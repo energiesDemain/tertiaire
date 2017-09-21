@@ -1,0 +1,15 @@
+cd rep_dossier_gcc
+set DERBY_HOME=c:\Apache\db-derby-10.13.1.1-bin
+set PATH=%DERBY_HOME%\bin;%PATH%
+setEmbeddedCP.bat
+java org.apache.derby.tools.ij
+connect 'jdbc:derby:gcc';
+show tables;
+CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE ('APP','PARC_RESULTATS','C:\Temp\Tables_csv\parc_resultats.csv',';','"',null);
+CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE ('APP','PARC_INIT','C:\Temp\Tables_csv\parc_init.csv',';','"',null);
+CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE ('APP','PARC_ENTRANT','C:\Temp\Tables_csv\parc_entrant.csv',';','"',null);
+CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE ('APP','CALIBRATION_CI','C:\Temp\Tables_csv\calibration_ci.csv',';','"',null);
+CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE ('APP','CALIBRATION_CI_BATI','C:\Temp\Tables_csv\calibration_ci_bati.csv',';','"',null);
+CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE ('APP','RT_EXISTANT','C:\Temp\Tables_csv\rt_existant.csv',';','"',null);
+CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE ('APP','RENDEMENT_RT_RESULTATS_TEST','C:\Temp\Tables_csv\rendement_rt_resultats_test.csv',';','"',null);
+CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE ('APP','OBLIGATION_TRAVAUX_SURF','C:\Temp\Tables_csv\obligation_travaux_surf.csv',';','"',null);
