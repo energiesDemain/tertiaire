@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <import resource="classpath:datasource.xml"/>
+
+	<bean id="initializeService" class="com.ed.cgdd.derby.initialize.impl.InitializeServiceImpl">
+	
+		<property name="createdas" ref="createTableDAS" />
+		<property name="dropdas" ref="dropTableDAS" />
+		<property name="insertdas" ref="insertDAS" />
+		<property name="pkeydas" ref="pkeyDAS" />
+		<property name="importExceldas" ref="importExcelDAS" />
+		<property name="loadInfodas" ref="loadInfoDAS" />
+	
+		
+		
+		
+	</bean>
+
+	<bean id="createTableDAS" class="com.ed.cgdd.derby.initialize.impl.CreateTableDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	
+	
+	
+	<bean id="loadInfoDAS" class="com.ed.cgdd.derby.initialize.impl.LoadInfoDASImpl">
+		
+	</bean>
+	
+	<bean id="importExcelDAS" class="com.ed.cgdd.derby.initialize.impl.ImportExcelDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="pkeyDAS" class="com.ed.cgdd.derby.initialize.impl.PkeyDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="insertDAS" class="com.ed.cgdd.derby.initialize.impl.InsertDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="dropTableDAS" class="com.ed.cgdd.derby.initialize.impl.DropTableDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+
+</beans>

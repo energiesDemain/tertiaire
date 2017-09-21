@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   					   http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <import resource="classpath:datasource.xml"/>
+
+	<bean id="processService" class="com.ed.cgdd.derby.process.impl.ProcessServiceImpl">
+		<property name="loadParcDatadas" ref="loadParcDataDAS" />
+		<property name="insertParcdas" ref="insertParcDAS" />
+		<property name="truncateParcTabledas" ref="truncateParcTableDAS" />
+		<property name="parcService" ref="parcService" />
+		<property name="loadTableUsagesNonRTdas" ref="loadTableUsagesNonRTDAS" />
+		<property name="insertUsagesNonRTdas" ref="insertUsagesNonRTDAS" />
+		<property name="truncateTableUsagesNonRTdas" ref="truncateTableUsagesNonRTDAS" />
+		<property name="bureauProcessService" ref="bureauProcessService" />
+		<property name="cuissonAutreService" ref="cuissonAutreService" />
+		<property name="froidAlimService" ref="froidAlimService" />
+		<property name="ecsService" ref="ecsService" />
+		<property name="climatisationService" ref="climatisationService" />
+		<property name="chauffageService" ref="chauffageService" />
+		<property name="eclairageService" ref="eclairageService" />
+		<property name="insertUsagesRTdas" ref="insertUsagesRTdas" />
+		<property name="loadTableRtdas" ref="loadTableRtdas" />
+		<property name="loadTableClimdas" ref="loadTableClimdas" />
+		<property name="truncateTableUsagesRTdas" ref="truncateTableUsagesRTdas" />
+		<property name="initializeConsoService" ref="initializeConsoService" />
+		<property name="commonService" ref="commonService" />
+		<property name="financeService" ref="financeService" />
+		<property name="createNeufService" ref="createNeufService" />
+		<property name="calibrageDAS" ref="calibrageDAS" />
+		<property name="calibrageService" ref="calibrageService" />
+		<property name="recupParamFinDAS" ref="recupParamFinDAS" />
+		<property name="gesteService" ref="gesteService" />
+		<property name="insertResultFinancementDAS" ref="insertResultFinancementDAS" />
+		<property name="truncateTableResFinanceDAS" ref="truncateTableResFinanceDAS" />
+		<property name="loadTableEffetRebondDAS" ref="loadTableEffetRebondDAS" />
+		<property name="excelCoutsService" ref="excelCoutsService" />
+		<property name="excelResultService" ref="excelResultService" />
+		<property name="excelEtiquetteService" ref="excelEtiquetteService" />
+		
+		
+		
+		
+		
+		
+			
+	</bean>	
+	
+	
+	
+	<bean id="parcService" class="com.ed.cgdd.derby.parc.impl.ParcServiceImpl">
+		<property name="loadParcDatadas" ref="loadParcDataDAS" />
+		<property name="insertParcdas" ref="insertParcDAS" />
+		<property name="truncateParcTabledas" ref="truncateParcTableDAS" />
+		
+	</bean>	
+	
+	<bean id="financeService" class="com.ed.cgdd.derby.finance.impl.FinanceServiceImpl">
+		<property name="PretBonifService" ref="pretBonifService" />
+		<property name="pbcService" ref="pbcService" />
+		<property name="commonService" ref="commonService" />
+		<property name="calculCoutService" ref="calculCoutService" />
+		<property name="recupParamFinDAS" ref="recupParamFinDAS" />
+		<property name="gesteService" ref="gesteService" />
+		<property name="coutEnergieService" ref="coutEnergieService" />
+				
+	</bean>	
+	
+	<bean id="calibrageDAS" class="com.ed.cgdd.derby.calibrageCINT.impl.CalibrageDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="commonService" ref="commonService" />
+	</bean>
+	
+	<bean id="calibrageService" class="com.ed.cgdd.derby.calibrageCINT.impl.CalibrageServiceImpl">
+		
+	</bean>
+	
+	<bean id="insertResultFinancementDAS" class="com.ed.cgdd.derby.finance.impl.InsertResultFinancementDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="loadTableEffetRebondDAS" class="com.ed.cgdd.derby.usagesrt.impl.LoadTableEffetRebondDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="truncateTableResFinanceDAS" class="com.ed.cgdd.derby.finance.impl.TruncateTableResFinanceDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="recupParamFinDAS" class="com.ed.cgdd.derby.finance.impl.RecupParamFinDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="commonService" ref="commonService" />
+	</bean>
+	
+	<bean id="gesteDas" class="com.ed.cgdd.derby.finance.impl.GesteDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="gesteService" class="com.ed.cgdd.derby.finance.impl.GesteServiceImpl">
+		<property name="commonService" ref="commonService" />
+		<property name="gesteDAS" ref="gesteDas" />
+		<property name="recupParamFinDAS" ref="recupParamFinDAS" />
+	</bean>
+	
+	<bean id="createNeufService" class="com.ed.cgdd.derby.finance.impl.CreateNeufServiceImpl">
+		<property name="coutEnergieService" ref="coutEnergieService" />
+		<property name="commonService" ref="commonService" />
+		<property name="recupParamFinDAS" ref="recupParamFinDAS" />
+		
+	</bean>
+
+		
+	<bean id="pretBonifService" class="com.ed.cgdd.derby.finance.impl.PretBonifServiceImpl">
+		<property name="calculCEEService" ref="calculCEEService" />	
+
+	</bean>
+	
+	<bean id="pbcService" class="com.ed.cgdd.derby.finance.impl.PBCServiceImpl">
+		<property name="calculCEEService" ref="calculCEEService" />	
+
+	</bean>
+	
+	<bean id="calculCEEService" class="com.ed.cgdd.derby.finance.impl.CalculCEEServiceImpl">
+
+	</bean>
+	
+	
+	<bean id="coutEnergieService" class="com.ed.cgdd.derby.finance.impl.CoutEnergieServiceImpl">
+		<property name="commonService" ref="commonService" />
+	</bean>
+	
+	
+	<bean id="calculCoutService" class="com.ed.cgdd.derby.finance.impl.CalculCoutServiceImpl">
+		<property name="coutEnergieService" ref="coutEnergieService" />	
+		<property name="commonService" ref="commonService" />
+	</bean>
+		
+	<bean id="commonService" class="com.ed.cgdd.derby.common.impl.CommonServiceImpl">
+				<property name="coutEnergieService" ref="coutEnergieService" />
+	</bean>	
+	<bean id="initializeConsoService" class="com.ed.cgdd.derby.process.impl.InitializeConsoServiceImpl">
+				<property name="commonService" ref="commonService" />	
+	</bean>
+	
+	<bean id="bureauProcessService" class="com.ed.cgdd.derby.usagesnonrt.impl.BureauProcessServiceImpl">
+			<property name="commonService" ref="commonService" />	
+	</bean>	
+		
+	<bean id="cuissonAutreService" class="com.ed.cgdd.derby.usagesnonrt.impl.CuissonAutreServiceImpl">
+			<property name="commonService" ref="commonService" />
+	</bean>		
+	
+	<bean id="froidAlimService" class="com.ed.cgdd.derby.usagesnonrt.impl.FroidAlimServiceImpl">
+			<property name="commonService" ref="commonService" />	
+	</bean>	
+		
+	<bean id="ecsService" class="com.ed.cgdd.derby.usagesrt.impl.EcsServiceImpl">
+			<property name="commonService" ref="commonService" />
+			<property name="initializeConsoService" ref="initializeConsoService" />	
+	</bean>	
+	
+	<bean id="climatisationService" class="com.ed.cgdd.derby.usagesrt.impl.ClimatisationServiceImpl">
+			<property name="commonService" ref="commonService" />	
+			<property name="initializeConsoService" ref="initializeConsoService" />
+	</bean>	
+	
+	<bean id="chauffageService" class="com.ed.cgdd.derby.usagesrt.impl.ChauffageServiceImpl">
+			<property name="commonService" ref="commonService" />	
+			<property name="financeService" ref="financeService" />
+	</bean>	
+	
+	<bean id="eclairageService" class="com.ed.cgdd.derby.usagesrt.impl.EclairageServiceImpl">
+			<property name="commonService" ref="commonService" />	
+			<property name="initializeConsoService" ref="initializeConsoService" />	
+	</bean>	
+	
+	
+	
+	<bean id="paramService" class="com.ed.cgdd.derby.loadparam.impl.LoadParamServiceImpl">	
+		<property name="insertParamdas" ref="insertParamDAS" />
+		<property name="importExcelParamdas" ref="importExcelParamDAS" />
+		<property name="loadInfoParamdas" ref="loadInfoParamDAS" />
+		<property name="truncateParamdas" ref="truncateParamDAS" />
+	</bean>	
+	
+	
+	<bean id="insertUsagesRTdas" class="com.ed.cgdd.derby.usagesrt.impl.InsertUsagesRTDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="loadTableRtdas" class="com.ed.cgdd.derby.usagesrt.impl.LoadTableRtDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+		<property name="initializeConsoService" ref="initializeConsoService" />
+	</bean>
+	
+	<bean id="loadTableClimdas" class="com.ed.cgdd.derby.usagesrt.impl.LoadTableChauffClimDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="truncateTableUsagesRTdas" class="com.ed.cgdd.derby.usagesrt.impl.TruncateTableUsagesRTDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="loadParcDataDAS" class="com.ed.cgdd.derby.parc.impl.LoadParcDataDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+		
+	<bean id="insertParcDAS" class="com.ed.cgdd.derby.parc.impl.InsertParcDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="truncateParcTableDAS" class="com.ed.cgdd.derby.parc.impl.TruncateParcTableDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	
+	<bean id="loadTableUsagesNonRTDAS" class="com.ed.cgdd.derby.usagesnonrt.impl.LoadTableUsagesNonRTDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+		
+	<bean id="insertUsagesNonRTDAS" class="com.ed.cgdd.derby.usagesnonrt.impl.InsertUsagesNonRTDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="truncateTableUsagesNonRTDAS" class="com.ed.cgdd.derby.usagesnonrt.impl.TruncateTableUsagesNonRTDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="loadInfoParamDAS" class="com.ed.cgdd.derby.loadparam.impl.LoadInfoParamDASImpl">
+	</bean>
+	
+	<bean id="importExcelParamDAS" class="com.ed.cgdd.derby.loadparam.impl.ImportExcelParamDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+		
+	<bean id="insertParamDAS" class="com.ed.cgdd.derby.loadparam.impl.InsertParamDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="truncateParamDAS" class="com.ed.cgdd.derby.loadparam.impl.TruncateParamDASImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="excelCoutsService" class="com.ed.cgdd.derby.excelresult.ExcelCoutsServiceImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="excelResultService" class="com.ed.cgdd.derby.excelresult.ExcelResultServiceImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="excelEtiquetteService" class="com.ed.cgdd.derby.excelresult.ExcelEtiquetteServiceImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+
+
+
+</beans>
