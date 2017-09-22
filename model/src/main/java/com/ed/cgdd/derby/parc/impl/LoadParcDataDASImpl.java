@@ -42,7 +42,7 @@ public class LoadParcDataDASImpl extends BddParcDAS implements LoadParcDataDAS {
 		String key = "Entrees" + LOAD_DATA;
 
 		String request = getProperty(key);
-
+		
 		return jdbcTemplate.query(request, new RowMapper<ParamParcArray>() {
 			@Override
 			public ParamParcArray mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -57,7 +57,7 @@ public class LoadParcDataDASImpl extends BddParcDAS implements LoadParcDataDAS {
 					entrees.setPeriode(3, rs.getBigDecimal("PERIODE3"));
 					entrees.setPeriode(4, rs.getBigDecimal("PERIODE4"));
 					entrees.setPeriode(5, rs.getBigDecimal("PERIODE5"));
-
+					
 				}
 				return entrees;
 
@@ -88,7 +88,7 @@ public class LoadParcDataDASImpl extends BddParcDAS implements LoadParcDataDAS {
 					sorties.setPeriode(3, rs.getBigDecimal("PERIODE3"));
 					sorties.setPeriode(4, rs.getBigDecimal("PERIODE4"));
 					sorties.setPeriode(5, rs.getBigDecimal("PERIODE5"));
-
+					
 				}
 				return sorties;
 

@@ -26,6 +26,7 @@ import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
 import com.ed.cgdd.derby.model.parc.Usage;
 import com.ed.cgdd.derby.usagesrt.ChauffageService;
+import com.ed.cgdd.derby.process.politiques;
 
 public class ChauffageServiceImpl implements ChauffageService {
 	private final static Logger LOG = LogManager.getLogger(ChauffageServiceImpl.class);
@@ -180,7 +181,7 @@ public class ChauffageServiceImpl implements ChauffageService {
 
 	protected Conso rdtExistModif(int anneeNTab, Conso rdtChauff) {
 		BigDecimal rdtN1 = BigDecimal.ZERO;
-
+		 
 		if (rdtChauff.getAnnee(anneeNTab) != null && rdtChauff.getAnnee(anneeNTab).signum() != 0) {
 			rdtN1 = rdtChauff.getAnnee(anneeNTab);
 		} else if (rdtChauff.getAnnee(anneeNTab - 1) != null) {
@@ -296,6 +297,8 @@ public class ChauffageServiceImpl implements ChauffageService {
 			besoinNeuf = bNeufsMap.get(concat).getPeriode(periodeCstr)
 					.multiply(elasticiteNeufMap.get(usage + energie)[annee - 2009], MathContext.DECIMAL32);
 		}
+		
+		
 		Conso besoinNew = new Conso(pasdeTemps);
 		besoinNew = createNeufConso(anneeNTab, idParc, parcNew, besoinNeuf, besoinNew);
 		resultatsMap.put(idParc, besoinNew);
@@ -462,7 +465,25 @@ public class ChauffageServiceImpl implements ChauffageService {
 			geste.setNewId(newId);
 			// Calcul de la surfModif, surface sortante du segment existant
 			BigDecimal surfModif = calcSurfModif(anneeNTab, parcInit, geste);
+			
+			
+			
+			
+			// Ajout gain individualisation des frais de chauffage TODO creer parametre
+			
+			if(politiques.getCheckifc() == 1){
+			//	LOG.debug("geste bat = {} BU {}",geste.getTypeRenovBat(),besoinU);
 
+			if(annee == 2017){
+				 besoinU =  besoinU.multiply(new BigDecimal("0.993625"),MathContext.DECIMAL32);
+				
+			} else if(annee == 2018){
+				besoinU =  besoinU.multiply(new BigDecimal("0.98725"),MathContext.DECIMAL32);
+			} else if(annee > 2018){
+				besoinU =  besoinU.multiply(new BigDecimal("0.980875"),MathContext.DECIMAL32);
+			}
+			}
+			
 			// Evolution des surfaces chauffees
 			parcTotMap = EvolParc(parcTotMap, anneeNTab, pasdeTemps, geste, parcInit, parcInitModif, newId, surfModif);
 			// Modification des besoins en chauffage et en auxiliaires
@@ -470,7 +491,14 @@ public class ChauffageServiceImpl implements ChauffageService {
 					anneeNTab, pasdeTemps, newId, besoinU, surfModif);
 			// Modification des rendements de chauffage
 			rdtMapChauff = EvolRdtsChauff(besoinInitChauff, geste, rdtMapChauff, anneeNTab, pasdeTemps, newId);
-			// Modification des besoins en ventilation
+			
+			// BV verif baisse du besoin U individualisation des frais de chauffage 
+			//if(annee > 2016){
+			//LOG.debug("après modif IFC geste bat = {} B {} B2 {} BU {}",geste.getTypeRenovBat(),
+			//		besoinMapChauff.get(newId).getAnnee(1),surfModif.multiply(besoinU),besoinU);
+			//}
+			
+			// Modification des besoins en ventilation 
 			besoinMapVentil = EvolVentil(besoinMapVentil, anneeNTab, pasdeTemps, geste, newId, gainsVentilationMap,
 					annee, parcTotMap.get(geste.getId()), parcTotMap.get(geste.getNewId()), surfModif,
 					elasticiteExistantMap);
@@ -626,13 +654,15 @@ public class ChauffageServiceImpl implements ChauffageService {
 
 		BigDecimal besoinModif = BigDecimal.ZERO;
 		BigDecimal gain = BigDecimal.ONE;
-
+		
 		if (geste.getGainEnerg() != null) {
 			// gain modifie par effet rebond en pourcentage du gain gagne
 			// gain = 1 - geste.Gain*(1-effetRebond)
 			gain = BigDecimal.ONE.subtract(geste.getGainEnerg().multiply(
 					BigDecimal.ONE.subtract(valeurRebond, MathContext.DECIMAL32), MathContext.DECIMAL32));
 		}
+		
+		
 		if (besoinInit != null && besoinInit.getAnnee(anneeNTab - 1) != null && parcInit != null
 				&& parcInit.getAnnee(anneeNTab - 1) != null && parcInit.getAnnee(anneeNTab - 1).signum() != 0) {
 			BigDecimal facteurElasticite = elasticiteExistantMap.get(Usage.CHAUFFAGE.getLabel() + geste.getEnergie())[annee - 2009];
@@ -645,7 +675,11 @@ public class ChauffageServiceImpl implements ChauffageService {
 			besoinModif = (temp);
 
 		}
-
+		
+		// BV ajout individualisation
+		
+		
+		
 		return besoinModif;
 	}
 

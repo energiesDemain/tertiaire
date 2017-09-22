@@ -59,6 +59,7 @@ import com.ed.cgdd.derby.model.financeObjects.RepartStatutOccup;
 import com.ed.cgdd.derby.model.financeObjects.SurfMoy;
 import com.ed.cgdd.derby.model.financeObjects.TauxInteret;
 import com.ed.cgdd.derby.model.parc.ParamParcArray;
+import com.ed.cgdd.derby.model.parc.Parc;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.model.progression.Progression;
 import com.ed.cgdd.derby.model.progression.ProgressionStep;
@@ -87,7 +88,7 @@ import com.ed.cgdd.derby.usagesrt.TruncateTableUsagesRTDAS;
 public class ProcessServiceImpl implements ProcessService {
 	private final static Logger LOG = LogManager.getLogger(ProcessServiceImpl.class);
 
-	private final static int NB_THREAD = 10;
+	private final static int NB_THREAD =40;
 
 	private ParcService parcService;
 	private LoadParcDataDAS loadParcDatadas;
@@ -386,6 +387,7 @@ public class ProcessServiceImpl implements ProcessService {
 		int NU = loadNu();
 		float txRenovBati = loadTxRenovBati();
 
+		
 		// Chargement des parametres influant sur l'evolution du parc
 		List<ParamParcArray> entrees = loadParcDatadas.getParamEntreesMapper();
 		List<ParamParcArray> sorties = loadParcDatadas.getParamSortiesMapper();
@@ -394,12 +396,12 @@ public class ProcessServiceImpl implements ProcessService {
 
 		// Chargement des besoins par usage pour les batiments neufs
 		HashMap<String, ParamBesoinsNeufs> bNeufsMap = loadTableUsagesNonRTdas.loadTableBesoinsNeufs("BesoinU_neuf");
-
+		
 		// Chargement de l'impact de l'effet rebond
 		HashMap<String, EffetRebond> effetRebond = loadTableEffetRebondDAS.recupEffetRebond("Effet_Rebond");
 
-		// Chargement des paramètres influant sur l'evolution des besoins non
-		// réglementés
+		// Chargement des parametres influant sur l'evolution des besoins non
+		// reglementes
 		HashMap<String, ParamGainsUsages> gainsNonRTMap = loadTableUsagesNonRTdas.loadTableGainsNonRT("Gains_nonRT");
 		HashMap<String, BigDecimal> dvUsagesMap = loadTableUsagesNonRTdas.loadTableDVNonRT("DV_autres");
 		HashMap<String, ParamPMConso> pmCuissonMap = loadTableUsagesNonRTdas.loadTablePMConso("PM_cuisson");
@@ -482,7 +484,12 @@ public class ProcessServiceImpl implements ProcessService {
 		// Couts intangibles dans le neuf
 		HashMap<String, BigDecimal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, NU);
 
-
+		for (String str :  coutIntangible.keySet()) {
+			if( str.substring(0, 2).equals("01") && str.substring(2, 4).equals("42") ){
+			LOG.debug("idC={} CINT={} ", str,   coutIntangible.get(str));
+			}
+		}
+		
 		// Chargement de l'evolution du cout des techno et du bati
 		HashMap<String, BigDecimal> evolCoutBati = recupParamFinDAS.getEvolutionCoutBati();
 		HashMap<String, BigDecimal> evolCoutTechno = recupParamFinDAS.getEvolutionCoutTechno();
@@ -568,7 +575,8 @@ public class ProcessServiceImpl implements ProcessService {
 			}
 			// Recuperation des resultats
 			// TODO export Xls
-			boolean isHidden = true;
+			//boolean isHidden = true;
+			boolean isHidden = false;
 			progression.setStep(ProgressionStep.EXTRACT);
 
 			excelResultService.excelService(pasdeTempsInit, isHidden);

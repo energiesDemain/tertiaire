@@ -270,6 +270,22 @@ public class CommonServiceImpl implements CommonService {
 		return periodeStrg;
 	}
 
+	public int anneeDebutPeriode(int periode) {
+		int anneeDebut;
+		if (periode == 1) {
+			anneeDebut = 2010;
+		} else if (periode == 2) {
+			anneeDebut = 2016;
+		} else if (periode == 3) {
+			anneeDebut = 2021;
+		} else if (periode == 4) {
+			anneeDebut = 2031;;
+		} else {
+			anneeDebut = 2041;
+		}
+		return anneeDebut;
+	}
+	
 	public String concatID(Parc parcAgreg, String usage) {
 
 		StringBuffer concatID = new StringBuffer();
