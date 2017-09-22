@@ -10,7 +10,7 @@ import com.ed.cgdd.derby.model.financeObjects.Geste;
 public interface CoutEnergieService {
 
 	BigDecimal chargesEnerAnnuelles(BigDecimal surface, BigDecimal besoinEnerUnitaireIni, Geste geste,
-			BigDecimal coutEnergie, int annee);
+			BigDecimal coutEnergie);
 
 	BigDecimal coutEnergie(HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
 			int annee, String energie, String usage, BigDecimal tva);

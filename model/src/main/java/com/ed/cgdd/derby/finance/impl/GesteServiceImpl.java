@@ -44,8 +44,6 @@ import com.ed.cgdd.derby.model.parc.SysChaud;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
 import com.ed.cgdd.derby.model.parc.Usage;
-import com.ed.cgdd.derby.process.politiques;
-
 
 public class GesteServiceImpl implements GesteService {
 	private final static Logger LOG = LogManager.getLogger(GesteServiceImpl.class);
@@ -184,9 +182,6 @@ public class GesteServiceImpl implements GesteService {
 		// Recuperation du niveau minimal attendu par la RT existant
 		String periodeString = commonService.correspPeriodeFin(annee);
 		String rtExistant = reglementations.getRt().get(periodeString).getExigence();
-		
-		
-		
 		// Recuperation du niveau minimal attendu par les obligations de travaux
 		// (si il y en a, sinon null)
 		String obligExig = NO_OBLIG;
@@ -196,17 +191,12 @@ public class GesteServiceImpl implements GesteService {
 		}
 		// Application de la reglementation des 2014 dans le cas des batiments
 		// de l'Etat
-		
-		
 		if ((annee == 2014 || annee == 2015) && surfOblig.signum() == 0
 				&& parc.getIdoccupant().equals(Occupant.ETAT.getCode())
 				&& reglementations.getOblSurf().get(parc.getIdoccupant()).getPartSurf(2).signum() != 0) {
 			surfOblig = reglementations.getOblSurf().get(parc.getIdoccupant()).getPartSurf(2);
 			obligExig = reglementations.getOblExig().get(parc.getIdoccupant()).getExigence(2);
-			
-			
 		}
-		//LOG.debug(" {} ",surfOblig, surfOblig.signum());
 		// Generation d'une HashMap ne contenant que les gestes sur le bati
 		HashMap<TypeRenovBati, Geste> gesteBatiMap = generateBatiGesteMap(bibliGeste.getGestesBati().get(
 				parc.getIdperiodedetail()));
@@ -241,7 +231,6 @@ public class GesteServiceImpl implements GesteService {
 			if (rdt != null) {
 				rdtN = rdt.getAnnee(anneeNTab - 1);
 			}
-			
 			for (Geste geste : ensembleGestes) {
 				Geste copyGeste = new Geste(geste);
 				BigDecimal evolCoutBatUnit = getVariation(copyGeste.getTypeRenovBati().getLabel(), annee, evolCoutBati);
@@ -285,45 +274,6 @@ public class GesteServiceImpl implements GesteService {
 					copyGeste.setRdt(rdtN);
 				}
 
-				// BV changement de gains pour les gestes respectant la RT existant en 2018, 
-				// TODO faire proprement avec un paramètre en entrée 
-				
-				BigDecimal Gain = copyGeste.getGainEner();
-				BigDecimal Rdt = copyGeste.getRdt();
-				
-				if(politiques.checkRTex==1){
-				//if (copyGeste.getExigence().equals(Exigence.RT_PAR_ELEMENT) && annee > 2017) {
-				//LOG.debug("exi={} geste={} syst={} syschaud={} gain={} Rdt ={}", copyGeste.getExigence(),copyGeste.getTypeRenovBati(),
-				//		copyGeste.getTypeRenovSys(),copyGeste.getSysChaud(),Gain, Rdt);
-				//}
-				
-				if (copyGeste.getExigence().equals(Exigence.RT_PAR_ELEMENT) && annee > 2017) {
-					BigDecimal GainSupRTex = new BigDecimal("0.05");
-					Gain = Gain.add(GainSupRTex);
-				//	LOG.debug("après modif RT existant geste {} {} {} {} {} {} {}", copyGeste.getExigence(),copyGeste.getTypeRenovBati(),
-				//			copyGeste.getTypeRenovSys(),Gain,copyGeste.getSysChaud(),
-				//			Rdt, copyGeste.getSysChaud().substring(0,1));
-					copyGeste.setGainEner(Gain);
-				// on augmente le coût aussi
-					copyGeste.setCoutGesteBati(copyGeste.getCoutGesteBati().multiply((BigDecimal.ONE.add(GainSupRTex))));
-				}
-				
-				// BV changement de rdt pour les systèmes respectant la RT existant en 2018, TODO faire proprement avec un paramètre en entrée 
-				
-				if (copyGeste.getTypeRenovSys().equals(TypeRenovSysteme.CHGT_SYS) &&
-						copyGeste.getSysChaud().substring(0,1).equals("0") && annee > 2017 && 
-						!(copyGeste.getEnergie().contentEquals("03"))) {
-					BigDecimal GainRdtSupRTex = new BigDecimal("0.1");
-					Rdt = Rdt.add(GainRdtSupRTex);
-				//	LOG.debug("après modif RT existant syst {} {} {} {} {} {} {}",copyGeste.getExigence(),copyGeste.getTypeRenovBati(),
-				//			copyGeste.getTypeRenovSys(),Gain,copyGeste.getSysChaud(),
-				//			Rdt, copyGeste.getSysChaud().substring(0,1));
-					copyGeste.setRdt(Rdt);
-				// on augmente le coût aussi
-					copyGeste.setCoutGesteSys(copyGeste.getCoutGesteSys().multiply((BigDecimal.ONE.add(GainRdtSupRTex ))));
-				} 
-				}
-				
 				// 1eme test concernant les systemes : si le systeme n'est pas
 				// en fin de vie alors on ne le change pas
 				// 2eme test : si le parc n'a subit aucune renovation alors

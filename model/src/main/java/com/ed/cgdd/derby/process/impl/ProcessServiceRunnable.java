@@ -1,7 +1,6 @@
 package com.ed.cgdd.derby.process.impl;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -47,9 +46,7 @@ import com.ed.cgdd.derby.model.financeObjects.CoutEnergie;
 import com.ed.cgdd.derby.model.financeObjects.ElasticiteMap;
 import com.ed.cgdd.derby.model.financeObjects.Emissions;
 import com.ed.cgdd.derby.model.financeObjects.EvolValeurVerte;
-import com.ed.cgdd.derby.model.financeObjects.Exigence;
 import com.ed.cgdd.derby.model.financeObjects.Financement;
-import com.ed.cgdd.derby.model.financeObjects.Geste;
 import com.ed.cgdd.derby.model.financeObjects.Maintenance;
 import com.ed.cgdd.derby.model.financeObjects.PBC;
 import com.ed.cgdd.derby.model.financeObjects.PartMarcheRenov;
@@ -64,15 +61,12 @@ import com.ed.cgdd.derby.model.parc.ParamParcArray;
 import com.ed.cgdd.derby.model.parc.Parc;
 import com.ed.cgdd.derby.model.parc.ResultParc;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
-import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
 import com.ed.cgdd.derby.model.parc.Usage;
-import com.ed.cgdd.derby.model.parc.UsageRT;
 import com.ed.cgdd.derby.model.progression.Progression;
 import com.ed.cgdd.derby.parc.InsertParcDAS;
 import com.ed.cgdd.derby.parc.LoadParcDataDAS;
 import com.ed.cgdd.derby.parc.ParcService;
 import com.ed.cgdd.derby.process.InitializeConsoService;
-import com.ed.cgdd.derby.process.politiques;
 import com.ed.cgdd.derby.usagesnonrt.BureauProcessService;
 import com.ed.cgdd.derby.usagesnonrt.CuissonAutreService;
 import com.ed.cgdd.derby.usagesnonrt.FroidAlimService;
@@ -96,23 +90,7 @@ public class ProcessServiceRunnable implements Runnable {
 	private final static int LENGTH_OCCUPANT = 2;
 	private final static int START_BRANCHE = 0;
 	private final static int LENGTH_BRANCHE = 2;
-	// BV ajouts 
-	private static final int START_ID_COURANT = 0;
-	private static final int ID_COURANT_LENGTH = 6;
-	private static final int START_BATTYPE = 4;
-	private static final int BATTYPE_LENGTH = 2;
-	private static final int ID_ENERGIE_START = 8;
-	private static final int ENERGIE_LENGTH = 2;
-	private static final int ID_SYSCHAUF_START = 6;
-	private static final int SYSCHAUF_LENGTH = 2;
-	private static final int START_ID_BRANCHE = 0;
-	private static final int LENGTH_ID_BRANCHE = 2;
-	private static final int START_ID_OCCUPANT = 6;
-	private static final int LENGTH_ID_OCCUPANT = 2;
-	private static final int START_ID_SYS = 8;
-	private static final int LENGTH_ID_SYS = 2;
-	// BV fin ajouts
-	
+
 	private ParcService parcService;
 	private LoadParcDataDAS loadParcDatadas;
 	private InsertParcDAS insertParcdas;
@@ -188,11 +166,11 @@ public class ProcessServiceRunnable implements Runnable {
 	HashMap<String, RepartStatutOccup> repartStatutOccupMap;
 	HashMap<String, Maintenance> maintenanceMap;
 	ElasticiteMap elasticiteMap;
+	HashMap<String, BigDecimal> coutIntangibleNeuf;
 
 	public ProcessServiceRunnable(int pasdeTempsInit, int NU, float txRenovBati,
 			HashMap<String, ParamParcArray> entreesMap, HashMap<String, ParamParcArray> sortiesMap,
-			HashMap<String, ParamBesoinsNeufs> bNeufsMap,
-			HashMap<String, EffetRebond> effetRebond,
+			HashMap<String, ParamBesoinsNeufs> bNeufsMap, HashMap<String, EffetRebond> effetRebond,
 			HashMap<String, ParamGainsUsages> gainsNonRTMap, HashMap<String, BigDecimal> dvUsagesMap,
 			HashMap<String, ParamPMConso> pmCuissonMap, HashMap<String, ParamPMConso> pmAutresMap,
 			HashMap<String, ParamPMConsoChgtSys> pmCuissonChgtMap,
@@ -214,7 +192,7 @@ public class ProcessServiceRunnable implements Runnable {
 			Reglementations reglementations, String idAgregParc, Progression progression,
 			HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, SurfMoy> surfMoyMap,
 			HashMap<String, EvolValeurVerte> evolVVMap, HashMap<String, RepartStatutOccup> repartStatutOccupMap,
-			HashMap<String, Maintenance> maintenanceMap, ElasticiteMap elasticiteMap) {
+			HashMap<String, Maintenance> maintenanceMap, ElasticiteMap elasticiteMap, HashMap<String, BigDecimal> coutIntangibleNeuf) {
 		this.pasdeTempsInit = pasdeTempsInit;
 		this.NU = NU;
 		this.txRenovBati = txRenovBati;
@@ -266,6 +244,7 @@ public class ProcessServiceRunnable implements Runnable {
 		this.repartStatutOccupMap = repartStatutOccupMap;
 		this.maintenanceMap = maintenanceMap;
 		this.elasticiteMap = elasticiteMap;
+		this.coutIntangibleNeuf = coutIntangibleNeuf;
 	}
 
 	public void initServices(ParcService parcService, LoadParcDataDAS loadParcDatadas, InsertParcDAS insertParcdas,
@@ -312,11 +291,7 @@ public class ProcessServiceRunnable implements Runnable {
 		ResultParc resultatsParc;
 		long timingSegmentStart = new Date().getTime();
 		ThreadContext.put(ID_PARC, idAgregParc);
-		//if (idAgregParc.equals("01014203")) {
-		//if (idAgregParc.substring(0,2).equals("01") && idAgregParc.substring(4,6).equals("42") && idAgregParc.substring(6,8).equals("03")){
-		
-		//if (idAgregParc.equals("05141304")){
-		//if (idAgregParc.substring(2,4).equals(B.TRANSPORT.getCode().toString()))
+		// if (idAgregParc.equals("04100202")
 		// // if (!idAgregParc.substring(2,
 		// // 4).equals(Branche.TRANSPORT.getCode().toString())) {
 		// // if (idAgregParc.equals("01014203")) {
@@ -369,7 +344,6 @@ public class ProcessServiceRunnable implements Runnable {
 				// Creation d'une HashMap de resultats pour les masses
 				// financieres
 				HashMap<ResFin, ValeurFinancement> resultFinance = new HashMap<>();
-
 				// Chargement de la bibliotheque de geste
 				BibliGeste bibliGeste = gesteService.createBibliGeste(dvChauffMap, dvGesteMap, idAgregParc,
 						rdtCoutChauffMap, periodeMap);
@@ -388,39 +362,18 @@ public class ProcessServiceRunnable implements Runnable {
 				// batiments neufs
 				HashMap<String, BigDecimal[]> elasticiteNeufMap = commonService.getFacteurElasticiteNeuf(idAgregParc,
 						coutEnergieMap, emissionsMap, elasticiteMap);
-				
-				// BV On reinitialise les besoins initiaux pour les batiments neufs (pas efficace en temps, TODO voir si on peut faire une copie de la hasmap initiale)
-				// HashMap<String, ParamBesoinsNeufs> bNeufsMap = new HashMap<String, ParamBesoinsNeufs>(bNeufsMapIni);
-				HashMap<String, ParamBesoinsNeufs> bNeufsMap = loadTableUsagesNonRTdas.loadTableBesoinsNeufs("BesoinU_neuf");
-				
-				
+
 				// Boucle de calcul des evolutions du parc et des
 				// consommations
 				// energetiques
 				// HashMap<String, BigDecimal> debugMap = new
 				// HashMap<String,
 				// BigDecimal>();
-				//for (int annee = 2010; annee <= 2050; annee++) {
-			    for (int annee = 2010; annee <= 2050; annee++) {
-			    	
-			    	//BV prise en compte travaux embarques
-			    	if(politiques.checkTravEmb ==1 & annee == 2017){
-			    		//LOG.debug("taux avant trav emb{}",txRenovBati);
-			    		// on copie le taux de renov tendanciel ini
-				    	float txRenovBatiCopy = txRenovBati;
-	
-			    	// travaux embarques on au gmente le taux de renov tendancielle de 1.3%
-				    	
-			    	txRenovBati = txRenovBatiCopy + 0.01300000f;
-			    	//LOG.debug("taux avant trav emb = {} apres ={}",txRenovBatiCopy, txRenovBati);
-			    	}					
-			    	
-			    	//LOG.debug("taux renov ={}", txRenovBati);
-			    	
+				for (int annee = 2010; annee <= 2016; annee++) {
 					long timingStart = new Date().getTime();
 					ThreadContext.put(YEAR, String.valueOf(annee));
 
-					//LOG.info("Annee {}", annee);
+					LOG.info("Annee {}", annee);
 					List<Financement> listFin = getFinListPeriode(ensembleFinancements, annee);
 					CEE subCEE = getCEE(subventions, annee);
 
@@ -429,55 +382,18 @@ public class ProcessServiceRunnable implements Runnable {
 					compteur = compteur.add(BigDecimal.ONE);
 
 					resultatsParc = new ResultParc();
-
-					// BV ajout bâtiment exemplaire de l'Etat. on baisse de les besoins unitaires des usages rt du parc entrant de l'Etat 
-					// pour prendre en compte l'entrée des bâtiments E+C-. TODO faire un paramètre propre 
-					if(politiques.checkBatex == 1){
-					int periode = commonService.correspPeriode(annee);
-					String idOccupant = idAgregParc.substring(START_OCCUPANT, START_OCCUPANT + LENGTH_OCCUPANT);
-					BigDecimal modifBUBatEx = new BigDecimal("0.8325");
-					
-					// On modifie les besoins des usages Rt uniquement, pour l'Etat et les collectivités 
-					// et seulement pour les années 2015 et les années de début de période
-					
-					if (!(idOccupant.equals("05")||idOccupant.equals("04")) && annee > 2014 &&  
-							(annee == commonService.anneeDebutPeriode(periode) | annee ==2015)){
-						
-						String idParcBesoin = idAgregParc.substring(START_ID_COURANT, START_ID_COURANT + LENGTH_ID_BRANCHE)
-						.concat(idAgregParc.substring(START_BATTYPE, START_BATTYPE + BATTYPE_LENGTH));
-						
-						for(UsageRT usagetemp : UsageRT.values()){	
-						String idBesoin = idParcBesoin.concat(usagetemp.getLabel());
-						//LOG.debug("idBesoin {} usage {} BU {}", idBesoin,usagetemp.getLabel());
-						BigDecimal besoinUnitaire = bNeufsMap.get(idBesoin).getPeriode(periode);
-						//LOG.debug("occ {} usage {} BU {}", idOccupant,usagetemp.getLabel(), besoinUnitaire);
-						besoinUnitaire = besoinUnitaire.multiply(modifBUBatEx, MathContext.DECIMAL32);
-						bNeufsMap.get(idBesoin).setPeriode(periode,besoinUnitaire);
-						//LOG.debug("occ {} usage {} BU {}", idOccupant,usagetemp.getLabel(), bNeufsMap.get(idBesoin).getPeriode(periode));
-						}
-						
-					}				
-					}
-					
+					// Calcul des parts de marche dans les batiments neufs
 					HashMap<String, BigDecimal> partsMarchesNeuf = createNeufService.pmChauffNeuf(bNeufsMap,
-							dvChauffMap, rdtCoutChauffMap, idAgregParc, annee, "Proprietaire", NU, coutIntangible,
+							dvChauffMap, rdtCoutChauffMap, idAgregParc, annee, "Proprietaire", NU, coutIntangibleNeuf,
 							coutEnergieMap, emissionsMap, evolCoutBati, evolCoutTechno, tauxInteretMap, maintenanceMap);
-			
-					
-					// BV affiche PM neufs calculées
-					//HashMap<String, BigDecimal> testMap = new HashMap<String,
-					//BigDecimal>();
-					//for (String key : partsMarchesNeuf.keySet()) {
-					//LOG.debug("id={} part={}", key, partsMarchesNeuf.get(key));
-					//}					
-					
+
 					resultatsParc = parcService.parc(txClimExistantMap, partsMarchesNeuf, parcTotMap, entreesMap,
 							sortiesMap, txClimNeufMap, pasdeTemps, anneeNTab, annee);
-					//LOG.info("Parc Done !");
-					
-					
+					// LOG.info("Parc Done !");
+
 					// debugMap = new HashMap<String, BigDecimal>();
 
+					// calcul des parts de marche dans les batiments existants
 					HashMap<String, PartMarcheRenov> partMarcheMap = financeService.renovationSegmentGlobal(
 							decretMemory, resultConsoUClimMap, resultConsoURtMap, listFin, subCEE, dvChauffMap,
 							dvGesteMap, rdtCoutChauffMap, parcTotMap, resultatsConsoRt, annee, anneeNTab,
@@ -508,8 +424,6 @@ public class ProcessServiceRunnable implements Runnable {
 							parcTotMap, partMarcheMap, bNeufsMap, rdtCoutChauffMap, anneeNTab, pasdeTemps, annee,
 							resultatsConsoRt, gainsVentilationMap, effetRebond, elasticiteNeufMap,
 							elasticiteExistantMap);
-					
-		
 					// LOG.info("Chauffage Done !");
 					// LOG.info("Ventilation Done !");
 
@@ -1135,22 +1049,4 @@ public class ProcessServiceRunnable implements Runnable {
 		}
 		return calageObject;
 	}
-	
-
-	private String getIdOccupant(String idAgreg) {
-
-		return idAgreg.substring(START_ID_OCCUPANT, START_ID_OCCUPANT + LENGTH_ID_OCCUPANT);
-	}
-	private String getIdBranche(String idAgreg) {
-
-		return idAgreg.substring(START_ID_BRANCHE, START_ID_BRANCHE + LENGTH_ID_BRANCHE);
-	}
-	
-	
-	private String getIdBesoinChauf(String idParamRdt) {
-		return idParamRdt.substring(START_ID_COURANT, START_ID_COURANT + LENGTH_ID_BRANCHE)
-				.concat(idParamRdt.substring(START_BATTYPE, START_BATTYPE + BATTYPE_LENGTH)).concat("Chauffage");
-	}
-	
 }
-

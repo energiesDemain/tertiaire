@@ -3,12 +3,12 @@ package com.ed.cgdd.launcher;
 import java.io.IOException;
 import java.sql.SQLException;
 
+
+import com.ed.cgdd.derby.initialize.InitializeService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import com.ed.cgdd.derby.initialize.InitializeService;
 
 public class LauncherInit {
 

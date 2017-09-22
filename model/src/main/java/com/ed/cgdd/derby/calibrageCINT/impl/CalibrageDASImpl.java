@@ -106,6 +106,46 @@ public class CalibrageDASImpl extends BddDAS implements CalibrageDAS {
 		return results;
 	}
 
+
+	// Ajout 21092017
+	public HashMap<String, CalibCI> recupCINeuf() {
+		HashMap<String, CalibCI> results = new HashMap<String, CalibCI>();
+
+		String requete = getProperty("CINT_NEUF_INIT_LOAD");
+
+		List<CalibCI> res = jdbcTemplate.query(requete, new RowMapper<CalibCI>() {
+
+			public CalibCI mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+				CalibCI sortie = new CalibCI();
+
+				sortie.setBranche(rs.getString("ID_BRANCHE"));
+				sortie.setBatType(rs.getString("ID_BAT_TYPE"));
+
+				String sysChaud = rs.getString("ID_PRODUCTION_CHAUD");
+
+				sysPerf(sortie, sysChaud);
+				sortie.setEnergies(rs.getString("ID_ENERGIE"));
+				sortie.setCoutM2(rs.getBigDecimal("COUT"));
+				sortie.setDureeVie(rs.getInt("DUREE_VIE"));
+				sortie.setRdt(rs.getBigDecimal("RDT"));
+				sortie.setPartMarche2009(rs.getBigDecimal("PM_ENTRANT"));
+
+				return sortie;
+
+			}
+
+		});
+		for (CalibCI calibCI : res) {
+			results.put(createIDforCI(calibCI), calibCI);
+		}
+
+		return results;
+	}
+
+
+
+
 	protected void sysPerf(CalibCI sortie, String sysChaud) {
 		BigDecimal sysChaudTemp = new BigDecimal(sysChaud);
 		if (sysChaudTemp.compareTo(new BigDecimal("20")) > 0) {

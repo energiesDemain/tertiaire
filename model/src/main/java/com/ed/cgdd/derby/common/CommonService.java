@@ -20,9 +20,7 @@ public interface CommonService {
 	String codeCreateEnerg(String energPmKey);
 
 	int correspPeriode(int annee);
-	
-	int anneeDebutPeriode(int periode);
-	
+
 	String concatID(Parc parcAgreg, String usage);
 
 	int correspPeriodeCstr(Parc parcExistant, int annee);

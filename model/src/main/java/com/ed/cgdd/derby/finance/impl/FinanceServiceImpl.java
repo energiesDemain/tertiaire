@@ -1323,9 +1323,7 @@ public class FinanceServiceImpl implements FinanceService {
 				reglementations, coutsEclVentilMap, coutEcsMap, pmEcsNeufMap, consoEner, ventil, aux, bNeufsMap,
 				besoinInit, gainsVentilationMap, bibliRdtEcsMap, statutOccup.getTauxActuProp(), evolCoutBati,
 				evolCoutTechno, maintenanceMap);
-		
-		
-		
+
 		// on sort une copie du pret bancaire classique
 		PBC pretDeBase = (PBC) getFinancementByType(listFin, FinancementType.PBC);
 
