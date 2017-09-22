@@ -19,16 +19,7 @@ public class LoadInfoDASImpl implements LoadInfoDAS {
 
 		ExcelParameters constant = new ExcelParameters();
 
-		// Chargement des donnees de la table PM_neuf.xlsx
-		// Ajout 210917
-		constant.setFilename("PM_neuf.xlsx");
-		constant.setSheetname("PM_neuf");
-		constant.setFline(1);
-		constant.setFcolumn(1);
-		constantMap.put("PM_neuf", constant);
-
 		// Chargement des donnees de la table EDL.xlsx
-		constant = new ExcelParameters();
 		constant.setFilename("Parc_init.xlsx");
 		constant.setSheetname("Parc");
 		constant.setFline(1);
@@ -303,7 +294,6 @@ public class LoadInfoDASImpl implements LoadInfoDAS {
 		// newTables.add(51, "Etiquettes_Categories");
 		newTables.add(50, "Maintenance");
 		newTables.add(51, "Elasticite_prix");
-
 
 		return newTables;
 	}

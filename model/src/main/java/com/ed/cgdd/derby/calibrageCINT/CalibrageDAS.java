@@ -8,8 +8,6 @@ import com.ed.cgdd.derby.model.financeObjects.CalibCIBati;
 public interface CalibrageDAS {
 	public HashMap<String, CalibCI> recupCI();
 
-	public HashMap<String, CalibCI> recupCINeuf();
-
 	public HashMap<String, CalibCIBati> recupCIBati();
 
 }

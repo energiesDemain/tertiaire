@@ -59,6 +59,7 @@ import com.ed.cgdd.derby.model.financeObjects.RepartStatutOccup;
 import com.ed.cgdd.derby.model.financeObjects.SurfMoy;
 import com.ed.cgdd.derby.model.financeObjects.TauxInteret;
 import com.ed.cgdd.derby.model.parc.ParamParcArray;
+import com.ed.cgdd.derby.model.parc.Parc;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.model.progression.Progression;
 import com.ed.cgdd.derby.model.progression.ProgressionStep;
@@ -87,7 +88,7 @@ import com.ed.cgdd.derby.usagesrt.TruncateTableUsagesRTDAS;
 public class ProcessServiceImpl implements ProcessService {
 	private final static Logger LOG = LogManager.getLogger(ProcessServiceImpl.class);
 
-	private final static int NB_THREAD = 10;
+	private final static int NB_THREAD =40;
 
 	private ParcService parcService;
 	private LoadParcDataDAS loadParcDatadas;
@@ -386,6 +387,7 @@ public class ProcessServiceImpl implements ProcessService {
 		int NU = loadNu();
 		float txRenovBati = loadTxRenovBati();
 
+		
 		// Chargement des parametres influant sur l'evolution du parc
 		List<ParamParcArray> entrees = loadParcDatadas.getParamEntreesMapper();
 		List<ParamParcArray> sorties = loadParcDatadas.getParamSortiesMapper();
@@ -394,12 +396,12 @@ public class ProcessServiceImpl implements ProcessService {
 
 		// Chargement des besoins par usage pour les batiments neufs
 		HashMap<String, ParamBesoinsNeufs> bNeufsMap = loadTableUsagesNonRTdas.loadTableBesoinsNeufs("BesoinU_neuf");
-
+		
 		// Chargement de l'impact de l'effet rebond
 		HashMap<String, EffetRebond> effetRebond = loadTableEffetRebondDAS.recupEffetRebond("Effet_Rebond");
 
-		// Chargement des paramètres influant sur l'evolution des besoins non
-		// réglementés
+		// Chargement des parametres influant sur l'evolution des besoins non
+		// reglementes
 		HashMap<String, ParamGainsUsages> gainsNonRTMap = loadTableUsagesNonRTdas.loadTableGainsNonRT("Gains_nonRT");
 		HashMap<String, BigDecimal> dvUsagesMap = loadTableUsagesNonRTdas.loadTableDVNonRT("DV_autres");
 		HashMap<String, ParamPMConso> pmCuissonMap = loadTableUsagesNonRTdas.loadTablePMConso("PM_cuisson");
@@ -464,25 +466,19 @@ public class ProcessServiceImpl implements ProcessService {
 		HashMap<String, ParamCoutEclVentil> coutsEclVentilMap = loadTableRtdas
 				.loadTableCoutEclVentil("Ecl_ventil_couts");
 
-		// Chargement du prix des energies et de la contribution climat energie
-		HashMap<Integer, CoutEnergie> coutEnergieMap = recupParamFinDAS.recupCoutEnergie("Cout_energie");
-
 		// Initialisation des couts intangibles
 		HashMap<String, CalibCI> cintMap = calibrageDAS.recupCI();
-		HashMap<String, CalibCI> cintMapNeuf = calibrageDAS.recupCINeuf();
 		HashMap<String, CalibCIBati> cintBatiMap = calibrageDAS.recupCIBati();
 
-		// Ajout 21092017
-		calibrageService.addingRowsInHashMap(cintMapNeuf,coutEnergieMap,bNeufsMap);
-
-		// Couts intangibles dans l'existant
 		HashMap<String, BigDecimal> coutIntangible = calibrageService.calibreCI(cintMap, NU);
 		HashMap<String, BigDecimal> coutIntangibleBati = calibrageService.calibreCIBati(cintBatiMap, NU);
-
-		// Couts intangibles dans le neuf
-		HashMap<String, BigDecimal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, NU);
-
-
+		
+		for (String str :  coutIntangible.keySet()) {
+			if( str.substring(0, 2).equals("01") && str.substring(2, 4).equals("42") ){
+			LOG.debug("idC={} CINT={} ", str,   coutIntangible.get(str));
+			}
+		}
+		
 		// Chargement de l'evolution du cout des techno et du bati
 		HashMap<String, BigDecimal> evolCoutBati = recupParamFinDAS.getEvolutionCoutBati();
 		HashMap<String, BigDecimal> evolCoutTechno = recupParamFinDAS.getEvolutionCoutTechno();
@@ -490,6 +486,8 @@ public class ProcessServiceImpl implements ProcessService {
 		// Chargement des periodes de construction
 		Map<String, List<String>> periodeMap = gesteService.getPeriodMap();
 
+		// Chargement du prix des energies et de la contribution climat energie
+		HashMap<Integer, CoutEnergie> coutEnergieMap = recupParamFinDAS.recupCoutEnergie("Cout_energie");
 		// Chargement des emissions de ges par energie, usage et periode (la cle
 		// de la map est code energie + usage)
 		HashMap<String, Emissions> emissionsMap = recupParamFinDAS.recupEmissions("Emissions");
@@ -549,7 +547,7 @@ public class ProcessServiceImpl implements ProcessService {
 					dvGesteMap, auxChaud, auxFroid, gainsEclairageMap, gainsVentilationMap, coutsEclVentilMap,
 					coutIntangible, coutIntangibleBati, evolCoutBati, evolCoutTechno, periodeMap, coutEnergieMap,
 					emissionsMap, reglementations, idAgregParc, progression, tauxInteretMap, surfMoyMap, evolVVMap,
-					repartStatutOccupMap, maintenanceMap, elasticiteMap, coutIntangibleNeuf);
+					repartStatutOccupMap, maintenanceMap, elasticiteMap);
 			runnable.initServices(parcService, loadParcDatadas, insertParcdas, bureauProcessService,
 					cuissonAutreService, froidAlimService, insertUsagesNonRTdas, loadTableUsagesNonRTdas, ecsService,
 					climatisationService, chauffageService, eclairageService, insertUsagesRTdas, loadTableRtdas,
@@ -568,7 +566,8 @@ public class ProcessServiceImpl implements ProcessService {
 			}
 			// Recuperation des resultats
 			// TODO export Xls
-			boolean isHidden = true;
+			//boolean isHidden = true;
+			boolean isHidden = false;
 			progression.setStep(ProgressionStep.EXTRACT);
 
 			excelResultService.excelService(pasdeTempsInit, isHidden);

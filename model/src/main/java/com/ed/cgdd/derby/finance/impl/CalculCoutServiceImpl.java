@@ -5,7 +5,10 @@ import java.math.MathContext;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import com.ed.cgdd.derby.common.CommonService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+
 import com.ed.cgdd.derby.finance.CalculCoutService;
 import com.ed.cgdd.derby.finance.CoutEnergieService;
 import com.ed.cgdd.derby.model.financeObjects.CoutEnergie;
@@ -21,9 +24,11 @@ import com.ed.cgdd.derby.model.parc.Parc;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
 import com.ed.cgdd.derby.model.parc.Usage;
+import com.ed.cgdd.derby.process.impl.ProcessServiceImpl;
+import com.ed.cgdd.derby.common.CommonService;
 
 public class CalculCoutServiceImpl implements CalculCoutService {
-
+	private final static Logger LOG = LogManager.getLogger(CalculCoutServiceImpl.class);
 	CoutEnergieService coutEnergieService;
 	CommonService commonService;
 
@@ -92,11 +97,17 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 
 			// TODO ajouter charges de maintenance (attention aux duree de
 			// vie)
+			
+			// BV DEBUG GESTE
+			//LOG.debug("{} {} {} {} {} {} {}", gesteFin.getGeste().getExigence(),gesteFin.getGeste().getTypeRenovBati(),
+			//		gesteFin.getGeste().getTypeRenovSys(),gesteFin.getGeste().getGainEner(),gesteFin.getGeste().getSysChaud(),
+			//		gesteFin.getGeste().getRdt(), gesteFin.getGeste().getSysChaud().substring(0,1));
+			
 			charge = coutEnergieService.chargesEnerAnnuelles(surface, besoinInitUnitaire, gesteFin.getGeste(),
-					coutEnergie);
+					coutEnergie,annee);
 		}
 		Arrays.fill(tableauAnnuite, charge);
-
+		
 		for (ListeFinanceValeur liste : gesteFin.getListeFinancement()) {
 
 			if (liste.getFinance().getType() != FinancementType.CEE) {
@@ -108,6 +119,18 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 				int dureeDeVie = Math.min(calculDuree(liste.getFinance()), dureeDeVieTravaux);
 				BigDecimal annuite = calculAnnuite(liste.getFinance(), liste.getValeur(), dureeDeVie);
 
+				
+				// BV debug annuite
+				//BigDecimal tauxInt = BigDecimal.ONE.add(((PBC) liste.getFinance()).getTauxInteret());
+				//BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
+
+				//BigDecimal intermediaire = commonService.serieGeometrique(inverse, inverse, dureeDeVie - 1);
+
+				//LOG.debug("geste={}, Finance={} valeur={} cout ={} DV={} tauxInt = {} intermediaire ={} annuite = {}",gesteFin.getGeste().getGesteNom(), 
+				//		liste.getFinance().getType(),
+				//		liste.getValeur(),gesteFin.getCoutRenov().getCT(),dureeDeVie, tauxInt,intermediaire,
+				//		annuite);
+				
 				// on additionne les annuitees dans le tableau avec les charges
 				// energetiques
 				for (int j = 0; j < dureeDeVie; j++) {
@@ -195,8 +218,18 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 		}
 		// on ajoute la valeur dans la hashmap en divisant par la duree de
 		// vie de la renovation pour rapporter le cout global a une annee
-		return val.divide(BigDecimal.valueOf(coutFinal.getAnnuites().length), MathContext.DECIMAL32).add(valCoutInt,
-				MathContext.DECIMAL32);
+		
+		//return val.divide(BigDecimal.valueOf(coutFinal.getAnnuites().length), MathContext.DECIMAL32).add(valCoutInt,
+		//		MathContext.DECIMAL32);
+		
+		// modif on ajoute à la hashmap en actualisant sur la durée de vie des travaux pour se ramener à une année
+		BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
+
+		BigDecimal coefactu = commonService.serieGeometrique(inverse, inverse, coutFinal.getAnnuites().length - 1);
+
+		return val.divide(coefactu, MathContext.DECIMAL32).add(valCoutInt,
+						MathContext.DECIMAL32);
+
 
 	}
 
