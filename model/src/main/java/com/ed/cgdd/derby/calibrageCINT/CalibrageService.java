@@ -9,7 +9,7 @@ import com.ed.cgdd.derby.model.financeObjects.CalibCIBati;
 import com.ed.cgdd.derby.model.financeObjects.CoutEnergie;
 
 public interface CalibrageService {
-	public HashMap<String, BigDecimal> calibreCI(HashMap<String, CalibCI> dataCalib, int nu);
+	public HashMap<String, BigDecimal> calibreCI(HashMap<String, CalibCI> dataCalib, int nu, BigDecimal cintRef);
 
 	public HashMap<String, BigDecimal> calibreCIBati(HashMap<String, CalibCIBati> dataCalib, int nu);
 

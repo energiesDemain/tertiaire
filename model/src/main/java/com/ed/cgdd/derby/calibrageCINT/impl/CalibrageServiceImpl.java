@@ -138,7 +138,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 	}
 
 	// methode de calcul des CI --> cette methode renvoie une hashmap de CI
-	public HashMap<String, BigDecimal> calibreCI(HashMap<String, CalibCI> dataCalib, int nu) {
+	public HashMap<String, BigDecimal> calibreCI(HashMap<String, CalibCI> dataCalib, int nu, BigDecimal cintRef) {
 		
 		HashMap<String, BigDecimal> results = new HashMap<String, BigDecimal>();
 
@@ -150,13 +150,13 @@ public class CalibrageServiceImpl implements CalibrageService {
 			// traitement specifique pour la branche transport
 			if (dataCalib.get(st).getBranche().equals(Branche.TRANSPORT.getCode())
 					&& dataCalib.get(st).getEnergies().equals(Energies.GAZ.getCode())) {
-				calibRef.put(generateKey(dataCalib.get(st)), refCopy(dataCalib.get(st)));
+				calibRef.put(generateKey(dataCalib.get(st)), refCopy(dataCalib.get(st), cintRef));
 
 			} else {
 				if ((dataCalib.get(st).getSysteme().equals(SysChaud.CHAUDIERE_GAZ.getCode()))
 						&& (dataCalib.get(st).getEnergies().equals(Energies.GAZ.getCode()) && (!dataCalib.get(st)
 								.getPerformant()))) {
-					calibRef.put(generateKey(dataCalib.get(st)), refCopy(dataCalib.get(st)));
+					calibRef.put(generateKey(dataCalib.get(st)), refCopy(dataCalib.get(st), cintRef));
 				}
 			}
 		}
@@ -268,8 +268,9 @@ public class CalibrageServiceImpl implements CalibrageService {
 		return stri.substring(0, stri.length() - 1) + "0";
 	}
 
-	protected CalibCIRef refCopy(CalibCI calibCI) {
+	protected CalibCIRef refCopy(CalibCI calibCI, BigDecimal cintRef) {
 		CalibCIRef result = new CalibCIRef();
+		
 		BigDecimal chargesEner = calibCI.getBesoinUnitaire().multiply(calibCI.getCoutEner(), MathContext.DECIMAL32)
 				.divide(calibCI.getRdt(), MathContext.DECIMAL32);
 		
@@ -296,7 +297,8 @@ public class CalibrageServiceImpl implements CalibrageService {
 		result.setPartMarche2009(new BigDecimal(calibCI.getPartMarche2009().toString()));
 
 		// TODO a revoir peut etre CIbase = 10...
-		result.setCoutGlobal(calcCG.add(BigDecimal.TEN, MathContext.DECIMAL32));
+		result.setCoutGlobal(calcCG.add(cintRef, MathContext.DECIMAL32));
+		//result.setCoutGlobal(calcCG.add(BigDecimal.TEN, MathContext.DECIMAL32));
 		//result.setCoutGlobal(calcCG.add(new BigDecimal("20.00"), MathContext.DECIMAL32));
 		//result.setCoutGlobal(calcCG.subtract(new BigDecimal("2.00"), MathContext.DECIMAL32));
 		//result.setCoutGlobal(calcCG.subtract(new BigDecimal("1.57"), MathContext.DECIMAL32));

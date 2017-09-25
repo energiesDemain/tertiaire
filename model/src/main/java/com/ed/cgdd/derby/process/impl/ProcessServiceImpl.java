@@ -478,11 +478,11 @@ public class ProcessServiceImpl implements ProcessService {
 		calibrageService.addingRowsInHashMap(cintMapNeuf,coutEnergieMap,bNeufsMap);
 
 		// Couts intangibles dans l'existant
-		HashMap<String, BigDecimal> coutIntangible = calibrageService.calibreCI(cintMap, NU);
+		HashMap<String, BigDecimal> coutIntangible = calibrageService.calibreCI(cintMap, NU, new BigDecimal("5.00"));
 		HashMap<String, BigDecimal> coutIntangibleBati = calibrageService.calibreCIBati(cintBatiMap, NU);
 
 		// Couts intangibles dans le neuf
-		HashMap<String, BigDecimal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, NU);
+		HashMap<String, BigDecimal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, NU, new BigDecimal("1.00"));
 
 		for (String str :  coutIntangible.keySet()) {
 			if( str.substring(0, 2).equals("01") && str.substring(2, 4).equals("42") ){

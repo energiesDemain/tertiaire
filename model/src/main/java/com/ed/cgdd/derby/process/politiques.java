@@ -10,7 +10,7 @@ public class  politiques {
 	}
 
 	// RT existant 2018
-	public final static int  checkRTex = 1;
+	public final static int  checkRTex = 0;
 	public static int getCheckRTex() {
 		return checkRTex;
 	}
