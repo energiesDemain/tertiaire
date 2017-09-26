@@ -2,8 +2,11 @@ package com.ed.cgdd.derby.calibrageCINT.impl;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import com.ed.cgdd.derby.model.financeObjects.*;
 import com.ed.cgdd.derby.model.parc.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,10 +14,6 @@ import org.apache.logging.log4j.Logger;
 import com.ed.cgdd.derby.calibrageCINT.CalibrageService;
 import com.ed.cgdd.derby.model.calcconso.ParamBesoinsNeufs;
 import com.ed.cgdd.derby.common.CommonService;
-import com.ed.cgdd.derby.model.financeObjects.CalibCI;
-import com.ed.cgdd.derby.model.financeObjects.CalibCIBati;
-import com.ed.cgdd.derby.model.financeObjects.CalibCIRef;
-import com.ed.cgdd.derby.model.financeObjects.CoutEnergie;
 //import com.ed.cgdd.derby.process.impl.ProcessServiceImpl;
 
 public class CalibrageServiceImpl implements CalibrageService {
@@ -36,8 +35,8 @@ public class CalibrageServiceImpl implements CalibrageService {
 	// methode de calcul des CI pour le BATI --> cette methode renvoie une
 	// hashmap de CI pour le BATI
 	// la cle contient la branche et le geste (voir methode recupCIBati)
-	public HashMap<String, BigDecimal> calibreCIBati(HashMap<String, CalibCIBati> dataCalib, ParamCInt paramCInt) {
-		HashMap<String, BigDecimal> results = new HashMap<String, BigDecimal>();
+	public List<CalibCoutGlobal> calibreCIBati(HashMap<String, CalibCIBati> dataCalib, ParamCInt paramCInt) {
+		List<CalibCoutGlobal> results = new ArrayList<CalibCoutGlobal>();
 		// pour le calage, on utilise ne rien faire
 		HashMap<String, CalibCIRef> calibRef = new HashMap<String, CalibCIRef>();
 		for (String st : dataCalib.keySet()) {
@@ -98,7 +97,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 													MathContext.DECIMAL32), MathContext.DECIMAL32),
 									MathContext.DECIMAL32), MathContext.DECIMAL32);
 			
-			results.put(str, coutIntangible);
+			results.add(new CalibCoutGlobal(str, coutIntangible,coutGlobalGeste));
 		}
 
 		return results;
@@ -135,9 +134,9 @@ public class CalibrageServiceImpl implements CalibrageService {
 	}
 
 	// methode de calcul des CI --> cette methode renvoie une hashmap de CI
-	public HashMap<String, BigDecimal> calibreCI(HashMap<String, CalibCI> dataCalib, ParamCInt paramCint) {
+	public List<CalibCoutGlobal> calibreCI(HashMap<String, CalibCI> dataCalib, ParamCInt paramCint) {
 		
-		HashMap<String, BigDecimal> results = new HashMap<String, BigDecimal>();
+		List<CalibCoutGlobal> results = new ArrayList<CalibCoutGlobal>();
 
 		// pour le calage : Chaudiere gaz
 		HashMap<String, CalibCIRef> calibRef = new HashMap<String, CalibCIRef>();
@@ -162,7 +161,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 			// if (!(dataCalib.get(str).getPerformant())) {
 			if (paramCint.getNu() == 0) { // dans ce cas les PM sont les memes pour tous et
 							// les CI ne peuvent pas etre calcule
-				results.put(str, BigDecimal.TEN);
+				results.add(new CalibCoutGlobal(str, BigDecimal.TEN,BigDecimal.ZERO));
 
 			} else {
 
@@ -209,13 +208,15 @@ public class CalibrageServiceImpl implements CalibrageService {
 				.multiply(besoinUnitaire
 				.divide(dataCalib.get(str).getRdt(), MathContext.DECIMAL32), 
 				MathContext.DECIMAL32);
-				
+
+				// Calcul du cout variable
+				BigDecimal coutVariable = (dataCalib.get(str).getCoutM2().divide(
+						coefactu, MathContext.DECIMAL32)).add(chargesEnerinter,
+						MathContext.DECIMAL32);
 				// on calcule le cout annualise en divisant l'investissement par le coef d'actualisation
 				
 				BigDecimal interFinal = (intermediaire.multiply(calibRef.get(generateKey(dataCalib.get(str)))
-				.getCoutGlobal(), MathContext.DECIMAL32)).subtract((dataCalib.get(str).getCoutM2().divide(
-						coefactu, MathContext.DECIMAL32)).add(chargesEnerinter,
-								MathContext.DECIMAL32), MathContext.DECIMAL32);
+				.getCoutGlobal(), MathContext.DECIMAL32)).subtract(coutVariable, MathContext.DECIMAL32);
 				
 				//if(str.substring(0,2).equals("01") && str.substring(2,4).equals("42")){
 				//LOG.debug("cef={} id={} BE ={}, COUT = {}, CGref = {}, CE = {}, PE={}, RDT={}", coefactu, str, besoinUnitaire, 
@@ -237,9 +238,9 @@ public class CalibrageServiceImpl implements CalibrageService {
 //				
 				
 				if (!dataCalib.get(str).getPerformant()) {
-					results.put(str, interFinal);
+					results.add(new CalibCoutGlobal(str, interFinal,coutVariable));
 				} else {
-					results.put(modif(str), interFinal);
+					results.add(new CalibCoutGlobal(modif(str), interFinal,coutVariable));
 				}
 
 			}

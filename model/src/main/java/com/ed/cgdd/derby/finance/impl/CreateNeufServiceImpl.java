@@ -3,7 +3,9 @@ package com.ed.cgdd.derby.finance.impl;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.HashMap;
+import java.util.List;
 
+import com.ed.cgdd.derby.model.financeObjects.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,11 +15,6 @@ import com.ed.cgdd.derby.finance.CreateNeufService;
 import com.ed.cgdd.derby.finance.RecupParamFinDAS;
 import com.ed.cgdd.derby.model.calcconso.ParamBesoinsNeufs;
 import com.ed.cgdd.derby.model.calcconso.ParamRdtCout;
-import com.ed.cgdd.derby.model.financeObjects.CoutEnergie;
-import com.ed.cgdd.derby.model.financeObjects.Emissions;
-import com.ed.cgdd.derby.model.financeObjects.Maintenance;
-import com.ed.cgdd.derby.model.financeObjects.PBC;
-import com.ed.cgdd.derby.model.financeObjects.TauxInteret;
 import com.ed.cgdd.derby.model.parc.Usage;
 
 public class CreateNeufServiceImpl implements CreateNeufService {
@@ -68,7 +65,7 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 	@Override
 	public HashMap<String, BigDecimal> pmChauffNeuf(HashMap<String, ParamBesoinsNeufs> bNeufsMap,
 			HashMap<String, BigDecimal> dvChauffMap, HashMap<String, ParamRdtCout> rdtCoutChauffMap, String idAgreg,
-			int annee, String statut_occup, int nu, HashMap<String, BigDecimal> coutIntangible,
+			int annee, String statut_occup, int nu, List<CalibCoutGlobal> coutIntangible,
 			HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
 			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,
 			HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, Maintenance> maintenanceMap) {
@@ -131,7 +128,10 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 					.getPart(), MathContext.DECIMAL32);
 			
 			cout = cout.add(coutMaintenance);
-			BigDecimal coutInt = coutIntangible.get(idCoutIntangible);
+			BigDecimal coutInt = null;
+			if(coutIntangible.stream().filter(p->p.getCalKey().equals(idCoutIntangible)).findFirst().isPresent()){
+				coutInt = coutIntangible.stream().filter(p->p.getCalKey().equals(idCoutIntangible)).findFirst().get().getCInt();
+			}
 		
 			
 			int dureeVie = dvChauffMap.get(getIdSysChauf(str)).intValueExact();

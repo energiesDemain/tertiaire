@@ -3,9 +3,14 @@ package com.ed.cgdd.derby.calibrageCINT.impl;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.ed.cgdd.derby.model.financeObjects.CalibCoutGlobal;
+import com.ed.cgdd.derby.model.parc.Branche;
+import com.ed.cgdd.derby.model.parc.CIntType;
+import com.sun.org.apache.bcel.internal.generic.SWITCH;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -16,8 +21,11 @@ import com.ed.cgdd.derby.model.financeObjects.CalibCIBati;
 
 public class CalibrageDASImpl extends BddDAS implements CalibrageDAS {
 
+	private final String INSERT_CINT="INSERT_CINT_";
+
 	private JdbcTemplate jdbcTemplate;
 	private CommonService commonService;
+
 
 	public JdbcTemplate getJdbcTemplate() {
 		return jdbcTemplate;
@@ -64,7 +72,8 @@ public class CalibrageDASImpl extends BddDAS implements CalibrageDAS {
 		return results;
 	}
 
-	protected String createIDforCIBati(CalibCIBati calibCIBati) {
+
+    protected String createIDforCIBati(CalibCIBati calibCIBati) {
 		String key = calibCIBati.getBranche() + calibCIBati.getGeste();
 		return key;
 	}
@@ -178,6 +187,41 @@ public class CalibrageDASImpl extends BddDAS implements CalibrageDAS {
 			return "1";
 		} else {
 			return "0";
+		}
+
+	}
+
+
+	@Override
+	public void insertCInt(List<CalibCoutGlobal> coutIntangibleMap, CIntType cIntType) {
+		List<Object[]> objectInsert = new ArrayList<Object[]>();
+		if (cIntType.equals(CIntType.BATI)){
+			for (CalibCoutGlobal calibCoutGlobal : coutIntangibleMap) {
+				Object[] object = new Object[4];
+				object[0] = calibCoutGlobal.getCalKey();
+				object[1] = calibCoutGlobal.getCalKey();
+				object[2] = calibCoutGlobal.getCInt();
+				object[3] = calibCoutGlobal.getCoutVariable();
+				objectInsert.add(object);
+			}
+		} else {
+			for (CalibCoutGlobal calibCoutGlobal : coutIntangibleMap) {
+				Object[] object = new Object[6];
+				object[0] = calibCoutGlobal.getCalKey();
+				object[1] = calibCoutGlobal.getCalKey();
+				object[2] = calibCoutGlobal.getCalKey();
+				object[3] = calibCoutGlobal.getCalKey();
+				object[4] = calibCoutGlobal.getCInt();
+				object[5] = calibCoutGlobal.getCoutVariable();
+				objectInsert.add(object);
+			}
+
+		}
+
+
+		if (!objectInsert.isEmpty()) {
+			String requestInsert = getProperty(INSERT_CINT + cIntType.toString());
+			jdbcTemplate.batchUpdate(requestInsert, objectInsert);
 		}
 
 	}

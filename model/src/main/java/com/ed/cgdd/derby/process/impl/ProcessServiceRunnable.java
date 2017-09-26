@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.ed.cgdd.derby.model.financeObjects.*;
 import com.ed.cgdd.derby.model.parc.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,24 +43,6 @@ import com.ed.cgdd.derby.model.calcconso.ResultConsoRdt;
 import com.ed.cgdd.derby.model.calcconso.ResultConsoRt;
 import com.ed.cgdd.derby.model.calcconso.ResultConsoUClim;
 import com.ed.cgdd.derby.model.calcconso.ResultConsoURt;
-import com.ed.cgdd.derby.model.financeObjects.BibliGeste;
-import com.ed.cgdd.derby.model.financeObjects.CEE;
-import com.ed.cgdd.derby.model.financeObjects.CoutEnergie;
-import com.ed.cgdd.derby.model.financeObjects.ElasticiteMap;
-import com.ed.cgdd.derby.model.financeObjects.Emissions;
-import com.ed.cgdd.derby.model.financeObjects.EvolValeurVerte;
-import com.ed.cgdd.derby.model.financeObjects.Exigence;
-import com.ed.cgdd.derby.model.financeObjects.Financement;
-import com.ed.cgdd.derby.model.financeObjects.Geste;
-import com.ed.cgdd.derby.model.financeObjects.Maintenance;
-import com.ed.cgdd.derby.model.financeObjects.PBC;
-import com.ed.cgdd.derby.model.financeObjects.PartMarcheRenov;
-import com.ed.cgdd.derby.model.financeObjects.Reglementations;
-import com.ed.cgdd.derby.model.financeObjects.RepartStatutOccup;
-import com.ed.cgdd.derby.model.financeObjects.ResFin;
-import com.ed.cgdd.derby.model.financeObjects.SurfMoy;
-import com.ed.cgdd.derby.model.financeObjects.TauxInteret;
-import com.ed.cgdd.derby.model.financeObjects.ValeurFinancement;
 import com.ed.cgdd.derby.model.progression.Progression;
 import com.ed.cgdd.derby.parc.InsertParcDAS;
 import com.ed.cgdd.derby.parc.LoadParcDataDAS;
@@ -165,8 +148,8 @@ public class ProcessServiceRunnable implements Runnable {
 	HashMap<String, ParamGainsUsages> gainsEclairageMap;
 	HashMap<String, ParamGainsUsages> gainsVentilationMap;
 	HashMap<String, ParamCoutEclVentil> coutsEclVentilMap;
-	HashMap<String, BigDecimal> coutIntangible;
-	HashMap<String, BigDecimal> coutIntangibleBati;
+	List<CalibCoutGlobal> coutIntangible;
+	List<CalibCoutGlobal> coutIntangibleBati;
 	HashMap<String, BigDecimal> evolCoutBati;
 	HashMap<String, BigDecimal> evolCoutTechno;
 	Map<String, List<String>> periodeMap;
@@ -181,7 +164,7 @@ public class ProcessServiceRunnable implements Runnable {
 	HashMap<String, RepartStatutOccup> repartStatutOccupMap;
 	HashMap<String, Maintenance> maintenanceMap;
 	ElasticiteMap elasticiteMap;
-	HashMap<String, BigDecimal> coutIntangibleNeuf;
+	List<CalibCoutGlobal> coutIntangibleNeuf;
 
 	public ProcessServiceRunnable(int pasdeTempsInit, ParamCintObjects paramCintObject, float txRenovBati,
 								  HashMap<String, ParamParcArray> entreesMap, HashMap<String, ParamParcArray> sortiesMap,
@@ -200,14 +183,14 @@ public class ProcessServiceRunnable implements Runnable {
 								  HashMap<String, BigDecimal> dvChauffMap, HashMap<TypeRenovBati, BigDecimal> dvGesteMap,
 								  HashMap<String, ParamRatioAux> auxChaud, HashMap<String, ParamRatioAux> auxFroid,
 								  HashMap<String, ParamGainsUsages> gainsEclairageMap, HashMap<String, ParamGainsUsages> gainsVentilationMap,
-								  HashMap<String, ParamCoutEclVentil> coutsEclVentilMap, HashMap<String, BigDecimal> coutIntangible,
-								  HashMap<String, BigDecimal> coutIntangibleBati, HashMap<String, BigDecimal> evolCoutBati,
+								  HashMap<String, ParamCoutEclVentil> coutsEclVentilMap, List<CalibCoutGlobal> coutIntangible,
+								  List<CalibCoutGlobal> coutIntangibleBati, HashMap<String, BigDecimal> evolCoutBati,
 								  HashMap<String, BigDecimal> evolCoutTechno, Map<String, List<String>> periodeMap,
 								  HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
 								  Reglementations reglementations, String idAgregParc, Progression progression,
 								  HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, SurfMoy> surfMoyMap,
 								  HashMap<String, EvolValeurVerte> evolVVMap, HashMap<String, RepartStatutOccup> repartStatutOccupMap,
-								  HashMap<String, Maintenance> maintenanceMap, ElasticiteMap elasticiteMap, HashMap<String, BigDecimal> coutIntangibleNeuf) {
+								  HashMap<String, Maintenance> maintenanceMap, ElasticiteMap elasticiteMap, List<CalibCoutGlobal> coutIntangibleNeuf) {
 		this.pasdeTempsInit = pasdeTempsInit;
 		this.paramCintObject = paramCintObject;
 		this.txRenovBati = txRenovBati;
@@ -424,8 +407,8 @@ public class ProcessServiceRunnable implements Runnable {
 
 					resultatsParc = new ResultParc();
 
-					// BV ajout b�timent exemplaire de l'Etat. on baisse de les besoins unitaires des usages rt du parc entrant de l'Etat 
-					// pour prendre en compte l'entree des b�timents E+C-. TODO faire un parametre propre 
+					// BV ajout batiment exemplaire de l'Etat. on baisse de les besoins unitaires des usages rt du parc entrant de l'Etat
+					// pour prendre en compte l'entree des batiments E+C-. TODO faire un parametre propre
 					if(politiques.checkBatex == 1){
 					int periode = commonService.correspPeriode(annee);
 					String idOccupant = idAgregParc.substring(START_OCCUPANT, START_OCCUPANT + LENGTH_OCCUPANT);

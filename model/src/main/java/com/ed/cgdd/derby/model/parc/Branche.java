@@ -18,4 +18,19 @@ public enum Branche {
 		this.code = code;
 	}
 
+	public static String getEnumName(String code) {
+
+		String name = new String();
+		for (Branche branche : Branche.values()) {
+
+			if (branche.getCode().toString().equals(code)) {
+
+				name = branche.toString();
+			}
+
+		}
+
+		return name;
+	}
+
 }

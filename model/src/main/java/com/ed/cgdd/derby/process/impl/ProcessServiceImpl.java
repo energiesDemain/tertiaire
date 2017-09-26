@@ -13,7 +13,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import com.ed.cgdd.derby.model.parc.ParamCintObjects;
+import com.ed.cgdd.derby.model.financeObjects.*;
+import com.ed.cgdd.derby.model.parc.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -48,20 +49,6 @@ import com.ed.cgdd.derby.model.calcconso.ParamRdtPerfEcs;
 import com.ed.cgdd.derby.model.calcconso.ParamTauxCouvEcs;
 import com.ed.cgdd.derby.model.calcconso.ParamTxClimExistant;
 import com.ed.cgdd.derby.model.calcconso.ParamTxClimNeuf;
-import com.ed.cgdd.derby.model.financeObjects.CalibCI;
-import com.ed.cgdd.derby.model.financeObjects.CalibCIBati;
-import com.ed.cgdd.derby.model.financeObjects.CoutEnergie;
-import com.ed.cgdd.derby.model.financeObjects.ElasticiteMap;
-import com.ed.cgdd.derby.model.financeObjects.Emissions;
-import com.ed.cgdd.derby.model.financeObjects.EvolValeurVerte;
-import com.ed.cgdd.derby.model.financeObjects.Maintenance;
-import com.ed.cgdd.derby.model.financeObjects.Reglementations;
-import com.ed.cgdd.derby.model.financeObjects.RepartStatutOccup;
-import com.ed.cgdd.derby.model.financeObjects.SurfMoy;
-import com.ed.cgdd.derby.model.financeObjects.TauxInteret;
-import com.ed.cgdd.derby.model.parc.ParamParcArray;
-import com.ed.cgdd.derby.model.parc.Parc;
-import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.model.progression.Progression;
 import com.ed.cgdd.derby.model.progression.ProgressionStep;
 import com.ed.cgdd.derby.parc.InsertParcDAS;
@@ -480,13 +467,16 @@ public class ProcessServiceImpl implements ProcessService {
 		calibrageService.addingRowsInHashMap(cintMapNeuf,coutEnergieMap,bNeufsMap);
 
 		// Couts intangibles dans l'existant
-		HashMap<String, BigDecimal> coutIntangible = calibrageService.calibreCI(cintMap, paramCintObjects.getSysExist());
-		HashMap<String, BigDecimal> coutIntangibleBati = calibrageService.calibreCIBati(cintBatiMap, paramCintObjects.getGesteBat());
+		List<CalibCoutGlobal> coutIntangible = calibrageService.calibreCI(cintMap, paramCintObjects.getSysExist());
+		List<CalibCoutGlobal> coutIntangibleBati = calibrageService.calibreCIBati(cintBatiMap, paramCintObjects.getGesteBat());
 
 		// Couts intangibles dans le neuf
-		HashMap<String, BigDecimal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf());
+		List<CalibCoutGlobal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf());
 
 		// Enregistrement des couts intangibles
+		calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
+		calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
+		calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
 
 		// Chargement de l'evolution du cout des techno et du bati
 		HashMap<String, BigDecimal> evolCoutBati = recupParamFinDAS.getEvolutionCoutBati();
@@ -626,24 +616,6 @@ public class ProcessServiceImpl implements ProcessService {
 		return pasdeTemps;
 	}
 
-	public int loadNu() throws IOException {
-		double temp;
-		int nu;
-
-		// Chargement du parametre nu
-
-		InputStream ExcelFileToUpdate = new FileInputStream("./Tables_param/Parametres_utilisateurs.xls");
-		HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToUpdate);
-		HSSFSheet sheet = wb.getSheet("Parametrage_couts_intangibles");
-
-		int i = 4;
-		int c = 1;
-		HSSFCell cell = sheet.getRow(i).getCell(c);
-		temp = cell.getNumericCellValue();
-		nu = (int) temp;
-
-		return nu;
-	}
 
 	public float loadTxRenovBati() throws IOException {
 		double temp;

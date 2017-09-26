@@ -70,6 +70,7 @@
 	<bean id="calibrageDAS" class="com.ed.cgdd.derby.calibrageCINT.impl.CalibrageDASImpl">
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
 		<property name="commonService" ref="commonService" />
+
 	</bean>
 	
 	<bean id="calibrageService" class="com.ed.cgdd.derby.calibrageCINT.impl.CalibrageServiceImpl">

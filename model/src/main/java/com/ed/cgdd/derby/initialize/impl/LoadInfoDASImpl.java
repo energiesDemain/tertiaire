@@ -303,6 +303,9 @@ public class LoadInfoDASImpl implements LoadInfoDAS {
 		// newTables.add(51, "Etiquettes_Categories");
 		newTables.add(50, "Maintenance");
 		newTables.add(51, "Elasticite_prix");
+		newTables.add(52, "CINT_BATI");
+		newTables.add(53, "CINT_SYS_NEUF");
+		newTables.add(54, "CINT_SYS_EXISTANT");
 
 
 		return newTables;
