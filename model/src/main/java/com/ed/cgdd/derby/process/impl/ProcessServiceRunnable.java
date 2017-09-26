@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.ed.cgdd.derby.model.parc.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
@@ -59,14 +60,6 @@ import com.ed.cgdd.derby.model.financeObjects.ResFin;
 import com.ed.cgdd.derby.model.financeObjects.SurfMoy;
 import com.ed.cgdd.derby.model.financeObjects.TauxInteret;
 import com.ed.cgdd.derby.model.financeObjects.ValeurFinancement;
-import com.ed.cgdd.derby.model.parc.MapResultsKeys;
-import com.ed.cgdd.derby.model.parc.ParamParcArray;
-import com.ed.cgdd.derby.model.parc.Parc;
-import com.ed.cgdd.derby.model.parc.ResultParc;
-import com.ed.cgdd.derby.model.parc.TypeRenovBati;
-import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
-import com.ed.cgdd.derby.model.parc.Usage;
-import com.ed.cgdd.derby.model.parc.UsageRT;
 import com.ed.cgdd.derby.model.progression.Progression;
 import com.ed.cgdd.derby.parc.InsertParcDAS;
 import com.ed.cgdd.derby.parc.LoadParcDataDAS;
@@ -138,7 +131,7 @@ public class ProcessServiceRunnable implements Runnable {
 	private InsertResultFinancementDAS insertResultFinancementDAS;
 
 	int pasdeTempsInit;
-	int NU;
+	ParamCintObjects paramCintObject;
 	float txRenovBati;
 	HashMap<String, ParamParcArray> entreesMap;
 	HashMap<String, ParamParcArray> sortiesMap;
@@ -190,33 +183,33 @@ public class ProcessServiceRunnable implements Runnable {
 	ElasticiteMap elasticiteMap;
 	HashMap<String, BigDecimal> coutIntangibleNeuf;
 
-	public ProcessServiceRunnable(int pasdeTempsInit, int NU, float txRenovBati,
-			HashMap<String, ParamParcArray> entreesMap, HashMap<String, ParamParcArray> sortiesMap,
-			HashMap<String, ParamBesoinsNeufs> bNeufsMap, HashMap<String, EffetRebond> effetRebond,
-			HashMap<String, ParamGainsUsages> gainsNonRTMap, HashMap<String, BigDecimal> dvUsagesMap,
-			HashMap<String, ParamPMConso> pmCuissonMap, HashMap<String, ParamPMConso> pmAutresMap,
-			HashMap<String, ParamPMConsoChgtSys> pmCuissonChgtMap,
-			HashMap<String, ParamPMConsoChgtSys> pmAutresChgtMap, HashMap<String, BigDecimal> rythmeFrdRgltMap,
-			HashMap<String, BigDecimal> gainFrdRgltMap, HashMap<String, ParamPMConso> pmEcsNeufMap,
-			HashMap<String, ParamPMConsoChgtSys> pmEcsChgtMap, HashMap<String, ParamRdtEcs> bibliRdtEcsMap,
-			HashMap<String, ParamRdtPerfEcs> rdtPerfEcsMap, HashMap<String, ParamPartSolaireEcs> partSolaireMap,
-			HashMap<String, ParamTauxCouvEcs> txCouvSolaireMap, HashMap<String, ParamPartSysPerfEcs> partSysPerfEcsMap,
-			HashMap<String, BigDecimal> dvEcsMap, HashMap<String, ParamCoutEcs> coutEcsMap,
-			HashMap<String, ParamRdtCout> rdtCoutClimMap, HashMap<String, ParamTxClimExistant> txClimExistantMap,
-			HashMap<String, ParamTxClimNeuf> txClimNeufMap, HashMap<String, ParamRdtCout> rdtCoutChauffMap,
-			HashMap<String, BigDecimal> dvChauffMap, HashMap<TypeRenovBati, BigDecimal> dvGesteMap,
-			HashMap<String, ParamRatioAux> auxChaud, HashMap<String, ParamRatioAux> auxFroid,
-			HashMap<String, ParamGainsUsages> gainsEclairageMap, HashMap<String, ParamGainsUsages> gainsVentilationMap,
-			HashMap<String, ParamCoutEclVentil> coutsEclVentilMap, HashMap<String, BigDecimal> coutIntangible,
-			HashMap<String, BigDecimal> coutIntangibleBati, HashMap<String, BigDecimal> evolCoutBati,
-			HashMap<String, BigDecimal> evolCoutTechno, Map<String, List<String>> periodeMap,
-			HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
-			Reglementations reglementations, String idAgregParc, Progression progression,
-			HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, SurfMoy> surfMoyMap,
-			HashMap<String, EvolValeurVerte> evolVVMap, HashMap<String, RepartStatutOccup> repartStatutOccupMap,
-			HashMap<String, Maintenance> maintenanceMap, ElasticiteMap elasticiteMap, HashMap<String, BigDecimal> coutIntangibleNeuf) {
+	public ProcessServiceRunnable(int pasdeTempsInit, ParamCintObjects paramCintObject, float txRenovBati,
+								  HashMap<String, ParamParcArray> entreesMap, HashMap<String, ParamParcArray> sortiesMap,
+								  HashMap<String, ParamBesoinsNeufs> bNeufsMap, HashMap<String, EffetRebond> effetRebond,
+								  HashMap<String, ParamGainsUsages> gainsNonRTMap, HashMap<String, BigDecimal> dvUsagesMap,
+								  HashMap<String, ParamPMConso> pmCuissonMap, HashMap<String, ParamPMConso> pmAutresMap,
+								  HashMap<String, ParamPMConsoChgtSys> pmCuissonChgtMap,
+								  HashMap<String, ParamPMConsoChgtSys> pmAutresChgtMap, HashMap<String, BigDecimal> rythmeFrdRgltMap,
+								  HashMap<String, BigDecimal> gainFrdRgltMap, HashMap<String, ParamPMConso> pmEcsNeufMap,
+								  HashMap<String, ParamPMConsoChgtSys> pmEcsChgtMap, HashMap<String, ParamRdtEcs> bibliRdtEcsMap,
+								  HashMap<String, ParamRdtPerfEcs> rdtPerfEcsMap, HashMap<String, ParamPartSolaireEcs> partSolaireMap,
+								  HashMap<String, ParamTauxCouvEcs> txCouvSolaireMap, HashMap<String, ParamPartSysPerfEcs> partSysPerfEcsMap,
+								  HashMap<String, BigDecimal> dvEcsMap, HashMap<String, ParamCoutEcs> coutEcsMap,
+								  HashMap<String, ParamRdtCout> rdtCoutClimMap, HashMap<String, ParamTxClimExistant> txClimExistantMap,
+								  HashMap<String, ParamTxClimNeuf> txClimNeufMap, HashMap<String, ParamRdtCout> rdtCoutChauffMap,
+								  HashMap<String, BigDecimal> dvChauffMap, HashMap<TypeRenovBati, BigDecimal> dvGesteMap,
+								  HashMap<String, ParamRatioAux> auxChaud, HashMap<String, ParamRatioAux> auxFroid,
+								  HashMap<String, ParamGainsUsages> gainsEclairageMap, HashMap<String, ParamGainsUsages> gainsVentilationMap,
+								  HashMap<String, ParamCoutEclVentil> coutsEclVentilMap, HashMap<String, BigDecimal> coutIntangible,
+								  HashMap<String, BigDecimal> coutIntangibleBati, HashMap<String, BigDecimal> evolCoutBati,
+								  HashMap<String, BigDecimal> evolCoutTechno, Map<String, List<String>> periodeMap,
+								  HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
+								  Reglementations reglementations, String idAgregParc, Progression progression,
+								  HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, SurfMoy> surfMoyMap,
+								  HashMap<String, EvolValeurVerte> evolVVMap, HashMap<String, RepartStatutOccup> repartStatutOccupMap,
+								  HashMap<String, Maintenance> maintenanceMap, ElasticiteMap elasticiteMap, HashMap<String, BigDecimal> coutIntangibleNeuf) {
 		this.pasdeTempsInit = pasdeTempsInit;
-		this.NU = NU;
+		this.paramCintObject = paramCintObject;
 		this.txRenovBati = txRenovBati;
 		this.entreesMap = entreesMap;
 		this.sortiesMap = sortiesMap;
@@ -431,8 +424,8 @@ public class ProcessServiceRunnable implements Runnable {
 
 					resultatsParc = new ResultParc();
 
-					// BV ajout bâtiment exemplaire de l'Etat. on baisse de les besoins unitaires des usages rt du parc entrant de l'Etat 
-					// pour prendre en compte l'entree des bâtiments E+C-. TODO faire un parametre propre 
+					// BV ajout bï¿½timent exemplaire de l'Etat. on baisse de les besoins unitaires des usages rt du parc entrant de l'Etat 
+					// pour prendre en compte l'entree des bï¿½timents E+C-. TODO faire un parametre propre 
 					if(politiques.checkBatex == 1){
 					int periode = commonService.correspPeriode(annee);
 					String idOccupant = idAgregParc.substring(START_OCCUPANT, START_OCCUPANT + LENGTH_OCCUPANT);
@@ -462,7 +455,7 @@ public class ProcessServiceRunnable implements Runnable {
 
 					// Calcul des parts de marche dans les batiments neufs
 					HashMap<String, BigDecimal> partsMarchesNeuf = createNeufService.pmChauffNeuf(bNeufsMap,
-							dvChauffMap, rdtCoutChauffMap, idAgregParc, annee, "Proprietaire", NU, coutIntangibleNeuf,
+							dvChauffMap, rdtCoutChauffMap, idAgregParc, annee, "Proprietaire", paramCintObject.getSysNeuf().getNu(), coutIntangibleNeuf,
 							coutEnergieMap, emissionsMap, evolCoutBati, evolCoutTechno, tauxInteretMap, maintenanceMap);
 			
 					
@@ -485,7 +478,7 @@ public class ProcessServiceRunnable implements Runnable {
 					HashMap<String, PartMarcheRenov> partMarcheMap = financeService.renovationSegmentGlobal(
 							decretMemory, resultConsoUClimMap, resultConsoURtMap, listFin, subCEE, dvChauffMap,
 							dvGesteMap, rdtCoutChauffMap, parcTotMap, resultatsConsoRt, annee, anneeNTab,
-							coutIntangible, coutIntangibleBati, NU, txRenovBati, idAgregParc, bibliGeste,
+							coutIntangible, coutIntangibleBati, paramCintObject, txRenovBati, idAgregParc, bibliGeste,
 							coutEnergieMap, emissionsMap, reglementations, compteur, coutsEclVentilMap, coutEcsMap,
 							pmEcsNeufMap, bNeufsMap, gainsVentilationMap, bibliRdtEcsMap, evolCoutBati, evolCoutTechno,
 							tauxInteretMap, surfMoyMap, evolVVMap, repartStatutOccupMap, maintenanceMap);

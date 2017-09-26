@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.HashMap;
 
+import com.ed.cgdd.derby.model.parc.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,10 +15,6 @@ import com.ed.cgdd.derby.model.financeObjects.CalibCI;
 import com.ed.cgdd.derby.model.financeObjects.CalibCIBati;
 import com.ed.cgdd.derby.model.financeObjects.CalibCIRef;
 import com.ed.cgdd.derby.model.financeObjects.CoutEnergie;
-import com.ed.cgdd.derby.model.parc.Branche;
-import com.ed.cgdd.derby.model.parc.Energies;
-import com.ed.cgdd.derby.model.parc.SysChaud;
-import com.ed.cgdd.derby.model.parc.Usage;
 //import com.ed.cgdd.derby.process.impl.ProcessServiceImpl;
 
 public class CalibrageServiceImpl implements CalibrageService {
@@ -39,7 +36,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 	// methode de calcul des CI pour le BATI --> cette methode renvoie une
 	// hashmap de CI pour le BATI
 	// la cle contient la branche et le geste (voir methode recupCIBati)
-	public HashMap<String, BigDecimal> calibreCIBati(HashMap<String, CalibCIBati> dataCalib, int nu) {
+	public HashMap<String, BigDecimal> calibreCIBati(HashMap<String, CalibCIBati> dataCalib, ParamCInt paramCInt) {
 		HashMap<String, BigDecimal> results = new HashMap<String, BigDecimal>();
 		// pour le calage, on utilise ne rien faire
 		HashMap<String, CalibCIRef> calibRef = new HashMap<String, CalibCIRef>();
@@ -52,7 +49,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 		for (String str : dataCalib.keySet()) {
 			Double inter1 = (dataCalib.get(str).getPartMarche().divide(calibRef.get(dataCalib.get(str).getBranche())
 					.getPartMarche2009(), MathContext.DECIMAL32)).doubleValue();
-			Double inter2 = BigDecimal.ONE.divide(BigDecimal.valueOf(-nu), MathContext.DECIMAL32).doubleValue();
+			Double inter2 = BigDecimal.ONE.divide(BigDecimal.valueOf(-paramCInt.getNu()), MathContext.DECIMAL32).doubleValue();
 			BigDecimal intermediaire = BigDecimal.valueOf(Math.pow(inter1, inter2));
 			BigDecimal coutGlobalGeste = intermediaire.multiply(calibRef.get(dataCalib.get(str).getBranche())
 					.getCoutGlobal(), MathContext.DECIMAL32);
@@ -77,7 +74,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 //			
 			
 			// BV ajout actualisation 
-			// TODO mettre un taux d'actualisation différent pour le public et le privé voire pptaire/locataire
+			// TODO mettre un taux d'actualisation different pour le public et le prive voire pptaire/locataire
 			BigDecimal tauxInt = BigDecimal.ONE.add(new BigDecimal("0.04"));
 			BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
 
@@ -126,7 +123,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 		// calcul du cout global pour le geste Rien faire
 		// les couts intangibles sont nuls
 		// la dureee de vie est de 1
-		// TODO vérifier le calcul du coût global ne rien faire dans excel
+		// TODO verifier le calcul du cout global ne rien faire dans excel
 		
 		BigDecimal coutGlobal = calibCIBati.getChargeInit();
 		reference.setCoutGlobal(coutGlobal);
@@ -138,7 +135,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 	}
 
 	// methode de calcul des CI --> cette methode renvoie une hashmap de CI
-	public HashMap<String, BigDecimal> calibreCI(HashMap<String, CalibCI> dataCalib, int nu, BigDecimal cintRef) {
+	public HashMap<String, BigDecimal> calibreCI(HashMap<String, CalibCI> dataCalib, ParamCInt paramCint) {
 		
 		HashMap<String, BigDecimal> results = new HashMap<String, BigDecimal>();
 
@@ -150,20 +147,20 @@ public class CalibrageServiceImpl implements CalibrageService {
 			// traitement specifique pour la branche transport
 			if (dataCalib.get(st).getBranche().equals(Branche.TRANSPORT.getCode())
 					&& dataCalib.get(st).getEnergies().equals(Energies.GAZ.getCode())) {
-				calibRef.put(generateKey(dataCalib.get(st)), refCopy(dataCalib.get(st), cintRef));
+				calibRef.put(generateKey(dataCalib.get(st)), refCopy(dataCalib.get(st), paramCint.getCintRef()));
 
 			} else {
 				if ((dataCalib.get(st).getSysteme().equals(SysChaud.CHAUDIERE_GAZ.getCode()))
 						&& (dataCalib.get(st).getEnergies().equals(Energies.GAZ.getCode()) && (!dataCalib.get(st)
 								.getPerformant()))) {
-					calibRef.put(generateKey(dataCalib.get(st)), refCopy(dataCalib.get(st), cintRef));
+					calibRef.put(generateKey(dataCalib.get(st)), refCopy(dataCalib.get(st), paramCint.getCintRef()));
 				}
 			}
 		}
 
 		for (String str : dataCalib.keySet()) {
 			// if (!(dataCalib.get(str).getPerformant())) {
-			if (nu == 0) { // dans ce cas les PM sont les memes pour tous et
+			if (paramCint.getNu() == 0) { // dans ce cas les PM sont les memes pour tous et
 							// les CI ne peuvent pas etre calcule
 				results.put(str, BigDecimal.TEN);
 
@@ -178,11 +175,11 @@ public class CalibrageServiceImpl implements CalibrageService {
 								MathContext.DECIMAL32).doubleValue();
 				
 				
-				Double inter2 = BigDecimal.ONE.divide(BigDecimal.valueOf(-nu), MathContext.DECIMAL32).doubleValue();
+				Double inter2 = BigDecimal.ONE.divide(BigDecimal.valueOf(-paramCint.getNu()), MathContext.DECIMAL32).doubleValue();
 				BigDecimal intermediaire = BigDecimal.valueOf(Math.pow(inter1, inter2));
 				
 				// BV ajout actualisation de l'investissement (4%)
-				// TODO mettre un taux d'actualisation différent pour le public et le privé voire pptaire/locataire
+				// TODO mettre un taux d'actualisation different pour le public et le prive voire pptaire/locataire
 				
 				BigDecimal tauxInt = BigDecimal.ONE.add(new BigDecimal("0.04"));
 				BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
@@ -275,7 +272,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 				.divide(calibCI.getRdt(), MathContext.DECIMAL32);
 		
 		// BV ajout actualisation de l'investissement (4%)
-		// TODO mettre un taux d'actualisation différent pour le public et le privé voire pptaire/locataire
+		// TODO mettre un taux d'actualisation different pour le public et le prive voire pptaire/locataire
 	
 		BigDecimal tauxInt = BigDecimal.ONE.add(new BigDecimal("0.04"));
 		BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);

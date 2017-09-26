@@ -18,7 +18,15 @@ public class LoadInfoParamDASImpl implements LoadInfoParamDAS {
 
 		ExcelParameters param = new ExcelParameters();
 
+		// Parametres des couts intangibles
+		param.setFilename("./Tables_param/Parametres_utilisateurs.xls");
+		param.setSheetname("Parametrage_couts_intangibles");
+		param.setFline(4);
+		param.setFcolumn(2);
+		paramMap.put("Cint", param);
+
 		// Parametres d'entrees de parc
+		param = new ExcelParameters();
 		param.setFilename("./Tables_param/Parametres_utilisateurs.xls");
 		param.setSheetname("Evolution_parc");
 		param.setFline(3);

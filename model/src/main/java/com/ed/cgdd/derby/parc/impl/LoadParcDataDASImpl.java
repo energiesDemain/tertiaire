@@ -6,16 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.ed.cgdd.derby.model.parc.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.ed.cgdd.derby.model.parc.ParamParcArray;
-import com.ed.cgdd.derby.model.parc.Parc;
-import com.ed.cgdd.derby.model.parc.TypeRenovBati;
-import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
 import com.ed.cgdd.derby.parc.LoadParcDataDAS;
 
 public class LoadParcDataDASImpl extends BddParcDAS implements LoadParcDataDAS {

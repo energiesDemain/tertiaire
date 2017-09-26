@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import com.ed.cgdd.derby.model.parc.ParamCintObjects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -377,15 +378,16 @@ public class ProcessServiceImpl implements ProcessService {
 	}
 
 	@Override
-	public void process(Progression progression) throws IOException {
+	public void process(Progression progression, ParamCintObjects paramCintObjects) throws IOException {
 
 		long start = System.currentTimeMillis();
 
 		// Chargement et initialisation des donnees
 
 		int pasdeTempsInit = 1;
-		int NU = loadNu();
 		float txRenovBati = loadTxRenovBati();
+
+
 
 		
 		// Chargement des parametres influant sur l'evolution du parc
@@ -478,18 +480,14 @@ public class ProcessServiceImpl implements ProcessService {
 		calibrageService.addingRowsInHashMap(cintMapNeuf,coutEnergieMap,bNeufsMap);
 
 		// Couts intangibles dans l'existant
-		HashMap<String, BigDecimal> coutIntangible = calibrageService.calibreCI(cintMap, NU, new BigDecimal("5.00"));
-		HashMap<String, BigDecimal> coutIntangibleBati = calibrageService.calibreCIBati(cintBatiMap, NU);
+		HashMap<String, BigDecimal> coutIntangible = calibrageService.calibreCI(cintMap, paramCintObjects.getSysExist());
+		HashMap<String, BigDecimal> coutIntangibleBati = calibrageService.calibreCIBati(cintBatiMap, paramCintObjects.getGesteBat());
 
 		// Couts intangibles dans le neuf
-		HashMap<String, BigDecimal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, NU, new BigDecimal("1.00"));
+		HashMap<String, BigDecimal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf());
 
-		for (String str :  coutIntangible.keySet()) {
-			if( str.substring(0, 2).equals("01") && str.substring(2, 4).equals("42") ){
-			LOG.debug("idC={} CINT={} ", str,   coutIntangible.get(str));
-			}
-		}
-		
+		// Enregistrement des couts intangibles
+
 		// Chargement de l'evolution du cout des techno et du bati
 		HashMap<String, BigDecimal> evolCoutBati = recupParamFinDAS.getEvolutionCoutBati();
 		HashMap<String, BigDecimal> evolCoutTechno = recupParamFinDAS.getEvolutionCoutTechno();
@@ -548,7 +546,7 @@ public class ProcessServiceImpl implements ProcessService {
 		ExecutorService executor = Executors.newFixedThreadPool(NB_THREAD);
 		List<Callable<Object>> process = new ArrayList<Callable<Object>>();
 		for (String idAgregParc : idAgregListMap.keySet()) {
-			ProcessServiceRunnable runnable = new ProcessServiceRunnable(pasdeTempsInit, NU, txRenovBati, entreesMap,
+			ProcessServiceRunnable runnable = new ProcessServiceRunnable(pasdeTempsInit, paramCintObjects, txRenovBati, entreesMap,
 					sortiesMap, bNeufsMap, effetRebond, gainsNonRTMap, dvUsagesMap, pmCuissonMap, pmAutresMap,
 					pmCuissonChgtMap, pmAutresChgtMap, rythmeFrdRgltMap, gainFrdRgltMap, pmEcsNeufMap, pmEcsChgtMap,
 					bibliRdtEcsMap, rdtPerfEcsMap, partSolaireMap, txCouvSolaireMap, partSysPerfEcsMap, dvEcsMap,

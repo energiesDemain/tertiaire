@@ -8,6 +8,7 @@ import java.math.MathContext;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.ed.cgdd.derby.model.parc.ParamCintObjects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -64,21 +65,28 @@ public class LoadParamServiceImpl implements LoadParamService {
 	public void setTruncateParamdas(TruncateParamDAS truncateParamdas) {
 		this.truncateParamdas = truncateParamdas;
 	}
+	private static String CINT = "Cint";
 
 	// TODO ouvrir l'Excel qu'une seule fois - voir avec EDR
 	@Override
-	public void initParam(Progression progression) throws IOException {
+	public ParamCintObjects initParam(Progression progression) throws IOException {
 		HashMap<String, ExcelParameters> paramMap = loadInfoParamdas.parameters();
 		long start = System.currentTimeMillis();
 
 		// Charge les tables de parametres - a lancer a chaque fois
 		progression.setStep(ProgressionStep.CHARGEMENT);
 
+		ParamCintObjects paramCint = new ParamCintObjects();
+
 		for (String mapKey : paramMap.keySet()) {
+			if(!mapKey.equals(CINT)){
 			LOG.info("Table {}", mapKey);
 			GenericExcelData excelData = importExcelParamdas.importExcel(paramMap.get(mapKey), mapKey);
 			truncateParamdas.truncateParam(mapKey);
 			insertParamdas.insert(excelData, mapKey, paramMap.get(mapKey));
+			} else {
+				paramCint = importExcelParamdas.loadCint(paramMap.get(mapKey));
+			}
 
 		}
 
@@ -94,6 +102,9 @@ public class LoadParamServiceImpl implements LoadParamService {
 
 		long end = System.currentTimeMillis();
 		LOG.info("creation time : {}ms", end - start);
+
+		return paramCint;
+
 	}
 
 	protected GenericExcelData evolutionCouts() throws IOException {

@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import javax.swing.SwingConstants;
 
+import com.ed.cgdd.derby.model.parc.ParamCintObjects;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -40,13 +41,13 @@ public class LauncherProcess {
 
 		// recuperation des parametres d'entrees dans le parc
 
-		serviceParam.initParam(progression);
+		ParamCintObjects paramCint = serviceParam.initParam(progression);
 
 		// lancement des methodes de calcul
 
 		ProcessService service = (ProcessService) context.getBean("processService");
 
-		service.process(progression);
+		service.process(progression,paramCint);
 		progression.setStep(ProgressionStep.FIN);
 
 		LOG.info("End engine");

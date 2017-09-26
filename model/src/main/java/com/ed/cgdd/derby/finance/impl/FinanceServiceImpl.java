@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.ed.cgdd.derby.model.parc.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -58,13 +59,6 @@ import com.ed.cgdd.derby.model.financeObjects.SurfMoy;
 import com.ed.cgdd.derby.model.financeObjects.TauxInteret;
 import com.ed.cgdd.derby.model.financeObjects.ValeurFinancement;
 import com.ed.cgdd.derby.model.financeObjects.ValeurVerte;
-import com.ed.cgdd.derby.model.parc.MapResultsKeys;
-import com.ed.cgdd.derby.model.parc.Occupant;
-import com.ed.cgdd.derby.model.parc.Parc;
-import com.ed.cgdd.derby.model.parc.Period;
-import com.ed.cgdd.derby.model.parc.TypeRenovBati;
-import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
-import com.ed.cgdd.derby.model.parc.Usage;
 
 public class FinanceServiceImpl implements FinanceService {
 	private final static Logger LOG = LogManager.getLogger(FinanceServiceImpl.class);
@@ -150,7 +144,7 @@ public class FinanceServiceImpl implements FinanceService {
 			List<Financement> listFin, CEE subCEE, HashMap<String, BigDecimal> dvChauffMap,
 			HashMap<TypeRenovBati, BigDecimal> dvGesteMap, HashMap<String, ParamRdtCout> paramRdtCout,
 			HashMap<String, Parc> parcTotMap, ResultConsoRt resultConsoRt, int annee, int anneeNTab,
-			HashMap<String, BigDecimal> coutIntangible, HashMap<String, BigDecimal> coutIntangibleBati, int nu,
+			HashMap<String, BigDecimal> coutIntangible, HashMap<String, BigDecimal> coutIntangibleBati, ParamCintObjects paramCintObjects,
 			float txRenovBati, String idAggreg, BibliGeste bibliGeste, HashMap<Integer, CoutEnergie> coutEnergieMap,
 			HashMap<String, Emissions> emissionsMap, Reglementations reglementations, BigDecimal compteur,
 			HashMap<String, ParamCoutEclVentil> coutsEclVentilMap, HashMap<String, ParamCoutEcs> coutEcsMap,
@@ -186,7 +180,7 @@ public class FinanceServiceImpl implements FinanceService {
 		// Calcul des parts de marche pour les segments proprietaires
 		HashMap<String, PartMarcheRenov> pmResult = renovationSegment(decretMemory, resultConsoUClimMap,
 				resultConsoURtMap, listFin, subCEE, dvChauffMap, dvGesteMap, paramRdtCout, parcTotMap, annee,
-				resultConsoRt, anneeNTab, coutIntangible, coutIntangibleBati, nu, txRenovBati, avgSurf, statutOccup,
+				resultConsoRt, anneeNTab, coutIntangible, coutIntangibleBati, paramCintObjects, txRenovBati, avgSurf, statutOccup,
 				bibliGeste, periode, coutEnergieMap, emissionsMap, valeurVerte, reglementations, compteur,
 				coutsEclVentilMap, coutEcsMap, pmEcsNeufMap, bNeufsMap, gainsVentilationMap, bibliRdtEcsMap,
 				evolCoutBati, evolCoutTechno, maintenanceMap);
@@ -201,7 +195,7 @@ public class FinanceServiceImpl implements FinanceService {
 			List<Financement> listFin, CEE subCEE, HashMap<String, BigDecimal> dvChauffMap,
 			HashMap<TypeRenovBati, BigDecimal> dvGesteMap, HashMap<String, ParamRdtCout> paramRdtCout,
 			HashMap<String, Parc> parcTotMap, int annee, ResultConsoRt resultConsoRt, int anneeNTab,
-			HashMap<String, BigDecimal> coutIntangible, HashMap<String, BigDecimal> coutIntangibleBati, int nu,
+			HashMap<String, BigDecimal> coutIntangible, HashMap<String, BigDecimal> coutIntangibleBati, ParamCintObjects paramCintObjects,
 			float txRenovBati, BigDecimal avgSurf, StatutOccup statutOccup, BibliGeste bibliGeste, int periode,
 			HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
 			ValeurVerte valeurVerte, Reglementations reglementations, BigDecimal compteur,
@@ -255,13 +249,13 @@ public class FinanceServiceImpl implements FinanceService {
 
 				CalculPM coutGestes = renovSegment(resultConsoUClimMap, resultConsoURtMap, idParc, avgSurf, listFin,
 						subCEE, dvChauffMap, dvGesteMap, paramRdtCout, parc, besoinIniUnitaire, consoIni, rdtIni,
-						annee, anneeNTab, coutIntangible, coutIntangibleBati, bibliGeste, statutOccup, nu, periode,
+						annee, anneeNTab, coutIntangible, coutIntangibleBati, bibliGeste, statutOccup, paramCintObjects, periode,
 						coutEnergieMap, emissionsMap, valeurVerte, reglementations, coutsEclVentilMap, coutEcsMap,
 						pmEcsNeufMap, ventil, aux, bNeufsMap, gainsVentilationMap, bibliRdtEcsMap, besoinIni,
 						evolCoutBati, evolCoutTechno, maintenanceMap);
 
 				// insertion resultats dans BDD
-				calculPM(decretMemory, dvChauffMap, coutGestes, nu, partGesteFin, statutOccup, parc, anneeNTab,
+				calculPM(decretMemory, dvChauffMap, coutGestes, paramCintObjects, partGesteFin, statutOccup, parc, anneeNTab,
 						reglementations, annee, compteur, txRenovBatiVentile, surfN);
 			}
 		}
@@ -310,7 +304,7 @@ public class FinanceServiceImpl implements FinanceService {
 	// methode de calcul des PM a partir d'une hashmap de cout et du parametre
 	// nu
 	public void calculPM(HashMap<String, BigDecimal> decretMemory, HashMap<String, BigDecimal> dvChauffMap,
-			CalculPM calculPM, int nu, HashMap<String, PartMarcheRenov> partGesteFin, StatutOccup statutOccup,
+			CalculPM calculPM, ParamCintObjects paramCintObjects, HashMap<String, PartMarcheRenov> partGesteFin, StatutOccup statutOccup,
 			Parc parcInit, int anneeNTab, Reglementations reglementations, int annee, BigDecimal compteur,
 			BigDecimal[] tauxRenovBatiVentile, BigDecimal surfParc) {
 		// Initialisation des objets de resultats
@@ -352,13 +346,13 @@ public class FinanceServiceImpl implements FinanceService {
 			CoutFinal etatFinalProp = coutTotProprio.get(prop);
 			// Calcul des parts de marche
 			// PM = CG^-nu / somme(CG^-nu)
-			BigDecimal pmProp = formulePM(nu, sommeProprio, etatFinalProp);
+			BigDecimal pmProp = formulePM(paramCintObjects.getGesteBat().getNu(), sommeProprio, etatFinalProp);
 			// Si la map des locataires contient le geste mene sur les proprio
 			BigDecimal pmLoc = BigDecimal.ZERO;
 			CoutFinal etatFinalLoc = null;
 			if (coutTotLoc.containsKey(prop)) {
 				etatFinalLoc = coutTotLoc.get(prop);
-				pmLoc = formulePM(nu, sommeLoc, etatFinalLoc);
+				pmLoc = formulePM(paramCintObjects.getGesteBat().getNu(), sommeLoc, etatFinalLoc);
 				coutTotLoc.remove(prop);
 			}
 			// Calcul de la part de marche agregee
@@ -1303,7 +1297,7 @@ public class FinanceServiceImpl implements FinanceService {
 			HashMap<TypeRenovBati, BigDecimal> dvGesteMap, HashMap<String, ParamRdtCout> paramRdtCout, Parc parcIni,
 			BigDecimal besoinInitUnitaire, Conso consoEner, Conso rdtIni, int annee, int anneeNTab,
 			HashMap<String, BigDecimal> coutIntangible, HashMap<String, BigDecimal> coutIntangibleBati,
-			BibliGeste bibliGeste, StatutOccup statutOccup, int nu, int periode,
+			BibliGeste bibliGeste, StatutOccup statutOccup, ParamCintObjects paramCintObjects, int periode,
 			HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
 			ValeurVerte valeurVerte, Reglementations reglementations,
 			HashMap<String, ParamCoutEclVentil> coutsEclVentilMap, HashMap<String, ParamCoutEcs> coutEcsMap,
@@ -1356,8 +1350,8 @@ public class FinanceServiceImpl implements FinanceService {
 				coutFinalMapProp.put(calculCoutService.outputName(idParc, inter, annee, coutFinalProp), coutFinalProp);
 				coutFinalMapLoc.put(calculCoutService.outputName(idParc, inter, annee, coutFinalLoc), coutFinalLoc);
 
-				sommeProp = sommeProp.add(coutFinalProp.getCoutGlobal().pow(-nu, MathContext.DECIMAL32));
-				sommeLoc = sommeLoc.add(coutFinalLoc.getCoutGlobal().pow(-nu, MathContext.DECIMAL32));
+				sommeProp = sommeProp.add(coutFinalProp.getCoutGlobal().pow(-paramCintObjects.getGesteBat().getNu(), MathContext.DECIMAL32));
+				sommeLoc = sommeLoc.add(coutFinalLoc.getCoutGlobal().pow(-paramCintObjects.getGesteBat().getNu(), MathContext.DECIMAL32));
 			} else {
 				for (Financement financement : listFin) {
 					inter = getFinanceService(financement).createFinancement(parcIni, consoEner, courant, financement,
@@ -1386,8 +1380,8 @@ public class FinanceServiceImpl implements FinanceService {
 						coutFinalMapLoc.put(calculCoutService.outputName(idParc, inter, annee, coutFinalLoc),
 								coutFinalLoc);
 
-						sommeProp = sommeProp.add(coutFinalProp.getCoutGlobal().pow(-nu, MathContext.DECIMAL32));
-						sommeLoc = sommeLoc.add(coutFinalLoc.getCoutGlobal().pow(-nu, MathContext.DECIMAL32));
+						sommeProp = sommeProp.add(coutFinalProp.getCoutGlobal().pow(-paramCintObjects.getGesteBat().getNu(), MathContext.DECIMAL32));
+						sommeLoc = sommeLoc.add(coutFinalLoc.getCoutGlobal().pow(-paramCintObjects.getGesteBat().getNu(), MathContext.DECIMAL32));
 					}
 				}
 			}

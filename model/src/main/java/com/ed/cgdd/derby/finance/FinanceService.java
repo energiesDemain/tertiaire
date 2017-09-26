@@ -29,6 +29,7 @@ import com.ed.cgdd.derby.model.financeObjects.ResultatsFinancements;
 import com.ed.cgdd.derby.model.financeObjects.SurfMoy;
 import com.ed.cgdd.derby.model.financeObjects.TauxInteret;
 import com.ed.cgdd.derby.model.financeObjects.ValeurFinancement;
+import com.ed.cgdd.derby.model.parc.ParamCintObjects;
 import com.ed.cgdd.derby.model.parc.Parc;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 
@@ -47,7 +48,7 @@ public interface FinanceService {
 			List<Financement> listFin, CEE subCEE, HashMap<String, BigDecimal> dvChauffMap,
 			HashMap<TypeRenovBati, BigDecimal> dvGesteMap, HashMap<String, ParamRdtCout> paramRdtCout,
 			HashMap<String, Parc> parcTotMap, ResultConsoRt resultConsoRt, int annee, int anneeNTab,
-			HashMap<String, BigDecimal> coutIntangible, HashMap<String, BigDecimal> coutIntangibleBati, int nu,
+			HashMap<String, BigDecimal> coutIntangible, HashMap<String, BigDecimal> coutIntangibleBati, ParamCintObjects paramCintObject,
 			float txRenovBati, String idAggreg, BibliGeste bibliGeste, HashMap<Integer, CoutEnergie> coutEnergieMap,
 			HashMap<String, Emissions> emissionsMap, Reglementations reglementations, BigDecimal compteur,
 			HashMap<String, ParamCoutEclVentil> coutsEclVentilMap, HashMap<String, ParamCoutEcs> coutEcsMap,
