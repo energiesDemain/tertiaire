@@ -374,9 +374,6 @@ public class ProcessServiceImpl implements ProcessService {
 		int pasdeTempsInit = 1;
 		float txRenovBati = loadTxRenovBati();
 
-
-
-		
 		// Chargement des parametres influant sur l'evolution du parc
 		List<ParamParcArray> entrees = loadParcDatadas.getParamEntreesMapper();
 		List<ParamParcArray> sorties = loadParcDatadas.getParamSortiesMapper();
@@ -458,6 +455,8 @@ public class ProcessServiceImpl implements ProcessService {
 		// Chargement du prix des energies et de la contribution climat energie
 		HashMap<Integer, CoutEnergie> coutEnergieMap = recupParamFinDAS.recupCoutEnergie("Cout_energie");
 
+		
+		
 		// Initialisation des couts intangibles
 		HashMap<String, CalibCI> cintMap = calibrageDAS.recupCI();
 		HashMap<String, CalibCI> cintMapNeuf = calibrageDAS.recupCINeuf();

@@ -378,17 +378,16 @@ public class ProcessServiceRunnable implements Runnable {
 				// HashMap<String,
 				// BigDecimal>();
 				//for (int annee = 2010; annee <= 2050; annee++) {
-			    for (int annee = 2010; annee <= 2050; annee++) {
-			    	
+			    for (int annee = 2010; annee <= 2016; annee++) {
+			    	    	
 			    	//BV prise en compte travaux embarques
 			    	if(politiques.checkTravEmb ==1 & annee == 2017){
 			    		//LOG.debug("taux avant trav emb{}",txRenovBati);
 			    		// on copie le taux de renov tendanciel ini
 				    	float txRenovBatiCopy = txRenovBati;
-	
-			    	// travaux embarques on au gmente le taux de renov tendancielle de 1.3%
-				    	
-			    	txRenovBati = txRenovBatiCopy + 0.01300000f;
+			    	// travaux embarques on augmente le taux de renov tendancielle de 1.3% 
+				
+			    	txRenovBati = txRenovBatiCopy + politiques.txRenovTravEmb;
 			    	//LOG.debug("taux avant trav emb = {} apres ={}",txRenovBatiCopy, txRenovBati);
 			    	}					
 			    	
@@ -409,6 +408,7 @@ public class ProcessServiceRunnable implements Runnable {
 
 					// BV ajout batiment exemplaire de l'Etat. on baisse de les besoins unitaires des usages rt du parc entrant de l'Etat
 					// pour prendre en compte l'entree des batiments E+C-. TODO faire un parametre propre
+					
 					if(politiques.checkBatex == 1){
 					int periode = commonService.correspPeriode(annee);
 					String idOccupant = idAgregParc.substring(START_OCCUPANT, START_OCCUPANT + LENGTH_OCCUPANT);
