@@ -455,8 +455,6 @@ public class ProcessServiceImpl implements ProcessService {
 		// Chargement du prix des energies et de la contribution climat energie
 		HashMap<Integer, CoutEnergie> coutEnergieMap = recupParamFinDAS.recupCoutEnergie("Cout_energie");
 
-		
-		
 		// Initialisation des couts intangibles
 		HashMap<String, CalibCI> cintMap = calibrageDAS.recupCI();
 		HashMap<String, CalibCI> cintMapNeuf = calibrageDAS.recupCINeuf();
@@ -473,9 +471,9 @@ public class ProcessServiceImpl implements ProcessService {
 		List<CalibCoutGlobal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf());
 
 		// Enregistrement des couts intangibles
-		calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
-		calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
-		calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
+		//calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
+		//calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
+		//calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
 
 		// Chargement de l'evolution du cout des techno et du bati
 		HashMap<String, BigDecimal> evolCoutBati = recupParamFinDAS.getEvolutionCoutBati();

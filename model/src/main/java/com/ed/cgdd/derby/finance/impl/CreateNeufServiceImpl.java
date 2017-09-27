@@ -114,21 +114,27 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 			//		.getPart();
 			// BV modif Ajout des couts de maintenance en %
 			
-			// BV prise en compte d'un surcout pour l'electrique joule du fait de la RT 2012
-	    	
-	    	if(politiques.checkSurcoutRT2012 == 1 & annee > 2012 & 
-	    			(idSysChaud == SysChaud.CASSETTE_RAYONNANTE.getCode() |
-	    			 idSysChaud == SysChaud.CASSETTE_RAYONNANTE_PERFORMANT.getCode() |
-	    			 idSysChaud == SysChaud.ELECTRIQUE_DIRECT.getCode() |
-	    			 idSysChaud == SysChaud.ELECTRIQUE_DIRECT_PERFORMANT.getCode()
-	    			)){
-	    		cout = cout.add(politiques.surcoutRT);	  	
-	    	}
-	    	
 			BigDecimal coutMaintenance = cout.multiply(maintenanceMap.get(str.substring(START_ID_SYS, START_ID_SYS + LENGTH_ID_SYS))
 					.getPart(), MathContext.DECIMAL32);
 			
 			cout = cout.add(coutMaintenance);
+			
+			// BV prise en compte d'un surcout pour l'electrique joule du fait de la RT 2012
+	
+			if(politiques.checkSurcoutRT2012 == 1 && annee > 2012 && 
+	    			(
+	    					
+	    			idSysChaud.equals(SysChaud.CASSETTE_RAYONNANTE.getCode()) ||
+	    			 idSysChaud.equals(SysChaud.CASSETTE_RAYONNANTE_PERFORMANT.getCode()) ||
+	    			 idSysChaud.equals(SysChaud.ELECTRIQUE_DIRECT.getCode()) ||
+	    			 idSysChaud.equals(SysChaud.ELECTRIQUE_DIRECT_PERFORMANT.getCode())
+	    			)){
+				
+	    		cout = cout.add(politiques.surcoutRT);	 
+
+			}
+			
+		
 			BigDecimal coutInt = null;
 			if(coutIntangible.stream().filter(p->p.getCalKey().equals(idCoutIntangible)).findFirst().isPresent()){
 				coutInt = coutIntangible.stream().filter(p->p.getCalKey().equals(idCoutIntangible)).findFirst().get().getCInt();
