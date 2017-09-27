@@ -7,10 +7,11 @@ model/settings.gradle
 model/gradle.properties
 model/.gradle/
 model/.idea/
-model/.build/
-model/.gcc/
-model/.logs/
-model/.Result_Excel/
+model/build/
+model/gcc/
+model/logs/
+model/bin/
+model/Result_Excel/
 *.dat
 *.log
 *.log
