@@ -22,6 +22,7 @@ import com.ed.cgdd.derby.model.financeObjects.CalibCIBati;
 public class CalibrageDASImpl extends BddDAS implements CalibrageDAS {
 
 	private final String INSERT_CINT="INSERT_CINT_";
+	private final String TRUNCATE_CINT="TRUNCATE_CINT_";
 
 	private JdbcTemplate jdbcTemplate;
 	private CommonService commonService;
@@ -220,8 +221,10 @@ public class CalibrageDASImpl extends BddDAS implements CalibrageDAS {
 
 
 		if (!objectInsert.isEmpty()) {
-			String requestInsert = getProperty(INSERT_CINT + cIntType.toString());
-			jdbcTemplate.batchUpdate(requestInsert, objectInsert);
+			// Truncate de la table avant insertion
+			jdbcTemplate.update(getProperty(TRUNCATE_CINT + cIntType.toString()));
+			// Insertion des valeurs
+			jdbcTemplate.batchUpdate(getProperty(INSERT_CINT + cIntType.toString()), objectInsert);
 		}
 
 	}
