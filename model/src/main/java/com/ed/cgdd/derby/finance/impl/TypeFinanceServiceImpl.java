@@ -8,13 +8,7 @@ import java.util.List;
 
 import com.ed.cgdd.derby.finance.TypeFinanceService;
 import com.ed.cgdd.derby.model.calcconso.Conso;
-import com.ed.cgdd.derby.model.financeObjects.CEE;
-import com.ed.cgdd.derby.model.financeObjects.CoutRenovation;
-import com.ed.cgdd.derby.model.financeObjects.Financement;
-import com.ed.cgdd.derby.model.financeObjects.Geste;
-import com.ed.cgdd.derby.model.financeObjects.GesteFinancement;
-import com.ed.cgdd.derby.model.financeObjects.ListeFinanceValeur;
-import com.ed.cgdd.derby.model.financeObjects.PBC;
+import com.ed.cgdd.derby.model.financeObjects.*;
 import com.ed.cgdd.derby.model.parc.Parc;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
@@ -24,8 +18,7 @@ public abstract class TypeFinanceServiceImpl implements TypeFinanceService {
 	// TODO revoir recupParamSegment
 	@Override
 	public CoutRenovation recupParamSegment(Parc parcIni, Conso consoEner, Geste geste, int anneeNtab, int annee,
-			BigDecimal surface, HashMap<String, BigDecimal> coutIntangible,
-			HashMap<String, BigDecimal> coutIntangibleBati, BigDecimal coutEnergie,
+			BigDecimal surface, List<CalibCoutGlobal> coutIntangible,List<CalibCoutGlobal> coutIntangibleBati, BigDecimal coutEnergie,
 			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno) {
 		// Cette methode recupere toutes les infos du segment pour creer le
 		// CoutRenovation
@@ -57,14 +50,19 @@ public abstract class TypeFinanceServiceImpl implements TypeFinanceService {
 		// calcul des CEini
 		resultat.setCEini(surface.multiply(consoN).multiply(coutEnergie));
 
+		// Recuperation du cout intangible du systeme
+		BigDecimal coutIntangibleSys = coutIntangible.stream().filter(p->p.getCalKey().equals(generateIDCoutInt(parcIni, geste))).findFirst().get().getCInt();
+		// Recuperation du cout intangible bati
+		BigDecimal coutIntangibleBat = coutIntangibleBati.stream().filter(p->p.getCalKey().equals(generateIDCoutIntBati(parcIni, geste))).findFirst().get().getCInt();
+
 		// XXX integration CINT
-		BigDecimal coutIntSys = coutIntangible.get(generateIDCoutInt(parcIni, geste)).multiply(
+		BigDecimal coutIntSys = coutIntangibleSys.multiply(
 				getVariation(geste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32);
 		BigDecimal multi = BigDecimal.ONE;
 		if (geste.getTypeRenovBati() != TypeRenovBati.ETAT_INIT) {
 			multi = getVariation(geste.getTypeRenovBati().getLabel(), annee, evolCoutBati);
 		}
-		BigDecimal coutIntBati = coutIntangibleBati.get(generateIDCoutIntBati(parcIni, geste)).multiply(multi,
+		BigDecimal coutIntBati = coutIntangibleBat.multiply(multi,
 				MathContext.DECIMAL32);
 
 		BigDecimal coutInt = (coutIntSys.add(coutIntBati, MathContext.DECIMAL32)).multiply(surface,

@@ -3,7 +3,9 @@ package com.ed.cgdd.derby.finance.impl;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.HashMap;
+import java.util.List;
 
+import com.ed.cgdd.derby.model.financeObjects.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,12 +15,9 @@ import com.ed.cgdd.derby.finance.CreateNeufService;
 import com.ed.cgdd.derby.finance.RecupParamFinDAS;
 import com.ed.cgdd.derby.model.calcconso.ParamBesoinsNeufs;
 import com.ed.cgdd.derby.model.calcconso.ParamRdtCout;
-import com.ed.cgdd.derby.model.financeObjects.CoutEnergie;
-import com.ed.cgdd.derby.model.financeObjects.Emissions;
-import com.ed.cgdd.derby.model.financeObjects.Maintenance;
-import com.ed.cgdd.derby.model.financeObjects.PBC;
-import com.ed.cgdd.derby.model.financeObjects.TauxInteret;
+import com.ed.cgdd.derby.model.parc.SysChaud;
 import com.ed.cgdd.derby.model.parc.Usage;
+import com.ed.cgdd.derby.process.politiques;
 
 public class CreateNeufServiceImpl implements CreateNeufService {
 	private final static Logger LOG = LogManager.getLogger(CreateNeufServiceImpl.class);
@@ -68,7 +67,7 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 	@Override
 	public HashMap<String, BigDecimal> pmChauffNeuf(HashMap<String, ParamBesoinsNeufs> bNeufsMap,
 			HashMap<String, BigDecimal> dvChauffMap, HashMap<String, ParamRdtCout> rdtCoutChauffMap, String idAgreg,
-			int annee, String statut_occup, int nu, HashMap<String, BigDecimal> coutIntangible,
+			int annee, String statut_occup, int nu, List<CalibCoutGlobal> coutIntangible,
 			HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
 			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,
 			HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, Maintenance> maintenanceMap) {
@@ -81,8 +80,10 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 		PBC pretDeBase = tauxInteretMap.get(idBranche + idOccupant + statut_occup).getPBC();
 
 		String idBesoin = getIdBesoinChauf(idAgreg);
-		BigDecimal besoinUnitaire = bNeufsMap.get(idBesoin).getPeriode(periode);
-
+		// BigDecimal besoinUnitaire = bNeufsMap.get(idBesoin).getPeriode(periode);
+		
+		
+		
 		HashMap<String, ParamRdtCout> mapRdtTravail = new HashMap<String, ParamRdtCout>();
 		HashMap<String, BigDecimal> coutGlobaux = new HashMap<String, BigDecimal>();
 
@@ -92,29 +93,61 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 			if (temp.equals(idCourant) && paramTestPeriode.equals(String.valueOf(periode))) {
 				mapRdtTravail.put(idParamRdt, rdtCoutChauffMap.get(idParamRdt));
 				// idParamRdt contient l'idAgreg ainsi que la periode
+				//LOG.debug("id={}",  idParamRdt, rdtCoutChauffMap.get(idParamRdt));
 			}
+			
 		}
 
 		for (String str : mapRdtTravail.keySet()) {
+			
 			String energie = getEnergie(str);
 			String idCoutIntangible = getIdCoutInt(str);
 			String idSysChaud = getIdSysChauf(str);
-
+			BigDecimal besoinUnitaire = bNeufsMap.get(idBesoin).getPeriode(periode);
+				
 			BigDecimal rdt = mapRdtTravail.get(str).getRdt();
 			BigDecimal cout = mapRdtTravail.get(str).getCout()
 					.multiply(getVariation(idSysChaud, annee, evolCoutTechno), MathContext.DECIMAL32);
+			
 			// Ajout des couts de maintenance
-			BigDecimal coutMaintenance = maintenanceMap.get(str.substring(START_ID_SYS, START_ID_SYS + LENGTH_ID_SYS))
-					.getPart();
+			//BigDecimal coutMaintenance = maintenanceMap.get(str.substring(START_ID_SYS, START_ID_SYS + LENGTH_ID_SYS))
+			//		.getPart();
+			// BV modif Ajout des couts de maintenance en %
+			
+			BigDecimal coutMaintenance = cout.multiply(maintenanceMap.get(str.substring(START_ID_SYS, START_ID_SYS + LENGTH_ID_SYS))
+					.getPart(), MathContext.DECIMAL32);
+			
 			cout = cout.add(coutMaintenance);
-			BigDecimal coutInt = coutIntangible.get(idCoutIntangible);
-			// LOG.debug("{} {} {}", energie, idSysChaud, coutInt.divide(cout,
-			// MathContext.DECIMAL32));
+			
+			// BV prise en compte d'un surcout pour l'electrique joule du fait de la RT 2012
+	
+			if(politiques.checkSurcoutRT2012 == 1 && annee > 2012 && 
+	    			(
+	    					
+	    			idSysChaud.equals(SysChaud.CASSETTE_RAYONNANTE.getCode()) ||
+	    			 idSysChaud.equals(SysChaud.CASSETTE_RAYONNANTE_PERFORMANT.getCode()) ||
+	    			 idSysChaud.equals(SysChaud.ELECTRIQUE_DIRECT.getCode()) ||
+	    			 idSysChaud.equals(SysChaud.ELECTRIQUE_DIRECT_PERFORMANT.getCode())
+	    			)){
+				
+	    		cout = cout.add(politiques.surcoutRT);	 
+
+			}
+			
+		
+			BigDecimal coutInt = null;
+			if(coutIntangible.stream().filter(p->p.getCalKey().equals(idCoutIntangible)).findFirst().isPresent()){
+				coutInt = coutIntangible.stream().filter(p->p.getCalKey().equals(idCoutIntangible)).findFirst().get().getCInt();
+			}
+		
 			int dureeVie = dvChauffMap.get(getIdSysChauf(str)).intValueExact();
 			BigDecimal coutEnergie = coutEnergieService.coutEnergie(coutEnergieMap, emissionsMap, annee, energie,
 					Usage.CHAUFFAGE.getLabel(), BigDecimal.ONE);
 			BigDecimal coutGlobal = coutNeuf(besoinUnitaire, rdt, cout, coutInt, dureeVie, pretDeBase, coutEnergie);
 			coutGlobaux.put(str, coutGlobal);
+			//LOG.debug("id={} idC={} CINT={} CENER={} COUT={} BESOIN={} RDT={} DV={} CM ={}", str, idCoutIntangible, coutInt, 
+			//		coutEnergie, cout,besoinUnitaire, rdt,dureeVie,coutMaintenance);
+			//LOG.debug("id={} idC={} CG={}", str,idCoutIntangible, coutGlobal);
 		}
 
 		return pmNeuf(coutGlobaux, nu);
@@ -167,12 +200,25 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 				MathContext.DECIMAL32);
 		BigDecimal tauxInt = BigDecimal.ONE.add(pretDeBase.getTauxInteret(), MathContext.DECIMAL32);
 		BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
-
-		result = result.add(
-				commonService.serieGeometrique(besoin.multiply(inverse, MathContext.DECIMAL32), inverse, dureeVie - 1),
-				MathContext.DECIMAL32);
-
-		return (result.divide(BigDecimal.valueOf(dureeVie), MathContext.DECIMAL32)).add(coutInt, MathContext.DECIMAL32);
+		
+		
+//		result = result.add(
+//				commonService.serieGeometrique(besoin.multiply(inverse, MathContext.DECIMAL32), inverse, dureeVie - 1),
+//				MathContext.DECIMAL32);
+//		return (result.divide(BigDecimal.valueOf(dureeVie), MathContext.DECIMAL32)).add(coutInt, MathContext.DECIMAL32);
+//		
+		// version avec investissement actualise
+		BigDecimal coefactu = commonService.serieGeometrique(inverse, inverse, dureeVie - 1);
+		
+		
+		
+		//LOG.debug("Coef ={}, tint = {}", coefactu, tauxInt);
+		
+		
+		result = result.divide(coefactu,MathContext.DECIMAL32).add(
+				besoin,MathContext.DECIMAL32).add(coutInt, MathContext.DECIMAL32);
+		return 	result;
+		
 	}
 
 	protected HashMap<String, BigDecimal> pmNeuf(HashMap<String, BigDecimal> coutNeuf, int nu) {

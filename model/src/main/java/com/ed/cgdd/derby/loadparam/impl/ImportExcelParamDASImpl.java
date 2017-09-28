@@ -5,11 +5,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
+import com.ed.cgdd.derby.model.parc.ParamCInt;
+import com.ed.cgdd.derby.model.parc.ParamCintObjects;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.xmlbeans.impl.tool.Extension;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.ed.cgdd.derby.loadparam.ImportExcelParamDAS;
@@ -27,6 +31,8 @@ public class ImportExcelParamDASImpl implements ImportExcelParamDAS {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
+	private static final int MAX_COLUMN_CINT=3;
+	private static final int MAX_LINE_CINT=2;
 	// Importer depuis un excel
 
 	@Override
@@ -72,7 +78,33 @@ public class ImportExcelParamDASImpl implements ImportExcelParamDAS {
 		return data;
 	}
 
-	protected Object convertPeriod(Object cellValue) {
+    @Override
+    public ParamCintObjects loadCint(ExcelParameters param) throws IOException  {
+		ParamCintObjects paramCintToReturn = new ParamCintObjects();
+		// Chargement du parametre nu
+		GenericExcelData data = new GenericExcelData();
+		ArrayList<ArrayList<Object>> recup = new ArrayList<ArrayList<Object>>();
+		InputStream ExcelFileToUpdate = new FileInputStream(param.getFilename());
+		HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToUpdate);
+		// Get first sheet from the workbook
+		HSSFSheet sheet = wb.getSheet(param.getSheetname());
+		int i = param.getFline();
+		int c = param.getFcolumn() - 1;
+		List<ParamCInt> listResult = new ArrayList<>();
+		for (int j=c ; j<c+MAX_COLUMN_CINT ; j++){
+			ParamCInt paramCint = new ParamCInt();
+			paramCint.setNu((int) sheet.getRow(i).getCell(j).getNumericCellValue());
+			paramCint.setCintRef(new BigDecimal(sheet.getRow(i+1).getCell(j).getNumericCellValue()));
+			listResult.add(paramCint);
+		}
+		paramCintToReturn.setSysNeuf(listResult.get(0));
+		paramCintToReturn.setSysExist(listResult.get(1));
+		paramCintToReturn.setGesteBat(listResult.get(2));
+		ExcelFileToUpdate.close();
+		return paramCintToReturn;
+    }
+
+    protected Object convertPeriod(Object cellValue) {
 		Object result = new Object();
 		if (cellValue.toString().equals("2010-2015")) {
 			result = "PERIODE1";

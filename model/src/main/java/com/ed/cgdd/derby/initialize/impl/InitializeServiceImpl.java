@@ -19,7 +19,7 @@ import com.ed.cgdd.derby.model.excelobjects.GenericExcelData;
 
 public class InitializeServiceImpl implements InitializeService {
 	private final static Logger LOG = LogManager.getLogger(InitializeServiceImpl.class);
-
+ 
 	public CreateTableDAS getCreatedas() {
 		return createdas;
 	}
@@ -83,9 +83,8 @@ public class InitializeServiceImpl implements InitializeService {
 
 		// Charge les tables "inamovibles" - a ne lancer qu'une fois
 		for (String mapkey : excelMap.keySet()) {
-
+			
 			LOG.info("{} - Begin", mapkey);
-
 			dropdas.dropTable(mapkey);
 			createdas.createTable(mapkey);
 			GenericExcelData excelData = importExceldas.importExcel(excelMap.get(mapkey));
