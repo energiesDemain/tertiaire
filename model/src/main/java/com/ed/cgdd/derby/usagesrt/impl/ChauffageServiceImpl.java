@@ -471,16 +471,16 @@ public class ChauffageServiceImpl implements ChauffageService {
 			
 			// Ajout gain individualisation des frais de chauffage TODO creer parametre
 			
-			if(politiques.getCheckifc() == 1){
+			if(politiques.checkIFC == 1){
 			//	LOG.debug("geste bat = {} BU {}",geste.getTypeRenovBat(),besoinU);
 
 			if(annee == 2017){
-				 besoinU =  besoinU.multiply(new BigDecimal("0.993625"),MathContext.DECIMAL32);
+				 besoinU =  besoinU.multiply(politiques.GainBU_2017,MathContext.DECIMAL32);
 				
 			} else if(annee == 2018){
-				besoinU =  besoinU.multiply(new BigDecimal("0.98725"),MathContext.DECIMAL32);
+				besoinU =  besoinU.multiply(politiques.GainBU_2018,MathContext.DECIMAL32);
 			} else if(annee > 2018){
-				besoinU =  besoinU.multiply(new BigDecimal("0.980875"),MathContext.DECIMAL32);
+				besoinU =  besoinU.multiply(politiques.GainBU_2019,MathContext.DECIMAL32);
 			}
 			}
 			
@@ -492,11 +492,6 @@ public class ChauffageServiceImpl implements ChauffageService {
 			// Modification des rendements de chauffage
 			rdtMapChauff = EvolRdtsChauff(besoinInitChauff, geste, rdtMapChauff, anneeNTab, pasdeTemps, newId);
 			
-			// BV verif baisse du besoin U individualisation des frais de chauffage 
-			//if(annee > 2016){
-			//LOG.debug("après modif IFC geste bat = {} B {} B2 {} BU {}",geste.getTypeRenovBat(),
-			//		besoinMapChauff.get(newId).getAnnee(1),surfModif.multiply(besoinU),besoinU);
-			//}
 			
 			// Modification des besoins en ventilation 
 			besoinMapVentil = EvolVentil(besoinMapVentil, anneeNTab, pasdeTemps, geste, newId, gainsVentilationMap,

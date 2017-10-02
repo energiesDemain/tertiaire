@@ -119,18 +119,6 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 				int dureeDeVie = Math.min(calculDuree(liste.getFinance()), dureeDeVieTravaux);
 				BigDecimal annuite = calculAnnuite(liste.getFinance(), liste.getValeur(), dureeDeVie);
 
-				
-				// BV debug annuite
-				//BigDecimal tauxInt = BigDecimal.ONE.add(((PBC) liste.getFinance()).getTauxInteret());
-				//BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
-
-				//BigDecimal intermediaire = commonService.serieGeometrique(inverse, inverse, dureeDeVie - 1);
-
-				//LOG.debug("geste={}, Finance={} valeur={} cout ={} DV={} tauxInt = {} intermediaire ={} annuite = {}",gesteFin.getGeste().getGesteNom(), 
-				//		liste.getFinance().getType(),
-				//		liste.getValeur(),gesteFin.getCoutRenov().getCT(),dureeDeVie, tauxInt,intermediaire,
-				//		annuite);
-				
 				// on additionne les annuitees dans le tableau avec les charges
 				// energetiques
 				for (int j = 0; j < dureeDeVie; j++) {

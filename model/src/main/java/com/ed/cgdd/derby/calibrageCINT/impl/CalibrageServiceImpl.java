@@ -31,7 +31,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 	private static final String INIT_STATE = "Etat initial";
 	private static final Integer YEAR_CALIB=2009;
 	private static final int PERIOD_CALIB=1;
-
+	private static final BigDecimal TAUX_ACTU_CALIB = new BigDecimal("0.04");
 	// methode de calcul des CI pour le BATI --> cette methode renvoie une
 	// hashmap de CI pour le BATI
 	// la cle contient la branche et le geste (voir methode recupCIBati)
@@ -53,28 +53,9 @@ public class CalibrageServiceImpl implements CalibrageService {
 			BigDecimal coutGlobalGeste = intermediaire.multiply(calibRef.get(dataCalib.get(str).getBranche())
 					.getCoutGlobal(), MathContext.DECIMAL32);
 			
-			
-			// je laisse de cote l'actualisation des charges ener pour
-			// simplifier
-			// quel taux d'actualisation prendre ?
-
-//			BigDecimal coutIntangible = coutGlobalGeste.subtract(
-//					dataCalib
-//							.get(str)
-//							.getCoutMoy()
-//							.divide(BigDecimal.valueOf(dataCalib.get(str).getDureeVie()), MathContext.DECIMAL32)
-//							.add(dataCalib
-//									.get(str)
-//									.getChargeInit()
-//									.multiply(
-//											BigDecimal.ONE.subtract(dataCalib.get(str).getGainMoy(),
-//													MathContext.DECIMAL32), MathContext.DECIMAL32),
-//									MathContext.DECIMAL32), MathContext.DECIMAL32);
-//			
-			
 			// BV ajout actualisation 
 			// TODO mettre un taux d'actualisation different pour le public et le prive voire pptaire/locataire
-			BigDecimal tauxInt = BigDecimal.ONE.add(new BigDecimal("0.04"));
+			BigDecimal tauxInt = BigDecimal.ONE.add(TAUX_ACTU_CALIB);
 			BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
 
 			// BigDecimal coefactu = commonService.serieGeometrique(inverse, inverse, dataCalib.get(str).getDureeVie() - 1);
@@ -84,26 +65,27 @@ public class CalibrageServiceImpl implements CalibrageService {
 			.divide(BigDecimal.ONE.subtract(inverse, MathContext.DECIMAL32),
 			MathContext.DECIMAL32);
 			
-			BigDecimal coutIntangible = coutGlobalGeste.subtract(
-					dataCalib
+			BigDecimal coutVariable = dataCalib
+					.get(str)
+					.getCoutMoy()
+					.divide(coefactu, MathContext.DECIMAL32)
+					.add(dataCalib
 							.get(str)
-							.getCoutMoy()
-							.divide(coefactu, MathContext.DECIMAL32)
-							.add(dataCalib
-									.get(str)
-									.getChargeInit()
-									.multiply(
-											BigDecimal.ONE.subtract(dataCalib.get(str).getGainMoy(),
-													MathContext.DECIMAL32), MathContext.DECIMAL32),
-									MathContext.DECIMAL32), MathContext.DECIMAL32);
+							.getChargeInit()
+							.multiply(
+									BigDecimal.ONE.subtract(dataCalib.get(str).getGainMoy(),
+											MathContext.DECIMAL32), MathContext.DECIMAL32),
+							MathContext.DECIMAL32);
 			
-			results.add(new CalibCoutGlobal(str, coutIntangible,coutGlobalGeste));
+			BigDecimal coutIntangible = coutGlobalGeste.subtract(coutVariable, MathContext.DECIMAL32);
+			
+			results.add(new CalibCoutGlobal(str, coutIntangible,coutVariable));
 		}
 
 		return results;
 
 	}
-	// Ajout 21092017
+	// Ajout des besoins et des prix de l'energie en 2009 pour la calibration des PM dans le neuf
     @Override
     public void addingRowsInHashMap(HashMap<String, CalibCI> cintMapNeuf, HashMap<Integer,
 			CoutEnergie> coutEnergieMap, HashMap<String, ParamBesoinsNeufs> bNeufsMap) {
@@ -121,7 +103,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 		CalibCIRef reference = new CalibCIRef();
 		// calcul du cout global pour le geste Rien faire
 		// les couts intangibles sont nuls
-		// la dureee de vie est de 1
+		// la duree de vie est de 1
 		// TODO verifier le calcul du cout global ne rien faire dans excel
 		
 		BigDecimal coutGlobal = calibCIBati.getChargeInit();
@@ -180,7 +162,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 				// BV ajout actualisation de l'investissement (4%)
 				// TODO mettre un taux d'actualisation different pour le public et le prive voire pptaire/locataire
 				
-				BigDecimal tauxInt = BigDecimal.ONE.add(new BigDecimal("0.04"));
+				BigDecimal tauxInt = BigDecimal.ONE.add(TAUX_ACTU_CALIB);
 				BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
 				// BigDecimal coefactu = commonService.serieGeometrique(inverse, inverse, dataCalib.get(str).getDureeVie() - 1);
 				
@@ -189,20 +171,8 @@ public class CalibrageServiceImpl implements CalibrageService {
 				.divide(BigDecimal.ONE.subtract(inverse, MathContext.DECIMAL32),
 				MathContext.DECIMAL32);
 				
-//				BigDecimal chargesEnerinter = dataCalib.get(str).getCoutEner()
-//						.multiply(dataCalib.get(str).getBesoinUnitaire()
-//										.divide(dataCalib.get(str).getRdt(), MathContext.DECIMAL32)
-//										.multiply(coefactu,MathContext.DECIMAL32)
-//										.divide(BigDecimal.valueOf(dataCalib.get(str).getDureeVie()), MathContext.DECIMAL32), 
-//										MathContext.DECIMAL32);
-				
 				BigDecimal besoinUnitaire =  dataCalib.get(str).getBesoinUnitaire();	
 				
-//				if(str.substring(7,8).equals("02")){
-//				besoinUnitaire =   besoinUnitaire.multiply(new BigDecimal("2.58"), MathContext.DECIMAL32);
-//				}
-
-//				
 				// 	calcul charges energetiques annuelles, agent myope
 				BigDecimal chargesEnerinter = dataCalib.get(str).getCoutEner()
 				.multiply(besoinUnitaire
@@ -217,13 +187,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 				
 				BigDecimal interFinal = (intermediaire.multiply(calibRef.get(generateKey(dataCalib.get(str)))
 				.getCoutGlobal(), MathContext.DECIMAL32)).subtract(coutVariable, MathContext.DECIMAL32);
-				
-				//if(str.substring(0,2).equals("01") && str.substring(2,4).equals("42")){
-				//LOG.debug("cef={} id={} BE ={}, COUT = {}, CGref = {}, CE = {}, PE={}, RDT={}", coefactu, str, besoinUnitaire, 
-				//dataCalib.get(str).getCoutM2(), calibRef.get(generateKey(dataCalib.get(str)))
-				//.getCoutGlobal(),chargesEnerinter,dataCalib.get(str).getCoutEner(),dataCalib.get(str).getRdt());
-				//}
-				
+
 				// version initiale
 //				BigDecimal interFinal = (intermediaire.multiply(calibRef.get(generateKey(dataCalib.get(str)))
 //						.getCoutGlobal(), MathContext.DECIMAL32)).subtract((dataCalib.get(str).getCoutM2().divide(
@@ -275,31 +239,23 @@ public class CalibrageServiceImpl implements CalibrageService {
 		// BV ajout actualisation de l'investissement (4%)
 		// TODO mettre un taux d'actualisation different pour le public et le prive voire pptaire/locataire
 	
-		BigDecimal tauxInt = BigDecimal.ONE.add(new BigDecimal("0.04"));
+		BigDecimal tauxInt = BigDecimal.ONE.add(TAUX_ACTU_CALIB);
 		BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
 		
 		// BigDecimal coefactu = commonService.serieGeometrique(inverse, inverse, calibCI.getDureeVie() - 1);
-
 		
 		BigDecimal coefactu = inverse.multiply(BigDecimal.ONE.subtract(inverse.pow(calibCI.getDureeVie(), MathContext.DECIMAL32), 
 				MathContext.DECIMAL32),MathContext.DECIMAL32)
 		.divide(BigDecimal.ONE.subtract(inverse, MathContext.DECIMAL32),
 		MathContext.DECIMAL32);
-		// LOG.debug("cef={} DV={} coef={}", tauxInt, calibCI.getDureeVie(),
-		//		 coefactu);
-		// chargesEner =  chargesEner.multiply(coefactu,MathContext.DECIMAL32).divide(BigDecimal.valueOf(calibCI.getDureeVie()), MathContext.DECIMAL32);
-				
+		
 		BigDecimal calcCG = calibCI.getCoutM2()
 				.divide(coefactu, MathContext.DECIMAL32)
 				.add(chargesEner, MathContext.DECIMAL32);
 		result.setPartMarche2009(new BigDecimal(calibCI.getPartMarche2009().toString()));
 
-		// TODO a revoir peut etre CIbase = 10...
+		// Ajoute le cint de l'option de reference
 		result.setCoutGlobal(calcCG.add(cintRef, MathContext.DECIMAL32));
-		//result.setCoutGlobal(calcCG.add(BigDecimal.TEN, MathContext.DECIMAL32));
-		//result.setCoutGlobal(calcCG.add(new BigDecimal("20.00"), MathContext.DECIMAL32));
-		//result.setCoutGlobal(calcCG.subtract(new BigDecimal("2.00"), MathContext.DECIMAL32));
-		//result.setCoutGlobal(calcCG.subtract(new BigDecimal("1.57"), MathContext.DECIMAL32));
 		
 		return result;
 	}

@@ -501,7 +501,7 @@ public class ProcessServiceImpl implements ProcessService {
 		HashMap<String, TauxInteret> tauxInteretMap = new HashMap<String, TauxInteret>();
 		tauxInteretMap = recupParamFinDAS.recupTauxInteret();
 
-		// Recupertation de la surface moyenne
+		// Recuperation de la surface moyenne
 		HashMap<String, SurfMoy> surfMoyMap = new HashMap<String, SurfMoy>();
 		surfMoyMap = recupParamFinDAS.recupSurfMoy();
 		// Recuperation de l'evolution de la valeur verte

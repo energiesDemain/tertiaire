@@ -1,5 +1,6 @@
 package com.ed.cgdd.derby.process;
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 public class  politiques {
 	
@@ -9,18 +10,26 @@ public class  politiques {
 	public static int getCheckifc() {
 		return checkIFC;
 	}
-
+	public final static BigDecimal GainBU_2017 = new BigDecimal("0.993625");
+	public final static BigDecimal GainBU_2018 = new BigDecimal("0.98725");
+	public final static BigDecimal GainBU_2019 = new BigDecimal("0.980875");
+	
+	
 	// RT existant 2018
-	public final static int  checkRTex = 0;
+	public final static int  checkRTex = 1;
 	public static int getCheckRTex() {
 		return checkRTex;
 	}
+	
+	public final static BigDecimal GainSupRTex = new BigDecimal("0.1");
+	public final static BigDecimal GainRdtSupRTex = new BigDecimal("0.05");
 
 	// batiment exemplaire
 	public final static int  checkBatex = 1;
 	public static int getCheckBatex() {
 		return checkBatex;
 	}
+	public final static BigDecimal modifBUBatEx = new BigDecimal("0.8325");
 	
 	//travaux embarques
 	public final static int  checkTravEmb = 1;
@@ -37,7 +46,7 @@ public class  politiques {
 	}
 	
 	// surcout en euros par m2 pour l'electrique joule
-	public final static BigDecimal surcoutRT = new BigDecimal("20") ;
+	public final static BigDecimal surcoutRT = new BigDecimal("15") ;
 
 	
 	

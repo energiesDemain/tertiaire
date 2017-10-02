@@ -285,36 +285,26 @@ public class GesteServiceImpl implements GesteService {
 					copyGeste.setRdt(rdtN);
 				}
 
-				// BV changement de gains pour les gestes respectant la RT existant en 2018, 
+				// BV changement de gains pour les gestes et les systemes respectant la RT existant en 2018, 
 				
 				BigDecimal Gain = copyGeste.getGainEner();
 				BigDecimal Rdt = copyGeste.getRdt();
 				
 				if(politiques.checkRTex==1){
-				//if (copyGeste.getExigence().equals(Exigence.RT_PAR_ELEMENT) && annee > 2017) {
-				//LOG.debug("exi={} geste={} syst={} syschaud={} gain={} Rdt ={}", copyGeste.getExigence(),copyGeste.getTypeRenovBati(),
-				//		copyGeste.getTypeRenovSys(),copyGeste.getSysChaud(),Gain, Rdt);
-				//}
-				
+					
 				if (copyGeste.getExigence().equals(Exigence.RT_PAR_ELEMENT) && annee > 2017) {
-					BigDecimal GainSupRTex = new BigDecimal("0.05");
-					Gain = Gain.add(GainSupRTex);
-				//			copyGeste.getTypeRenovSys(),Gain,copyGeste.getSysChaud(),
-				//			Rdt, copyGeste.getSysChaud().substring(0,1));
+					Gain = Gain.add(politiques.GainSupRTex);
 					copyGeste.setGainEner(Gain);
-					copyGeste.setCoutGesteBati(copyGeste.getCoutGesteBati().multiply((BigDecimal.ONE.add(GainSupRTex))));
+					copyGeste.setCoutGesteBati(copyGeste.getCoutGesteBati().multiply((BigDecimal.ONE.add(politiques.GainSupRTex))));
 				}
 				
 				
 				if (copyGeste.getTypeRenovSys().equals(TypeRenovSysteme.CHGT_SYS) &&
 						copyGeste.getSysChaud().substring(0,1).equals("0") && annee > 2017 && 
 						!(copyGeste.getEnergie().contentEquals("03"))) {
-					BigDecimal GainRdtSupRTex = new BigDecimal("0.1");
-					Rdt = Rdt.add(GainRdtSupRTex);
-				//			copyGeste.getTypeRenovSys(),Gain,copyGeste.getSysChaud(),
-				//			Rdt, copyGeste.getSysChaud().substring(0,1));
+					Rdt = Rdt.add(politiques.GainRdtSupRTex);
 					copyGeste.setRdt(Rdt);
-					copyGeste.setCoutGesteSys(copyGeste.getCoutGesteSys().multiply((BigDecimal.ONE.add(GainRdtSupRTex ))));
+					copyGeste.setCoutGesteSys(copyGeste.getCoutGesteSys().multiply((BigDecimal.ONE.add(politiques.GainRdtSupRTex ))));
 				} 
 				}
 				
