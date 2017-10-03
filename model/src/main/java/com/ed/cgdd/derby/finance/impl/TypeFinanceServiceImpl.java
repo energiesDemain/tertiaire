@@ -37,8 +37,12 @@ public abstract class TypeFinanceServiceImpl implements TypeFinanceService {
 		}
 
 		BigDecimal coutAdd = BigDecimal.ZERO;
-		if (geste.getCoutTravauxAddGeste() != null) {
-			resultat.setCTA(surface.multiply(coutAdd));
+		
+		if (geste.getCoutTravauxAddGeste() != null && geste.getCoutTravauxAddGeste().compareTo(new BigDecimal("0.0001")) == 1 ) {
+			// BV on ajoute zéro dans cette version!
+			// resultat.setCTA(surface.multiply(coutAdd));
+			resultat.setCTA(surface.multiply(geste.getCoutTravauxAddGeste()));
+			// resultat.getCTA();
 		} else {
 			resultat.setCTA(coutAdd);
 		}

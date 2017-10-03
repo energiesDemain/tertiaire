@@ -38,7 +38,7 @@ public class PBCServiceImpl extends TypeFinanceServiceImpl {
 		List<ListeFinanceValeur> listeFinancement = new LinkedList<>();
 
 		BigDecimal coutAFinance = coutRenov.getCT();
-		if (coutRenov.getCTA() != null) {
+		if (coutRenov.getCTA() != null  && coutRenov.getCTA().compareTo(new BigDecimal("0.0001")) == 1) {
 			coutAFinance = coutAFinance.add(coutRenov.getCTA());
 		}
 		// on enleve du cout a financer les CEE

@@ -253,6 +253,7 @@ public class GesteServiceImpl implements GesteService {
 					copyGeste.setCoutGesteBati(copyGeste.getCoutGesteBati().multiply(evolCoutBatUnit,
 							MathContext.DECIMAL32));
 				}
+				
 				if (copyGeste.getTypeRenovSys() != TypeRenovSysteme.ETAT_INIT) {
 					copyGeste.setCoutGesteSys(copyGeste.getCoutGesteSys().multiply(
 							getVariation(copyGeste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32));
@@ -271,12 +272,19 @@ public class GesteServiceImpl implements GesteService {
 							&& copyGeste.getCoutGesteSys() != null) {
 						// Ajout des frais de maintenance (en % du prix initial
 						// du systeme)
+						// BV les couts de maintenance ne sont pas (1 + part maintenance) * cout mais partmaintenance*cout!
 						BigDecimal partMaintenance = maintenanceMap.get(copyGeste.getSysChaud()).getPart();
-						coutMaintenance = (BigDecimal.ONE.add(partMaintenance)).multiply(copyGeste.getCoutGesteSys());
+						// coutMaintenance = (BigDecimal.ONE.add(partMaintenance)).multiply(copyGeste.getCoutGesteSys());
+						coutMaintenance = partMaintenance.multiply(copyGeste.getCoutGesteSys());
 					}
-
 					coutAdd = coutAdd.add(coutMaintenance);
-
+					
+					// BV ces additionnels couts ne sont jamais utilises il me semble. Il n'y a pas de setter. test de modifier le code
+					if(!coutAdd.equals(BigDecimal.ZERO) && coutAdd.compareTo(new BigDecimal("0.0001")) == 1){
+					copyGeste.setCoutTravauxAddGeste(coutAdd); 
+					// copyGeste.getCoutTravauxAddGeste(); 
+					}
+					
 				}
 
 				if (copyGeste.getTypeRenovSys().equals(TypeRenovSysteme.ETAT_INIT)) {
@@ -425,6 +433,26 @@ public class GesteServiceImpl implements GesteService {
 				travauxAdd = true;
 			}
 
+			//BV sinon on part d'un systeme non centralise pour aller vers un centralise, on aussi des surcouts
+			
+		} else {
+			if (copyGeste.getSysChaud().equals(SysChaud.CASSETTE_RAYONNANTE.getCode())
+					|| copyGeste.getSysChaud().equals(SysChaud.CASSETTE_RAYONNANTE_PERFORMANT.getCode())
+					|| copyGeste.getSysChaud().equals(SysChaud.DRV.getCode())
+					|| copyGeste.getSysChaud().equals(SysChaud.DRV_PERFORMANT.getCode())
+					|| copyGeste.getSysChaud().equals(SysChaud.ELECTRIQUE_DIRECT.getCode())
+					|| copyGeste.getSysChaud().equals(SysChaud.ELECTRIQUE_DIRECT_PERFORMANT.getCode())
+					|| copyGeste.getSysChaud().equals(SysChaud.PAC.getCode())
+					|| copyGeste.getSysChaud().equals(SysChaud.PAC_PERFORMANT.getCode())
+					|| copyGeste.getSysChaud().equals(SysChaud.ROOFTOP.getCode())
+					|| copyGeste.getSysChaud().equals(SysChaud.ROOFTOP_PERFORMANT.getCode())) {
+				travauxAdd = true;
+			} else {
+				// Sinon, des travaux additionnels sont a prevoir
+				travauxAdd = false;
+			}
+			
+			
 		}
 
 		return travauxAdd;
