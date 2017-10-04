@@ -266,6 +266,7 @@ public class GesteServiceImpl implements GesteService {
 						coutAdd = copyGeste.getCoutGesteSys().multiply(
 								getVariation(copyGeste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32);
 					}
+					
 					BigDecimal coutMaintenance = BigDecimal.ZERO;
 					if (maintenanceMap.get(copyGeste.getSysChaud()) != null
 							&& maintenanceMap.get(copyGeste.getSysChaud()).getPart() != null

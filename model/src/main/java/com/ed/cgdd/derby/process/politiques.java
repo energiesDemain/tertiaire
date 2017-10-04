@@ -6,7 +6,7 @@ public class  politiques {
 	
 	// Activation politiques publiques
 	// individualisation des frais de chauffage
-	public final static int checkIFC = 0;
+	public final static int checkIFC = 1;
 	public static int getCheckifc() {
 		return checkIFC;
 	}
@@ -16,7 +16,7 @@ public class  politiques {
 	
 	
 	// RT existant 2018
-	public final static int  checkRTex =0;
+	public final static int  checkRTex =1;
 	public static int getCheckRTex() {
 		return checkRTex;
 	}
@@ -25,14 +25,14 @@ public class  politiques {
 	public final static BigDecimal GainRdtSupRTex = new BigDecimal("0.05");
 
 	// batiment exemplaire
-	public final static int  checkBatex = 0;
+	public final static int  checkBatex = 1;
 	public static int getCheckBatex() {
 		return checkBatex;
 	}
 	public final static BigDecimal modifBUBatEx = new BigDecimal("0.8325");
 	
 	//travaux embarques
-	public final static int  checkTravEmb = 0;
+	public final static int  checkTravEmb = 1;
 	public static int getCheckTravEmb() {
 		return checkTravEmb;
 	}
@@ -47,7 +47,6 @@ public class  politiques {
 	
 	// surcout en euros par m2 pour l'electrique joule
 	public final static BigDecimal surcoutRT = new BigDecimal("15") ;
-
 	
 	
 }
