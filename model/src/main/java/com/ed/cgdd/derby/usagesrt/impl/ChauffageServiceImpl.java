@@ -26,7 +26,7 @@ import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
 import com.ed.cgdd.derby.model.parc.Usage;
 import com.ed.cgdd.derby.usagesrt.ChauffageService;
-import com.ed.cgdd.derby.process.politiques;
+import com.ed.cgdd.derby.model.politiques;
 
 public class ChauffageServiceImpl implements ChauffageService {
 	private final static Logger LOG = LogManager.getLogger(ChauffageServiceImpl.class);
@@ -471,7 +471,7 @@ public class ChauffageServiceImpl implements ChauffageService {
 			
 			// Ajout gain individualisation des frais de chauffage TODO creer parametre
 			
-			if(politiques.checkIFC == 1){
+			if(politiques.checkIFC){
 			//	LOG.debug("geste bat = {} BU {}",geste.getTypeRenovBat(),besoinU);
 
 			if(annee == 2017){

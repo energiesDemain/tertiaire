@@ -44,7 +44,7 @@ import com.ed.cgdd.derby.model.parc.SysChaud;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
 import com.ed.cgdd.derby.model.parc.Usage;
-import com.ed.cgdd.derby.process.politiques;
+import com.ed.cgdd.derby.model.politiques;
 
 
 public class GesteServiceImpl implements GesteService {
@@ -281,7 +281,7 @@ public class GesteServiceImpl implements GesteService {
 					coutAdd = coutAdd.add(coutMaintenance);
 					
 					// BV ces additionnels couts ne sont jamais utilises il me semble. Il n'y a pas de setter. test de modifier le code
-					if(!coutAdd.equals(BigDecimal.ZERO) && coutAdd.compareTo(new BigDecimal("0.0001")) == 1){
+					if(coutAdd.compareTo(new BigDecimal("0.0001")) == 1){
 					copyGeste.setCoutTravauxAddGeste(coutAdd); 
 					// copyGeste.getCoutTravauxAddGeste(); 
 					}
@@ -299,7 +299,7 @@ public class GesteServiceImpl implements GesteService {
 				BigDecimal Gain = copyGeste.getGainEner();
 				BigDecimal Rdt = copyGeste.getRdt();
 				
-				if(politiques.checkRTex==1){
+				if(politiques.checkRTex){
 					
 				if (copyGeste.getExigence().equals(Exigence.RT_PAR_ELEMENT) && annee > 2017) {
 					Gain = Gain.add(politiques.GainSupRTex);
@@ -380,7 +380,7 @@ public class GesteServiceImpl implements GesteService {
 						if (addToMap) {
 							// 11eme test : si le parc doit subir une obligation
 							// de
-							// travaux, alor les gestes retenus doivent
+							// travaux, alors les gestes retenus doivent
 							// correspondre
 							// a l'exigence de la reglementation
 							obligBool = obligationExigence(parc, copyGeste, obligExig, surfOblig);

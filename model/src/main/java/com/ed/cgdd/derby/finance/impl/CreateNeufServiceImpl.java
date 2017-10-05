@@ -17,7 +17,7 @@ import com.ed.cgdd.derby.model.calcconso.ParamBesoinsNeufs;
 import com.ed.cgdd.derby.model.calcconso.ParamRdtCout;
 import com.ed.cgdd.derby.model.parc.SysChaud;
 import com.ed.cgdd.derby.model.parc.Usage;
-import com.ed.cgdd.derby.process.politiques;
+import com.ed.cgdd.derby.model.politiques;
 
 public class CreateNeufServiceImpl implements CreateNeufService {
 	private final static Logger LOG = LogManager.getLogger(CreateNeufServiceImpl.class);
@@ -121,7 +121,7 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 			
 			// BV prise en compte d'un surcout pour l'electrique joule du fait de la RT 2012
 	
-			if(politiques.checkSurcoutRT2012 == 1 && annee > 2012 && 
+			if(politiques.checkSurcoutRT2012 && annee > 2012 &&
 	    			(
 	    					
 	    			idSysChaud.equals(SysChaud.CASSETTE_RAYONNANTE.getCode()) ||

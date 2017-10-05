@@ -48,7 +48,7 @@ import com.ed.cgdd.derby.parc.InsertParcDAS;
 import com.ed.cgdd.derby.parc.LoadParcDataDAS;
 import com.ed.cgdd.derby.parc.ParcService;
 import com.ed.cgdd.derby.process.InitializeConsoService;
-import com.ed.cgdd.derby.process.politiques;
+import com.ed.cgdd.derby.model.politiques;
 import com.ed.cgdd.derby.usagesnonrt.BureauProcessService;
 import com.ed.cgdd.derby.usagesnonrt.CuissonAutreService;
 import com.ed.cgdd.derby.usagesnonrt.FroidAlimService;
@@ -61,6 +61,7 @@ import com.ed.cgdd.derby.usagesrt.EcsService;
 import com.ed.cgdd.derby.usagesrt.InsertUsagesRTDAS;
 import com.ed.cgdd.derby.usagesrt.LoadTableChauffClimDAS;
 import com.ed.cgdd.derby.usagesrt.LoadTableRtDAS;
+import org.apache.xmlbeans.impl.tool.Extension;
 
 public class ProcessServiceRunnable implements Runnable {
 	private final static Logger LOG = LogManager.getLogger(ProcessServiceImpl.class);
@@ -118,7 +119,8 @@ public class ProcessServiceRunnable implements Runnable {
 	float txRenovBati;
 	HashMap<String, ParamParcArray> entreesMap;
 	HashMap<String, ParamParcArray> sortiesMap;
-	HashMap<String, ParamBesoinsNeufs> bNeufsMap;
+	HashMap<String, ParamBesoinsNeufs> bNeufsMapInit;
+	HashMap<String, ParamBesoinsNeufs> copyBesoinsNeufs;
 	HashMap<String, EffetRebond> effetRebond;
 	HashMap<String, ParamGainsUsages> gainsNonRTMap;
 	HashMap<String, BigDecimal> dvUsagesMap;
@@ -168,7 +170,7 @@ public class ProcessServiceRunnable implements Runnable {
 
 	public ProcessServiceRunnable(int pasdeTempsInit, ParamCintObjects paramCintObject, float txRenovBati,
 								  HashMap<String, ParamParcArray> entreesMap, HashMap<String, ParamParcArray> sortiesMap,
-								  HashMap<String, ParamBesoinsNeufs> bNeufsMap, HashMap<String, EffetRebond> effetRebond,
+								  HashMap<String, ParamBesoinsNeufs> bNeufsMapInit,HashMap<String, ParamBesoinsNeufs> copyBesoinsNeufs, HashMap<String, EffetRebond> effetRebond,
 								  HashMap<String, ParamGainsUsages> gainsNonRTMap, HashMap<String, BigDecimal> dvUsagesMap,
 								  HashMap<String, ParamPMConso> pmCuissonMap, HashMap<String, ParamPMConso> pmAutresMap,
 								  HashMap<String, ParamPMConsoChgtSys> pmCuissonChgtMap,
@@ -196,7 +198,8 @@ public class ProcessServiceRunnable implements Runnable {
 		this.txRenovBati = txRenovBati;
 		this.entreesMap = entreesMap;
 		this.sortiesMap = sortiesMap;
-		this.bNeufsMap = bNeufsMap;
+		this.bNeufsMapInit = bNeufsMapInit;
+		this.copyBesoinsNeufs=copyBesoinsNeufs;
 		this.effetRebond = effetRebond;
 		this.gainsNonRTMap = gainsNonRTMap;
 		this.dvUsagesMap = dvUsagesMap;
@@ -366,11 +369,6 @@ public class ProcessServiceRunnable implements Runnable {
 				HashMap<String, BigDecimal[]> elasticiteNeufMap = commonService.getFacteurElasticiteNeuf(idAgregParc,
 						coutEnergieMap, emissionsMap, elasticiteMap);
 				
-				// BV On reinitialise les besoins initiaux pour les batiments neufs (pas efficace en temps, TODO voir si on peut faire une copie de la hasmap initiale)
-				// HashMap<String, ParamBesoinsNeufs> bNeufsMap = new HashMap<String, ParamBesoinsNeufs>(bNeufsMapIni);
-				HashMap<String, ParamBesoinsNeufs> bNeufsMap = loadTableUsagesNonRTdas.loadTableBesoinsNeufs("BesoinU_neuf");
-				
-				
 				// Boucle de calcul des evolutions du parc et des
 				// consommations
 				// energetiques
@@ -378,16 +376,14 @@ public class ProcessServiceRunnable implements Runnable {
 				// HashMap<String,
 				// BigDecimal>();
 				//for (int annee = 2010; annee <= 2050; annee++) {
-			    for (int annee = 2010; annee <= 2050; annee++) {
+			    for (int annee = 2010; annee <= 2012; annee++) {
 			    	    	
 			    	//BV prise en compte travaux embarques
-			    	if(politiques.checkTravEmb == 1 & annee == 2017){
+			    	if(politiques.checkTravEmb && annee == 2017){
 			    		//LOG.debug("taux avant trav emb{}",txRenovBati);
-			    		// on copie le taux de renov tendanciel ini
-				    	float txRenovBatiCopy = txRenovBati;
-			    	// travaux embarques on augmente le taux de renov tendancielle de 1.3% 
+			    		// travaux embarques on augmente le taux de renov tendancielle de 1.3%
 				
-			    	txRenovBati = txRenovBatiCopy + politiques.txRenovTravEmb;
+			    	txRenovBati = txRenovBati + politiques.txRenovTravEmb;
 			    	//LOG.debug("taux avant trav emb = {} apres ={}",txRenovBatiCopy, txRenovBati);
 			    	}					
 			    	
@@ -406,35 +402,8 @@ public class ProcessServiceRunnable implements Runnable {
 
 					resultatsParc = new ResultParc();
 
-					// BV ajout batiment exemplaire de l'Etat. on baisse de les besoins unitaires des usages rt du parc entrant de l'Etat
-					// pour prendre en compte l'entree des batiments E+C-. TODO faire un parametre propre
-					
-					if(politiques.checkBatex == 1){
-					int periode = commonService.correspPeriode(annee);
-					String idOccupant = idAgregParc.substring(START_OCCUPANT, START_OCCUPANT + LENGTH_OCCUPANT);
-					
-					
-					// On modifie les besoins des usages Rt uniquement, pour l'Etat et les collectivites 
-					// et seulement pour les annees 2015 et les annees de debut de periode
-					
-					if (!(idOccupant.equals("05")||idOccupant.equals("04")) && annee > 2014 &&  
-							(annee == commonService.anneeDebutPeriode(periode) | annee ==2015)){
-						
-						String idParcBesoin = idAgregParc.substring(START_ID_COURANT, START_ID_COURANT + LENGTH_ID_BRANCHE)
-						.concat(idAgregParc.substring(START_BATTYPE, START_BATTYPE + BATTYPE_LENGTH));
-						
-						for(UsageRT usagetemp : UsageRT.values()){	
-						String idBesoin = idParcBesoin.concat(usagetemp.getLabel());
-						//LOG.debug("idBesoin {} usage {} BU {}", idBesoin,usagetemp.getLabel());
-						BigDecimal besoinUnitaire = bNeufsMap.get(idBesoin).getPeriode(periode);
-						//LOG.debug("occ {} usage {} BU {}", idOccupant,usagetemp.getLabel(), besoinUnitaire);
-						besoinUnitaire = besoinUnitaire.multiply(politiques.modifBUBatEx, MathContext.DECIMAL32);
-						bNeufsMap.get(idBesoin).setPeriode(periode,besoinUnitaire);
-						//LOG.debug("occ {} usage {} BU {}", idOccupant,usagetemp.getLabel(), bNeufsMap.get(idBesoin).getPeriode(periode));
-						}
-						
-					}				
-					}
+					// On charge la bonne map des besoins neufs a utiliser en fonction de l'occupant et de l'annee
+					HashMap<String, ParamBesoinsNeufs> bNeufsMap = getBNeufMapToUse(annee);
 
 					// Calcul des parts de marche dans les batiments neufs
 					HashMap<String, BigDecimal> partsMarchesNeuf = createNeufService.pmChauffNeuf(bNeufsMap,
@@ -708,6 +677,27 @@ public class ProcessServiceRunnable implements Runnable {
 
 		}
 
+	}
+
+	protected HashMap<String, ParamBesoinsNeufs> getBNeufMapToUse(int annee) {
+		HashMap<String,ParamBesoinsNeufs> bNeufsMap = bNeufsMapInit;
+		if(politiques.checkBatex){
+        int periode = commonService.correspPeriode(annee);
+        String idOccupant = idAgregParc.substring(START_OCCUPANT, START_OCCUPANT + LENGTH_OCCUPANT);
+
+
+        // On modifie les besoins des usages Rt uniquement, pour l'Etat et les collectivites
+        // et seulement pour les annees 2015 et les annees de debut de periode
+
+
+        if (!(idOccupant.equals("05")|| idOccupant.equals("04")) && annee > 2014 &&
+                (annee == commonService.anneeDebutPeriode(periode) || annee ==2015)){
+
+            bNeufsMap=copyBesoinsNeufs;
+
+        }
+        }
+		return bNeufsMap;
 	}
 
 	private ResultConso loadInitConso(String idAgregParc, int pasdeTemps) {

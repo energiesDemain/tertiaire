@@ -4,17 +4,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.MathContext;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.stream.Collectors;
 
 import com.ed.cgdd.derby.model.financeObjects.*;
 import com.ed.cgdd.derby.model.parc.*;
+import com.ed.cgdd.derby.model.politiques;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -382,7 +382,8 @@ public class ProcessServiceImpl implements ProcessService {
 
 		// Chargement des besoins par usage pour les batiments neufs
 		HashMap<String, ParamBesoinsNeufs> bNeufsMap = loadTableUsagesNonRTdas.loadTableBesoinsNeufs("BesoinU_neuf");
-		
+		HashMap<String, ParamBesoinsNeufs> copyBNeufs = loadTableUsagesNonRTdas.loadTableBesoinsNeufs("BesoinU_neuf");
+
 		// Chargement de l'impact de l'effet rebond
 		HashMap<String, EffetRebond> effetRebond = loadTableEffetRebondDAS.recupEffetRebond("Effet_Rebond");
 
@@ -523,6 +524,10 @@ public class ProcessServiceImpl implements ProcessService {
 
 		LOG.info("Truncate done");
 
+		// Creation des deux maps de besoins pour les batiments entrant
+
+		HashMap<String, ParamBesoinsNeufs> copyMapNeuf = modifBesoinUBatEx(copyBNeufs);
+
 		// Creation de la HashMap conte
 		List<String> listeId = loadParcDatadas.getParamParcListeMapper();
 		HashMap<String, List<String>> idAgregListMap = commonService.idAgregBoucleList(listeId);
@@ -534,7 +539,7 @@ public class ProcessServiceImpl implements ProcessService {
 		List<Callable<Object>> process = new ArrayList<Callable<Object>>();
 		for (String idAgregParc : idAgregListMap.keySet()) {
 			ProcessServiceRunnable runnable = new ProcessServiceRunnable(pasdeTempsInit, paramCintObjects, txRenovBati, entreesMap,
-					sortiesMap, bNeufsMap, effetRebond, gainsNonRTMap, dvUsagesMap, pmCuissonMap, pmAutresMap,
+					sortiesMap, bNeufsMap,copyMapNeuf, effetRebond, gainsNonRTMap, dvUsagesMap, pmCuissonMap, pmAutresMap,
 					pmCuissonChgtMap, pmAutresChgtMap, rythmeFrdRgltMap, gainFrdRgltMap, pmEcsNeufMap, pmEcsChgtMap,
 					bibliRdtEcsMap, rdtPerfEcsMap, partSolaireMap, txCouvSolaireMap, partSysPerfEcsMap, dvEcsMap,
 					coutEcsMap, rdtCoutClimMap, txClimExistantMap, txClimNeufMap, rdtCoutChauffMap, dvChauffMap,
@@ -576,6 +581,24 @@ public class ProcessServiceImpl implements ProcessService {
 		}
 
 	}
+
+	protected HashMap<String, ParamBesoinsNeufs> modifBesoinUBatEx(HashMap<String, ParamBesoinsNeufs> copyMapNeuf) {
+		for(String keyMap : copyMapNeuf.keySet()){
+		ParamBesoinsNeufs paramBesoinsNeufs = copyMapNeuf.get(keyMap);
+		if(Arrays.asList(UsageRT.values()).stream().filter(p->p.toString().equals(Usage.getEnumName(paramBesoinsNeufs.getUsage())))
+				.findAny().isPresent()){
+			BigDecimal besoinUnitaire = null;
+			for(int i=1 ; i<6 ; i++){
+				besoinUnitaire = paramBesoinsNeufs.getPeriode(i);
+				paramBesoinsNeufs.setPeriode(i,besoinUnitaire.multiply(politiques.modifBUBatEx, MathContext.DECIMAL32));
+			}
+		copyMapNeuf.put(keyMap,paramBesoinsNeufs);
+		}}
+		return copyMapNeuf;
+	}
+
+
+
 
 	protected void truncateResultTables() {
 		truncateParcTabledas.truncateTable("Parc_entrant");

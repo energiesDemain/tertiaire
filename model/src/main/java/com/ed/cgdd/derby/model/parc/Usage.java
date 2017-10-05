@@ -19,6 +19,21 @@ public enum Usage {
 		this.label = label;
 	}
 
+	public static String getEnumName(String label) {
+
+		String name = new String();
+		for (Usage usage : Usage.values()) {
+
+			if (usage.getLabel().toString().equals(label)) {
+
+				name = usage.toString();
+			}
+
+		}
+
+		return name;
+	}
+
 }
 
 

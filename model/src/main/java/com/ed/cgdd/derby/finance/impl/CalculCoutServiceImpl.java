@@ -210,7 +210,7 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 		//return val.divide(BigDecimal.valueOf(coutFinal.getAnnuites().length), MathContext.DECIMAL32).add(valCoutInt,
 		//		MathContext.DECIMAL32);
 		
-		// modif on ajoute à la hashmap en actualisant sur la durée de vie des travaux pour se ramener à une année
+		// modif on ajoute  la hashmap en actualisant sur la duree de vie des travaux pour se ramener a une annee
 		BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
 
 		BigDecimal coefactu = commonService.serieGeometrique(inverse, inverse, coutFinal.getAnnuites().length - 1);

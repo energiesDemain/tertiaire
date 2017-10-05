@@ -36,15 +36,14 @@ public abstract class TypeFinanceServiceImpl implements TypeFinanceService {
 			coutRen = coutRen.add(geste.getCoutGesteSys(), MathContext.DECIMAL32);
 		}
 
-		BigDecimal coutAdd = BigDecimal.ZERO;
-		
 		if (geste.getCoutTravauxAddGeste() != null && geste.getCoutTravauxAddGeste().compareTo(new BigDecimal("0.0001")) == 1 ) {
-			// BV on ajoute zéro dans cette version!
+			// BV on ajoute zero dans cette version!
 			// resultat.setCTA(surface.multiply(coutAdd));
 			resultat.setCTA(surface.multiply(geste.getCoutTravauxAddGeste()));
 			// resultat.getCTA();
 		} else {
-			resultat.setCTA(coutAdd);
+			// Si il n'y a pas de couts additionnels
+			resultat.setCTA(BigDecimal.ZERO);
 		}
 
 		resultat.setCT(surface.multiply(coutRen, MathContext.DECIMAL32));
