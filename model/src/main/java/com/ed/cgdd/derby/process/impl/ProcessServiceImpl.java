@@ -374,9 +374,6 @@ public class ProcessServiceImpl implements ProcessService {
 		int pasdeTempsInit = 1;
 		float txRenovBati = loadTxRenovBati();
 
-
-
-		
 		// Chargement des parametres influant sur l'evolution du parc
 		List<ParamParcArray> entrees = loadParcDatadas.getParamEntreesMapper();
 		List<ParamParcArray> sorties = loadParcDatadas.getParamSortiesMapper();
@@ -504,7 +501,7 @@ public class ProcessServiceImpl implements ProcessService {
 		HashMap<String, TauxInteret> tauxInteretMap = new HashMap<String, TauxInteret>();
 		tauxInteretMap = recupParamFinDAS.recupTauxInteret();
 
-		// Recupertation de la surface moyenne
+		// Recuperation de la surface moyenne
 		HashMap<String, SurfMoy> surfMoyMap = new HashMap<String, SurfMoy>();
 		surfMoyMap = recupParamFinDAS.recupSurfMoy();
 		// Recuperation de l'evolution de la valeur verte

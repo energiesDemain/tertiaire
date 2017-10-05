@@ -15,7 +15,9 @@ import com.ed.cgdd.derby.finance.CreateNeufService;
 import com.ed.cgdd.derby.finance.RecupParamFinDAS;
 import com.ed.cgdd.derby.model.calcconso.ParamBesoinsNeufs;
 import com.ed.cgdd.derby.model.calcconso.ParamRdtCout;
+import com.ed.cgdd.derby.model.parc.SysChaud;
 import com.ed.cgdd.derby.model.parc.Usage;
+import com.ed.cgdd.derby.process.politiques;
 
 public class CreateNeufServiceImpl implements CreateNeufService {
 	private final static Logger LOG = LogManager.getLogger(CreateNeufServiceImpl.class);
@@ -102,20 +104,7 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 			String idCoutIntangible = getIdCoutInt(str);
 			String idSysChaud = getIdSysChauf(str);
 			BigDecimal besoinUnitaire = bNeufsMap.get(idBesoin).getPeriode(periode);
-			
-			
-			//LOG.debug("{} {} {} {}", idOccupant, energie, idSysChaud,besoinUnitaire);
-
-		
-		
-//			// ajout conversion EP EF pour l'elec
-//			if(energie.equals("02")){
-//				 besoinUnitaire =  besoinUnitaire.multiply(new BigDecimal("2.58"));
-//			}
-//			LOG.debug("{} {} {}", energie, idSysChaud,besoinUnitaire);
-			
-			
-			
+				
 			BigDecimal rdt = mapRdtTravail.get(str).getRdt();
 			BigDecimal cout = mapRdtTravail.get(str).getCout()
 					.multiply(getVariation(idSysChaud, annee, evolCoutTechno), MathContext.DECIMAL32);
@@ -124,16 +113,33 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 			//BigDecimal coutMaintenance = maintenanceMap.get(str.substring(START_ID_SYS, START_ID_SYS + LENGTH_ID_SYS))
 			//		.getPart();
 			// BV modif Ajout des couts de maintenance en %
+			
 			BigDecimal coutMaintenance = cout.multiply(maintenanceMap.get(str.substring(START_ID_SYS, START_ID_SYS + LENGTH_ID_SYS))
 					.getPart(), MathContext.DECIMAL32);
 			
 			cout = cout.add(coutMaintenance);
+			
+			// BV prise en compte d'un surcout pour l'electrique joule du fait de la RT 2012
+	
+			if(politiques.checkSurcoutRT2012 == 1 && annee > 2012 && 
+	    			(
+	    					
+	    			idSysChaud.equals(SysChaud.CASSETTE_RAYONNANTE.getCode()) ||
+	    			 idSysChaud.equals(SysChaud.CASSETTE_RAYONNANTE_PERFORMANT.getCode()) ||
+	    			 idSysChaud.equals(SysChaud.ELECTRIQUE_DIRECT.getCode()) ||
+	    			 idSysChaud.equals(SysChaud.ELECTRIQUE_DIRECT_PERFORMANT.getCode())
+	    			)){
+				
+	    		cout = cout.add(politiques.surcoutRT);	 
+
+			}
+			
+		
 			BigDecimal coutInt = null;
 			if(coutIntangible.stream().filter(p->p.getCalKey().equals(idCoutIntangible)).findFirst().isPresent()){
 				coutInt = coutIntangible.stream().filter(p->p.getCalKey().equals(idCoutIntangible)).findFirst().get().getCInt();
 			}
 		
-			
 			int dureeVie = dvChauffMap.get(getIdSysChauf(str)).intValueExact();
 			BigDecimal coutEnergie = coutEnergieService.coutEnergie(coutEnergieMap, emissionsMap, annee, energie,
 					Usage.CHAUFFAGE.getLabel(), BigDecimal.ONE);

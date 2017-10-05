@@ -291,7 +291,7 @@ public class ProcessServiceRunnable implements Runnable {
 		ThreadContext.put(ID_PARC, idAgregParc);
 		//if (idAgregParc.equals("01014203")) {
 		//if (idAgregParc.substring(0,2).equals("01") && idAgregParc.substring(4,6).equals("42") && idAgregParc.substring(6,8).equals("03")){
-		
+		//if (idAgregParc.substring(0,2).equals("01")) {
 		//if (idAgregParc.equals("05141304")){
 		//if (idAgregParc.substring(2,4).equals(B.TRANSPORT.getCode().toString()))
 		// // if (!idAgregParc.substring(2,
@@ -379,16 +379,15 @@ public class ProcessServiceRunnable implements Runnable {
 				// BigDecimal>();
 				//for (int annee = 2010; annee <= 2050; annee++) {
 			    for (int annee = 2010; annee <= 2050; annee++) {
-			    	
+			    	    	
 			    	//BV prise en compte travaux embarques
-			    	if(politiques.checkTravEmb ==1 & annee == 2017){
+			    	if(politiques.checkTravEmb == 1 & annee == 2017){
 			    		//LOG.debug("taux avant trav emb{}",txRenovBati);
 			    		// on copie le taux de renov tendanciel ini
 				    	float txRenovBatiCopy = txRenovBati;
-	
-			    	// travaux embarques on au gmente le taux de renov tendancielle de 1.3%
-				    	
-			    	txRenovBati = txRenovBatiCopy + 0.01300000f;
+			    	// travaux embarques on augmente le taux de renov tendancielle de 1.3% 
+				
+			    	txRenovBati = txRenovBatiCopy + politiques.txRenovTravEmb;
 			    	//LOG.debug("taux avant trav emb = {} apres ={}",txRenovBatiCopy, txRenovBati);
 			    	}					
 			    	
@@ -409,10 +408,11 @@ public class ProcessServiceRunnable implements Runnable {
 
 					// BV ajout batiment exemplaire de l'Etat. on baisse de les besoins unitaires des usages rt du parc entrant de l'Etat
 					// pour prendre en compte l'entree des batiments E+C-. TODO faire un parametre propre
+					
 					if(politiques.checkBatex == 1){
 					int periode = commonService.correspPeriode(annee);
 					String idOccupant = idAgregParc.substring(START_OCCUPANT, START_OCCUPANT + LENGTH_OCCUPANT);
-					BigDecimal modifBUBatEx = new BigDecimal("0.8325");
+					
 					
 					// On modifie les besoins des usages Rt uniquement, pour l'Etat et les collectivites 
 					// et seulement pour les annees 2015 et les annees de debut de periode
@@ -428,7 +428,7 @@ public class ProcessServiceRunnable implements Runnable {
 						//LOG.debug("idBesoin {} usage {} BU {}", idBesoin,usagetemp.getLabel());
 						BigDecimal besoinUnitaire = bNeufsMap.get(idBesoin).getPeriode(periode);
 						//LOG.debug("occ {} usage {} BU {}", idOccupant,usagetemp.getLabel(), besoinUnitaire);
-						besoinUnitaire = besoinUnitaire.multiply(modifBUBatEx, MathContext.DECIMAL32);
+						besoinUnitaire = besoinUnitaire.multiply(politiques.modifBUBatEx, MathContext.DECIMAL32);
 						bNeufsMap.get(idBesoin).setPeriode(periode,besoinUnitaire);
 						//LOG.debug("occ {} usage {} BU {}", idOccupant,usagetemp.getLabel(), bNeufsMap.get(idBesoin).getPeriode(periode));
 						}
@@ -453,7 +453,6 @@ public class ProcessServiceRunnable implements Runnable {
 							sortiesMap, txClimNeufMap, pasdeTemps, anneeNTab, annee);
 					//LOG.info("Parc Done !");
 					
-					
 					// debugMap = new HashMap<String, BigDecimal>();
 
 // 					// calcul des parts de marche dans les batiments existants
@@ -465,24 +464,6 @@ public class ProcessServiceRunnable implements Runnable {
 							coutEnergieMap, emissionsMap, reglementations, compteur, coutsEclVentilMap, coutEcsMap,
 							pmEcsNeufMap, bNeufsMap, gainsVentilationMap, bibliRdtEcsMap, evolCoutBati, evolCoutTechno,
 							tauxInteretMap, surfMoyMap, evolVVMap, repartStatutOccupMap, maintenanceMap);
-
-					// HashMap<String, BigDecimal> testMap = new HashMap<String,
-					// BigDecimal>();
-					// for (String key : partMarcheMap.keySet()) {
-					// PartMarcheRenov geste = partMarcheMap.get(key);
-					// if (testMap.containsKey(geste.getId())) {
-					// BigDecimal temp = testMap.get(geste.getId());
-					// BigDecimal insert = temp.add(geste.getPart());
-					// testMap.put(geste.getId(), insert);
-					// } else {
-					//
-					// testMap.put(geste.getId(), geste.getPart());
-					// }
-					//
-					// }
-					// for (String key : testMap.keySet()) {
-					// LOG.debug("id={} part={}", key, testMap.get(key));
-					// }
 
 					resultatsConsoRt = chauffageService.evolChauffageConso(resultFinance, idAgregParc, auxChaud,
 							parcTotMap, partMarcheMap, bNeufsMap, rdtCoutChauffMap, anneeNTab, pasdeTemps, annee,
