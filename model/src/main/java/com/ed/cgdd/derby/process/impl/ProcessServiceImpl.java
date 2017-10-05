@@ -452,6 +452,10 @@ public class ProcessServiceImpl implements ProcessService {
 				.loadTableGainsVentilation("Gains_ventilation");
 		HashMap<String, ParamCoutEclVentil> coutsEclVentilMap = loadTableRtdas
 				.loadTableCoutEclVentil("Ecl_ventil_couts");
+		
+		// Recuperation des couts de maintenance
+				HashMap<String, Maintenance> maintenanceMap = new HashMap<String, Maintenance>();
+				maintenanceMap = recupParamFinDAS.recupMaintenance();
 
 		// Chargement du prix des energies et de la contribution climat energie
 		HashMap<Integer, CoutEnergie> coutEnergieMap = recupParamFinDAS.recupCoutEnergie("Cout_energie");
@@ -465,16 +469,16 @@ public class ProcessServiceImpl implements ProcessService {
 		calibrageService.addingRowsInHashMap(cintMapNeuf,coutEnergieMap,bNeufsMap);
 
 		// Couts intangibles dans l'existant
-		List<CalibCoutGlobal> coutIntangible = calibrageService.calibreCI(cintMap, paramCintObjects.getSysExist());
+		List<CalibCoutGlobal> coutIntangible = calibrageService.calibreCI(cintMap, paramCintObjects.getSysExist(), maintenanceMap);
 		List<CalibCoutGlobal> coutIntangibleBati = calibrageService.calibreCIBati(cintBatiMap, paramCintObjects.getGesteBat());
 
 		// Couts intangibles dans le neuf
-		List<CalibCoutGlobal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf());
+		List<CalibCoutGlobal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf(), maintenanceMap);
 
 		// Enregistrement des couts intangibles
-		calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
-		calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
-		calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
+		//calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
+		//calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
+		//calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
 
 		// Chargement de l'evolution du cout des techno et du bati
 		HashMap<String, BigDecimal> evolCoutBati = recupParamFinDAS.getEvolutionCoutBati();
@@ -511,10 +515,7 @@ public class ProcessServiceImpl implements ProcessService {
 		// Recuperation de la repartion du statut d'occupation
 		HashMap<String, RepartStatutOccup> repartStatutOccupMap = new HashMap<String, RepartStatutOccup>();
 		repartStatutOccupMap = recupParamFinDAS.recupRepartStatutOccup();
-		// Recuperation des couts de maintenance
-		HashMap<String, Maintenance> maintenanceMap = new HashMap<String, Maintenance>();
-		maintenanceMap = recupParamFinDAS.recupMaintenance();
-
+		
 		// Recuperation des facteurs d'elasticite-prix
 		ElasticiteMap elasticiteMap = new ElasticiteMap();
 		elasticiteMap = recupParamFinDAS.elasticite("Elasticite_prix", elasticiteMap);

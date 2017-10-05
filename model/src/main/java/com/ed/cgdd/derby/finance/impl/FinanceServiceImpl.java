@@ -1288,7 +1288,7 @@ public class FinanceServiceImpl implements FinanceService {
 				resultConsoURtMap, parcIni, bibliGeste, dvChauffMap, dvGesteMap, annee, periode, rdtIni, anneeNTab,
 				reglementations, coutsEclVentilMap, coutEcsMap, pmEcsNeufMap, consoEner, ventil, aux, bNeufsMap,
 				besoinInit, gainsVentilationMap, bibliRdtEcsMap, statutOccup.getTauxActuProp(), evolCoutBati,
-				evolCoutTechno, maintenanceMap);
+				evolCoutTechno, maintenanceMap, paramRdtCout);
 		
 		
 		
@@ -1331,16 +1331,7 @@ public class FinanceServiceImpl implements FinanceService {
 							coutEnergie, evolCoutBati, evolCoutTechno);
 
 					if (inter != null) {
-						// if
-						// (courant.getTypeRenovBati().equals(TypeRenovBati.ENSBBC))
-						// {
-						// LOG.debug(
-						// "Rapport CINT/CT {}",
-						// inter.getCoutRenov()
-						// .getCINT()
-						// .divide(inter.getCoutRenov().getCT().add(inter.getCoutRenov().getCTA()),
-						// MathContext.DECIMAL32));
-						// }
+						
 						coutFinalProp = calculCoutService.calculCoutFinal(surface, besoinInitUnitaire, parcIni, inter,
 								annee, idParc, anneeNTab, statutOccup.getTauxActuProp(), coutEnergieMap, emissionsMap,
 								valeurVerte.getValeurProp());

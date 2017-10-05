@@ -28,6 +28,8 @@ public class Geste {
 														// geste systeme
 
 	private BigDecimal coutTravauxAddGeste; // le cout des travaux additionnels
+	private BigDecimal coutMaintenance; // le cout de maintenance annuel
+	
 	private BigDecimal gainEner; // le gain d'�nergie par m2 en %
 	private BigDecimal valeurCEE;
 	private BigDecimal rdt; // rendement du systeme
@@ -53,6 +55,9 @@ public class Geste {
 		}
 		if (copy.getCoutTravauxAddGeste() != null) {
 			this.setCoutTravauxAddGeste(new BigDecimal(copy.getCoutTravauxAddGeste().toString()));
+		}
+		if (copy.getCoutMaintenance() != null) {
+			this.setCoutMaintenance(new BigDecimal(copy.getCoutMaintenance().toString()));
 		}
 		if (copy.getGainEner() != null) {
 			this.setGainEner(new BigDecimal(copy.getGainEner().toString()));
@@ -197,6 +202,14 @@ public class Geste {
 	public Geste(String typeRenov) {
 		super();
 		this.gesteNom = typeRenov;
+	}
+
+	public BigDecimal getCoutMaintenance() {
+		return coutMaintenance;
+	}
+
+	public void setCoutMaintenance(BigDecimal coutMaintenance) {
+		this.coutMaintenance = coutMaintenance;
 	}
 
 }

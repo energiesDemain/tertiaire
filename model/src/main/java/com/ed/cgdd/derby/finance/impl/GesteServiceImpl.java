@@ -179,7 +179,7 @@ public class GesteServiceImpl implements GesteService {
 			Conso ventil, Conso aux, HashMap<String, ParamBesoinsNeufs> bNeufsMap, Conso besoinInit,
 			HashMap<String, ParamGainsUsages> gainsVentilationMap, HashMap<String, ParamRdtEcs> bibliRdtEcsMap,
 			PBC tauxActu, HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,
-			HashMap<String, Maintenance> maintenanceMap) {
+			HashMap<String, Maintenance> maintenanceMap, HashMap<String, ParamRdtCout> paramRdtCout) {
 
 		// Recuperation du niveau minimal attendu par la RT existant
 		String periodeString = commonService.correspPeriodeFin(annee);
@@ -267,7 +267,22 @@ public class GesteServiceImpl implements GesteService {
 								getVariation(copyGeste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32);
 					}
 					
-					BigDecimal coutMaintenance = BigDecimal.ZERO;
+					// BV ces additionnels couts ne sont jamais utilises il me semble. Il n'y a pas de setter. test de modifier le code
+					// On ajoute les couts additionnels aux couts d'investissement
+					if(coutAdd.compareTo(new BigDecimal("0.0001")) == 1){
+					copyGeste.setCoutTravauxAddGeste(coutAdd); 
+					// copyGeste.getCoutTravauxAddGeste(); 
+					}
+				}	
+				
+				if (copyGeste.getTypeRenovSys().equals(TypeRenovSysteme.ETAT_INIT)) {
+					copyGeste.setSysChaud(parc.getIdsyschaud());
+					copyGeste.setEnergie(parc.getIdenergchauff());
+					copyGeste.setRdt(rdtN);
+				}
+				
+				// ajout des couts de maintenance y compris quand le systeme de chauffage ne change pas
+				BigDecimal coutMaintenance = BigDecimal.ZERO;
 					if (maintenanceMap.get(copyGeste.getSysChaud()) != null
 							&& maintenanceMap.get(copyGeste.getSysChaud()).getPart() != null
 							&& copyGeste.getCoutGesteSys() != null) {
@@ -276,22 +291,20 @@ public class GesteServiceImpl implements GesteService {
 						// BV les couts de maintenance ne sont pas (1 + part maintenance) * cout mais partmaintenance*cout!
 						BigDecimal partMaintenance = maintenanceMap.get(copyGeste.getSysChaud()).getPart();
 						// coutMaintenance = (BigDecimal.ONE.add(partMaintenance)).multiply(copyGeste.getCoutGesteSys());
-						coutMaintenance = partMaintenance.multiply(copyGeste.getCoutGesteSys());
-					}
-					coutAdd = coutAdd.add(coutMaintenance);
-					
-					// BV ces additionnels couts ne sont jamais utilises il me semble. Il n'y a pas de setter. test de modifier le code
-					if(coutAdd.compareTo(new BigDecimal("0.0001")) == 1){
-					copyGeste.setCoutTravauxAddGeste(coutAdd); 
-					// copyGeste.getCoutTravauxAddGeste(); 
-					}
-					
+						coutMaintenance = partMaintenance.multiply(copyGeste.getCoutGesteSys().multiply(
+								getVariation(copyGeste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32));
+						
+						// si pas de changement de systeme (cout du geste chgt de syst nul), on va chercher le cout du systeme dans la bdd des couts des systemes pour calculer les couts de maintenance
+						
+				    if (copyGeste.getTypeRenovSys() == TypeRenovSysteme.ETAT_INIT) {
+				    	coutMaintenance = partMaintenance.multiply(paramRdtCout.get(parc.getIdbranche() + parc.getIdssbranche() + parc.getIdbattype() + parc.getIdsyschaud() + parc.getIdenergchauff() + periode).getCout().multiply(
+								getVariation(copyGeste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32));
+				    }
 				}
-
-				if (copyGeste.getTypeRenovSys().equals(TypeRenovSysteme.ETAT_INIT)) {
-					copyGeste.setSysChaud(parc.getIdsyschaud());
-					copyGeste.setEnergie(parc.getIdenergchauff());
-					copyGeste.setRdt(rdtN);
+					
+					// on ajoute les couts de maintenance annuels au geste
+				if(coutMaintenance.compareTo(new BigDecimal("0.0001")) == 1){
+						copyGeste.setCoutMaintenance(coutMaintenance); 
 				}
 
 				// BV changement de gains pour les gestes et les systemes respectant la RT existant en 2018, 

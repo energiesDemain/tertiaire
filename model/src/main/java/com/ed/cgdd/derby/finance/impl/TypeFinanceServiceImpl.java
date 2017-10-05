@@ -36,6 +36,7 @@ public abstract class TypeFinanceServiceImpl implements TypeFinanceService {
 			coutRen = coutRen.add(geste.getCoutGesteSys(), MathContext.DECIMAL32);
 		}
 
+		// ajout des couts de travaux additionnels
 		if (geste.getCoutTravauxAddGeste() != null && geste.getCoutTravauxAddGeste().compareTo(new BigDecimal("0.0001")) == 1 ) {
 			// BV on ajoute zero dans cette version!
 			// resultat.setCTA(surface.multiply(coutAdd));
@@ -48,6 +49,14 @@ public abstract class TypeFinanceServiceImpl implements TypeFinanceService {
 
 		resultat.setCT(surface.multiply(coutRen, MathContext.DECIMAL32));
 
+		// ajout des couts de maintenance annuels 
+		if (geste.getCoutMaintenance() != null && geste.getCoutMaintenance().compareTo(new BigDecimal("0.0001")) == 1 ) {
+			resultat.setMaintenance(surface.multiply(geste.getCoutMaintenance()));
+		} else {
+			// Si il n'y a pas de couts additionnels
+			resultat.setMaintenance(BigDecimal.ZERO);
+		}
+		
 		resultat.setDuree(Math.max(geste.getDureeSys(), geste.getDureeBati()));
 
 		// calcul des CEini
@@ -110,12 +119,28 @@ public abstract class TypeFinanceServiceImpl implements TypeFinanceService {
 		if (geste.getTypeRenovSys() != TypeRenovSysteme.ETAT_INIT) {
 			coutRen = coutRen.add(geste.getCoutGesteSys(), MathContext.DECIMAL32);
 		}
-		BigDecimal coutAdd = BigDecimal.ZERO;
-		if (geste.getCoutTravauxAddGeste() != null) {
-			resultat.setCTA(surface.multiply(coutAdd));
+		
+		// ajout des couts de travaux additionnels
+		if (geste.getCoutTravauxAddGeste() != null && geste.getCoutTravauxAddGeste().compareTo(new BigDecimal("0.0001")) == 1 ) {
+		// BV on ajoute zero dans cette version!
+		// resultat.setCTA(surface.multiply(coutAdd));
+		resultat.setCTA(surface.multiply(geste.getCoutTravauxAddGeste()));
+		// resultat.getCTA();
 		} else {
-			resultat.setCTA(coutAdd);
+		// Si il n'y a pas de couts additionnels
+		resultat.setCTA(BigDecimal.ZERO);
 		}
+
+		resultat.setCT(surface.multiply(coutRen, MathContext.DECIMAL32));
+
+		// ajout des couts de maintenance annuels 
+		if (geste.getCoutMaintenance() != null && geste.getCoutMaintenance().compareTo(new BigDecimal("0.0001")) == 1 ) {
+			resultat.setMaintenance(surface.multiply(geste.getCoutMaintenance()));
+		} else {
+		// Si il n'y a pas de couts additionnels
+		resultat.setMaintenance(BigDecimal.ZERO);
+		}
+				
 
 		resultat.setCT(surface.multiply(coutRen, MathContext.DECIMAL32));
 

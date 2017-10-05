@@ -91,20 +91,19 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 		if (gesteFin.getGeste().getTypeRenovSys().equals(TypeRenovSysteme.ETAT_INIT)
 				&& gesteFin.getGeste().getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)) {
 			charge = new BigDecimal(gesteFin.getCoutRenov().getCEini().toString());
+			// on ajoute la maintenance meme sans changement de systeme
+			charge = charge.add(gesteFin.getGeste().getCoutMaintenance().multiply(surface, MathContext.DECIMAL32));
 		} else {
 			BigDecimal coutEnergie = coutEnergieService.coutEnergie(coutEnergieMap, emissionsMap, annee, gesteFin
 					.getGeste().getEnergie(), Usage.CHAUFFAGE.getLabel(), BigDecimal.ONE);
 
-			// TODO ajouter charges de maintenance (attention aux duree de
-			// vie)
-			
-			// BV DEBUG GESTE
-			//LOG.debug("{} {} {} {} {} {} {}", gesteFin.getGeste().getExigence(),gesteFin.getGeste().getTypeRenovBati(),
-			//		gesteFin.getGeste().getTypeRenovSys(),gesteFin.getGeste().getGainEner(),gesteFin.getGeste().getSysChaud(),
-			//		gesteFin.getGeste().getRdt(), gesteFin.getGeste().getSysChaud().substring(0,1));
-			
 			charge = coutEnergieService.chargesEnerAnnuelles(surface, besoinInitUnitaire, gesteFin.getGeste(),
 					coutEnergie,annee);
+			
+			// ajout charges de maintenance 
+			
+			BigDecimal coutMaintenance = gesteFin.getGeste().getCoutMaintenance().multiply(surface, MathContext.DECIMAL32);			
+			charge = charge.add(coutMaintenance, MathContext.DECIMAL32); 
 		}
 		Arrays.fill(tableauAnnuite, charge);
 		

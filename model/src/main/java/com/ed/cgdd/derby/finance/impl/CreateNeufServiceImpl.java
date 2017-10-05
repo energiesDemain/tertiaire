@@ -109,15 +109,8 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 			BigDecimal cout = mapRdtTravail.get(str).getCout()
 					.multiply(getVariation(idSysChaud, annee, evolCoutTechno), MathContext.DECIMAL32);
 			
-			// Ajout des couts de maintenance
-			//BigDecimal coutMaintenance = maintenanceMap.get(str.substring(START_ID_SYS, START_ID_SYS + LENGTH_ID_SYS))
-			//		.getPart();
-			// BV modif Ajout des couts de maintenance en %
+			int dureeVie = dvChauffMap.get(getIdSysChauf(str)).intValueExact();
 			
-			BigDecimal coutMaintenance = cout.multiply(maintenanceMap.get(str.substring(START_ID_SYS, START_ID_SYS + LENGTH_ID_SYS))
-					.getPart(), MathContext.DECIMAL32);
-			
-			cout = cout.add(coutMaintenance);
 			
 			// BV prise en compte d'un surcout pour l'electrique joule du fait de la RT 2012
 	
@@ -140,7 +133,15 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 				coutInt = coutIntangible.stream().filter(p->p.getCalKey().equals(idCoutIntangible)).findFirst().get().getCInt();
 			}
 		
-			int dureeVie = dvChauffMap.get(getIdSysChauf(str)).intValueExact();
+			// Ajout des couts de maintenance
+		    // BV modif Ajout des couts de maintenance en %
+			BigDecimal coutMaintenance = cout.multiply(maintenanceMap.get(str.substring(START_ID_SYS, START_ID_SYS + LENGTH_ID_SYS))
+								.getPart(), MathContext.DECIMAL32);
+			
+			// Ce sont des cout annuels fixes. on les ajoute aux cout intangibles
+			coutInt = coutInt.add(coutMaintenance);
+						
+			
 			BigDecimal coutEnergie = coutEnergieService.coutEnergie(coutEnergieMap, emissionsMap, annee, energie,
 					Usage.CHAUFFAGE.getLabel(), BigDecimal.ONE);
 			BigDecimal coutGlobal = coutNeuf(besoinUnitaire, rdt, cout, coutInt, dureeVie, pretDeBase, coutEnergie);

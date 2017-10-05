@@ -9,6 +9,7 @@ import com.ed.cgdd.derby.model.financeObjects.CalibCI;
 import com.ed.cgdd.derby.model.financeObjects.CalibCIBati;
 import com.ed.cgdd.derby.model.financeObjects.CalibCoutGlobal;
 import com.ed.cgdd.derby.model.financeObjects.CoutEnergie;
+import com.ed.cgdd.derby.model.financeObjects.Maintenance;
 import com.ed.cgdd.derby.model.parc.ParamCInt;
 
 public interface CalibrageService {
@@ -19,7 +20,7 @@ public interface CalibrageService {
 	 * @param paramCint
 	 * @return
 	 */
-	List<CalibCoutGlobal> calibreCI(HashMap<String, CalibCI> dataCalib, ParamCInt paramCint);
+	List<CalibCoutGlobal> calibreCI(HashMap<String, CalibCI> dataCalib, ParamCInt paramCint, HashMap<String, Maintenance> maintenanceMap);
 
 	/**
 	 * Calculate CInt and return all cost parameters

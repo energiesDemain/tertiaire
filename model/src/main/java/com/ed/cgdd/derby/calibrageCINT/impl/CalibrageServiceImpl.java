@@ -108,7 +108,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 		
 		BigDecimal coutGlobal = calibCIBati.getChargeInit();
 		reference.setCoutGlobal(coutGlobal);
-
+		
 		BigDecimal partRef = calibCIBati.getPartMarche();
 		reference.setPartMarche2009(partRef);
 
@@ -116,7 +116,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 	}
 
 	// methode de calcul des CI --> cette methode renvoie une hashmap de CI
-	public List<CalibCoutGlobal> calibreCI(HashMap<String, CalibCI> dataCalib, ParamCInt paramCint) {
+	public List<CalibCoutGlobal> calibreCI(HashMap<String, CalibCI> dataCalib, ParamCInt paramCint, HashMap<String, Maintenance> maintenanceMap) {
 		
 		List<CalibCoutGlobal> results = new ArrayList<CalibCoutGlobal>();
 
@@ -128,13 +128,13 @@ public class CalibrageServiceImpl implements CalibrageService {
 			// traitement specifique pour la branche transport
 			if (dataCalib.get(st).getBranche().equals(Branche.TRANSPORT.getCode())
 					&& dataCalib.get(st).getEnergies().equals(Energies.GAZ.getCode())) {
-				calibRef.put(generateKey(dataCalib.get(st)), refCopy(dataCalib.get(st), paramCint.getCintRef()));
+				calibRef.put(generateKey(dataCalib.get(st)), refCopy(dataCalib.get(st), paramCint.getCintRef(), maintenanceMap));
 
 			} else {
 				if ((dataCalib.get(st).getSysteme().equals(SysChaud.CHAUDIERE_GAZ.getCode()))
 						&& (dataCalib.get(st).getEnergies().equals(Energies.GAZ.getCode()) && (!dataCalib.get(st)
 								.getPerformant()))) {
-					calibRef.put(generateKey(dataCalib.get(st)), refCopy(dataCalib.get(st), paramCint.getCintRef()));
+					calibRef.put(generateKey(dataCalib.get(st)), refCopy(dataCalib.get(st), paramCint.getCintRef(), maintenanceMap));
 				}
 			}
 		}
@@ -143,7 +143,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 			// if (!(dataCalib.get(str).getPerformant())) {
 			if (paramCint.getNu() == 0) { // dans ce cas les PM sont les memes pour tous et
 							// les CI ne peuvent pas etre calcule
-				results.add(new CalibCoutGlobal(str, BigDecimal.TEN,BigDecimal.ZERO));
+				results.add(new CalibCoutGlobal(str,paramCint.getCintRef(),BigDecimal.ZERO));
 
 			} else {
 
@@ -178,12 +178,17 @@ public class CalibrageServiceImpl implements CalibrageService {
 				.multiply(besoinUnitaire
 				.divide(dataCalib.get(str).getRdt(), MathContext.DECIMAL32), 
 				MathContext.DECIMAL32);
-
-				// Calcul du cout variable
+				
+				// ajout des couts de maintenance dans la calibration 
+				BigDecimal coutMaintenance = dataCalib.get(str).getCoutM2().multiply(maintenanceMap.get(dataCalib.get(str).getSysteme())
+						.getPart(), MathContext.DECIMAL32);
+				
+				// Calcul du cout variable annualise en divisant l'investissement par le coef d'actualisation
+				
 				BigDecimal coutVariable = (dataCalib.get(str).getCoutM2().divide(
 						coefactu, MathContext.DECIMAL32)).add(chargesEnerinter,
-						MathContext.DECIMAL32);
-				// on calcule le cout annualise en divisant l'investissement par le coef d'actualisation
+						MathContext.DECIMAL32).add(coutMaintenance, MathContext.DECIMAL32 );
+				
 				
 				BigDecimal interFinal = (intermediaire.multiply(calibRef.get(generateKey(dataCalib.get(str)))
 				.getCoutGlobal(), MathContext.DECIMAL32)).subtract(coutVariable, MathContext.DECIMAL32);
@@ -230,15 +235,20 @@ public class CalibrageServiceImpl implements CalibrageService {
 		return stri.substring(0, stri.length() - 1) + "0";
 	}
 
-	protected CalibCIRef refCopy(CalibCI calibCI, BigDecimal cintRef) {
+	protected CalibCIRef refCopy(CalibCI calibCI, BigDecimal cintRef, HashMap<String, Maintenance> maintenanceMap) {
 		CalibCIRef result = new CalibCIRef();
 		
 		BigDecimal chargesEner = calibCI.getBesoinUnitaire().multiply(calibCI.getCoutEner(), MathContext.DECIMAL32)
 				.divide(calibCI.getRdt(), MathContext.DECIMAL32);
 		
+		// ajout des couts de maintenance dans la calibration 
+		BigDecimal coutMaintenance = calibCI.getCoutM2().multiply(maintenanceMap.get(calibCI.getSysteme())
+				.getPart(), MathContext.DECIMAL32);
+		
 		// BV ajout actualisation de l'investissement (4%)
 		// TODO mettre un taux d'actualisation different pour le public et le prive voire pptaire/locataire
-	
+		
+		
 		BigDecimal tauxInt = BigDecimal.ONE.add(TAUX_ACTU_CALIB);
 		BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
 		
@@ -251,11 +261,13 @@ public class CalibrageServiceImpl implements CalibrageService {
 		
 		BigDecimal calcCG = calibCI.getCoutM2()
 				.divide(coefactu, MathContext.DECIMAL32)
-				.add(chargesEner, MathContext.DECIMAL32);
+				.add(chargesEner, MathContext.DECIMAL32).add(coutMaintenance);
 		result.setPartMarche2009(new BigDecimal(calibCI.getPartMarche2009().toString()));
 
+		// Ajoute le min entre le cout intangible de reference et 50 % du cout global de reference 
+		
 		// Ajoute le cint de l'option de reference
-		result.setCoutGlobal(calcCG.add(cintRef, MathContext.DECIMAL32));
+		result.setCoutGlobal(calcCG.add(cintRef.min(calcCG.multiply(new BigDecimal("0.5"))), MathContext.DECIMAL32));
 		
 		return result;
 	}

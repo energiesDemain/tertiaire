@@ -46,5 +46,5 @@ public interface GesteService {
 			Conso ventil, Conso aux, HashMap<String, ParamBesoinsNeufs> bNeufsMap, Conso besoinInit,
 			HashMap<String, ParamGainsUsages> gainsVentilationMap, HashMap<String, ParamRdtEcs> bibliRdtEcsMap,
 			PBC tauxActu, HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,
-			HashMap<String, Maintenance> maintenanceMap);
+			HashMap<String, Maintenance> maintenanceMap, HashMap<String, ParamRdtCout> paramRdtCout);
 }
