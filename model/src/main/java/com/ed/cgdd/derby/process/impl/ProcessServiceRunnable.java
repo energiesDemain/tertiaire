@@ -294,7 +294,7 @@ public class ProcessServiceRunnable implements Runnable {
 		ThreadContext.put(ID_PARC, idAgregParc);
 		//if (idAgregParc.equals("01014203")) {
 		//if (idAgregParc.substring(0,2).equals("01") && idAgregParc.substring(4,6).equals("42") && idAgregParc.substring(6,8).equals("03")){
-		//if (idAgregParc.substring(0,2).equals("01")) {
+		//if (idAgregParc.substring(6,8).equals("03")) {
 		//if (idAgregParc.equals("05141304")){
 		//if (idAgregParc.substring(2,4).equals(B.TRANSPORT.getCode().toString()))
 		// // if (!idAgregParc.substring(2,
@@ -376,7 +376,7 @@ public class ProcessServiceRunnable implements Runnable {
 				// HashMap<String,
 				// BigDecimal>();
 				//for (int annee = 2010; annee <= 2050; annee++) {
-			    for (int annee = 2010; annee <= 2035; annee++) {
+			    for (int annee = 2010; annee <= 2050; annee++) {
 			    	    	
 			    	//BV prise en compte travaux embarques
 			    	if(politiques.checkTravEmb && annee == 2017){

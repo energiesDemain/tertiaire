@@ -476,9 +476,9 @@ public class ProcessServiceImpl implements ProcessService {
 		List<CalibCoutGlobal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf(), maintenanceMap);
 
 		// Enregistrement des couts intangibles
-		//calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
-		//calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
-		//calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
+		calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
+		calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
+		calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
 
 		// Chargement de l'evolution du cout des techno et du bati
 		HashMap<String, BigDecimal> evolCoutBati = recupParamFinDAS.getEvolutionCoutBati();
