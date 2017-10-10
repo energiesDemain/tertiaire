@@ -17,11 +17,11 @@ public interface TypeFinanceService {
 			BigDecimal surface, BigDecimal coutenergie);
 
 	GesteFinancement createFinancement(Parc parcIni, Conso consoEner, Geste geste, Financement financement,
-			int anneeNtab, int annee, PBC pretDeBase, CEE valeurCEE, BigDecimal surface,List<CalibCoutGlobal> coutIntangible, List<CalibCoutGlobal> coutIntangibleBati,
+			int anneeNtab, int annee, PBC pretDeBase, CEE valeurCEE, BigDecimal surface,HashMap<String,CalibCoutGlobal> coutIntangible, HashMap<String,CalibCoutGlobal> coutIntangibleBati,
 			BigDecimal coutEnergie, HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno);
 
 	CoutRenovation recupParamSegment(Parc parcIni, Conso consoEner, Geste geste, int anneeNtab, int annee,
-			BigDecimal surface, List<CalibCoutGlobal> coutIntangible,List<CalibCoutGlobal> coutIntangibleBati, BigDecimal coutEnergie,
+			BigDecimal surface, HashMap<String,CalibCoutGlobal> coutIntangible,HashMap<String,CalibCoutGlobal> coutIntangibleBati, BigDecimal coutEnergie,
 			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno);
 
 }

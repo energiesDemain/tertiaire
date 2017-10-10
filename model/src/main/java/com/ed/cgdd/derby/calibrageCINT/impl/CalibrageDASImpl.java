@@ -194,26 +194,26 @@ public class CalibrageDASImpl extends BddDAS implements CalibrageDAS {
 
 
 	@Override
-	public void insertCInt(List<CalibCoutGlobal> coutIntangibleMap, CIntType cIntType) {
+	public void insertCInt(HashMap<String,CalibCoutGlobal> coutIntangibleMap, CIntType cIntType) {
 		List<Object[]> objectInsert = new ArrayList<Object[]>();
 		if (cIntType.equals(CIntType.BATI)){
-			for (CalibCoutGlobal calibCoutGlobal : coutIntangibleMap) {
+			for (String key : coutIntangibleMap.keySet()) {
 				Object[] object = new Object[4];
-				object[0] = calibCoutGlobal.getCalKey();
-				object[1] = calibCoutGlobal.getCalKey();
-				object[2] = calibCoutGlobal.getCInt();
-				object[3] = calibCoutGlobal.getCoutVariable();
+				object[0] = key;
+				object[1] = key;
+				object[2] = coutIntangibleMap.get(key).getCInt();
+				object[3] = coutIntangibleMap.get(key).getCoutVariable();
 				objectInsert.add(object);
 			}
 		} else {
-			for (CalibCoutGlobal calibCoutGlobal : coutIntangibleMap) {
+			for (String key : coutIntangibleMap.keySet()) {
 				Object[] object = new Object[6];
-				object[0] = calibCoutGlobal.getCalKey();
-				object[1] = calibCoutGlobal.getCalKey();
-				object[2] = calibCoutGlobal.getCalKey();
-				object[3] = calibCoutGlobal.getCalKey();
-				object[4] = calibCoutGlobal.getCInt();
-				object[5] = calibCoutGlobal.getCoutVariable();
+				object[0] = key;
+				object[1] = key;
+				object[2] = key;
+				object[3] = key;
+				object[4] = coutIntangibleMap.get(key).getCInt();
+				object[5] = coutIntangibleMap.get(key).getCoutVariable();
 				objectInsert.add(object);
 			}
 

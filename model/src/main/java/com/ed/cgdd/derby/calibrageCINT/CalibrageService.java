@@ -1,8 +1,6 @@
 package com.ed.cgdd.derby.calibrageCINT;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
 
 import com.ed.cgdd.derby.model.calcconso.ParamBesoinsNeufs;
 import com.ed.cgdd.derby.model.financeObjects.CalibCI;
@@ -20,7 +18,7 @@ public interface CalibrageService {
 	 * @param paramCint
 	 * @return
 	 */
-	List<CalibCoutGlobal> calibreCI(HashMap<String, CalibCI> dataCalib, ParamCInt paramCint, HashMap<String, Maintenance> maintenanceMap);
+	HashMap<String, CalibCoutGlobal> calibreCI(HashMap<String, CalibCI> dataCalib, ParamCInt paramCint, HashMap<String, Maintenance> maintenanceMap);
 
 	/**
 	 * Calculate CInt and return all cost parameters
@@ -28,7 +26,7 @@ public interface CalibrageService {
 	 * @param paramCint
 	 * @return
 	 */
-	List<CalibCoutGlobal> calibreCIBati(HashMap<String, CalibCIBati> dataCalib, ParamCInt paramCint);
+	HashMap<String, CalibCoutGlobal> calibreCIBati(HashMap<String, CalibCIBati> dataCalib, ParamCInt paramCint);
 
 	/**
 	 * adding energy cost and heating need

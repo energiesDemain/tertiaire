@@ -2,9 +2,7 @@ package com.ed.cgdd.derby.calibrageCINT.impl;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import com.ed.cgdd.derby.model.financeObjects.*;
 import com.ed.cgdd.derby.model.parc.*;
@@ -35,8 +33,8 @@ public class CalibrageServiceImpl implements CalibrageService {
 	// methode de calcul des CI pour le BATI --> cette methode renvoie une
 	// hashmap de CI pour le BATI
 	// la cle contient la branche et le geste (voir methode recupCIBati)
-	public List<CalibCoutGlobal> calibreCIBati(HashMap<String, CalibCIBati> dataCalib, ParamCInt paramCInt) {
-		List<CalibCoutGlobal> results = new ArrayList<CalibCoutGlobal>();
+	public HashMap<String, CalibCoutGlobal> calibreCIBati(HashMap<String, CalibCIBati> dataCalib, ParamCInt paramCInt) {
+		HashMap<String,CalibCoutGlobal> results = new HashMap<>();
 		// pour le calage, on utilise ne rien faire
 		HashMap<String, CalibCIRef> calibRef = new HashMap<String, CalibCIRef>();
 		for (String st : dataCalib.keySet()) {
@@ -79,7 +77,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 			
 			BigDecimal coutIntangible = coutGlobalGeste.subtract(coutVariable, MathContext.DECIMAL32);
 			
-			results.add(new CalibCoutGlobal(str, coutIntangible,coutVariable));
+			results.put(str,new CalibCoutGlobal(coutIntangible,coutVariable));
 		}
 
 		return results;
@@ -116,9 +114,9 @@ public class CalibrageServiceImpl implements CalibrageService {
 	}
 
 	// methode de calcul des CI --> cette methode renvoie une hashmap de CI
-	public List<CalibCoutGlobal> calibreCI(HashMap<String, CalibCI> dataCalib, ParamCInt paramCint, HashMap<String, Maintenance> maintenanceMap) {
+	public HashMap<String, CalibCoutGlobal> calibreCI(HashMap<String, CalibCI> dataCalib, ParamCInt paramCint, HashMap<String, Maintenance> maintenanceMap) {
 		
-		List<CalibCoutGlobal> results = new ArrayList<CalibCoutGlobal>();
+		HashMap<String,CalibCoutGlobal> results = new HashMap<String,CalibCoutGlobal>();
 
 		// pour le calage : Chaudiere gaz
 		HashMap<String, CalibCIRef> calibRef = new HashMap<String, CalibCIRef>();
@@ -143,7 +141,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 			// if (!(dataCalib.get(str).getPerformant())) {
 			if (paramCint.getNu() == 0) { // dans ce cas les PM sont les memes pour tous et
 							// les CI ne peuvent pas etre calcule
-				results.add(new CalibCoutGlobal(str,paramCint.getCintRef(),BigDecimal.ZERO));
+				results.put(str,new CalibCoutGlobal(paramCint.getCintRef(),BigDecimal.ZERO));
 
 			} else {
 
@@ -207,9 +205,9 @@ public class CalibrageServiceImpl implements CalibrageService {
 //				
 				
 				if (!dataCalib.get(str).getPerformant()) {
-					results.add(new CalibCoutGlobal(str, interFinal,coutVariable));
+					results.put(str,new CalibCoutGlobal(interFinal,coutVariable));
 				} else {
-					results.add(new CalibCoutGlobal(modif(str), interFinal,coutVariable));
+					results.put(modif(str),new CalibCoutGlobal(interFinal,coutVariable));
 				}
 
 			}

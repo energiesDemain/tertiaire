@@ -117,7 +117,7 @@ public class FinanceServiceImpl implements FinanceService {
 			List<Financement> listFin, CEE subCEE, HashMap<String, BigDecimal> dvChauffMap,
 			HashMap<TypeRenovBati, BigDecimal> dvGesteMap, HashMap<String, ParamRdtCout> paramRdtCout,
 			HashMap<String, Parc> parcTotMap, ResultConsoRt resultConsoRt, int annee, int anneeNTab,
-			List<CalibCoutGlobal> coutIntangible, List<CalibCoutGlobal> coutIntangibleBati, ParamCintObjects paramCintObjects,
+			HashMap<String,CalibCoutGlobal> coutIntangible, HashMap<String,CalibCoutGlobal> coutIntangibleBati, ParamCintObjects paramCintObjects,
 			float txRenovBati, String idAggreg, BibliGeste bibliGeste, HashMap<Integer, CoutEnergie> coutEnergieMap,
 			HashMap<String, Emissions> emissionsMap, Reglementations reglementations, BigDecimal compteur,
 			HashMap<String, ParamCoutEclVentil> coutsEclVentilMap, HashMap<String, ParamCoutEcs> coutEcsMap,
@@ -167,7 +167,8 @@ public class FinanceServiceImpl implements FinanceService {
 			HashMap<String, ResultConsoUClim> resultConsoUClimMap, HashMap<String, ResultConsoURt> resultConsoURtMap,
 			List<Financement> listFin, CEE subCEE, HashMap<String, BigDecimal> dvChauffMap,
 			HashMap<TypeRenovBati, BigDecimal> dvGesteMap, HashMap<String, ParamRdtCout> paramRdtCout,
-			HashMap<String, Parc> parcTotMap, int annee, ResultConsoRt resultConsoRt, int anneeNTab,List<CalibCoutGlobal> coutIntangible, List<CalibCoutGlobal> coutIntangibleBati, ParamCintObjects paramCintObjects,
+			HashMap<String, Parc> parcTotMap, int annee, ResultConsoRt resultConsoRt, int anneeNTab,HashMap<String,CalibCoutGlobal> coutIntangible,
+			HashMap<String,CalibCoutGlobal> coutIntangibleBati, ParamCintObjects paramCintObjects,
 			float txRenovBati, BigDecimal avgSurf, StatutOccup statutOccup, BibliGeste bibliGeste, int periode,
 			HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
 			ValeurVerte valeurVerte, Reglementations reglementations, BigDecimal compteur,
@@ -185,10 +186,10 @@ public class FinanceServiceImpl implements FinanceService {
 		HashMap<String, Conso> ventilationMap = resultConsoRt.getMap(MapResultsKeys.VENTILATION.getLabel());
 		HashMap<String, Conso> auxiliairesMap = resultConsoRt.getMap(MapResultsKeys.AUXILIAIRES.getLabel());
 
+
 		// LOG.debug("# parc : {}", parcTotMap.keySet().size());
 		// TODO implementer calcul taux renov en dehors de la boucle des
 		// segments use txRenovBati
-
 		BigDecimal[] txRenovBatiVentile = ventileTxRenovBat(dvGesteMap, annee, txRenovBati, reglementations);
 		BigDecimal surfaceSegmentTot = BigDecimal.ZERO;
 
@@ -229,11 +230,14 @@ public class FinanceServiceImpl implements FinanceService {
 				// insertion resultats dans BDD
 				calculPM(decretMemory, dvChauffMap, coutGestes, paramCintObjects, partGesteFin, statutOccup, parc, anneeNTab,
 						reglementations, annee, compteur, txRenovBatiVentile, surfN);
+
+
 			}
 		}
-		// ajout de la reno tendancielle
-		partGesteFin = renoTendancielle(partGesteFin, txRenovBatiVentile, surfaceSegmentTot, parcTotMap, anneeNTab);
 
+		// ajout de la reno tendancielle
+
+		partGesteFin = renoTendancielle(partGesteFin, txRenovBatiVentile, surfaceSegmentTot, parcTotMap, anneeNTab);
 		return partGesteFin;
 	}
 
@@ -1268,7 +1272,7 @@ public class FinanceServiceImpl implements FinanceService {
 			List<Financement> listFin, CEE subCEE, HashMap<String, BigDecimal> dvChauffMap,
 			HashMap<TypeRenovBati, BigDecimal> dvGesteMap, HashMap<String, ParamRdtCout> paramRdtCout, Parc parcIni,
 			BigDecimal besoinInitUnitaire, Conso consoEner, Conso rdtIni, int annee, int anneeNTab,
-			List<CalibCoutGlobal> coutIntangible, List<CalibCoutGlobal> coutIntangibleBati,
+			HashMap<String,CalibCoutGlobal> coutIntangible, HashMap<String,CalibCoutGlobal> coutIntangibleBati,
 			BibliGeste bibliGeste, StatutOccup statutOccup, ParamCintObjects paramCintObjects, int periode,
 			HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
 			ValeurVerte valeurVerte, Reglementations reglementations,
@@ -1280,28 +1284,36 @@ public class FinanceServiceImpl implements FinanceService {
 
 		HashMap<String, CoutFinal> coutFinalMapProp = new HashMap<String, CoutFinal>();
 		HashMap<String, CoutFinal> coutFinalMapLoc = new HashMap<String, CoutFinal>();
-
+//		long startPM = System.currentTimeMillis();
 		// Generation d'une liste de geste apres trie des gestes pouvant etre
 		// effectivement menes a l'annee N
-
+//		long startGestesPossibles = System.currentTimeMillis();
 		List<Geste> gestesPossibles = gesteService.cleanningGeste(coutEnergieMap, resultConsoUClimMap,
 				resultConsoURtMap, parcIni, bibliGeste, dvChauffMap, dvGesteMap, annee, periode, rdtIni, anneeNTab,
 				reglementations, coutsEclVentilMap, coutEcsMap, pmEcsNeufMap, consoEner, ventil, aux, bNeufsMap,
 				besoinInit, gainsVentilationMap, bibliRdtEcsMap, statutOccup.getTauxActuProp(), evolCoutBati,
 				evolCoutTechno, maintenanceMap, paramRdtCout);
-		
-		
+
+//		long endGestesPossibles = System.currentTimeMillis();
+//		if(endGestesPossibles - startGestesPossibles>1){
+//		LOG.info("Gestes possibles : {}ms", endGestesPossibles - startGestesPossibles);}
 		
 		// on sort une copie du pret bancaire classique
+//		long startCopiePret = System.currentTimeMillis();
 		PBC pretDeBase = (PBC) getFinancementByType(listFin, FinancementType.PBC);
-
+//		long endCopiePret = System.currentTimeMillis();
+//		LOG.info("Copie Pret : {}ms", endCopiePret - startCopiePret);
 		// Initialisation de l'objet de somme du cout global
 		BigDecimal sommeProp = BigDecimal.ZERO;
 		BigDecimal sommeLoc = BigDecimal.ZERO;
 
 		// on construit les GestesFinancement
+//		long startCoutEner = System.currentTimeMillis();
 		BigDecimal coutEnergie = coutEnergieService.coutEnergie(coutEnergieMap, emissionsMap, annee,
 				parcIni.getIdenergchauff(), Usage.CHAUFFAGE.getLabel(), BigDecimal.ONE);
+//		long endCoutEner = System.currentTimeMillis();
+//		if(endCoutEner - startCoutEner>1){
+//			LOG.info("Cout energie : {}ms", endCoutEner - startCoutEner);}
 
 		GesteFinancement inter;
 		CoutFinal coutFinalProp;
@@ -1310,6 +1322,8 @@ public class FinanceServiceImpl implements FinanceService {
 			// on evacue le geste Ne rien faire qui accepte tous les
 			// financements
 			if (courant.getGesteNom().equals("Etat initialAUCUNE")) {
+//				long startRF = System.currentTimeMillis();
+
 				inter = getFinanceService(pretDeBase).createRienFaire(parcIni, consoEner, courant, anneeNTab,
 						pretDeBase, surface, coutEnergie);
 				coutFinalProp = calculCoutService.calculCoutFinal(surface, besoinInitUnitaire, parcIni, inter, annee,
@@ -1324,14 +1338,25 @@ public class FinanceServiceImpl implements FinanceService {
 
 				sommeProp = sommeProp.add(coutFinalProp.getCoutGlobal().pow(-paramCintObjects.getGesteBat().getNu(), MathContext.DECIMAL32));
 				sommeLoc = sommeLoc.add(coutFinalLoc.getCoutGlobal().pow(-paramCintObjects.getGesteBat().getNu(), MathContext.DECIMAL32));
+//				long endRF = System.currentTimeMillis();
+//				if(endRF-startRF>1){
+//				LOG.info("Ne rien faire : {}ms - geste {}", endRF - startRF,courant.getGesteNom());}
 			} else {
+
 				for (Financement financement : listFin) {
+//					long startGetFinancement = System.currentTimeMillis();
+
 					inter = getFinanceService(financement).createFinancement(parcIni, consoEner, courant, financement,
 							anneeNTab, annee, pretDeBase, subCEE, surface, coutIntangible, coutIntangibleBati,
 							coutEnergie, evolCoutBati, evolCoutTechno);
+//					long endGetFinancement = System.currentTimeMillis();
+//					if(endGetFinancement-startGetFinancement>1){
+//					LOG.info("Get Financement : {}ms - geste {}", endGetFinancement - startGetFinancement, courant.getGesteNom());}
+
 
 					if (inter != null) {
-						
+//						long startCoutFinal = System.currentTimeMillis();
+
 						coutFinalProp = calculCoutService.calculCoutFinal(surface, besoinInitUnitaire, parcIni, inter,
 								annee, idParc, anneeNTab, statutOccup.getTauxActuProp(), coutEnergieMap, emissionsMap,
 								valeurVerte.getValeurProp());
@@ -1345,6 +1370,11 @@ public class FinanceServiceImpl implements FinanceService {
 
 						sommeProp = sommeProp.add(coutFinalProp.getCoutGlobal().pow(-paramCintObjects.getGesteBat().getNu(), MathContext.DECIMAL32));
 						sommeLoc = sommeLoc.add(coutFinalLoc.getCoutGlobal().pow(-paramCintObjects.getGesteBat().getNu(), MathContext.DECIMAL32));
+
+//						long endCoutFinal = System.currentTimeMillis();
+//						if(endCoutFinal - startCoutFinal>1){
+//						LOG.info("Calcul cout final : {}ms - geste {}", endCoutFinal - startCoutFinal, courant.getGesteNom());}
+
 					}
 				}
 			}
@@ -1356,6 +1386,8 @@ public class FinanceServiceImpl implements FinanceService {
 		calculPM.setCoutFinalPropMap(coutFinalMapProp);
 		calculPM.setSommeCGLoc(sommeLoc);
 		calculPM.setCoutFinalLocMap(coutFinalMapLoc);
+//		long endPM = System.currentTimeMillis();
+//		LOG.info("PM : {}ms", endPM - startPM);
 
 		return calculPM;
 	}

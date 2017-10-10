@@ -10,9 +10,12 @@ import com.ed.cgdd.derby.finance.CalculCEEService;
 import com.ed.cgdd.derby.model.calcconso.Conso;
 import com.ed.cgdd.derby.model.financeObjects.*;
 import com.ed.cgdd.derby.model.parc.Parc;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class PretBonifServiceImpl extends TypeFinanceServiceImpl {
 	private CalculCEEService calculCEEService;
+	private final static Logger LOG = LogManager.getLogger(FinanceServiceImpl.class);
 
 	public CalculCEEService getCalculCEEService() {
 		return calculCEEService;
@@ -25,15 +28,26 @@ public class PretBonifServiceImpl extends TypeFinanceServiceImpl {
 	@Override
 	public GesteFinancement createFinancement(Parc parc, Conso consoEner, Geste geste, Financement financement,
 	  int anneeNtab, int annee, PBC pretDeBase, CEE valeurCEE, BigDecimal surface,
-	  List<CalibCoutGlobal> coutIntangible, List<CalibCoutGlobal> coutIntangibleBati,
+	HashMap<String,CalibCoutGlobal> coutIntangible, HashMap<String,CalibCoutGlobal> coutIntangibleBati,
 	  BigDecimal coutEnergie, HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno) {
 		// on check si le geste est compatible
 		// TODO test pour Systeme/enveloppe Bati
 
 		BigDecimal aide = calculCEEService.calculCEE(surface, geste, valeurCEE);
+//		long startRecupParamSegment = System.currentTimeMillis();
 		CoutRenovation coutRenov = recupParamSegment(parc, consoEner, geste, anneeNtab, annee, surface, coutIntangible,
 				coutIntangibleBati, coutEnergie, evolCoutBati, evolCoutTechno);
-		return createFinancementBPI(geste, (PretBonif) financement, pretDeBase, aide, coutRenov);
+//		long endRecupParamSegment = System.currentTimeMillis();
+//		if(endRecupParamSegment - startRecupParamSegment >1){
+//			LOG.info("Recup Param Segment Pret Bonif : {}ms - geste {}", endRecupParamSegment - startRecupParamSegment);}
+
+//		long startCreate = System.currentTimeMillis();
+		GesteFinancement financementReturn = createFinancementBPI(geste, (PretBonif) financement, pretDeBase, aide, coutRenov);
+//		long endCreate = System.currentTimeMillis();
+//		if(endCreate - startCreate >1){
+//			LOG.info("Create finacement Pret Bonif : {}ms", endCreate - startCreate);}
+
+		return financementReturn;
 
 	}
 

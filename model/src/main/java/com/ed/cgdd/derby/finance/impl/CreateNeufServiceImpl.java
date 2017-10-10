@@ -67,7 +67,7 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 	@Override
 	public HashMap<String, BigDecimal> pmChauffNeuf(HashMap<String, ParamBesoinsNeufs> bNeufsMap,
 			HashMap<String, BigDecimal> dvChauffMap, HashMap<String, ParamRdtCout> rdtCoutChauffMap, String idAgreg,
-			int annee, String statut_occup, int nu, List<CalibCoutGlobal> coutIntangible,
+			int annee, String statut_occup, int nu, HashMap<String,CalibCoutGlobal> coutIntangible,
 			HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
 			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,
 			HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, Maintenance> maintenanceMap) {
@@ -127,12 +127,10 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 
 			}
 			
-		
-			BigDecimal coutInt = null;
-			if(coutIntangible.stream().filter(p->p.getCalKey().equals(idCoutIntangible)).findFirst().isPresent()){
-				coutInt = coutIntangible.stream().filter(p->p.getCalKey().equals(idCoutIntangible)).findFirst().get().getCInt();
-			}
-		
+
+			BigDecimal coutInt = coutIntangible.get(idCoutIntangible).getCInt();
+
+
 			// Ajout des couts de maintenance
 		    // BV modif Ajout des couts de maintenance en %
 			BigDecimal coutMaintenance = cout.multiply(maintenanceMap.get(str.substring(START_ID_SYS, START_ID_SYS + LENGTH_ID_SYS))

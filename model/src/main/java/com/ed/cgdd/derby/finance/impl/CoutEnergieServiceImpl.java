@@ -43,10 +43,11 @@ public class CoutEnergieServiceImpl implements CoutEnergieService {
 
 	public BigDecimal coutEnergie(HashMap<Integer, CoutEnergie> coutEnergieMap,
 			HashMap<String, Emissions> emissionsMap, int annee, String energie, String usage, BigDecimal tva) {
+		CoutEnergie coutEnergie = coutEnergieMap.get(annee);
 		// Energie = code energie
-		BigDecimal prixEnerg = coutEnergieMap.get(annee).getEnergie(Energies.getEnumName(energie)).multiply(tva);
+		BigDecimal prixEnerg = coutEnergie.getEnergie(Energies.getEnumName(energie)).multiply(tva);
 		// Conversion de l'€/tCO2 en €/grCO2
-		BigDecimal cce = coutEnergieMap.get(annee).getCCE().divide((new BigDecimal("1000000")), MathContext.DECIMAL32);
+		BigDecimal cce = coutEnergie.getCCE().divide((new BigDecimal("1000000")), MathContext.DECIMAL32);
 		BigDecimal txEmission = BigDecimal.ZERO;
 		if (emissionsMap.get(energie + usage) != null) {
 			txEmission = emissionsMap.get(energie + usage).getPeriode(commonService.correspPeriode(annee));

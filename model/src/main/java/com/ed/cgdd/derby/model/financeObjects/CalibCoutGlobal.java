@@ -6,17 +6,8 @@ import java.util.List;
 
 public class CalibCoutGlobal {
 
-	private String calKey;
 	private BigDecimal CInt;
 	private BigDecimal CoutVariable;
-
-	public String getCalKey() {
-		return calKey;
-	}
-
-	public void setCalKey(String calKey) {
-		this.calKey = calKey;
-	}
 
 	public BigDecimal getCInt() {
 		return CInt;
@@ -37,8 +28,7 @@ public class CalibCoutGlobal {
 	public CalibCoutGlobal(){
 	}
 
-	public CalibCoutGlobal(String calKey, BigDecimal CInt, BigDecimal CoutVariable){
-		this.calKey=calKey;
+	public CalibCoutGlobal(BigDecimal CInt, BigDecimal CoutVariable){
 		this.CInt=CInt;
 		this.CoutVariable=CoutVariable;
 	}

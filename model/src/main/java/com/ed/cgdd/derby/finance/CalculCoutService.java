@@ -12,7 +12,6 @@ import com.ed.cgdd.derby.model.parc.Parc;
 
 public interface CalculCoutService {
 
-	BigDecimal calculCoutGlobal(CoutFinal coutFinal, PBC tauxActualisation);
 
 	String outputName(String idParc, GesteFinancement courant, int annee, CoutFinal coutFinal);
 

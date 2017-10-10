@@ -9,9 +9,12 @@ import com.ed.cgdd.derby.finance.CalculCEEService;
 import com.ed.cgdd.derby.model.calcconso.Conso;
 import com.ed.cgdd.derby.model.financeObjects.*;
 import com.ed.cgdd.derby.model.parc.Parc;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class PBCServiceImpl extends TypeFinanceServiceImpl {
 	private CalculCEEService calculCEEService;
+	private final static Logger LOG = LogManager.getLogger(FinanceServiceImpl.class);
 
 	public CalculCEEService getCalculCEEService() {
 		return calculCEEService;
@@ -23,13 +26,25 @@ public class PBCServiceImpl extends TypeFinanceServiceImpl {
 
 	@Override
 	public GesteFinancement createFinancement(Parc parcIni, Conso consoEner, Geste geste, Financement financement,
-			int anneeNtab, int annee, PBC pretDeBase, CEE valeurCEE, BigDecimal surface,List<CalibCoutGlobal> coutIntangible, List<CalibCoutGlobal> coutIntangibleBati,
+			int anneeNtab, int annee, PBC pretDeBase, CEE valeurCEE, BigDecimal surface,
+			HashMap<String,CalibCoutGlobal> coutIntangible, HashMap<String,CalibCoutGlobal> coutIntangibleBati,
 			BigDecimal coutEnergie, HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno) {
 
+//		long startRecupParamSegment = System.currentTimeMillis();
 		CoutRenovation coutRenov = recupParamSegment(parcIni, consoEner, geste, anneeNtab, annee, surface,
 				coutIntangible, coutIntangibleBati, coutEnergie, evolCoutBati, evolCoutTechno);
+//		long endRecupParamSegment = System.currentTimeMillis();
+//		if(endRecupParamSegment - startRecupParamSegment >1){
+//			LOG.info("Recup Param Segment PBC : {}ms - geste {}", endRecupParamSegment - startRecupParamSegment);}
+
 		BigDecimal aide = calculCEEService.calculCEE(surface, geste, valeurCEE);
-		return createFinancementPBC(geste, (PBC) financement, aide, coutRenov);
+//		long startCreate = System.currentTimeMillis();
+		GesteFinancement returnGeste = createFinancementPBC(geste, (PBC) financement, aide, coutRenov);
+//		long endCreate = System.currentTimeMillis();
+//		if(endCreate - startCreate >1){
+//			LOG.info("Create finacement PBC : {}ms", endCreate - startCreate);}
+
+		return returnGeste;
 
 	}
 

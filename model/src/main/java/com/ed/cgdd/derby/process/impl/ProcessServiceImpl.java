@@ -76,7 +76,7 @@ import com.ed.cgdd.derby.usagesrt.TruncateTableUsagesRTDAS;
 public class ProcessServiceImpl implements ProcessService {
 	private final static Logger LOG = LogManager.getLogger(ProcessServiceImpl.class);
 
-	private final static int NB_THREAD =20;
+	private final static int NB_THREAD =40;
 
 	private ParcService parcService;
 	private LoadParcDataDAS loadParcDatadas;
@@ -469,17 +469,18 @@ public class ProcessServiceImpl implements ProcessService {
 		calibrageService.addingRowsInHashMap(cintMapNeuf,coutEnergieMap,bNeufsMap);
 
 		// Couts intangibles dans l'existant
-		List<CalibCoutGlobal> coutIntangible = calibrageService.calibreCI(cintMap, paramCintObjects.getSysExist(), maintenanceMap);
-		List<CalibCoutGlobal> coutIntangibleBati = calibrageService.calibreCIBati(cintBatiMap, paramCintObjects.getGesteBat());
+		HashMap<String,CalibCoutGlobal> coutIntangible = calibrageService.calibreCI(cintMap, paramCintObjects.getSysExist(), maintenanceMap);
+		HashMap<String,CalibCoutGlobal> coutIntangibleBati = calibrageService.calibreCIBati(cintBatiMap, paramCintObjects.getGesteBat());
 
 		// Couts intangibles dans le neuf
-		List<CalibCoutGlobal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf(), maintenanceMap);
+		HashMap<String,CalibCoutGlobal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf(), maintenanceMap);
 
 		// Enregistrement des couts intangibles
-		calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
-		calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
-		calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
-
+//		LOG.debug("Insert couts intangibles");
+//		calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
+//		calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
+//		calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
+//		LOG.debug("Insert couts intangibles - done");
 		// Chargement de l'evolution du cout des techno et du bati
 		HashMap<String, BigDecimal> evolCoutBati = recupParamFinDAS.getEvolutionCoutBati();
 		HashMap<String, BigDecimal> evolCoutTechno = recupParamFinDAS.getEvolutionCoutTechno();

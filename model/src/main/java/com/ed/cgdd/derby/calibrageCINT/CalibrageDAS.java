@@ -21,5 +21,5 @@ public interface CalibrageDAS {
 	 * @param coutIntangibleMap
 	 * @param cIntType
 	 */
-	void insertCInt(List<CalibCoutGlobal> coutIntangibleMap, CIntType cIntType);
+	void insertCInt(HashMap<String,CalibCoutGlobal> coutIntangibleMap, CIntType cIntType);
 }

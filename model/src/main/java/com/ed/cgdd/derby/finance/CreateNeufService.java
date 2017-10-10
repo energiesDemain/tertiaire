@@ -12,7 +12,7 @@ public interface CreateNeufService {
 
 	HashMap<String, BigDecimal> pmChauffNeuf(HashMap<String, ParamBesoinsNeufs> bNeufsMap,
 			HashMap<String, BigDecimal> dvChauffMap, HashMap<String, ParamRdtCout> rdtCoutChauffMap, String idAgreg,
-			int annee, String statut_occup, int nu, List<CalibCoutGlobal> coutIntangible,
+			int annee, String statut_occup, int nu, HashMap<String,CalibCoutGlobal> coutIntangible,
 			HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
 			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,
 			HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, Maintenance> maintenanceMap);
