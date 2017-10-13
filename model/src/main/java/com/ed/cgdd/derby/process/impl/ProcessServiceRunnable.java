@@ -292,7 +292,7 @@ public class ProcessServiceRunnable implements Runnable {
 		ResultParc resultatsParc;
 		long timingSegmentStart = new Date().getTime();
 		ThreadContext.put(ID_PARC, idAgregParc);
-		//if (idAgregParc.equals("01014203")) {
+		if (idAgregParc.equals("01018403")) {
 		//if (idAgregParc.substring(0,2).equals("01") && idAgregParc.substring(4,6).equals("42") && idAgregParc.substring(6,8).equals("03")){
 		//if (idAgregParc.substring(6,8).equals("03")) {
 		//if (idAgregParc.equals("05141304")){
@@ -309,7 +309,7 @@ public class ProcessServiceRunnable implements Runnable {
 		// // {equals("08356005")
 		// || idAgregParc.equals("01024401")) {
 		// if (idAgregParc.equals("02186705")) {
-		if (true) {
+		//if (true) {
 			int pasdeTemps = pasdeTempsInit;
 			LOG.info("idAgregParc = {}", idAgregParc);
 			try {
@@ -406,18 +406,16 @@ public class ProcessServiceRunnable implements Runnable {
 					resultatsParc = new ResultParc();
 
 					// On charge la bonne map des besoins neufs a utiliser en fonction de l'occupant et de l'annee
-//					long start3 = System.currentTimeMillis();
 					HashMap<String, ParamBesoinsNeufs> bNeufsMap = getBNeufMapToUse(annee);
-//					long end3 = System.currentTimeMillis();
-//					LOG.info("Choix des besoins neufs : {}ms", end3 - start3);
+
 					// Calcul des parts de marche dans les batiments neufs
-//					long startMarcheNeuf = System.currentTimeMillis();
+					//long startMarcheNeuf = System.currentTimeMillis();
 					HashMap<String, BigDecimal> partsMarchesNeuf = createNeufService.pmChauffNeuf(bNeufsMap,
 							dvChauffMap, rdtCoutChauffMap, idAgregParc, annee, "Proprietaire", paramCintObject.getSysNeuf().getNu(),
 							coutIntangibleNeuf,
 							coutEnergieMap, emissionsMap, evolCoutBati, evolCoutTechno, tauxInteretMap, maintenanceMap);
-//					long endMarcheNeuf = System.currentTimeMillis();
-//					LOG.info("Parts de marche neufs : {}ms", endMarcheNeuf - startMarcheNeuf);
+					//long endMarcheNeuf = System.currentTimeMillis();
+					//LOG.info("Parts de marche neufs : {}ms", endMarcheNeuf - startMarcheNeuf);
 
 
 //					long startParc = System.currentTimeMillis();
@@ -432,7 +430,7 @@ public class ProcessServiceRunnable implements Runnable {
 
 // 					// calcul des parts de marche dans les batiments existants
 
-//					long startPM = System.currentTimeMillis();
+					//long startPM = System.currentTimeMillis();
 					HashMap<String, PartMarcheRenov> partMarcheMap = financeService.renovationSegmentGlobal(
 							decretMemory, resultConsoUClimMap, resultConsoURtMap, listFin, subCEE, dvChauffMap,
 							dvGesteMap, rdtCoutChauffMap, parcTotMap, resultatsConsoRt, annee, anneeNTab,
@@ -440,10 +438,10 @@ public class ProcessServiceRunnable implements Runnable {
 							coutEnergieMap, emissionsMap, reglementations, compteur, coutsEclVentilMap, coutEcsMap,
 							pmEcsNeufMap, bNeufsMap, gainsVentilationMap, bibliRdtEcsMap, evolCoutBati, evolCoutTechno,
 							tauxInteretMap, surfMoyMap, evolVVMap, repartStatutOccupMap, maintenanceMap);
-//					long endPM = System.currentTimeMillis();
-//					LOG.info("PM existant : {}ms", endPM - startPM);
+					//long endPM = System.currentTimeMillis();
+					//LOG.info("PM existant : {}ms", endPM - startPM);
 
-//					long startConso = System.currentTimeMillis();
+					//long startConso = System.currentTimeMillis();
 					resultatsConsoRt = chauffageService.evolChauffageConso(resultFinance, idAgregParc, auxChaud,
 							parcTotMap, partMarcheMap, bNeufsMap, rdtCoutChauffMap, anneeNTab, pasdeTemps, annee,
 							resultatsConsoRt, gainsVentilationMap, effetRebond, elasticiteNeufMap,
@@ -501,10 +499,10 @@ public class ProcessServiceRunnable implements Runnable {
 							compteur, Usage.ECLAIRAGE.getLabel(), resultConsoURtMap, elasticiteNeufMap,
 							elasticiteExistantMap);
 					// LOG.info("Eclairage Done !");
-//					long endConso = System.currentTimeMillis();
-//					LOG.info("Conso : {}ms", endConso - startConso);
+					//long endConso = System.currentTimeMillis();
+					//LOG.info("Conso : {}ms", endConso - startConso);
 
-//					long startInsert = System.currentTimeMillis();
+					//long startInsert = System.currentTimeMillis();
 					// Insertion/Update des resultats
 					if (anneeNTab == pasdeTemps || annee == 2010) {
 						int pasdeTempsTemp = 0;
@@ -610,13 +608,13 @@ public class ProcessServiceRunnable implements Runnable {
 						insertUsagesRTdas.insert(Usage.CLIMATISATION.getLabel(), "Couts_resultats",
 								resultatsConsoClimAgreg.getMap(MapResultsKeys.COUT_CLIM.getLabel()), pasdeTemps, annee);
 
-//						long endInsert = System.currentTimeMillis();
-//						LOG.info("Insert : {}ms", endInsert - startInsert);
+						//long endInsert = System.currentTimeMillis();
+						//LOG.info("Insert : {}ms", endInsert - startInsert);
 
 						if (annee == 2010) {
 							pasdeTemps = pasdeTempsTemp;
 						}
-//						long startTransfert = System.currentTimeMillis();
+						//long startTransfert = System.currentTimeMillis();
 
 						//
 						LOG.info("Debut transfert");
@@ -669,8 +667,8 @@ public class ProcessServiceRunnable implements Runnable {
 						transfertMapConsoU(resultConsoURtMap, pasdeTemps, annee);
 						transfertMapConsoUClim(resultConsoUClimMap, pasdeTemps, annee);
 						LOG.info("Annee de la boucle {}, pas de temps = {}", annee, pasdeTemps);
-//						long endTransfert = System.currentTimeMillis();
-//						LOG.info("Transfert : {}ms", endTransfert - startTransfert);
+						//long endTransfert = System.currentTimeMillis();
+						//LOG.info("Transfert : {}ms", endTransfert - startTransfert);
 
 					}
 

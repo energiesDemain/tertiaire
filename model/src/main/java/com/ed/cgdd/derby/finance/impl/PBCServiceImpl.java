@@ -42,10 +42,9 @@ public class PBCServiceImpl extends TypeFinanceServiceImpl {
 		GesteFinancement returnGeste = createFinancementPBC(geste, (PBC) financement, aide, coutRenov);
 //		long endCreate = System.currentTimeMillis();
 //		if(endCreate - startCreate >1){
-//			LOG.info("Create finacement PBC : {}ms", endCreate - startCreate);}
+//			LOG.info("Create financement PBC : {}ms", endCreate - startCreate);}
 
 		return returnGeste;
-
 	}
 
 	GesteFinancement createFinancementPBC(Geste geste, PBC financement, BigDecimal aide, CoutRenovation coutRenov) {

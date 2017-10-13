@@ -91,7 +91,12 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 		// initialisation du tableau avec les consommations d'energie
 		// si pas de travaux, on reprend les charges ener ini
 //		long startCalculCharge= System.currentTimeMillis();
-
+		BigDecimal tauxInt = BigDecimal.ONE.add(tauxActu.getTauxInteret());
+		
+		BigDecimal coefactu = commonService.serieGeometrique(BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32),
+				BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32), 
+				tableauAnnuite.length- 1);
+		
 		BigDecimal charge;
 		if (gesteFin.getGeste().getTypeRenovSys().equals(TypeRenovSysteme.ETAT_INIT)
 				&& gesteFin.getGeste().getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)) {
@@ -113,16 +118,16 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 		Arrays.fill(tableauAnnuite, charge);
 //		long endCalculCharge= System.currentTimeMillis();
 //		if(endCalculCharge - startCalculCharge>1){
-//			LOG.info("Calculdes Charges : {}ms", endCalculCharge - startCalculCharge);}
+//			LOG.info("Calcul des Charges : {}ms", endCalculCharge - startCalculCharge);}
 
 		// TODO BV : verifier les calculs
-		BigDecimal coutGlobal = charge.multiply(commonService.serieGeometrique(BigDecimal.ONE.divide(tauxActu.getTauxInteret(), MathContext.DECIMAL32),
-				BigDecimal.ONE.divide(tauxActu.getTauxInteret(), MathContext.DECIMAL32), tableauAnnuite.length- 1));
+		BigDecimal coutGlobal;
+	    coutGlobal = charge.multiply(coefactu);
 //		long startAnnuite= System.currentTimeMillis();
 		for (ListeFinanceValeur liste : gesteFin.getListeFinancement()) {
 
 			if (liste.getFinance().getType() != FinancementType.CEE) {
-				BigDecimal tauxInt = BigDecimal.ONE.add(tauxActu.getTauxInteret());
+				
 				// XXX probleme si la duree de pret est inferieure a la duree de
 				// vie du geste
 				// Solution : on limite la duree du pret a la duree de vie du
@@ -164,7 +169,7 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 		coutFin.setSysChaud(gesteFin.getGeste().getSysChaud());
 		coutFin.setGainEner(gesteFin.getGeste().getGainEner());
 		coutFin.setRdtFin(gesteFin.getGeste().getRdt());
-		coutFin.setCoutGlobal(calculCoutGlobal(coutFin, tauxActu, coutGlobal));
+		coutFin.setCoutGlobal(calculCoutGlobal(coutFin, coefactu, coutGlobal));
 		coutFin.setDetailFinancement(gesteFin.getListeFinancement());
 		coutFin.setSurfaceUnitaire(surface);
 		coutFin.setReglementation(gesteFin.getGeste().getReglementation());
@@ -206,18 +211,12 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 	}
 
 	// methode qui renvoie un cout global par an a partir du CoutFinal
-	protected BigDecimal calculCoutGlobal(CoutFinal coutFinal, PBC tauxActualisation, BigDecimal coutGlobal) {
+	protected BigDecimal calculCoutGlobal(CoutFinal coutFinal, BigDecimal  coefactu, BigDecimal coutGlobal) {
 //		long startCoefActu = System.currentTimeMillis();
 
 		// on recupere le cout intangible
 		BigDecimal valCoutInt = coutFinal.getCoutIntangible();
 		// modif on ajoute  la hashmap en actualisant sur la duree de vie des travaux pour se ramener a une annee
-		BigDecimal inverse = BigDecimal.ONE.divide(tauxActualisation.getTauxInteret(), MathContext.DECIMAL32);
-
-		BigDecimal coefactu = commonService.serieGeometrique(inverse, inverse, coutFinal.getAnnuites().length- 1);
-//		long endCoefActu = System.currentTimeMillis();
-//		if(endCoefActu - startCoefActu>1){
-//			LOG.info("Actualisation coef : {}ms - duree annuites {}", endCoefActu - startCoefActu, coutFinal.getAnnuites().length);}
 
 		return coutGlobal.divide(coefactu, MathContext.DECIMAL32).add(valCoutInt,
 						MathContext.DECIMAL32);

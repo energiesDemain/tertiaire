@@ -76,7 +76,7 @@ import com.ed.cgdd.derby.usagesrt.TruncateTableUsagesRTDAS;
 public class ProcessServiceImpl implements ProcessService {
 	private final static Logger LOG = LogManager.getLogger(ProcessServiceImpl.class);
 
-	private final static int NB_THREAD =40;
+	private final static int NB_THREAD =1;
 
 	private ParcService parcService;
 	private LoadParcDataDAS loadParcDatadas;
@@ -476,11 +476,11 @@ public class ProcessServiceImpl implements ProcessService {
 		HashMap<String,CalibCoutGlobal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf(), maintenanceMap);
 
 		// Enregistrement des couts intangibles
-//		LOG.debug("Insert couts intangibles");
-//		calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
-//		calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
-//		calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
-//		LOG.debug("Insert couts intangibles - done");
+		LOG.debug("Insert couts intangibles");
+		//calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
+		//calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
+		//calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
+		LOG.debug("Insert couts intangibles - done");
 		// Chargement de l'evolution du cout des techno et du bati
 		HashMap<String, BigDecimal> evolCoutBati = recupParamFinDAS.getEvolutionCoutBati();
 		HashMap<String, BigDecimal> evolCoutTechno = recupParamFinDAS.getEvolutionCoutTechno();
