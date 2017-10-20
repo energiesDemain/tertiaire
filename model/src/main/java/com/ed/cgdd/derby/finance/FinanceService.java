@@ -15,6 +15,7 @@ import com.ed.cgdd.derby.model.calcconso.ResultConsoRt;
 import com.ed.cgdd.derby.model.calcconso.ResultConsoUClim;
 import com.ed.cgdd.derby.model.calcconso.ResultConsoURt;
 import com.ed.cgdd.derby.model.financeObjects.*;
+import com.ed.cgdd.derby.model.parc.EvolBesoinMap;
 import com.ed.cgdd.derby.model.parc.ParamCintObjects;
 import com.ed.cgdd.derby.model.parc.Parc;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
@@ -43,7 +44,7 @@ public interface FinanceService {
 		 HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,
 		 HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, SurfMoy> surfMoyMap,
 		 HashMap<String, EvolValeurVerte> evolVVMap, HashMap<String, RepartStatutOccup> repartStatutOccupMap,
-		 HashMap<String, Maintenance> maintenanceMap);
+		 HashMap<String, Maintenance> maintenanceMap, EvolBesoinMap evolBesoinMap);
 
 	// public HashMap<String, PartMarcheRenov>
 	// traitementReglementation(HashMap<String, PartMarcheRenov> partMarcheIni);

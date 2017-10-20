@@ -126,7 +126,7 @@ public class FinanceServiceImpl implements FinanceService {
 			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,
 			HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, SurfMoy> surfMoyMap,
 			HashMap<String, EvolValeurVerte> evolVVMap, HashMap<String, RepartStatutOccup> repartStatutOccupMap,
-			HashMap<String, Maintenance> maintenanceMap) {
+			HashMap<String, Maintenance> maintenanceMap, EvolBesoinMap evolBesoinMap ) {
 
 		int periode = commonService.correspPeriode(annee);
 		// recuperation des id
@@ -156,7 +156,7 @@ public class FinanceServiceImpl implements FinanceService {
 				resultConsoRt, anneeNTab, coutIntangible, coutIntangibleBati, paramCintObjects, txRenovBati, avgSurf, statutOccup,
 				bibliGeste, periode, coutEnergieMap, emissionsMap, valeurVerte, reglementations, compteur,
 				coutsEclVentilMap, coutEcsMap, pmEcsNeufMap, bNeufsMap, gainsVentilationMap, bibliRdtEcsMap,
-				evolCoutBati, evolCoutTechno, maintenanceMap);
+				evolCoutBati, evolCoutTechno, maintenanceMap, evolBesoinMap);
 		// LOG.debug("end renov");
 
 		return pmResult;
@@ -176,7 +176,7 @@ public class FinanceServiceImpl implements FinanceService {
 			HashMap<String, ParamPMConso> pmEcsNeufMap, HashMap<String, ParamBesoinsNeufs> bNeufsMap,
 			HashMap<String, ParamGainsUsages> gainsVentilationMap, HashMap<String, ParamRdtEcs> bibliRdtEcsMap,
 			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,
-			HashMap<String, Maintenance> maintenanceMap) {
+			HashMap<String, Maintenance> maintenanceMap, EvolBesoinMap evolBesoinMap) {
 
 		HashMap<String, PartMarcheRenov> partGesteFin = new HashMap<String, PartMarcheRenov>();
 
@@ -221,6 +221,7 @@ public class FinanceServiceImpl implements FinanceService {
 				// on calcul le besoin unitaire par m2
 				BigDecimal besoinIniUnitaire = besoinIni.getAnnee(anneeNTab - 1).divide(parc.getAnnee(anneeNTab - 1),
 						MathContext.DECIMAL32);
+				//LOG.debug("id = {} annee = {} BesoinU ={}", idParc, annee,besoinIniUnitaire);
 				
 				//long start= System.nanoTime();
 				CalculPM coutGestes = renovSegment(resultConsoUClimMap, resultConsoURtMap, idParc, avgSurf, listFin,
@@ -243,9 +244,6 @@ public class FinanceServiceImpl implements FinanceService {
 				//if(end2- start2>1){	
 				//LOG.info("calcPM  : {}ms", end2 - start2);
 				//}
-			}
-			for(String key : partGesteFin.keySet()){
-			BigDecimal PMtest = partGesteFin.get(key).getPart();
 			}
 		}
 		
@@ -1344,9 +1342,8 @@ public class FinanceServiceImpl implements FinanceService {
 		for (Geste courant : gestesPossibles) {
 			// on evacue le geste Ne rien faire qui accepte tous les
 			// financements
+	
 			if (courant.getGesteNom().equals("Etat initialAUCUNE")) {
-				//long startRF = System.currentTimeMillis();
-
 				inter = getFinanceService(pretDeBase).createRienFaire(parcIni, consoEner, courant, anneeNTab,
 						pretDeBase, surface, coutEnergie);
 				coutFinalProp = calculCoutService.calculCoutFinal(surface, besoinInitUnitaire, parcIni, inter, annee,
@@ -1361,25 +1358,15 @@ public class FinanceServiceImpl implements FinanceService {
 
 				sommeProp = sommeProp.add(coutFinalProp.getCoutGlobal().pow(-paramCintObjects.getGesteBat().getNu(), MathContext.DECIMAL32));
 				sommeLoc = sommeLoc.add(coutFinalLoc.getCoutGlobal().pow(-paramCintObjects.getGesteBat().getNu(), MathContext.DECIMAL32));
-				//long endRF = System.currentTimeMillis();
-				//if(endRF-startRF>1){
-				//LOG.info("Ne rien faire : {}ms - geste {}", endRF - startRF,courant.getGesteNom());}
 			} else {
 
 				for (Financement financement : listFin) {
-					//long startGetFinancement = System.currentTimeMillis();
-
 					inter = getFinanceService(financement).createFinancement(parcIni, consoEner, courant, financement,
 							anneeNTab, annee, pretDeBase, subCEE, surface, coutIntangible, coutIntangibleBati,
 							coutEnergie, evolCoutBati, evolCoutTechno);
-					//long endGetFinancement = System.currentTimeMillis();
-					//if(endGetFinancement-startGetFinancement>1){
-					//LOG.info("Get Financement : {}ms - geste {}", endGetFinancement - startGetFinancement, courant.getGesteNom());}
-
 
 					if (inter != null) {
 						long startCoutFinal = System.currentTimeMillis();
-
 						coutFinalProp = calculCoutService.calculCoutFinal(surface, besoinInitUnitaire, parcIni, inter,
 								annee, idParc, anneeNTab, statutOccup.getTauxActuProp(), coutEnergieMap, emissionsMap,
 								valeurVerte.getValeurProp());
@@ -1390,19 +1377,48 @@ public class FinanceServiceImpl implements FinanceService {
 								coutFinalProp);
 						coutFinalMapLoc.put(calculCoutService.outputName(idParc, inter, annee, coutFinalLoc),
 								coutFinalLoc);
-
+						
 						sommeProp = sommeProp.add(coutFinalProp.getCoutGlobal().pow(-paramCintObjects.getGesteBat().getNu(), MathContext.DECIMAL32));
 						sommeLoc = sommeLoc.add(coutFinalLoc.getCoutGlobal().pow(-paramCintObjects.getGesteBat().getNu(), MathContext.DECIMAL32));
 
-						long endCoutFinal = System.currentTimeMillis();
-						//if(endCoutFinal - startCoutFinal>1){
-						LOG.info("Calcul cout final : {}ms - geste {} CG {}", endCoutFinal - startCoutFinal, courant.getGesteNom(), coutFinalProp.getCoutGlobal());
-						//}
 
+//						long endCoutFinal = System.currentTimeMillis();
+//						
+//						if(endCoutFinal - startCoutFinal>1){
+//						// LOG POUR VERIFIER LES COMPOSANTES DU COUT GLOBAL
+//						LOG.info("Calcul cout final : {}ms - bati {} syst {} ", endCoutFinal - startCoutFinal,
+//								courant.getTypeRenovBati(),SysChaud.getEnumName(courant.getSysChaud()));
+//						
+//						BigDecimal CINTsys = BigDecimal.ZERO; 
+//						BigDecimal CINTbati = BigDecimal.ZERO;
+//						BigDecimal Cadd = BigDecimal.ZERO;
+//
+//						if(!courant.getTypeRenovSys().equals(TypeRenovSysteme.ETAT_INIT)){
+//							CINTsys = coutIntangible.get(generateIDCoutInt(parcIni, courant)).getCInt().multiply(surface);
+//							if(!(courant.getCoutTravauxAddGeste() == null)){
+//							Cadd = courant.getCoutTravauxAddGeste().multiply(surface);
+//							}
+//						}
+//						if(!courant.getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)){
+//							
+//							CINTbati = coutIntangibleBati.get(generateIDCoutIntBati(parcIni, courant)).getCInt().multiply(surface);
+//						}
+//					
+//						LOG.info("Cbati {} CINTbati {}  CSyst {} CAdd {} CINTSys {} Maint {} CG {}", 
+//								courant.getCoutGesteBati().multiply(surface),
+//								CINTbati,
+//								courant.getCoutGesteSys().multiply(surface),
+//								Cadd,
+//								CINTsys,
+//								courant.getCoutMaintenance().multiply(surface),
+//								coutFinalProp.getCoutGlobal() 
+//								);
+//						}
 					}
+					
 				}
 			}
-
+			
 		}
 
 		CalculPM calculPM = new CalculPM();
@@ -1576,5 +1592,23 @@ public class FinanceServiceImpl implements FinanceService {
 		}
 
 	}
+	
+	protected String generateIDCoutInt(Parc parcIni, Geste geste) {
+		String perfor;
+		BigDecimal sysChaudTemp = new BigDecimal(geste.getSysChaud());
 
+		if (sysChaudTemp.compareTo(new BigDecimal("20")) > 0) {
+			perfor = "1";
+
+		} else {
+			perfor = "0";
+		}
+
+		return parcIni.getIdbranche().concat(parcIni.getIdbattype()).concat(geste.getSysChaud())
+				.concat(geste.getEnergie()).concat(perfor);
+	}
+	protected String generateIDCoutIntBati(Parc parcIni, Geste geste) {
+		String key = parcIni.getIdbranche() + geste.getTypeRenovBati().getLabel();
+		return key;
+	}
 }

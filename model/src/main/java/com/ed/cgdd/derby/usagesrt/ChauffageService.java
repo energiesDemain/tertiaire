@@ -12,6 +12,7 @@ import com.ed.cgdd.derby.model.calcconso.ResultConsoRt;
 import com.ed.cgdd.derby.model.financeObjects.PartMarcheRenov;
 import com.ed.cgdd.derby.model.financeObjects.ResFin;
 import com.ed.cgdd.derby.model.financeObjects.ValeurFinancement;
+import com.ed.cgdd.derby.model.parc.EvolBesoinMap;
 import com.ed.cgdd.derby.model.parc.Parc;
 
 public interface ChauffageService {
@@ -22,5 +23,5 @@ public interface ChauffageService {
 			HashMap<String, ParamRdtCout> rdtCoutChauffMap, int anneeNTab, int pasdeTemps, int annee,
 			ResultConsoRt resultatsConsoRt, HashMap<String, ParamGainsUsages> gainsVentilationMap,
 			HashMap<String, EffetRebond> effetRebond, HashMap<String, BigDecimal[]> elasticiteNeufMap,
-			HashMap<String, BigDecimal[]> elasticiteExistantMap);
+			HashMap<String, BigDecimal[]> elasticiteExistantMap, EvolBesoinMap evolBesoinMap);
 }

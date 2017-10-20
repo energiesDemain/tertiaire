@@ -6,8 +6,8 @@ public class CEE implements Financement {
 	String periode;
 	BigDecimal prixKWhCumac;
 	String branche;
-
-	public CEE(String string, BigDecimal val) {
+	
+    public CEE(String string, BigDecimal val) {
 		this.prixKWhCumac = val;
 	}
 

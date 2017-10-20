@@ -20,7 +20,6 @@ import org.apache.logging.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-
 import com.ed.cgdd.derby.calibrageCINT.CalibrageDAS;
 import com.ed.cgdd.derby.calibrageCINT.CalibrageService;
 import com.ed.cgdd.derby.common.CommonService;
@@ -521,6 +520,7 @@ public class ProcessServiceImpl implements ProcessService {
 		ElasticiteMap elasticiteMap = new ElasticiteMap();
 		elasticiteMap = recupParamFinDAS.elasticite("Elasticite_prix", elasticiteMap);
 
+		
 		// Vidage des tables de resultats
 		truncateResultTables();
 
@@ -530,9 +530,14 @@ public class ProcessServiceImpl implements ProcessService {
 
 		HashMap<String, ParamBesoinsNeufs> copyMapNeuf = modifBesoinUBatEx(copyBNeufs);
 
-		// Creation de la HashMap conte
+		// Creation de la HashMap contenant
 		List<String> listeId = loadParcDatadas.getParamParcListeMapper();
 		HashMap<String, List<String>> idAgregListMap = commonService.idAgregBoucleList(listeId);
+
+		//Remplissage de la map pour l'evolution des besoins de chauffage et de climatisation 
+		// (adaptation au CC et individualisation des frais de chauffage)
+		EvolBesoinMap  evolBesoinMap = new EvolBesoinMap();
+	    setEvolBesoin(evolBesoinMap,idAgregListMap); 
 
 		progression.setStep(ProgressionStep.CALCUL);
 		progression.setParcSize(idAgregListMap.size());
@@ -548,7 +553,7 @@ public class ProcessServiceImpl implements ProcessService {
 					dvGesteMap, auxChaud, auxFroid, gainsEclairageMap, gainsVentilationMap, coutsEclVentilMap,
 					coutIntangible, coutIntangibleBati, evolCoutBati, evolCoutTechno, periodeMap, coutEnergieMap,
 					emissionsMap, reglementations, idAgregParc, progression, tauxInteretMap, surfMoyMap, evolVVMap,
-					repartStatutOccupMap, maintenanceMap, elasticiteMap, coutIntangibleNeuf);
+					repartStatutOccupMap, maintenanceMap, elasticiteMap, coutIntangibleNeuf, evolBesoinMap);
 			runnable.initServices(parcService, loadParcDatadas, insertParcdas, bureauProcessService,
 					cuissonAutreService, froidAlimService, insertUsagesNonRTdas, loadTableUsagesNonRTdas, ecsService,
 					climatisationService, chauffageService, eclairageService, insertUsagesRTdas, loadTableRtdas,
@@ -583,6 +588,39 @@ public class ProcessServiceImpl implements ProcessService {
 		}
 
 	}
+
+private EvolBesoinMap setEvolBesoin(EvolBesoinMap evolBesoinMap, HashMap<String, List<String>> idAgregListMap) {
+		
+		for (String idAgregParc : idAgregListMap.keySet()) {
+			for (int annee = 2010; annee <= 2050; annee++) { 
+					for(Usage usage : Usage.values()){
+						EvolutionBesoin evolbesoin = new EvolutionBesoin();
+						evolbesoin.setIdBranche(idAgregParc.substring(0,2));
+						evolbesoin.setAnnee(annee);
+						evolbesoin.setUsage(usage);
+						BigDecimal evolution = BigDecimal.ZERO; 
+			
+						if(politiques.checkAdaptationCC ){
+							if(usage.equals(Usage.CHAUFFAGE)){	
+								evolution = evolution.add(politiques.tcamBesoinChauff);
+							}
+							if(usage.equals(Usage.CLIMATISATION)){				
+								evolution =evolution.add(politiques.tcamBesoinClim);
+							}
+						}
+						if(annee > 2016 && annee < 2020 && politiques.checkIFC && usage.equals(Usage.CHAUFFAGE)){
+								evolution =  evolution.add(politiques.GainBU_IFC_annuel);
+						}
+			
+			evolbesoin.setEvolution(evolution);
+			evolBesoinMap.putEvolutionBesoin(evolbesoin);
+			
+				}
+			}
+		}
+
+	return null;
+}
 
 	protected HashMap<String, ParamBesoinsNeufs> modifBesoinUBatEx(HashMap<String, ParamBesoinsNeufs> copyMapNeuf) {
 		for(String keyMap : copyMapNeuf.keySet()){

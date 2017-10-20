@@ -25,6 +25,7 @@ import com.ed.cgdd.derby.model.parc.Parc;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
 import com.ed.cgdd.derby.model.parc.Usage;
+import com.ed.cgdd.derby.model.parc.EvolBesoinMap;
 import com.ed.cgdd.derby.usagesrt.ChauffageService;
 import com.ed.cgdd.derby.model.politiques;
 
@@ -40,8 +41,8 @@ public class ChauffageServiceImpl implements ChauffageService {
 	private final static int LENGTH_SYS_CHAUD = 2;
 	private final static int START_NRJ = 16;
 	private final static int LENGTH_NRJ = 2;
-	private static final int START_ID_BRANCHE = 0;
 	private static final int LENGTH_ID_BRANCHE = 2;
+	private static final int START_ID_BRANCHE = 0;
 
 	public CommonService getCommonService() {
 		return commonService;
@@ -68,13 +69,13 @@ public class ChauffageServiceImpl implements ChauffageService {
 			HashMap<String, ParamRdtCout> rdtCoutChauffMap, int anneeNTab, int pasdeTemps, int annee,
 			ResultConsoRt resultatsConsoRt, HashMap<String, ParamGainsUsages> gainsVentilationMap,
 			HashMap<String, EffetRebond> effetRebond, HashMap<String, BigDecimal[]> elasticiteNeufMap,
-			HashMap<String, BigDecimal[]> elasticiteExistantMap) {
+			HashMap<String, BigDecimal[]> elasticiteExistantMap, EvolBesoinMap evolBesoinMap) {
 
 		// Initialisation des objets pour le chauffage
 		HashMap<String, Conso> besoinMapChauff = resultatsConsoRt.getMap(MapResultsKeys.BESOIN_CHAUFF.getLabel());
 		HashMap<String, Conso> rdtMapChauff = resultatsConsoRt.getMap(MapResultsKeys.RDT_CHAUFF.getLabel());
 		HashMap<String, Conso> consoMapChauff = resultatsConsoRt.getMap(MapResultsKeys.CONSO_CHAUFF.getLabel());
-
+		
 		// Initialisation des objets pour la ventilation et les auxiliaires de
 		// chauffage
 		HashMap<String, Conso> besoinMapVentil = resultatsConsoRt.getMap(MapResultsKeys.VENTILATION.getLabel());
@@ -85,8 +86,8 @@ public class ChauffageServiceImpl implements ChauffageService {
 		// Comptabilise egalement les rehab
 		modifParcBesoinGeste(resultFinance, idAgregParc, auxChaud, consoAuxChauff, besoinMapVentil, besoinMapChauff,
 				rdtMapChauff, parcTotMap, partMarcheMap, anneeNTab, pasdeTemps, gainsVentilationMap, annee,
-				effetRebond, elasticiteNeufMap, elasticiteExistantMap);
-
+				effetRebond, elasticiteNeufMap, elasticiteExistantMap, evolBesoinMap);
+		
 		// Ajout des besoins et des rendements de chauffage des batiments neufs
 		// ainsi que les besoins de ventilation
 		resultatsConsoRt = besoinsNeuf(auxChaud, resultatsConsoRt, rdtCoutChauffMap, parcTotMap, bNeufsMap, anneeNTab,
@@ -94,7 +95,24 @@ public class ChauffageServiceImpl implements ChauffageService {
 
 		// Modification des consommations de chauffage
 		consoMapChauff = modifConsoChauff(rdtMapChauff, besoinMapChauff, consoMapChauff, anneeNTab, pasdeTemps, annee);
-
+		
+//      Commentaire BV pour verifier la prise en comptre de la modif du besoin		
+//		HashMap<String, Conso> besoinMapChaufftest = resultatsConsoRt.getMap(MapResultsKeys.BESOIN_CHAUFF.getLabel());
+//		for (String key : partMarcheMap.keySet()) {
+//			PartMarcheRenov geste = partMarcheMap.get(key);
+//
+//			// Chargement de la copie de travail du besoin initial
+//						Conso besoinInitChauff2 = null;
+//						if (besoinMapChauff.containsKey(geste.getId())) {
+//							besoinInitChauff2 = new Conso(besoinMapChaufftest.get(geste.getId()));
+//
+//						}
+//
+//						
+//						LOG.debug("id {} Bi modif {}",besoinInitChauff2.getId(),besoinInitChauff2.getAnnee(anneeNTab - 1));
+//		}
+//		
+		
 		return resultatsConsoRt;
 
 	}
@@ -424,7 +442,8 @@ public class ChauffageServiceImpl implements ChauffageService {
 			HashMap<String, Conso> rdtMapChauff, HashMap<String, Parc> parcTotMap,
 			HashMap<String, PartMarcheRenov> partMarcheMap, int anneeNTab, int pasdeTemps,
 			HashMap<String, ParamGainsUsages> gainsVentilationMap, int annee, HashMap<String, EffetRebond> effetRebond,
-			HashMap<String, BigDecimal[]> elasticiteNeufMap, HashMap<String, BigDecimal[]> elasticiteExistantMap) {
+			HashMap<String, BigDecimal[]> elasticiteNeufMap, 
+			HashMap<String, BigDecimal[]> elasticiteExistantMap, EvolBesoinMap evolBesoinMap) {
 
 		HashMap<String, Parc> parcTotMapCopy = new HashMap<String, Parc>(parcTotMap);
 
@@ -454,9 +473,13 @@ public class ChauffageServiceImpl implements ChauffageService {
 				besoinInitChauff = new Conso(besoinMapChauff.get(geste.getId()));
 
 			}
-			// Le besoinU integre le gain
+			
+			
+			// Le besoinU integre le gain, l'effet rebond, l'elasticite prix et l'evolution liee au CC et IFC
 			BigDecimal besoinU = calcBesoinUModif(geste, besoinInitChauff, anneeNTab, parcInit, valeurRebond,
-					elasticiteExistantMap, annee);
+					elasticiteExistantMap, evolBesoinMap, annee);
+			
+			
 			// Chargement des ratios de consommation en auxiliaires
 			BigDecimal ratioAux = auxChaud.get(geste.getSysChaud()).getRatio();
 			// Generation du nouvel idParc
@@ -466,24 +489,6 @@ public class ChauffageServiceImpl implements ChauffageService {
 			// Calcul de la surfModif, surface sortante du segment existant
 			BigDecimal surfModif = calcSurfModif(anneeNTab, parcInit, geste);
 			
-			
-			
-			
-			// Ajout gain individualisation des frais de chauffage TODO creer parametre
-			
-			if(politiques.checkIFC){
-			//	LOG.debug("geste bat = {} BU {}",geste.getTypeRenovBat(),besoinU);
-
-			if(annee == 2017){
-				 besoinU =  besoinU.multiply(politiques.GainBU_2017,MathContext.DECIMAL32);
-				
-			} else if(annee == 2018){
-				besoinU =  besoinU.multiply(politiques.GainBU_2018,MathContext.DECIMAL32);
-			} else if(annee > 2018){
-				besoinU =  besoinU.multiply(politiques.GainBU_2019,MathContext.DECIMAL32);
-			}
-			}
-			
 			// Evolution des surfaces chauffees
 			parcTotMap = EvolParc(parcTotMap, anneeNTab, pasdeTemps, geste, parcInit, parcInitModif, newId, surfModif);
 			// Modification des besoins en chauffage et en auxiliaires
@@ -491,7 +496,6 @@ public class ChauffageServiceImpl implements ChauffageService {
 					anneeNTab, pasdeTemps, newId, besoinU, surfModif);
 			// Modification des rendements de chauffage
 			rdtMapChauff = EvolRdtsChauff(besoinInitChauff, geste, rdtMapChauff, anneeNTab, pasdeTemps, newId);
-			
 			
 			// Modification des besoins en ventilation 
 			besoinMapVentil = EvolVentil(besoinMapVentil, anneeNTab, pasdeTemps, geste, newId, gainsVentilationMap,
@@ -645,7 +649,7 @@ public class ChauffageServiceImpl implements ChauffageService {
 	}
 
 	protected BigDecimal calcBesoinUModif(PartMarcheRenov geste, Conso besoinInit, int anneeNTab, Parc parcInit,
-			BigDecimal valeurRebond, HashMap<String, BigDecimal[]> elasticiteExistantMap, int annee) {
+			BigDecimal valeurRebond, HashMap<String, BigDecimal[]> elasticiteExistantMap,EvolBesoinMap evolBesoinMap, int annee) {
 
 		BigDecimal besoinModif = BigDecimal.ZERO;
 		BigDecimal gain = BigDecimal.ONE;
@@ -657,12 +661,13 @@ public class ChauffageServiceImpl implements ChauffageService {
 					BigDecimal.ONE.subtract(valeurRebond, MathContext.DECIMAL32), MathContext.DECIMAL32));
 		}
 		
-		
+		BigDecimal facteurElasticite = BigDecimal.ONE;
+		BigDecimal besoinU = BigDecimal.ZERO;
 		if (besoinInit != null && besoinInit.getAnnee(anneeNTab - 1) != null && parcInit != null
 				&& parcInit.getAnnee(anneeNTab - 1) != null && parcInit.getAnnee(anneeNTab - 1).signum() != 0) {
-			BigDecimal facteurElasticite = elasticiteExistantMap.get(Usage.CHAUFFAGE.getLabel() + geste.getEnergie())[annee - 2009];
+			facteurElasticite = elasticiteExistantMap.get(Usage.CHAUFFAGE.getLabel() + geste.getEnergie())[annee - 2009];
 			// besoinU = (besoinInit/parcInit)
-			BigDecimal besoinU = (besoinInit.getAnnee(anneeNTab - 1).divide(parcInit.getAnnee(anneeNTab - 1),
+			besoinU = (besoinInit.getAnnee(anneeNTab - 1).divide(parcInit.getAnnee(anneeNTab - 1),
 					MathContext.DECIMAL32));
 			// besoinModif = besoinU*gain*facteurElasticite
 			BigDecimal temp = (besoinU.multiply(gain, MathContext.DECIMAL32)).multiply(facteurElasticite,
@@ -670,10 +675,19 @@ public class ChauffageServiceImpl implements ChauffageService {
 			besoinModif = (temp);
 
 		}
+	
+		//On modifie le besoin de chauffage si le besoin evolue (adaptation CC ou IFC)
+		BigDecimal evolBesoinChauff = 
+				evolBesoinMap.getEvolBesoin()
+				.get(parcInit.getIdagreg().substring(START_ID_BRANCHE,LENGTH_ID_BRANCHE)+Usage.CHAUFFAGE+annee)
+				.getEvolution();
+		besoinModif = besoinModif.multiply(BigDecimal.ONE.add(evolBesoinChauff));
 		
-		// BV ajout individualisation
-		
-		
+		// affiche les elements de calcul du besoin modif
+		LOG.debug("id {} Bi {} gain {} elas {} evol {} besoinUi {}  besoinUmod {}  ",
+				besoinInit.getId(),besoinInit.getAnnee(anneeNTab - 1),
+				gain,
+				facteurElasticite, evolBesoinChauff, besoinU, besoinModif);
 		
 		return besoinModif;
 	}

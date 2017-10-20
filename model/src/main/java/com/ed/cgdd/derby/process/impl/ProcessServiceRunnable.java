@@ -167,7 +167,8 @@ public class ProcessServiceRunnable implements Runnable {
 	HashMap<String, Maintenance> maintenanceMap;
 	ElasticiteMap elasticiteMap;
 	HashMap<String,CalibCoutGlobal> coutIntangibleNeuf;
-
+	EvolBesoinMap evolBesoinMap;
+	
 	public ProcessServiceRunnable(int pasdeTempsInit, ParamCintObjects paramCintObject, float txRenovBati,
 								  HashMap<String, ParamParcArray> entreesMap, HashMap<String, ParamParcArray> sortiesMap,
 								  HashMap<String, ParamBesoinsNeufs> bNeufsMapInit,HashMap<String, ParamBesoinsNeufs> copyBesoinsNeufs, HashMap<String, EffetRebond> effetRebond,
@@ -192,7 +193,8 @@ public class ProcessServiceRunnable implements Runnable {
 								  Reglementations reglementations, String idAgregParc, Progression progression,
 								  HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, SurfMoy> surfMoyMap,
 								  HashMap<String, EvolValeurVerte> evolVVMap, HashMap<String, RepartStatutOccup> repartStatutOccupMap,
-								  HashMap<String, Maintenance> maintenanceMap, ElasticiteMap elasticiteMap, HashMap<String,CalibCoutGlobal> coutIntangibleNeuf) {
+								  HashMap<String, Maintenance> maintenanceMap, ElasticiteMap elasticiteMap, HashMap<String,CalibCoutGlobal> coutIntangibleNeuf, 
+								  EvolBesoinMap evolBesoinMap) {
 		this.pasdeTempsInit = pasdeTempsInit;
 		this.paramCintObject = paramCintObject;
 		this.txRenovBati = txRenovBati;
@@ -246,6 +248,7 @@ public class ProcessServiceRunnable implements Runnable {
 		this.maintenanceMap = maintenanceMap;
 		this.elasticiteMap = elasticiteMap;
 		this.coutIntangibleNeuf = coutIntangibleNeuf;
+		this.evolBesoinMap = evolBesoinMap;
 	}
 
 	public void initServices(ParcService parcService, LoadParcDataDAS loadParcDatadas, InsertParcDAS insertParcdas,
@@ -292,7 +295,7 @@ public class ProcessServiceRunnable implements Runnable {
 		ResultParc resultatsParc;
 		long timingSegmentStart = new Date().getTime();
 		ThreadContext.put(ID_PARC, idAgregParc);
-		if (idAgregParc.equals("01018403")) {
+		//if (idAgregParc.equals("01018403")) {
 		//if (idAgregParc.substring(0,2).equals("01") && idAgregParc.substring(4,6).equals("42") && idAgregParc.substring(6,8).equals("03")){
 		//if (idAgregParc.substring(6,8).equals("03")) {
 		//if (idAgregParc.equals("05141304")){
@@ -309,7 +312,7 @@ public class ProcessServiceRunnable implements Runnable {
 		// // {equals("08356005")
 		// || idAgregParc.equals("01024401")) {
 		// if (idAgregParc.equals("02186705")) {
-		//if (true) {
+		if (true) {
 			int pasdeTemps = pasdeTempsInit;
 			LOG.info("idAgregParc = {}", idAgregParc);
 			try {
@@ -378,7 +381,7 @@ public class ProcessServiceRunnable implements Runnable {
 				// HashMap<String,
 				// BigDecimal>();
 				//for (int annee = 2010; annee <= 2050; annee++) {
-			    for (int annee = 2010; annee <= 2050; annee++) {
+			    for (int annee = 2010; annee <= 2020; annee++) {
 //					long start2 = System.currentTimeMillis();
 			    	//BV prise en compte travaux embarques
 			    	if(politiques.checkTravEmb && annee == 2017){
@@ -397,8 +400,15 @@ public class ProcessServiceRunnable implements Runnable {
 
 					//LOG.info("Annee {}", annee);
 					List<Financement> listFin = getFinListPeriode(ensembleFinancements, annee);
-					CEE subCEE = getCEE(subventions, annee);
-
+					
+					CEE subCEE = new CEE();
+					// Ajout temporaire test CEE annuels
+					if(politiques.checkCEEannuels){
+						subCEE = getCEEannuel(subventions, annee);
+					} else {
+						subCEE = getCEE(subventions, annee);
+					}
+					
 					int anneeNTab = calcBoucle(annee, pasdeTemps);
 
 					compteur = compteur.add(BigDecimal.ONE);
@@ -408,6 +418,21 @@ public class ProcessServiceRunnable implements Runnable {
 					// On charge la bonne map des besoins neufs a utiliser en fonction de l'occupant et de l'annee
 					HashMap<String, ParamBesoinsNeufs> bNeufsMap = getBNeufMapToUse(annee);
 
+//					// BV test si les modifs de besoins sont pris en compte
+//				
+//					HashMap<String, Conso> besoinIniMap = 
+//							resultatsConsoRt.getMap(MapResultsKeys.BESOIN_CHAUFF.getLabel());
+//					for (String idParc : parcTotMap.keySet()) {
+//						
+//						if(idParc.substring(0,18).equals("030766050701100102")){
+//							Parc parc2 = parcTotMap.get(idParc);
+//							Conso besoinIni = besoinIniMap.get(idParc);
+//							BigDecimal BU = besoinIni.getAnnee(anneeNTab - 1).divide(parc2.getAnnee(anneeNTab - 1),
+//									MathContext.DECIMAL32);
+//						LOG.debug("id {} BU {}",idParc,BU);
+//						}
+//					}
+						
 					// Calcul des parts de marche dans les batiments neufs
 					//long startMarcheNeuf = System.currentTimeMillis();
 					HashMap<String, BigDecimal> partsMarchesNeuf = createNeufService.pmChauffNeuf(bNeufsMap,
@@ -419,7 +444,8 @@ public class ProcessServiceRunnable implements Runnable {
 
 
 //					long startParc = System.currentTimeMillis();
-					resultatsParc = parcService.parc(txClimExistantMap, partsMarchesNeuf, parcTotMap, entreesMap,
+					resultatsParc = parcService.parc(txClimExistantMap, partsMarchesNeuf, 
+							parcTotMap, entreesMap,
 							sortiesMap, txClimNeufMap, pasdeTemps, anneeNTab, annee);
 //					long endParc = System.currentTimeMillis();
 //					LOG.info("Parc : {}ms", endParc - startParc);
@@ -430,6 +456,7 @@ public class ProcessServiceRunnable implements Runnable {
 
 // 					// calcul des parts de marche dans les batiments existants
 
+
 					//long startPM = System.currentTimeMillis();
 					HashMap<String, PartMarcheRenov> partMarcheMap = financeService.renovationSegmentGlobal(
 							decretMemory, resultConsoUClimMap, resultConsoURtMap, listFin, subCEE, dvChauffMap,
@@ -437,7 +464,8 @@ public class ProcessServiceRunnable implements Runnable {
 							coutIntangible, coutIntangibleBati, paramCintObject, txRenovBati, idAgregParc, bibliGeste,
 							coutEnergieMap, emissionsMap, reglementations, compteur, coutsEclVentilMap, coutEcsMap,
 							pmEcsNeufMap, bNeufsMap, gainsVentilationMap, bibliRdtEcsMap, evolCoutBati, evolCoutTechno,
-							tauxInteretMap, surfMoyMap, evolVVMap, repartStatutOccupMap, maintenanceMap);
+							tauxInteretMap, surfMoyMap, evolVVMap, repartStatutOccupMap, maintenanceMap, 
+							evolBesoinMap);
 					//long endPM = System.currentTimeMillis();
 					//LOG.info("PM existant : {}ms", endPM - startPM);
 
@@ -445,7 +473,7 @@ public class ProcessServiceRunnable implements Runnable {
 					resultatsConsoRt = chauffageService.evolChauffageConso(resultFinance, idAgregParc, auxChaud,
 							parcTotMap, partMarcheMap, bNeufsMap, rdtCoutChauffMap, anneeNTab, pasdeTemps, annee,
 							resultatsConsoRt, gainsVentilationMap, effetRebond, elasticiteNeufMap,
-							elasticiteExistantMap);
+							elasticiteExistantMap, evolBesoinMap);
 					
 		
 					// LOG.info("Chauffage Done !");
@@ -1063,7 +1091,35 @@ public class ProcessServiceRunnable implements Runnable {
 		}
 		return subCEE;
 	}
-
+	
+	protected CEE getCEEannuel(List<CEE> subventions, int annee) {
+		CEE subCEE = new CEE();
+		subCEE.setPeriode(commonService.correspPeriodeString(annee));
+		// verifier si on doit set la branche
+		if(annee == 2015){
+			subCEE.setPrixKWhCumac(politiques.pCEE2015);
+		} else
+		if(annee == 2016){
+			subCEE.setPrixKWhCumac(politiques.pCEE2016);
+		}else
+		if(annee == 2017){
+			subCEE.setPrixKWhCumac(politiques.pCEE2017);
+		}else
+		if(annee == 2018){
+			subCEE.setPrixKWhCumac(politiques.pCEE2018);
+		}else
+		if(annee == 2019){
+			subCEE.setPrixKWhCumac(politiques.pCEE2019);
+		}else
+		if(annee == 2020){
+			subCEE.setPrixKWhCumac(politiques.pCEE2020);
+		}else {
+			subCEE.setPrixKWhCumac(BigDecimal.ZERO);
+		}
+			
+			
+		return subCEE;
+	}
 	protected List<Financement> getFinListPeriode(List<Financement> ensembleFinancements, int annee) {
 		// on recupere les financements valables pour la periode
 		String periodeFin = commonService.correspPeriodeFin(annee);

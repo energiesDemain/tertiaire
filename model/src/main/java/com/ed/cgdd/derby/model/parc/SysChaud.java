@@ -13,12 +13,30 @@ public enum SysChaud {
 		this.code = code;
 	}
 
-	public String getCode() {
+	public String Sys() {
 		return code;
 	}
 
 	public void setCode(String code) {
 		this.code = code;
+	}	
+	
+	public String getCode() {
+		return code;
 	}
+	
+	public static String getEnumName(String code) {
 
+		String name = new String();
+		for (SysChaud Sys : SysChaud.values()) {
+
+			if (Sys.getCode().toString().equals(code)) {
+
+				name = Sys.toString();
+			}
+
+		}
+
+		return name;
+	}
 }
