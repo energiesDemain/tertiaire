@@ -263,8 +263,13 @@ public class GesteServiceImpl implements GesteService {
 						// sont a prevoir
 						// Ceux-ci sont egaux aux couts initiaux du changement
 						// de systeme
-						coutAdd = copyGeste.getCoutGesteSys().multiply(
+						if(politiques.checkSurcoutFuelSwitch){
+						coutAdd = copyGeste.getCoutGesteSys().multiply(politiques.FacteurFuelCentrElec, MathContext.DECIMAL32).multiply(
 								getVariation(copyGeste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32);
+						} else 
+						{coutAdd = copyGeste.getCoutGesteSys().multiply(
+								getVariation(copyGeste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32);
+						}
 					}
 					
 					// BV ces additionnels couts ne sont jamais utilises il me semble. Il n'y a pas de setter. test de modifier le code
@@ -315,18 +320,18 @@ public class GesteServiceImpl implements GesteService {
 				if(politiques.checkRTex){
 					
 				if (copyGeste.getExigence().equals(Exigence.RT_PAR_ELEMENT) && annee > 2017) {
-					Gain = Gain.add(politiques.GainSupRTex);
+					Gain = Gain.add(politiques.GainSupRTex, MathContext.DECIMAL32);
 					copyGeste.setGainEner(Gain);
-					copyGeste.setCoutGesteBati(copyGeste.getCoutGesteBati().multiply((BigDecimal.ONE.add(politiques.GainSupRTex))));
+					copyGeste.setCoutGesteBati(copyGeste.getCoutGesteBati().multiply((BigDecimal.ONE.add(politiques.GainSupRTex, MathContext.DECIMAL32)), MathContext.DECIMAL32));
 				}
 				
 				
 				if (copyGeste.getTypeRenovSys().equals(TypeRenovSysteme.CHGT_SYS) &&
 						copyGeste.getSysChaud().substring(0,1).equals("0") && annee > 2017 && 
 						!(copyGeste.getEnergie().contentEquals("03"))) {
-					Rdt = Rdt.add(politiques.GainRdtSupRTex);
+					Rdt = Rdt.multiply(BigDecimal.ONE.add(politiques.GainRdtSupRTex, MathContext.DECIMAL32), MathContext.DECIMAL32);
 					copyGeste.setRdt(Rdt);
-					copyGeste.setCoutGesteSys(copyGeste.getCoutGesteSys().multiply((BigDecimal.ONE.add(politiques.GainRdtSupRTex ))));
+					copyGeste.setCoutGesteSys(copyGeste.getCoutGesteSys().multiply((BigDecimal.ONE.add(politiques.GainRdtSupRTex, MathContext.DECIMAL32 )), MathContext.DECIMAL32));
 				} 
 				}
 				

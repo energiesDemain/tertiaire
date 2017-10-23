@@ -75,7 +75,7 @@ import com.ed.cgdd.derby.usagesrt.TruncateTableUsagesRTDAS;
 public class ProcessServiceImpl implements ProcessService {
 	private final static Logger LOG = LogManager.getLogger(ProcessServiceImpl.class);
 
-	private final static int NB_THREAD =1;
+	private final static int NB_THREAD =40;
 
 	private ParcService parcService;
 	private LoadParcDataDAS loadParcDatadas;
@@ -602,14 +602,14 @@ private EvolBesoinMap setEvolBesoin(EvolBesoinMap evolBesoinMap, HashMap<String,
 			
 						if(politiques.checkAdaptationCC ){
 							if(usage.equals(Usage.CHAUFFAGE)){	
-								evolution = evolution.add(politiques.tcamBesoinChauff);
+								evolution = evolution.add(politiques.tcamBesoinChauff, MathContext.DECIMAL32);
 							}
 							if(usage.equals(Usage.CLIMATISATION)){				
-								evolution =evolution.add(politiques.tcamBesoinClim);
+								evolution =evolution.add(politiques.tcamBesoinClim, MathContext.DECIMAL32);
 							}
 						}
 						if(annee > 2016 && annee < 2020 && politiques.checkIFC && usage.equals(Usage.CHAUFFAGE)){
-								evolution =  evolution.add(politiques.GainBU_IFC_annuel);
+								evolution =  evolution.add(politiques.GainBU_IFC_annuel, MathContext.DECIMAL32);
 						}
 			
 			evolbesoin.setEvolution(evolution);

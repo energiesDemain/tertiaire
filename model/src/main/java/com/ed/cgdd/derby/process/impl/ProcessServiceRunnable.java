@@ -381,7 +381,7 @@ public class ProcessServiceRunnable implements Runnable {
 				// HashMap<String,
 				// BigDecimal>();
 				//for (int annee = 2010; annee <= 2050; annee++) {
-			    for (int annee = 2010; annee <= 2020; annee++) {
+			    for (int annee = 2010; annee <= 2021; annee++) {
 //					long start2 = System.currentTimeMillis();
 			    	//BV prise en compte travaux embarques
 			    	if(politiques.checkTravEmb && annee == 2017){
@@ -402,6 +402,7 @@ public class ProcessServiceRunnable implements Runnable {
 					List<Financement> listFin = getFinListPeriode(ensembleFinancements, annee);
 					
 					CEE subCEE = new CEE();
+					
 					// Ajout temporaire test CEE annuels
 					if(politiques.checkCEEannuels){
 						subCEE = getCEEannuel(subventions, annee);
@@ -482,7 +483,7 @@ public class ProcessServiceRunnable implements Runnable {
 					resultatsConsoRt = climatisationService.evolClimatisationConso(resultConsoUClimMap, auxFroid,
 							parcTotMap, resultatsConsoRt, bNeufsMap, dvUsagesMap, rdtCoutClimMap, anneeNTab,
 							pasdeTemps, annee, compteur, Usage.CLIMATISATION.getLabel(), elasticiteNeufMap,
-							elasticiteExistantMap);
+							elasticiteExistantMap, evolBesoinMap);
 					// LOG.info("Climatisation Done !");
 
 					resultatsConso.put(Usage.BUREAUTIQUE.getLabel(), bureauProcessService.evolBureauProcess(

@@ -23,6 +23,7 @@ import com.ed.cgdd.derby.model.parc.Period;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
 import com.ed.cgdd.derby.model.parc.Usage;
+import com.ed.cgdd.derby.model.parc.EvolBesoinMap;
 import com.ed.cgdd.derby.process.InitializeConsoService;
 import com.ed.cgdd.derby.usagesrt.ClimatisationService;
 
@@ -30,6 +31,8 @@ public class ClimatisationServiceImpl implements ClimatisationService {
 	private final static Logger LOG = LogManager.getLogger(ClimatisationServiceImpl.class);
 	private CommonService commonService;
 	private InitializeConsoService initializeConsoService;
+	private static final int START_ID_BRANCHE = 0;
+	private static final int LENGTH_ID_BRANCHE = 2;
 	private static final int START_ID_RDT = 0;
 	private static final int LENGTH_ID_RDT = 6;
 	private static final int START_SYS_FROID = 12;
@@ -67,7 +70,7 @@ public class ClimatisationServiceImpl implements ClimatisationService {
 			HashMap<String, ParamBesoinsNeufs> bNeufsMap, HashMap<String, BigDecimal> dvUsagesMap,
 			HashMap<String, ParamRdtCout> rdtCoutClimMap, int anneeNTab, int pasdeTemps, int annee,
 			BigDecimal compteur, String usage, HashMap<String, BigDecimal[]> elasticiteNeufMap,
-			HashMap<String, BigDecimal[]> elasticiteExistantMap) {
+			HashMap<String, BigDecimal[]> elasticiteExistantMap, EvolBesoinMap evolBesoinMap) {
 
 		// Initialisation des objets
 		HashMap<String, Conso> besoinMap = resultatsConsoRt.getMap(MapResultsKeys.BESOIN_CLIM.getLabel());
@@ -133,7 +136,7 @@ public class ClimatisationServiceImpl implements ClimatisationService {
 						batimentsExistantsClim(besoinAgregCout, resultConsoUClimMap, auxFroid, dvUsagesMap,
 								rdtCoutClimMap, anneeNTab, pasdeTemps, annee, compteur, besoinMap, rdtMapClim,
 								consoMap, keyClim, eqFroid, parcAgreg, periodeCstr, periode, usage, coutMap,
-								elasticiteExistantMap);
+								elasticiteExistantMap,evolBesoinMap);
 					}
 				}
 			}
@@ -154,7 +157,7 @@ public class ClimatisationServiceImpl implements ClimatisationService {
 			BigDecimal compteur, HashMap<String, Conso> besoinMap, HashMap<String, Conso> rdtMapClim,
 			HashMap<String, Conso> consoMap, String keyClim, String sysFroid, Parc parcAgreg, int periodeCstr,
 			int periode, String usage, HashMap<String, Conso> coutMap,
-			HashMap<String, BigDecimal[]> elasticiteExistantMap) {
+			HashMap<String, BigDecimal[]> elasticiteExistantMap, EvolBesoinMap evolBesoinMap) {
 
 		Conso besoinSegment = besoinMap.get(keyClim);
 		Conso consoSegment = consoMap.get(keyClim);
@@ -289,7 +292,7 @@ public class ClimatisationServiceImpl implements ClimatisationService {
 				// Les systemes sortants sont donc remplaces par des systemes
 				// identiques mais plus performants
 				besoinMap = besoinModifTrans(keyClim, besoinMap, besoinSortant, annee, anneeNTab, pasdeTemps,
-						elasticiteExistantMap);
+						elasticiteExistantMap, evolBesoinMap);
 				Conso rdt = rdtNeufClim(besoinMap.get(generateIDNew(keyClim, annee)), rdtCoutClimMap, pasdeTemps,
 						anneeNTab, keyClim, annee, periode);
 				rdtMapClim.put(generateIDNew(keyClim, annee), rdt);
@@ -317,13 +320,27 @@ public class ClimatisationServiceImpl implements ClimatisationService {
 
 	protected HashMap<String, Conso> besoinModifTrans(String keyClim, HashMap<String, Conso> besoinMap,
 			BigDecimal besoinEntrant, int annee, int anneeNTab, int pasdeTemps,
-			HashMap<String, BigDecimal[]> elasticiteExistantMap) {
+			HashMap<String, BigDecimal[]> elasticiteExistantMap, EvolBesoinMap evolBesoinMap) {
 		// Le besoin est modifie pour inclure le facteur d'elasticite
 		BigDecimal besoinModif = besoinEntrant
 				.multiply(
 						elasticiteExistantMap.get(Usage.CLIMATISATION.getLabel() + Energies.ELECTRICITE.getCode())[annee - 2009],
 						MathContext.DECIMAL32);
 
+		// Modification du besoin Evol pour adaptation CC
+				BigDecimal evolBesoinClim = 
+						evolBesoinMap.getEvolBesoin()
+						.get(keyClim.substring(START_ID_BRANCHE,LENGTH_ID_BRANCHE)+Usage.CLIMATISATION+annee)
+						.getEvolution();
+				besoinModif = besoinModif.multiply(BigDecimal.ONE.add(evolBesoinClim),MathContext.DECIMAL32);
+				
+				// affiche les elements de calcul du besoin modif
+//				LOG.debug("keyClim {} elas {} evol {} besoinUi {}  besoinUmod {}  ",
+//						keyClim,
+//						elasticiteExistantMap.get(Usage.CLIMATISATION.getLabel() + Energies.ELECTRICITE.getCode())[annee - 2009],
+//						evolBesoinClim, besoinEntrant, besoinModif);
+//				
+		
 		if (!besoinMap.containsKey(generateIDNew(keyClim, annee))) {
 
 			// si le segment n'existe pas :

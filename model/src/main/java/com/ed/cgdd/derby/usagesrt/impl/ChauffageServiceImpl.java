@@ -681,14 +681,15 @@ public class ChauffageServiceImpl implements ChauffageService {
 				evolBesoinMap.getEvolBesoin()
 				.get(parcInit.getIdagreg().substring(START_ID_BRANCHE,LENGTH_ID_BRANCHE)+Usage.CHAUFFAGE+annee)
 				.getEvolution();
-		besoinModif = besoinModif.multiply(BigDecimal.ONE.add(evolBesoinChauff));
+		besoinModif = besoinModif.multiply(BigDecimal.ONE.add(evolBesoinChauff), MathContext.DECIMAL32);
 		
-		// affiche les elements de calcul du besoin modif
-		LOG.debug("id {} Bi {} gain {} elas {} evol {} besoinUi {}  besoinUmod {}  ",
-				besoinInit.getId(),besoinInit.getAnnee(anneeNTab - 1),
-				gain,
-				facteurElasticite, evolBesoinChauff, besoinU, besoinModif);
-		
+//		// affiche les elements de calcul du besoin modif
+//		LOG.debug("id {} Bi {} gain {} elas {} evol {} besoinUi {}  besoinUmod {}  ",
+//				besoinInit.getId(),besoinInit.getAnnee(anneeNTab - 1),
+//				gain,
+//				facteurElasticite, evolBesoinChauff, besoinU, besoinModif);
+//		
+
 		return besoinModif;
 	}
 

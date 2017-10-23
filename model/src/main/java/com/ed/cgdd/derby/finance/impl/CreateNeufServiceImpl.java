@@ -82,8 +82,6 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 		String idBesoin = getIdBesoinChauf(idAgreg);
 		// BigDecimal besoinUnitaire = bNeufsMap.get(idBesoin).getPeriode(periode);
 		
-		
-		
 		HashMap<String, ParamRdtCout> mapRdtTravail = new HashMap<String, ParamRdtCout>();
 		HashMap<String, BigDecimal> coutGlobaux = new HashMap<String, BigDecimal>();
 
@@ -123,7 +121,7 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 	    			 idSysChaud.equals(SysChaud.ELECTRIQUE_DIRECT_PERFORMANT.getCode())
 	    			)){
 				
-	    		cout = cout.add(politiques.surcoutRT);	 
+	    		cout = cout.add(politiques.surcoutRT, MathContext.DECIMAL32);	 
 
 			}
 			
@@ -137,7 +135,7 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 								.getPart(), MathContext.DECIMAL32);
 			
 			// Ce sont des cout annuels fixes. on les ajoute aux cout intangibles
-			coutInt = coutInt.add(coutMaintenance);
+			coutInt = coutInt.add(coutMaintenance, MathContext.DECIMAL32);
 						
 			
 			BigDecimal coutEnergie = coutEnergieService.coutEnergie(coutEnergieMap, emissionsMap, annee, energie,
@@ -208,9 +206,7 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 //		
 		// version avec investissement actualise
 		BigDecimal coefactu = commonService.serieGeometrique(inverse, inverse, dureeVie - 1);
-		
-		
-		
+	
 		//LOG.debug("Coef ={}, tint = {}", coefactu, tauxInt);
 		
 		

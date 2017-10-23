@@ -9,6 +9,7 @@ import com.ed.cgdd.derby.model.calcconso.ParamRdtCout;
 import com.ed.cgdd.derby.model.calcconso.ResultConsoRt;
 import com.ed.cgdd.derby.model.calcconso.ResultConsoUClim;
 import com.ed.cgdd.derby.model.parc.Parc;
+import com.ed.cgdd.derby.model.parc.EvolBesoinMap;;
 
 public interface ClimatisationService {
 
@@ -17,6 +18,6 @@ public interface ClimatisationService {
 			HashMap<String, ParamBesoinsNeufs> bNeufsMap, HashMap<String, BigDecimal> dvUsagesMap,
 			HashMap<String, ParamRdtCout> rdtCoutClimMap, int anneeNTab, int pasdeTemps, int annee,
 			BigDecimal compteur, String usage, HashMap<String, BigDecimal[]> elasticiteNeufMap,
-			HashMap<String, BigDecimal[]> elasticiteExistantMap);
+			HashMap<String, BigDecimal[]> elasticiteExistantMap, EvolBesoinMap evolBesoinMap);
 
 }
