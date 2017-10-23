@@ -52,7 +52,7 @@ public class  politiques {
 	public final static BigDecimal surcoutRT = new BigDecimal("15") ;
 	
 	// Adaptation CC
-	public final static boolean  checkAdaptationCC = false;
+	public final static boolean  checkAdaptationCC = true;
 	public final static BigDecimal tcamBesoinChauff = new BigDecimal("-0.01");
 	public final static BigDecimal tcamBesoinClim = new BigDecimal("0.01");
 	
