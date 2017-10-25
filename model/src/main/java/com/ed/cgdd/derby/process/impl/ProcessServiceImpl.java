@@ -79,7 +79,7 @@ public class ProcessServiceImpl implements ProcessService {
 	private final static Logger LOG = LogManager.getLogger(ProcessServiceImpl.class);
 
 	private final static int NB_THREAD =40;
-
+	public static final boolean checkXlsX = true;
 	private ParcService parcService;
 	private LoadParcDataDAS loadParcDatadas;
 	private InsertParcDAS insertParcdas;
