@@ -113,8 +113,7 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 			// BV prise en compte d'un surcout pour l'electrique joule du fait de la RT 2012
 	
 			if(politiques.checkSurcoutRT2012 && annee > 2012 &&
-	    			(
-	    					
+	    			(		
 	    			idSysChaud.equals(SysChaud.CASSETTE_RAYONNANTE.getCode()) ||
 	    			 idSysChaud.equals(SysChaud.CASSETTE_RAYONNANTE_PERFORMANT.getCode()) ||
 	    			 idSysChaud.equals(SysChaud.ELECTRIQUE_DIRECT.getCode()) ||

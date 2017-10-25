@@ -312,6 +312,7 @@ public class GesteServiceImpl implements GesteService {
 						copyGeste.setCoutMaintenance(coutMaintenance); 
 				}
 
+				
 				// BV changement de gains pour les gestes et les systemes respectant la RT existant en 2018, 
 				
 				BigDecimal Gain = copyGeste.getGainEner();
@@ -320,18 +321,41 @@ public class GesteServiceImpl implements GesteService {
 				if(politiques.checkRTex){
 					
 				if (copyGeste.getExigence().equals(Exigence.RT_PAR_ELEMENT) && annee > 2017) {
+					// augmentation des gains
 					Gain = Gain.add(politiques.GainSupRTex, MathContext.DECIMAL32);
 					copyGeste.setGainEner(Gain);
-					copyGeste.setCoutGesteBati(copyGeste.getCoutGesteBati().multiply((BigDecimal.ONE.add(politiques.GainSupRTex, MathContext.DECIMAL32)), MathContext.DECIMAL32));
+					// augmentation des couts en %
+					copyGeste.setCoutGesteBati(copyGeste.getCoutGesteBati()
+							.multiply((BigDecimal.ONE.add(politiques.CoutSupRTex, MathContext.DECIMAL32)), 
+									MathContext.DECIMAL32));
 				}
 				
 				
 				if (copyGeste.getTypeRenovSys().equals(TypeRenovSysteme.CHGT_SYS) &&
-						copyGeste.getSysChaud().substring(0,1).equals("0") && annee > 2017 && 
-						!(copyGeste.getEnergie().contentEquals("03"))) {
-					Rdt = Rdt.multiply(BigDecimal.ONE.add(politiques.GainRdtSupRTex, MathContext.DECIMAL32), MathContext.DECIMAL32);
+						copyGeste.getSysChaud().substring(0,1).equals("0") && annee > 2017) {
+					// augmentation des rdts et des couts en % pour l'elec joule
+					if(		
+					 copyGeste.getSysChaud().equals(SysChaud.CASSETTE_RAYONNANTE.getCode()) ||
+					 copyGeste.getSysChaud().equals(SysChaud.CASSETTE_RAYONNANTE_PERFORMANT.getCode()) ||
+					 copyGeste.getSysChaud().equals(SysChaud.ELECTRIQUE_DIRECT.getCode()) ||
+					 copyGeste.getSysChaud().equals(SysChaud.ELECTRIQUE_DIRECT_PERFORMANT.getCode())
+	    			){
+
+					    Rdt = Rdt.multiply(BigDecimal.ONE.add(politiques.GainRdtSupRTexElecJoule, MathContext.DECIMAL32), 
+								MathContext.DECIMAL32);
+						copyGeste.setRdt(Rdt);
+						copyGeste.setCoutGesteSys(copyGeste.getCoutGesteSys()
+								.multiply((BigDecimal.ONE.add(politiques.CoutRdtSupRTexElecJoule, MathContext.DECIMAL32 )),
+										MathContext.DECIMAL32));
+					} else {
+					// augmentation des rdts et des couts en % pour les autres systemes
+					Rdt = Rdt.multiply(BigDecimal.ONE.add(politiques.GainRdtSupRTex, MathContext.DECIMAL32), 
+							MathContext.DECIMAL32);
 					copyGeste.setRdt(Rdt);
-					copyGeste.setCoutGesteSys(copyGeste.getCoutGesteSys().multiply((BigDecimal.ONE.add(politiques.GainRdtSupRTex, MathContext.DECIMAL32 )), MathContext.DECIMAL32));
+					copyGeste.setCoutGesteSys(copyGeste.getCoutGesteSys()
+							.multiply((BigDecimal.ONE.add(politiques.CoutRdtSupRTex, MathContext.DECIMAL32 )),
+									MathContext.DECIMAL32));
+					}
 				} 
 				}
 				

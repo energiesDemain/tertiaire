@@ -11,8 +11,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.ed.cgdd.derby.excelresult.ExcelCoutsService;
 import com.ed.cgdd.derby.excelresult.ExcelEtiquetteService;
 import com.ed.cgdd.derby.excelresult.ExcelResultService;
+import com.ed.cgdd.derby.excelresult.ExcelXCoutsService;
+import com.ed.cgdd.derby.excelresult.ExcelXEtiquetteService;
+import com.ed.cgdd.derby.excelresult.ExcelXResultService;
+
+
 
 public class LauncherTableResult {
+	public static final boolean checkXlsX = true;
 
 	private final static Logger LOG = LogManager.getLogger(LauncherTableResult.class);
 
@@ -20,17 +26,30 @@ public class LauncherTableResult {
 		LOG.info("Start engine");
 
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContextProcess.xml");
+		
+		if(checkXlsX){
+			ExcelXCoutsService excelXCoutService = (ExcelXCoutsService) context.getBean("excelXCoutsService");
+			ExcelXResultService excelXResultService = (ExcelXResultService) context.getBean("excelXResultService");
+			ExcelXEtiquetteService excelXEtiquetteService = (ExcelXEtiquetteService) context.getBean("excelXEtiquetteService");
 
-		ExcelCoutsService excelCoutService = (ExcelCoutsService) context.getBean("excelCoutsService");
-		ExcelResultService excelResultService = (ExcelResultService) context.getBean("excelResultService");
-		ExcelEtiquetteService excelEtiquetteService = (ExcelEtiquetteService) context.getBean("excelEtiquetteService");
-
-		// TODO Open and close file only once
-
-		excelResultService.excelService(1, false);
-		excelCoutService.excelService(1, false);
-		excelEtiquetteService.excelService(1, false);
-
+			// TODO Open and close file only once
+			
+			excelXResultService.excelXService(1, false);
+			excelXCoutService.excelXService(1, false);
+			excelXEtiquetteService.excelXService(1, false);
+			
+		} else {
+		
+			ExcelCoutsService excelCoutService = (ExcelCoutsService) context.getBean("excelCoutsService");
+			ExcelResultService excelResultService = (ExcelResultService) context.getBean("excelResultService");
+			ExcelEtiquetteService excelEtiquetteService = (ExcelEtiquetteService) context.getBean("excelEtiquetteService");
+	
+			// TODO Open and close file only once
+			
+			excelResultService.excelService(1, false);
+			excelCoutService.excelService(1, false);
+			excelEtiquetteService.excelService(1, false);
+		}
 		// excelCoutService.getContributionClimat(coutEnergieMap);
 
 		LOG.info("End engine");

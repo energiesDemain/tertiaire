@@ -26,6 +26,9 @@ import com.ed.cgdd.derby.common.CommonService;
 import com.ed.cgdd.derby.excelresult.ExcelCoutsService;
 import com.ed.cgdd.derby.excelresult.ExcelEtiquetteService;
 import com.ed.cgdd.derby.excelresult.ExcelResultService;
+import com.ed.cgdd.derby.excelresult.ExcelXCoutsService;
+import com.ed.cgdd.derby.excelresult.ExcelXEtiquetteService;
+import com.ed.cgdd.derby.excelresult.ExcelXResultService;
 import com.ed.cgdd.derby.finance.CreateNeufService;
 import com.ed.cgdd.derby.finance.FinanceService;
 import com.ed.cgdd.derby.finance.GesteService;
@@ -103,6 +106,9 @@ public class ProcessServiceImpl implements ProcessService {
 	private ExcelResultService excelResultService;
 	private ExcelCoutsService excelCoutsService;
 	private ExcelEtiquetteService excelEtiquetteService;
+	private ExcelXResultService excelXResultService;
+	private ExcelXCoutsService excelXCoutsService;
+	private ExcelXEtiquetteService excelXEtiquetteService;
 	private CalibrageDAS calibrageDAS;
 	private CalibrageService calibrageService;
 	private RecupParamFinDAS recupParamFinDAS;
@@ -118,7 +124,13 @@ public class ProcessServiceImpl implements ProcessService {
 	public void setExcelCoutsService(ExcelCoutsService excelCoutsService) {
 		this.excelCoutsService = excelCoutsService;
 	}
+	public ExcelXCoutsService getExcelXCoutsService() {
+		return excelXCoutsService;
+	}
 
+	public void setExcelXCoutsService(ExcelXCoutsService excelXCoutsService) {
+		this.excelXCoutsService = excelXCoutsService;
+	}
 	public CalibrageDAS getCalibrageDAS() {
 		return calibrageDAS;
 	}
@@ -162,7 +174,18 @@ public class ProcessServiceImpl implements ProcessService {
 	public void setExcelResult(ExcelResultService excelResult) {
 		this.excelResultService = excelResult;
 	}
+	public ExcelXResultService getExcelXResultService() {
+		return excelXResultService;
+	}
 
+	public void setExcelXResultService(ExcelXResultService excelXResultService) {
+		this.excelXResultService = excelXResultService;
+	}
+
+	public void setExcelXResult(ExcelXResultService excelXResult) {
+		this.excelXResultService = excelXResult;
+	}
+	
 	public FinanceService getFinanceService() {
 		return financeService;
 	}
@@ -701,5 +724,11 @@ private EvolBesoinMap setEvolBesoin(EvolBesoinMap evolBesoinMap, HashMap<String,
 	public void setExcelEtiquetteService(ExcelEtiquetteService excelEtiquetteService) {
 		this.excelEtiquetteService = excelEtiquetteService;
 	}
+	public ExcelXEtiquetteService getExcelXEtiquetteService() {
+		return excelXEtiquetteService;
+	}
 
+	public void setExcelXEtiquetteService(ExcelXEtiquetteService excelXEtiquetteService) {
+		this.excelXEtiquetteService = excelXEtiquetteService;
+	}
 }

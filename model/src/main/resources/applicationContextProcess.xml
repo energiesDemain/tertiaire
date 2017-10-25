@@ -38,6 +38,10 @@
 		<property name="excelCoutsService" ref="excelCoutsService" />
 		<property name="excelResultService" ref="excelResultService" />
 		<property name="excelEtiquetteService" ref="excelEtiquetteService" />
+		<property name="excelXCoutsService" ref="excelXCoutsService" />
+		<property name="excelXResultService" ref="excelXResultService" />
+		<property name="excelXEtiquetteService" ref="excelXEtiquetteService" />
+		
 		
 		
 		
@@ -257,7 +261,18 @@
 	<bean id="excelEtiquetteService" class="com.ed.cgdd.derby.excelresult.ExcelEtiquetteServiceImpl">
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
 	</bean>
-
+	
+	<bean id="excelXCoutsService" class="com.ed.cgdd.derby.excelresult.ExcelXCoutsServiceImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="excelXResultService" class="com.ed.cgdd.derby.excelresult.ExcelXResultServiceImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+	
+	<bean id="excelXEtiquetteService" class="com.ed.cgdd.derby.excelresult.ExcelXEtiquetteServiceImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
 
 
 </beans>
