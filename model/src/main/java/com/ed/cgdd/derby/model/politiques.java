@@ -33,9 +33,9 @@ public class  politiques {
 	public final static BigDecimal modifBUBatEx = new BigDecimal("0.8325");
 
 	//travaux embarques
-	public final static boolean  checkTravEmb =  false;
+	public final static boolean  checkTravEmb =  true;
 	// taux de renovation tendanciel supplementaire
-	public static float  txRenovTravEmb = 0.013f;
+	public static float  txRenovTravEmb = 0.011f;
 
 	//surcout RT 2012 electrique direct
 	public final static boolean  checkSurcoutRT2012 = true;
@@ -43,7 +43,7 @@ public class  politiques {
 	public final static BigDecimal surcoutRT = new BigDecimal("15") ;
 		
 	// CEE prix annuels
-	public final static boolean  checkCEEannuels = true;
+	public final static boolean  checkCEEannuels = false;
 	public final static BigDecimal pCEE2015 = new BigDecimal("0.053");
 	public final static BigDecimal pCEE2016 = new BigDecimal("0.090");
 	public final static BigDecimal pCEE2017 = new BigDecimal("0.100");
@@ -58,9 +58,5 @@ public class  politiques {
 	public final static BigDecimal tcamBesoinChauff = new BigDecimal("-0.01");
 	public final static BigDecimal tcamBesoinClim = new BigDecimal("0.01");
 	
-	// param surcout fuel switch en % du cout d'investissement
-	public final static boolean  checkSurcoutFuelSwitch = true;
-	public final static BigDecimal FacteurFuelCentrElec = new BigDecimal("2");
-	public final static BigDecimal FacteurFuelElecCentr = new BigDecimal("2");
-		
+	
 }

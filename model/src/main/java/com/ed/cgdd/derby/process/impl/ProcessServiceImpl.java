@@ -598,12 +598,20 @@ public class ProcessServiceImpl implements ProcessService {
 			//boolean isHidden = true;
 			boolean isHidden = false;
 			progression.setStep(ProgressionStep.EXTRACT);
-
-			excelResultService.excelService(pasdeTempsInit, isHidden);
-			excelCoutsService.excelService(pasdeTempsInit, isHidden);
-			excelCoutsService.getContributionClimat(coutEnergieMap);
-			excelEtiquetteService.excelService(pasdeTempsInit, isHidden);
-
+			
+			if(checkXlsX){
+				excelXResultService.excelXService(pasdeTempsInit, isHidden);
+				excelXCoutsService.excelXService(pasdeTempsInit, isHidden);
+				excelXCoutsService.getContributionClimat(coutEnergieMap);
+				excelXEtiquetteService.excelXService(pasdeTempsInit, isHidden);
+					
+			}else {
+				excelResultService.excelService(pasdeTempsInit, isHidden);
+				excelCoutsService.excelService(pasdeTempsInit, isHidden);
+				excelCoutsService.getContributionClimat(coutEnergieMap);
+				excelEtiquetteService.excelService(pasdeTempsInit, isHidden);
+			}
+			
 			long end = System.currentTimeMillis();
 			LOG.info("creation time : {}ms", end - start);
 		} catch (InterruptedException e) {

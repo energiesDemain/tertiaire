@@ -15,9 +15,10 @@ public interface LoadTableChauffClimDAS {
 	 * loadData
 	 */
 
-	HashMap<String, Conso> loadMapResultBesoin(String tableName, final String idAgregParc, final int pasdeTemps);
+	HashMap<String, Conso> loadMapResultBesoin(String tableName, final String idAgregParc, final int pasdeTemps,  BigDecimal calageParc);
 
-	HashMap<String, Conso> loadMapResultBesoinChauff(String tableName, final String idAgregParc, final int pasdeTemps);
+	HashMap<String, Conso> loadMapResultBesoinChauff(String tableName, final String idAgregParc, 
+			final int pasdeTemps,  BigDecimal calageParc);
 
 	HashMap<String, ParamRdtCout> loadTableRdtCout(String tableName);
 

@@ -14,7 +14,7 @@ public interface LoadTableUsagesNonRTDAS {
 	/**
 	 * loadData
 	 */
-	HashMap<String, Parc> loadMapResultBesoin(String tableName, final String idAgreg, final int pasdeTemps);
+	HashMap<String, Parc> loadMapResultBesoin(String tableName, final String idAgreg, final int pasdeTemps, BigDecimal calageParc);
 
 	HashMap<String, ParamGainsUsages> loadTableGainsNonRT(String tableName);
 

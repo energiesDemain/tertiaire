@@ -1,6 +1,7 @@
 package com.ed.cgdd.derby.usagesnonrt.impl;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,6 +26,7 @@ import com.ed.cgdd.derby.model.parc.Parc;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.usagesnonrt.LoadTableUsagesNonRTDAS;
 
+
 public class LoadTableUsagesNonRTDASImpl extends BddUsagesNonRTDAS implements LoadTableUsagesNonRTDAS {
 	private final static Logger LOG = LogManager.getLogger(LoadTableUsagesNonRTDASImpl.class);
 
@@ -42,10 +44,11 @@ public class LoadTableUsagesNonRTDASImpl extends BddUsagesNonRTDAS implements Lo
 
 	// Renvoie les champs des tables Derby de besoins initiaux sous forme de
 	// HashMap
-	public HashMap<String, Parc> loadMapResultBesoin(String tableName, final String idAgregParc, final int pasdeTemps) {
+	public HashMap<String, Parc> loadMapResultBesoin(String tableName, final String idAgregParc, 
+			final int pasdeTemps, BigDecimal calageParc) {
 
 		HashMap<String, Parc> usageMap = new HashMap<String, Parc>();
-		List<Parc> loadParc = getTableMap(tableName, idAgregParc, pasdeTemps);
+		List<Parc> loadParc = getTableMap(tableName, idAgregParc, pasdeTemps, calageParc);
 		for (Parc parc : loadParc) {
 			usageMap.put(parc.getId(), parc);
 		}
@@ -355,7 +358,7 @@ public class LoadTableUsagesNonRTDASImpl extends BddUsagesNonRTDAS implements Lo
 		});
 	}
 
-	protected List<Parc> getTableMap(String tableName, final String idAgregParc, final int pasdeTemps) {
+	protected List<Parc> getTableMap(String tableName, final String idAgregParc, final int pasdeTemps, BigDecimal calageParc) {
 
 		// Charge les tables de consommations initiales pour les usages ne
 		// faisant pas l'objet de financements specifiques
@@ -379,8 +382,8 @@ public class LoadTableUsagesNonRTDASImpl extends BddUsagesNonRTDAS implements Lo
 					parc.setId(rs.getString("ID"));
 					parc.setAnneeRenov(INIT_STATE);
 					parc.setTypeRenovBat(TypeRenovBati.ETAT_INIT);
-					parc.setAnnee(0, rs.getBigDecimal("BESOIN"));
-
+					parc.setAnnee(0, rs.getBigDecimal("BESOIN").multiply(calageParc,MathContext.DECIMAL32));
+					
 					for (int j = 1; j <= pasdeTemps; j++) {
 
 						parc.setAnnee(j, BigDecimal.ZERO);

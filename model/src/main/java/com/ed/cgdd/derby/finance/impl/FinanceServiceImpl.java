@@ -249,14 +249,9 @@ public class FinanceServiceImpl implements FinanceService {
 		
 		//LOG.info("countrenov : {}ms", countrenov/100000f);
 		
-		// ajout de la reno tendancielle
-		//long start3= System.currentTimeMillis();
-		//partGesteFin = renoTendancielle(partGesteFin, txRenovBatiVentile, surfaceSegmentTot, parcTotMap, anneeNTab);
-		//long end3= System.currentTimeMillis();
-		//if(end3- start3>1){	
-		// LOG.info("reno tendan  : {}ms", end3 - start3);
-		//}
-	
+		//ajout de la reno tendancielle
+
+	    partGesteFin = renoTendancielle(partGesteFin, txRenovBatiVentile, surfaceSegmentTot, parcTotMap, anneeNTab);
 		return partGesteFin;
 		
 	}

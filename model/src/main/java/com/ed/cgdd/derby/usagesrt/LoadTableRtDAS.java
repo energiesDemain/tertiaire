@@ -27,7 +27,8 @@ public interface LoadTableRtDAS {
 
 	HashMap<String, ParamPMConsoChgtSys> loadTablePMECSChgtSys(String tableName);
 
-	HashMap<String, Conso> loadMapResultBesoin(String tableName, final String idAgregParc, final int pasdeTemps);
+	HashMap<String, Conso> loadMapResultBesoin(String tableName, final String idAgregParc, final int pasdeTemps, 
+			BigDecimal calageParc);
 
 	HashMap<String, ParamRdtEcs> loadTableRdtEcs(String tableName);
 
@@ -53,9 +54,9 @@ public interface LoadTableRtDAS {
 
 	HashMap<String, ParamRatioAux> loadTableRatioAuxChaud(String tableName);
 
-	HashMap<String, Conso> loadMapResultBesoinVentil(String tableName, final String idAgregParc, final int pasdeTemps);
+	HashMap<String, Conso> loadMapResultBesoinVentil(String tableName, final String idAgregParc, final int pasdeTemps, BigDecimal calageParc);
 
 	HashMap<String, Conso> loadMapResultBesoinEclairage(String tableName, final String idAgregParc,
-			final int pasdeTemps, HashMap<String, ResultConsoURt> resultConsoURtMap);
+			final int pasdeTemps, HashMap<String, ResultConsoURt> resultConsoURtMap, BigDecimal calageParc);
 
 }

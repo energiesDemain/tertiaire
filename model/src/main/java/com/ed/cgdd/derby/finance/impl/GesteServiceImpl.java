@@ -45,7 +45,7 @@ import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
 import com.ed.cgdd.derby.model.parc.Usage;
 import com.ed.cgdd.derby.model.politiques;
-
+import com.ed.cgdd.derby.model.CalibParameters;
 
 public class GesteServiceImpl implements GesteService {
 	private final static Logger LOG = LogManager.getLogger(GesteServiceImpl.class);
@@ -263,8 +263,8 @@ public class GesteServiceImpl implements GesteService {
 						// sont a prevoir
 						// Ceux-ci sont egaux aux couts initiaux du changement
 						// de systeme
-						if(politiques.checkSurcoutFuelSwitch){
-						coutAdd = copyGeste.getCoutGesteSys().multiply(politiques.FacteurFuelCentrElec, MathContext.DECIMAL32).multiply(
+						if(CalibParameters.checkSurcoutFuelSwitch){
+						coutAdd = copyGeste.getCoutGesteSys().multiply(CalibParameters.FacteurFuelCentrElec, MathContext.DECIMAL32).multiply(
 								getVariation(copyGeste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32);
 						} else 
 						{coutAdd = copyGeste.getCoutGesteSys().multiply(

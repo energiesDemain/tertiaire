@@ -1,6 +1,7 @@
 package com.ed.cgdd.derby.usagesrt.impl;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -128,10 +129,10 @@ public class LoadTableRtDASImpl extends BddUsagesRTDAS implements LoadTableRtDAS
 	// Renvoie les champs des tables Derby de besoins initiaux sous forme de
 	// HashMap
 	public HashMap<String, Conso> loadMapResultBesoinVentil(String tableName, final String idAgregParc,
-			final int pasdeTemps) {
+			final int pasdeTemps, BigDecimal calageParc) {
 
 		HashMap<String, Conso> usageMap = new HashMap<String, Conso>();
-		List<Conso> loadParc = getTableMap(tableName, idAgregParc, pasdeTemps);
+		List<Conso> loadParc = getTableMap(tableName, idAgregParc, pasdeTemps, calageParc);
 		for (Conso parc : loadParc) {
 			usageMap.put(
 					parc.getId() + parc.getAnneeRenovSys() + parc.getTypeRenovSys() + parc.getAnneeRenov()
@@ -144,11 +145,11 @@ public class LoadTableRtDASImpl extends BddUsagesRTDAS implements LoadTableRtDAS
 	// Renvoie les champs des tables Derby de besoins initiaux sous forme de
 	// HashMap et rempli les consoU
 	public HashMap<String, Conso> loadMapResultBesoinEclairage(String tableName, final String idAgregParc,
-			final int pasdeTemps, HashMap<String, ResultConsoURt> resultConsoURtMap) {
+			final int pasdeTemps, HashMap<String, ResultConsoURt> resultConsoURtMap, BigDecimal calageParc) {
 		String idResultRt;
 		int anneeNTab = 0;
 		HashMap<String, Conso> usageMap = new HashMap<String, Conso>();
-		List<Conso> loadConso = getTableMap(tableName, idAgregParc, pasdeTemps);
+		List<Conso> loadConso = getTableMap(tableName, idAgregParc, pasdeTemps, calageParc);
 		for (Conso conso : loadConso) {
 			usageMap.put(conso.getId() + conso.getAnneeRenovSys() + conso.getTypeRenovSys() + conso.getAnneeRenov()
 					+ conso.getTypeRenovBat(), conso);
@@ -171,10 +172,11 @@ public class LoadTableRtDASImpl extends BddUsagesRTDAS implements LoadTableRtDAS
 
 	// Renvoie les champs des tables Derby de besoins initiaux sous forme de
 	// HashMap
-	public HashMap<String, Conso> loadMapResultBesoin(String tableName, final String idAgregParc, final int pasdeTemps) {
+	public HashMap<String, Conso> loadMapResultBesoin(String tableName, final String idAgregParc,
+			final int pasdeTemps, BigDecimal calageParc) {
 
 		HashMap<String, Conso> usageMap = new HashMap<String, Conso>();
-		List<Conso> loadConso = getTableMap(tableName, idAgregParc, pasdeTemps);
+		List<Conso> loadConso = getTableMap(tableName, idAgregParc, pasdeTemps, calageParc);
 		for (Conso conso : loadConso) {
 			usageMap.put(conso.getId() + conso.getAnneeRenovSys() + conso.getTypeRenovSys() + conso.getAnneeRenov()
 					+ conso.getTypeRenovBat(), conso);
@@ -475,7 +477,7 @@ public class LoadTableRtDASImpl extends BddUsagesRTDAS implements LoadTableRtDAS
 		});
 	}
 
-	protected List<Conso> getTableMap(String tableName, final String idAgregParc, final int pasdeTemps) {
+	protected List<Conso> getTableMap(String tableName, final String idAgregParc, final int pasdeTemps, BigDecimal calageParc) {
 
 		// Charge les tables de consommations initiales pour les usages ne
 		// faisant pas l'objet de financements specifiques
@@ -502,7 +504,7 @@ public class LoadTableRtDASImpl extends BddUsagesRTDAS implements LoadTableRtDAS
 					conso.setTypeRenovSys(TypeRenovSysteme.ETAT_INIT);
 					conso.setAnneeRenov(INIT_STATE);
 					conso.setTypeRenovBat(TypeRenovBati.ETAT_INIT);
-					conso.setAnnee(0, rs.getBigDecimal("BESOIN"));
+					conso.setAnnee(0, rs.getBigDecimal("BESOIN").multiply(calageParc,MathContext.DECIMAL32));
 
 					for (int j = 1; j <= pasdeTemps; j++) {
 

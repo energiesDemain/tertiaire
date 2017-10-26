@@ -49,6 +49,7 @@ import com.ed.cgdd.derby.parc.LoadParcDataDAS;
 import com.ed.cgdd.derby.parc.ParcService;
 import com.ed.cgdd.derby.process.InitializeConsoService;
 import com.ed.cgdd.derby.model.politiques;
+import com.ed.cgdd.derby.model.CalibParameters;
 import com.ed.cgdd.derby.usagesnonrt.BureauProcessService;
 import com.ed.cgdd.derby.usagesnonrt.CuissonAutreService;
 import com.ed.cgdd.derby.usagesnonrt.FroidAlimService;
@@ -323,27 +324,74 @@ public class ProcessServiceRunnable implements Runnable {
 				HashMap<String, ResultConsoUClim> resultConsoUClimMap = new HashMap<String, ResultConsoUClim>();
 				// Chargement du parc initial
 				List<Parc> parc = loadParcDatadas.getParamParcMapper(idAgregParc, pasdeTemps);
+				// selectionne param Recalage parc init TODO faire une methode
+				
+				BigDecimal calageParc = BigDecimal.ZERO;
+				if(idAgregParc.substring(0,2).equals("01")){
+					calageParc = CalibParameters.CalageBranche01;
+				} 
+				if(idAgregParc.substring(0,2).equals("02")){
+					calageParc = CalibParameters.CalageBranche02;
+				} 
+				if(idAgregParc.substring(0,2).equals("03")){
+					calageParc = CalibParameters.CalageBranche03;
+				} 
+				if(idAgregParc.substring(0,2).equals("04")){
+					calageParc = CalibParameters.CalageBranche04;
+				} 
+				if(idAgregParc.substring(0,2).equals("05")){
+					calageParc = CalibParameters.CalageBranche05;
+				} 
+				if(idAgregParc.substring(0,2).equals("06")){
+					calageParc = CalibParameters.CalageBranche06;
+				} 
+				if(idAgregParc.substring(0,2).equals("07")){
+					calageParc = CalibParameters.CalageBranche07;
+				} 
+				if(idAgregParc.substring(0,2).equals("08")){
+					calageParc = CalibParameters.CalageBranche08;
+				} 
+				
+				// Recalage du parc
+				for (Parc parcTemp : parc) {
+				parcTemp.setAnnee(0,parcTemp.getAnnee(0).multiply(calageParc,MathContext.DECIMAL32));
+				}
+				
+				
 				// rempli egalement resultConsoURtMap
 				HashMap<String, Parc> parcTotMap = parcService.sortDataParc(parc, resultConsoURtMap, pasdeTemps,
 						resultConsoUClimMap);
-				// Chargement des tables de besoins initiaux
-				ResultConso resultatsConso = loadInitConso(idAgregParc, pasdeTemps);
+				// Chargement des tables de besoins initiaux et recalage
+				ResultConso resultatsConso = loadInitConso(idAgregParc, pasdeTemps, calageParc);
+//				// Recalage Conso ini
+//				for(String key : resultatsConso.keySet()){
+//					for (Parc parcTemp : parc) {
+//						Parc parcTomodif = resultatsConso.getMap(key).get(parcTemp.getId().substring(0,14));
+//						LOG.debug("id {} usage {} consoi {}",parcTemp.getId().substring(0,14),key,resultatsConso.getMap(key).get(parcTemp.getId().substring(0,14))
+//								.getAnnee(0));
+//						parcTomodif.setAnnee(0,resultatsConso.getMap(key).get(parcTemp.getId().substring(0,14))
+//						.getAnnee(0).multiply(calageParc,MathContext.DECIMAL32));
+//						
+//						LOG.debug("id {} usage {} consof {}",parcTemp.getId().substring(0,14),key,resultatsConso.getMap(key).get(parcTemp.getId().substring(0,14))
+//								.getAnnee(0));
+//					}
+//				}
 				// Initialisation de l'ECS, rempli egalement
 				// resultConsoURtMap
 				ResultConsoRdt resultatsConsoEcs = InitializeEcs(idAgregParc, pasdeTemps, bibliRdtEcsMap,
-						resultConsoURtMap);
+						resultConsoURtMap,calageParc);
 				// Chargement des tables de besoins initiaux d'eclairage,
 				// ventilation , et rempli egalement resultConsoURtMap
-				ResultConsoRt resultatsConsoRt = loadInitConsoRt(idAgregParc, pasdeTemps, resultConsoURtMap);
+				ResultConsoRt resultatsConsoRt = loadInitConsoRt(idAgregParc, pasdeTemps, resultConsoURtMap, calageParc);
 				// Initialisation du chauffage
 				resultatsConsoRt = initializeChauffClim(resultConsoUClimMap, resultatsConsoRt, idAgregParc, pasdeTemps,
-						rdtCoutChauffMap, Usage.CHAUFFAGE.getLabel());
+						rdtCoutChauffMap, Usage.CHAUFFAGE.getLabel(), calageParc);
 				// Initialisation des consommations d'auxiliaires
 				resultatsConsoRt = initializeConsoService.initializeAuxChaud(resultatsConsoRt, auxChaud, pasdeTemps);
 				// Initialisation de la climatisation et rempli
 				// resultConsoUClimMap
 				resultatsConsoRt = initializeChauffClim(resultConsoUClimMap, resultatsConsoRt, idAgregParc, pasdeTemps,
-						rdtCoutClimMap, Usage.CLIMATISATION.getLabel());
+						rdtCoutClimMap, Usage.CLIMATISATION.getLabel(), calageParc);
 				// chargement des financements
 				List<Financement> ensembleFinancements = recupParamFinDAS.recupFinancement(
 						idAgregParc.substring(START_OCCUPANT, START_OCCUPANT + LENGTH_OCCUPANT),
@@ -381,15 +429,15 @@ public class ProcessServiceRunnable implements Runnable {
 				// HashMap<String,
 				// BigDecimal>();
 				//for (int annee = 2010; annee <= 2050; annee++) {
-			    for (int annee = 2010; annee <= 2021; annee++) {
+			    for (int annee = 2010; annee <= 2017; annee++) {
 //					long start2 = System.currentTimeMillis();
 			    	//BV prise en compte travaux embarques
 			    	if(politiques.checkTravEmb && annee == 2017){
-			    		//LOG.debug("taux avant trav emb{}",txRenovBati);
-			    		// travaux embarques on augmente le taux de renov tendancielle de 1.3%
+			    	//	LOG.debug("taux avant trav emb{}",txRenovBati);
+			        // travaux embarques on augmente le taux de renov tendancielle de 1.3%
 				
 			    	txRenovBati = txRenovBati + politiques.txRenovTravEmb;
-			    	//LOG.debug("taux avant trav emb = {} apres ={}",txRenovBatiCopy, txRenovBati);
+			    	//LOG.debug("taux apres ={}", txRenovBati);
 			    	}
 //					long end2 = System.currentTimeMillis();
 //					LOG.info("Travaux embarques : {}ms", end2 - start2);
@@ -747,31 +795,31 @@ public class ProcessServiceRunnable implements Runnable {
 		return bNeufsMap;
 	}
 
-	private ResultConso loadInitConso(String idAgregParc, int pasdeTemps) {
+	private ResultConso loadInitConso(String idAgregParc, int pasdeTemps, BigDecimal calageParc) {
 		ResultConso resultatsConso = new ResultConso();
 		resultatsConso.put(Usage.BUREAUTIQUE.getLabel(),
-				loadTableUsagesNonRTdas.loadMapResultBesoin("Bureautique_init", idAgregParc, pasdeTemps));
+				loadTableUsagesNonRTdas.loadMapResultBesoin("Bureautique_init", idAgregParc, pasdeTemps,calageParc));
 		resultatsConso.put(Usage.PROCESS.getLabel(),
-				loadTableUsagesNonRTdas.loadMapResultBesoin("Process_init", idAgregParc, pasdeTemps));
+				loadTableUsagesNonRTdas.loadMapResultBesoin("Process_init", idAgregParc, pasdeTemps,calageParc));
 		resultatsConso.put(Usage.AUTRES.getLabel(),
-				loadTableUsagesNonRTdas.loadMapResultBesoin("Autre_init", idAgregParc, pasdeTemps));
+				loadTableUsagesNonRTdas.loadMapResultBesoin("Autre_init", idAgregParc, pasdeTemps,calageParc));
 		resultatsConso.put(Usage.CUISSON.getLabel(),
-				loadTableUsagesNonRTdas.loadMapResultBesoin("Cuisson_init", idAgregParc, pasdeTemps));
+				loadTableUsagesNonRTdas.loadMapResultBesoin("Cuisson_init", idAgregParc, pasdeTemps,calageParc));
 		resultatsConso.put(Usage.FROID_ALIMENTAIRE.getLabel(),
-				loadTableUsagesNonRTdas.loadMapResultBesoin("Froid_alimentaire_init", idAgregParc, pasdeTemps));
+				loadTableUsagesNonRTdas.loadMapResultBesoin("Froid_alimentaire_init", idAgregParc, pasdeTemps,calageParc));
 
 		return resultatsConso;
 	}
 
 	private ResultConsoRt loadInitConsoRt(String idAgregParc, int pasdeTemps,
-			HashMap<String, ResultConsoURt> resultConsoURtMap) {
+			HashMap<String, ResultConsoURt> resultConsoURtMap, BigDecimal calageParc) {
 		ResultConsoRt resultatsConso = new ResultConsoRt();
 		resultatsConso.put(MapResultsKeys.ECLAIRAGE.getLabel(), loadTableRtdas.loadMapResultBesoinEclairage(
-				"Eclairage_init", idAgregParc, pasdeTemps, resultConsoURtMap));
+				"Eclairage_init", idAgregParc, pasdeTemps, resultConsoURtMap, calageParc));
 		HashMap<String, Conso> coutMap = new HashMap<String, Conso>();
 		resultatsConso.put(MapResultsKeys.COUT_ECLAIRAGE.getLabel(), coutMap);
 		resultatsConso.put(MapResultsKeys.VENTILATION.getLabel(),
-				loadTableRtdas.loadMapResultBesoinVentil("Ventilation_init", idAgregParc, pasdeTemps));
+				loadTableRtdas.loadMapResultBesoinVentil("Ventilation_init", idAgregParc, pasdeTemps, calageParc));
 		return resultatsConso;
 	}
 
@@ -1007,13 +1055,13 @@ public class ProcessServiceRunnable implements Runnable {
 
 	protected ResultConsoRt initializeChauffClim(HashMap<String, ResultConsoUClim> resultConsoUClimMap,
 			ResultConsoRt resultatsConsoRt, String idAgregParc, int pasdeTemps,
-			HashMap<String, ParamRdtCout> rdtCoutMap, String usage) {
+			HashMap<String, ParamRdtCout> rdtCoutMap, String usage, BigDecimal calageParc) {
 
 		if (usage.equals(Usage.CLIMATISATION.getLabel())) {
 			// Initialisation de la climatisation
 
 			resultatsConsoRt.put(MapResultsKeys.BESOIN_CLIM.getLabel(),
-					loadTableClimdas.loadMapResultBesoin("Climatisation_init", idAgregParc, pasdeTemps));
+					loadTableClimdas.loadMapResultBesoin("Climatisation_init", idAgregParc, pasdeTemps, calageParc));
 			resultatsConsoRt.put(MapResultsKeys.RDT_CLIM.getLabel(), initializeConsoService.initializeRdtClim(
 					rdtCoutMap, resultatsConsoRt.getMap("Besoins_clim"), pasdeTemps));
 			resultatsConsoRt.put(
@@ -1026,7 +1074,7 @@ public class ProcessServiceRunnable implements Runnable {
 		} else {
 			// Chargement des tables de chauffage
 			resultatsConsoRt.put(MapResultsKeys.BESOIN_CHAUFF.getLabel(),
-					loadTableClimdas.loadMapResultBesoin("Chauffage_init", idAgregParc, pasdeTemps));
+					loadTableClimdas.loadMapResultBesoin("Chauffage_init", idAgregParc, pasdeTemps, calageParc));
 			resultatsConsoRt.put(
 					MapResultsKeys.RDT_CHAUFF.getLabel(),
 					initializeConsoService.initializeRdtChauff(rdtCoutMap,
@@ -1041,10 +1089,11 @@ public class ProcessServiceRunnable implements Runnable {
 	}
 
 	private ResultConsoRdt InitializeEcs(String idAgregParc, int pasdeTemps,
-			HashMap<String, ParamRdtEcs> bibliRdtEcsMap, HashMap<String, ResultConsoURt> resultConsoURtMap) {
+			HashMap<String, ParamRdtEcs> bibliRdtEcsMap, HashMap<String, ResultConsoURt> resultConsoURtMap, 
+			BigDecimal calageParc) {
 		ResultConsoRdt resultatsConsoEcs = new ResultConsoRdt();
 		resultatsConsoEcs.put(MapResultsKeys.BESOIN_ECS.getLabel(),
-				loadTableRtdas.loadMapResultBesoin("ECS_init", idAgregParc, pasdeTemps));
+				loadTableRtdas.loadMapResultBesoin("ECS_init", idAgregParc, pasdeTemps, calageParc));
 		resultatsConsoEcs.put(
 				MapResultsKeys.RDT_ECS.getLabel(),
 				initializeConsoService.initializeRdtEcs(bibliRdtEcsMap,
