@@ -357,7 +357,6 @@ public class ProcessServiceRunnable implements Runnable {
 				parcTemp.setAnnee(0,parcTemp.getAnnee(0).multiply(calageParc,MathContext.DECIMAL32));
 				}
 				
-				
 				// rempli egalement resultConsoURtMap
 				HashMap<String, Parc> parcTotMap = parcService.sortDataParc(parc, resultConsoURtMap, pasdeTemps,
 						resultConsoUClimMap);
@@ -429,7 +428,7 @@ public class ProcessServiceRunnable implements Runnable {
 				// HashMap<String,
 				// BigDecimal>();
 				//for (int annee = 2010; annee <= 2050; annee++) {
-			    for (int annee = 2010; annee <= 2017; annee++) {
+			    for (int annee = 2010; annee <= 2050; annee++) {
 //					long start2 = System.currentTimeMillis();
 			    	//BV prise en compte travaux embarques
 			    	if(politiques.checkTravEmb && annee == 2017){
