@@ -94,6 +94,7 @@ FROM BESOIN_RT_RESULTATS cs
 GROUP BY b.USAGE, b.ANNEE, b.COD_ENERGIE) s
 on r.ANNEE = s.ANNEE AND r.USAGE = s.USAGE AND r.COD_ENERGIE = s.COD_ENERGIE
 
+
 -- Requete d'extraction des besoins et conso pour tous les usages par branche et par énergie
 SELECT r.COD_BRANCHE, r.ANNEE,r.USAGE,r.COD_ENERGIE, r.CONSO_TOT,s.BESOIN_TOT FROM 
 (SELECT a.COD_BRANCHE, a.ANNEE, a.USAGE, a.COD_ENERGIE,  sum(a.CONSOMMATION_EF) as CONSO_TOT FROM
@@ -110,5 +111,55 @@ FROM BESOIN_RT_RESULTATS cs
 ) b
 GROUP BY b.COD_BRANCHE,b.ANNEE, b.USAGE,  b.COD_ENERGIE) s
 on r.COD_BRANCHE= s.COD_BRANCHE AND r.ANNEE = s.ANNEE AND r.USAGE = s.USAGE AND r.COD_ENERGIE = s.COD_ENERGIE
+
+
+-- Requete d'extraction des conso pour tous les usages non rt par branche et par énergie
+SELECT r.COD_BRANCHE, r.ANNEE,r.USAGE,r.COD_ENERGIE, r.CONSO_TOT FROM 
+(SELECT a.COD_BRANCHE, a.ANNEE, a.USAGE, a.COD_ENERGIE,  sum(a.CONSOMMATION_EF) as CONSO_TOT FROM
+(SELECT  substr(ci.ID,1,2) as COD_BRANCHE, ci.ANNEE, ci.USAGE, ci.CONSOMMATION_EF,
+(case when ci.usage in ('Ventilation','Eclairage','Auxiliaires') then '02' else substr(ci.ID,length(ci.ID)-1,2) end) as COD_ENERGIE 
+FROM CONSO_NON_RT_RESULTATS ci
+) a  
+GROUP BY a.COD_BRANCHE, a.ANNEE, a.USAGE,  a.COD_ENERGIE) r
+
+
+
+-- Requete d'extraction des besoins et conso pour tous les usages par branche et par énergie et par période de construction
+SELECT r.COD_BRANCHE, r.ANNEE,r.COD_PERIODE_SIMPLE,r.USAGE,r.COD_ENERGIE, r.CONSO_TOT,s.BESOIN_TOT FROM 
+(SELECT a.COD_BRANCHE, a.ANNEE,a.COD_PERIODE_SIMPLE, a.USAGE, a.COD_ENERGIE,  sum(a.CONSOMMATION_EF) as CONSO_TOT FROM
+(SELECT  substr(ci.ID,1,2) as COD_BRANCHE, ci.ANNEE, ci.USAGE, ci.CONSOMMATION_EF,
+substr(ci.ID,11,2) as COD_PERIODE_SIMPLE,
+(case when ci.usage in ('Ventilation','Eclairage','Auxiliaires') then '02' else substr(ci.ID,length(ci.ID)-1,2) end) as COD_ENERGIE
+FROM CONSO_RT_RESULTATS ci
+) a  
+GROUP BY a.COD_BRANCHE, a.ANNEE,a.COD_PERIODE_SIMPLE, a.USAGE,  a.COD_ENERGIE) r
+JOIN 
+(SELECT  b.COD_BRANCHE, b.ANNEE,b.COD_PERIODE_SIMPLE, b.USAGE, b.COD_ENERGIE,sum(b.BESOIN) as BESOIN_TOT FROM
+(SELECT substr(cs.ID,1,2) as COD_BRANCHE,cs.ANNEE, cs.USAGE, cs.BESOIN,substr(cs.ID,11,2) as COD_PERIODE_SIMPLE,
+(case when cs.usage in ('Ventilation','Eclairage','Auxiliaires') then '02' else substr(cs.ID,length(cs.ID)-1,2) end) as COD_ENERGIE
+FROM BESOIN_RT_RESULTATS cs
+) b
+GROUP BY b.COD_BRANCHE,b.ANNEE,b.COD_PERIODE_SIMPLE, b.USAGE,  b.COD_ENERGIE) s
+on r.COD_BRANCHE= s.COD_BRANCHE AND r.ANNEE = s.ANNEE AND r.USAGE = s.USAGE AND r.COD_ENERGIE = s.COD_ENERGIE AND r.COD_PERIODE_SIMPLE = s.COD_PERIODE_SIMPLE
+
+
+-- Requete d'extraction des conso pour tous les usages non rt par branche et par énergie et par période de construction
+SELECT r.COD_BRANCHE, r.ANNEE, r.COD_PERIODE_SIMPLE, r.USAGE,r.COD_ENERGIE, r.CONSO_TOT FROM 
+(SELECT a.COD_BRANCHE, a.ANNEE, a.COD_PERIODE_SIMPLE, a.USAGE, a.COD_ENERGIE,  sum(a.CONSOMMATION_EF) as CONSO_TOT FROM
+(SELECT  substr(ci.ID,1,2) as COD_BRANCHE, ci.ANNEE, ci.USAGE, ci.CONSOMMATION_EF,
+substr(ci.ID,11,2) as COD_PERIODE_SIMPLE,
+(case when ci.usage in ('Ventilation','Eclairage','Auxiliaires') then '02' else substr(ci.ID,length(ci.ID)-1,2) end) as COD_ENERGIE 
+FROM CONSO_NON_RT_RESULTATS ci
+) a  
+GROUP BY a.COD_BRANCHE, a.ANNEE,a.COD_PERIODE_SIMPLE, a.USAGE,  a.COD_ENERGIE) r
+
+-- Requete d'extraction des surfaces climatisées par branche
+SELECT r.COD_BRANCHE, r.ANNEE, r.COD_PERIODE_SIMPLE,r.COD_SYSTEME_FROID, r.SURFACES_TOT FROM 
+(SELECT a.COD_BRANCHE, a.ANNEE, a.COD_PERIODE_SIMPLE,a.COD_SYSTEME_FROID, sum(a.SURFACES)  as SURFACES_TOT FROM
+(SELECT  substr(ci.ID,1,2) as COD_BRANCHE, ci.ANNEE,substr(ci.ID,15,2) as COD_SYSTEME_FROID, ci.SURFACES, 
+substr(ci.ID,11,2) as COD_PERIODE_SIMPLE
+FROM PARC_RESULTATS ci
+) a  
+GROUP BY a.COD_BRANCHE, a.ANNEE,a.COD_PERIODE_SIMPLE, a.COD_SYSTEME_FROID) r
 
 

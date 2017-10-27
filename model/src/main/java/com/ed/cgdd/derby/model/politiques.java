@@ -43,7 +43,7 @@ public class  politiques {
 	public final static BigDecimal surcoutRT = new BigDecimal("15") ;
 		
 	// CEE prix annuels
-	public final static boolean  checkCEEannuels = false;
+	public final static boolean  checkCEEannuels = true;
 	public final static BigDecimal pCEE2015 = new BigDecimal("0.053");
 	public final static BigDecimal pCEE2016 = new BigDecimal("0.090");
 	public final static BigDecimal pCEE2017 = new BigDecimal("0.100");
