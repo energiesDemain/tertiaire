@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import com.ed.cgdd.derby.model.financeObjects.*;
 import com.ed.cgdd.derby.model.parc.*;
+import com.ed.cgdd.derby.model.CalibParameters;
 import com.ed.cgdd.derby.model.politiques;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,6 +56,7 @@ import com.ed.cgdd.derby.model.progression.Progression;
 import com.ed.cgdd.derby.model.progression.ProgressionStep;
 import com.ed.cgdd.derby.parc.InsertParcDAS;
 import com.ed.cgdd.derby.parc.LoadParcDataDAS;
+import com.ed.cgdd.derby.parc.ParamCalageEner;
 import com.ed.cgdd.derby.parc.ParcService;
 import com.ed.cgdd.derby.parc.TruncateParcTableDAS;
 import com.ed.cgdd.derby.process.InitializeConsoService;
@@ -562,6 +564,14 @@ public class ProcessServiceImpl implements ProcessService {
 		EvolBesoinMap  evolBesoinMap = new EvolBesoinMap();
 	    setEvolBesoin(evolBesoinMap,idAgregListMap); 
 
+	  
+
+	    // Remplissage de la Map de calage du parc par energie
+	    HashMap<String, ParamCalageEner> calageEner = putCalageEner();
+	 // Remplissage de la Map de calage du parc par branche
+	    HashMap<String, BigDecimal> calageBranche = putCalageBranche();
+	   
+	    
 		progression.setStep(ProgressionStep.CALCUL);
 		progression.setParcSize(idAgregListMap.size());
 
@@ -576,7 +586,7 @@ public class ProcessServiceImpl implements ProcessService {
 					dvGesteMap, auxChaud, auxFroid, gainsEclairageMap, gainsVentilationMap, coutsEclVentilMap,
 					coutIntangible, coutIntangibleBati, evolCoutBati, evolCoutTechno, periodeMap, coutEnergieMap,
 					emissionsMap, reglementations, idAgregParc, progression, tauxInteretMap, surfMoyMap, evolVVMap,
-					repartStatutOccupMap, maintenanceMap, elasticiteMap, coutIntangibleNeuf, evolBesoinMap);
+					repartStatutOccupMap, maintenanceMap, elasticiteMap, coutIntangibleNeuf, evolBesoinMap, calageEner, calageBranche);
 			runnable.initServices(parcService, loadParcDatadas, insertParcdas, bureauProcessService,
 					cuissonAutreService, froidAlimService, insertUsagesNonRTdas, loadTableUsagesNonRTdas, ecsService,
 					climatisationService, chauffageService, eclairageService, insertUsagesRTdas, loadTableRtdas,
@@ -620,6 +630,49 @@ public class ProcessServiceImpl implements ProcessService {
 
 	}
 
+private HashMap<String, ParamCalageEner> putCalageEner() {
+	 
+	HashMap<String, ParamCalageEner> CalageEner = new HashMap<String, ParamCalageEner>();
+	ParamCalageEner paramCalageElec = new ParamCalageEner();
+	ParamCalageEner paramCalageGaz = new ParamCalageEner();
+	ParamCalageEner paramCalageFioul = new ParamCalageEner();
+	ParamCalageEner paramCalageUrbain = new ParamCalageEner();
+	ParamCalageEner paramCalageAutres = new ParamCalageEner();
+
+	paramCalageElec.setFacteurCalageConso(CalibParameters.CalageConsoChauffElec);
+	paramCalageGaz.setFacteurCalageConso(CalibParameters.CalageConsoChauffGaz);
+	paramCalageFioul.setFacteurCalageConso(CalibParameters.CalageConsoChauffFioul);
+	paramCalageUrbain.setFacteurCalageConso(CalibParameters.CalageConsoChauffUrbain);
+	paramCalageAutres.setFacteurCalageConso(CalibParameters.CalageConsoChauffAutres);
+	
+	paramCalageElec.setFacteurCalageParc(CalibParameters.CalageParcChauffElec);
+	paramCalageGaz.setFacteurCalageParc(CalibParameters.CalageParcChauffGaz);
+	paramCalageFioul.setFacteurCalageParc(CalibParameters.CalageParcChauffFioul);
+	paramCalageUrbain.setFacteurCalageParc(CalibParameters.CalageParcChauffUrbain);
+	paramCalageAutres.setFacteurCalageParc(CalibParameters.CalageParcChauffAutres);
+	
+	
+	CalageEner.put(Energies.ELECTRICITE.getCode(),paramCalageElec);
+	CalageEner.put(Energies.GAZ.getCode(),paramCalageGaz);
+	CalageEner.put(Energies.FIOUL.getCode(),paramCalageFioul);
+	CalageEner.put(Energies.URBAIN.getCode(),paramCalageUrbain);
+	CalageEner.put(Energies.AUTRES.getCode(),paramCalageAutres);
+	return CalageEner;		
+	}
+
+private HashMap<String, BigDecimal> putCalageBranche() {
+	HashMap<String, BigDecimal> CalageBranche = new HashMap<String, BigDecimal>();    
+	CalageBranche.put(Branche.BUREAUX_ADMINISTRATION.getCode(),CalibParameters.CalageBranche01);
+	CalageBranche.put(Branche.CAFE_HOSTEL_RESTAURANT.getCode(),CalibParameters.CalageBranche02);
+	CalageBranche.put(Branche.COMMERCE.getCode(),CalibParameters.CalageBranche03);
+	CalageBranche.put(Branche.ENSEIGNEMENT_RECHERCHE.getCode(),CalibParameters.CalageBranche04);
+	CalageBranche.put(Branche.HABITAT_COMMUNAUTAIRE.getCode(),CalibParameters.CalageBranche05);
+	CalageBranche.put(Branche.SANTE_ACTION_SOCIALE.getCode(),CalibParameters.CalageBranche06);
+	CalageBranche.put(Branche.SPORT_LOISIR_CULTURE.getCode(),CalibParameters.CalageBranche07);
+	CalageBranche.put(Branche.TRANSPORT.getCode(),CalibParameters.CalageBranche08);
+	return CalageBranche;		
+	}
+
 private EvolBesoinMap setEvolBesoin(EvolBesoinMap evolBesoinMap, HashMap<String, List<String>> idAgregListMap) {
 		
 		for (String idAgregParc : idAgregListMap.keySet()) {
@@ -632,12 +685,35 @@ private EvolBesoinMap setEvolBesoin(EvolBesoinMap evolBesoinMap, HashMap<String,
 						BigDecimal evolution = BigDecimal.ZERO; 
 			
 						if(politiques.checkAdaptationCC ){
+							BigDecimal tcamBesoinChauff = BigDecimal.ZERO;
+							BigDecimal tcamBesoinClim = BigDecimal.ZERO;
+							
+							if(annee > 2015 && annee < 2021){
+							  tcamBesoinChauff = politiques.tcamBesoinChauff20152020;
+							  tcamBesoinClim = politiques.tcamBesoinClim20152020;
+							}
+							if(annee > 2020 && annee < 2026){
+								  tcamBesoinChauff = politiques.tcamBesoinChauff20202025;
+								  tcamBesoinClim = politiques.tcamBesoinClim20202025;
+							}
+							if(annee > 2025 && annee < 2031){
+								  tcamBesoinChauff = politiques.tcamBesoinChauff20252030;
+								  tcamBesoinClim = politiques.tcamBesoinClim20252030;
+							}
+							if(annee > 2030 && annee <= 2050){
+								  tcamBesoinChauff = politiques.tcamBesoinChauff20302050;
+								  tcamBesoinClim = politiques.tcamBesoinClim20302050;
+							}
+							
+							
 							if(usage.equals(Usage.CHAUFFAGE)){	
-								evolution = evolution.add(politiques.tcamBesoinChauff, MathContext.DECIMAL32);
+								evolution = evolution.add(tcamBesoinChauff, MathContext.DECIMAL32);
 							}
+							
 							if(usage.equals(Usage.CLIMATISATION)){				
-								evolution =evolution.add(politiques.tcamBesoinClim, MathContext.DECIMAL32);
+								evolution =evolution.add(tcamBesoinClim, MathContext.DECIMAL32);
 							}
+							
 						}
 						if(annee > 2016 && annee < 2020 && politiques.checkIFC && usage.equals(Usage.CHAUFFAGE)){
 								evolution =  evolution.add(politiques.GainBU_IFC_annuel, MathContext.DECIMAL32);

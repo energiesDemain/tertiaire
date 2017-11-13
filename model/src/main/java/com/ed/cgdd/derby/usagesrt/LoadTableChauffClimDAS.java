@@ -8,6 +8,7 @@ import com.ed.cgdd.derby.model.calcconso.ParamRdtCout;
 import com.ed.cgdd.derby.model.calcconso.ParamTxClimExistant;
 import com.ed.cgdd.derby.model.calcconso.ParamTxClimNeuf;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
+import com.ed.cgdd.derby.parc.ParamCalageEner;
 
 public interface LoadTableChauffClimDAS {
 
@@ -15,10 +16,11 @@ public interface LoadTableChauffClimDAS {
 	 * loadData
 	 */
 
-	HashMap<String, Conso> loadMapResultBesoin(String tableName, final String idAgregParc, final int pasdeTemps,  BigDecimal calageParc);
+	HashMap<String, Conso> loadMapResultBesoin(String tableName, final String idAgregParc, final int pasdeTemps,  
+			BigDecimal calageParc, HashMap<String, ParamCalageEner> calageEner);
 
 	HashMap<String, Conso> loadMapResultBesoinChauff(String tableName, final String idAgregParc, 
-			final int pasdeTemps,  BigDecimal calageParc);
+			final int pasdeTemps,  BigDecimal calageParc,HashMap<String, ParamCalageEner> calageEner);
 
 	HashMap<String, ParamRdtCout> loadTableRdtCout(String tableName);
 

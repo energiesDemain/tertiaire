@@ -43,20 +43,38 @@ public class  politiques {
 	public final static BigDecimal surcoutRT = new BigDecimal("15") ;
 		
 	// CEE prix annuels
+	
 	public final static boolean  checkCEEannuels = true;
 	public final static BigDecimal pCEE2015 = new BigDecimal("0.053");
 	public final static BigDecimal pCEE2016 = new BigDecimal("0.090");
 	public final static BigDecimal pCEE2017 = new BigDecimal("0.100");
-	public final static BigDecimal pCEE2018 = new BigDecimal("2.000");
-	public final static BigDecimal pCEE2019 = new BigDecimal("2.000");
-	public final static BigDecimal pCEE2020 = new BigDecimal("2.000");
+	public final static BigDecimal pCEE2018 = new BigDecimal("0.300");
+	public final static BigDecimal pCEE2019 = new BigDecimal("0.300");
+	public final static BigDecimal pCEE2020 = new BigDecimal("0.300");
+	
+//	public final static BigDecimal pCEE2015 = new BigDecimal("0.053");
+//	public final static BigDecimal pCEE2016 = new BigDecimal("0.090");
+//	public final static BigDecimal pCEE2017 = new BigDecimal("0.100");
+//	public final static BigDecimal pCEE2018 = new BigDecimal("2.000");
+//	public final static BigDecimal pCEE2019 = new BigDecimal("2.000");
+//	public final static BigDecimal pCEE2020 = new BigDecimal("2.000");
+	
 	// TODO faire une hasmap annee, pcee;
 	public HashMap<Integer, BigDecimal> pCEE = new HashMap<Integer, BigDecimal>();
 
-	// Adaptation CC
+	// Adaptation CC TODO faire une Hasmap des tcam des besoins
 	public final static boolean  checkAdaptationCC = false;
-	public final static BigDecimal tcamBesoinChauff = new BigDecimal("-0.01");
-	public final static BigDecimal tcamBesoinClim = new BigDecimal("0.01");
+	// taux de croissance annuels moyens des besoin de chauffage par periode
+	public final static BigDecimal tcamBesoinChauff20152020 = new BigDecimal("-0.001068949531");
+	public final static BigDecimal tcamBesoinChauff20202025  = new BigDecimal("-0.001074693510");
+	public final static BigDecimal tcamBesoinChauff20252030  = new BigDecimal("-0.0010804995531");
+	public final static BigDecimal tcamBesoinChauff20302050  = new BigDecimal("-0.001914505186");
+
+	// taux de croissance annuels moyens des besoin de climatisation par periode
+	public final static BigDecimal tcamBesoinClim20152020 = new BigDecimal("0.007874988518");
+	public final static BigDecimal tcamBesoinClim20202025  = new BigDecimal("0.007576624052");
+	public final static BigDecimal tcamBesoinClim20252030  = new BigDecimal("0.007300045195");
+	public final static BigDecimal tcamBesoinClim20302050  = new BigDecimal("0.006304199098");
 	
 	
 }

@@ -187,7 +187,7 @@ public class FinanceServiceImpl implements FinanceService {
 		HashMap<String, Conso> auxiliairesMap = resultConsoRt.getMap(MapResultsKeys.AUXILIAIRES.getLabel());
 
 
-		 LOG.debug("# parc : {}", parcTotMap.keySet().size());
+		// LOG.debug("# parc : {}", parcTotMap.keySet().size());
 		// TODO implementer calcul taux renov en dehors de la boucle des
 		// segments use txRenovBati
 		BigDecimal[] txRenovBatiVentile = ventileTxRenovBat(dvGesteMap, annee, txRenovBati, reglementations);

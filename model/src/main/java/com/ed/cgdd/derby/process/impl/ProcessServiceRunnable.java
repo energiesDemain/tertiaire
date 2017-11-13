@@ -46,6 +46,7 @@ import com.ed.cgdd.derby.model.calcconso.ResultConsoURt;
 import com.ed.cgdd.derby.model.progression.Progression;
 import com.ed.cgdd.derby.parc.InsertParcDAS;
 import com.ed.cgdd.derby.parc.LoadParcDataDAS;
+import com.ed.cgdd.derby.parc.ParamCalageEner;
 import com.ed.cgdd.derby.parc.ParcService;
 import com.ed.cgdd.derby.process.InitializeConsoService;
 import com.ed.cgdd.derby.model.politiques;
@@ -169,6 +170,8 @@ public class ProcessServiceRunnable implements Runnable {
 	ElasticiteMap elasticiteMap;
 	HashMap<String,CalibCoutGlobal> coutIntangibleNeuf;
 	EvolBesoinMap evolBesoinMap;
+	HashMap<String, ParamCalageEner> calageEner;  
+	HashMap<String, BigDecimal> calageBranche;
 	
 	public ProcessServiceRunnable(int pasdeTempsInit, ParamCintObjects paramCintObject, float txRenovBati,
 								  HashMap<String, ParamParcArray> entreesMap, HashMap<String, ParamParcArray> sortiesMap,
@@ -195,7 +198,8 @@ public class ProcessServiceRunnable implements Runnable {
 								  HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, SurfMoy> surfMoyMap,
 								  HashMap<String, EvolValeurVerte> evolVVMap, HashMap<String, RepartStatutOccup> repartStatutOccupMap,
 								  HashMap<String, Maintenance> maintenanceMap, ElasticiteMap elasticiteMap, HashMap<String,CalibCoutGlobal> coutIntangibleNeuf, 
-								  EvolBesoinMap evolBesoinMap) {
+								  EvolBesoinMap evolBesoinMap,HashMap<String, ParamCalageEner> calageEner,  
+								  HashMap<String, BigDecimal> calageBranche) {
 		this.pasdeTempsInit = pasdeTempsInit;
 		this.paramCintObject = paramCintObject;
 		this.txRenovBati = txRenovBati;
@@ -250,6 +254,8 @@ public class ProcessServiceRunnable implements Runnable {
 		this.elasticiteMap = elasticiteMap;
 		this.coutIntangibleNeuf = coutIntangibleNeuf;
 		this.evolBesoinMap = evolBesoinMap;
+		this.calageEner = calageEner;
+		this.calageBranche = calageBranche;
 	}
 
 	public void initServices(ParcService parcService, LoadParcDataDAS loadParcDatadas, InsertParcDAS insertParcdas,
@@ -324,37 +330,16 @@ public class ProcessServiceRunnable implements Runnable {
 				HashMap<String, ResultConsoUClim> resultConsoUClimMap = new HashMap<String, ResultConsoUClim>();
 				// Chargement du parc initial
 				List<Parc> parc = loadParcDatadas.getParamParcMapper(idAgregParc, pasdeTemps);
-				// selectionne param Recalage parc init TODO faire une methode
+				// selectionne param Recalage parc init
 				
 				BigDecimal calageParc = BigDecimal.ZERO;
-				if(idAgregParc.substring(0,2).equals("01")){
-					calageParc = CalibParameters.CalageBranche01;
-				} 
-				if(idAgregParc.substring(0,2).equals("02")){
-					calageParc = CalibParameters.CalageBranche02;
-				} 
-				if(idAgregParc.substring(0,2).equals("03")){
-					calageParc = CalibParameters.CalageBranche03;
-				} 
-				if(idAgregParc.substring(0,2).equals("04")){
-					calageParc = CalibParameters.CalageBranche04;
-				} 
-				if(idAgregParc.substring(0,2).equals("05")){
-					calageParc = CalibParameters.CalageBranche05;
-				} 
-				if(idAgregParc.substring(0,2).equals("06")){
-					calageParc = CalibParameters.CalageBranche06;
-				} 
-				if(idAgregParc.substring(0,2).equals("07")){
-					calageParc = CalibParameters.CalageBranche07;
-				} 
-				if(idAgregParc.substring(0,2).equals("08")){
-					calageParc = CalibParameters.CalageBranche08;
-				} 
 				
-				// Recalage du parc
+				calageParc = calageBranche.get(idAgregParc.substring(0,2));
+				
+				// Recalage du parc par branche
 				for (Parc parcTemp : parc) {
-				parcTemp.setAnnee(0,parcTemp.getAnnee(0).multiply(calageParc,MathContext.DECIMAL32));
+				parcTemp.setAnnee(0,parcTemp.getAnnee(0).multiply(calageParc,MathContext.DECIMAL32)
+						.multiply(calageEner.get(parcTemp.getIdenergchauff()).getFacteurCalageParc(),MathContext.DECIMAL32));
 				}
 				
 				// rempli egalement resultConsoURtMap
@@ -362,19 +347,7 @@ public class ProcessServiceRunnable implements Runnable {
 						resultConsoUClimMap);
 				// Chargement des tables de besoins initiaux et recalage
 				ResultConso resultatsConso = loadInitConso(idAgregParc, pasdeTemps, calageParc);
-//				// Recalage Conso ini
-//				for(String key : resultatsConso.keySet()){
-//					for (Parc parcTemp : parc) {
-//						Parc parcTomodif = resultatsConso.getMap(key).get(parcTemp.getId().substring(0,14));
-//						LOG.debug("id {} usage {} consoi {}",parcTemp.getId().substring(0,14),key,resultatsConso.getMap(key).get(parcTemp.getId().substring(0,14))
-//								.getAnnee(0));
-//						parcTomodif.setAnnee(0,resultatsConso.getMap(key).get(parcTemp.getId().substring(0,14))
-//						.getAnnee(0).multiply(calageParc,MathContext.DECIMAL32));
-//						
-//						LOG.debug("id {} usage {} consof {}",parcTemp.getId().substring(0,14),key,resultatsConso.getMap(key).get(parcTemp.getId().substring(0,14))
-//								.getAnnee(0));
-//					}
-//				}
+
 				// Initialisation de l'ECS, rempli egalement
 				// resultConsoURtMap
 				ResultConsoRdt resultatsConsoEcs = InitializeEcs(idAgregParc, pasdeTemps, bibliRdtEcsMap,
@@ -384,13 +357,13 @@ public class ProcessServiceRunnable implements Runnable {
 				ResultConsoRt resultatsConsoRt = loadInitConsoRt(idAgregParc, pasdeTemps, resultConsoURtMap, calageParc);
 				// Initialisation du chauffage
 				resultatsConsoRt = initializeChauffClim(resultConsoUClimMap, resultatsConsoRt, idAgregParc, pasdeTemps,
-						rdtCoutChauffMap, Usage.CHAUFFAGE.getLabel(), calageParc);
+						rdtCoutChauffMap, Usage.CHAUFFAGE.getLabel(), calageParc,  calageEner);
 				// Initialisation des consommations d'auxiliaires
 				resultatsConsoRt = initializeConsoService.initializeAuxChaud(resultatsConsoRt, auxChaud, pasdeTemps);
 				// Initialisation de la climatisation et rempli
 				// resultConsoUClimMap
 				resultatsConsoRt = initializeChauffClim(resultConsoUClimMap, resultatsConsoRt, idAgregParc, pasdeTemps,
-						rdtCoutClimMap, Usage.CLIMATISATION.getLabel(), calageParc);
+						rdtCoutClimMap, Usage.CLIMATISATION.getLabel(), calageParc, calageEner);
 				// chargement des financements
 				List<Financement> ensembleFinancements = recupParamFinDAS.recupFinancement(
 						idAgregParc.substring(START_OCCUPANT, START_OCCUPANT + LENGTH_OCCUPANT),
@@ -434,7 +407,6 @@ public class ProcessServiceRunnable implements Runnable {
 			    	if(politiques.checkTravEmb && annee == 2017){
 			    	//	LOG.debug("taux avant trav emb{}",txRenovBati);
 			        // travaux embarques on augmente le taux de renov tendancielle de 1.3%
-				
 			    	txRenovBati = txRenovBati + politiques.txRenovTravEmb;
 			    	//LOG.debug("taux apres ={}", txRenovBati);
 			    	}
@@ -450,12 +422,14 @@ public class ProcessServiceRunnable implements Runnable {
 					
 					CEE subCEE = new CEE();
 					
-					// Ajout temporaire test CEE annuels
+					// Ajout des CEE annuels
 					if(politiques.checkCEEannuels){
 						subCEE = getCEEannuel(subventions, annee);
 					} else {
 						subCEE = getCEE(subventions, annee);
 					}
+					
+					
 					
 					int anneeNTab = calcBoucle(annee, pasdeTemps);
 
@@ -465,22 +439,7 @@ public class ProcessServiceRunnable implements Runnable {
 
 					// On charge la bonne map des besoins neufs a utiliser en fonction de l'occupant et de l'annee
 					HashMap<String, ParamBesoinsNeufs> bNeufsMap = getBNeufMapToUse(annee);
-
-//					// BV test si les modifs de besoins sont pris en compte
-//				
-//					HashMap<String, Conso> besoinIniMap = 
-//							resultatsConsoRt.getMap(MapResultsKeys.BESOIN_CHAUFF.getLabel());
-//					for (String idParc : parcTotMap.keySet()) {
-//						
-//						if(idParc.substring(0,18).equals("030766050701100102")){
-//							Parc parc2 = parcTotMap.get(idParc);
-//							Conso besoinIni = besoinIniMap.get(idParc);
-//							BigDecimal BU = besoinIni.getAnnee(anneeNTab - 1).divide(parc2.getAnnee(anneeNTab - 1),
-//									MathContext.DECIMAL32);
-//						LOG.debug("id {} BU {}",idParc,BU);
-//						}
-//					}
-						
+		
 					// Calcul des parts de marche dans les batiments neufs
 					//long startMarcheNeuf = System.currentTimeMillis();
 					HashMap<String, BigDecimal> partsMarchesNeuf = createNeufService.pmChauffNeuf(bNeufsMap,
@@ -504,7 +463,10 @@ public class ProcessServiceRunnable implements Runnable {
 
 // 					// calcul des parts de marche dans les batiments existants
 
-
+//					LOG.debug("annee {} evol {}", annee, evolBesoinMap.getEvolBesoin()
+//					.get(idAgregParc.substring(START_ID_BRANCHE,LENGTH_ID_BRANCHE)+Usage.CHAUFFAGE+annee)
+//					.getEvolution());
+					
 					//long startPM = System.currentTimeMillis();
 					HashMap<String, PartMarcheRenov> partMarcheMap = financeService.renovationSegmentGlobal(
 							decretMemory, resultConsoUClimMap, resultConsoURtMap, listFin, subCEE, dvChauffMap,
@@ -1054,13 +1016,14 @@ public class ProcessServiceRunnable implements Runnable {
 
 	protected ResultConsoRt initializeChauffClim(HashMap<String, ResultConsoUClim> resultConsoUClimMap,
 			ResultConsoRt resultatsConsoRt, String idAgregParc, int pasdeTemps,
-			HashMap<String, ParamRdtCout> rdtCoutMap, String usage, BigDecimal calageParc) {
+			HashMap<String, ParamRdtCout> rdtCoutMap, String usage, BigDecimal calageParc, 
+			HashMap<String, ParamCalageEner> calageEner) {
 
 		if (usage.equals(Usage.CLIMATISATION.getLabel())) {
 			// Initialisation de la climatisation
-
+			HashMap<String, ParamCalageEner> calageEnerClim = new HashMap<String, ParamCalageEner>();
 			resultatsConsoRt.put(MapResultsKeys.BESOIN_CLIM.getLabel(),
-					loadTableClimdas.loadMapResultBesoin("Climatisation_init", idAgregParc, pasdeTemps, calageParc));
+					loadTableClimdas.loadMapResultBesoin("Climatisation_init", idAgregParc, pasdeTemps, calageParc, calageEnerClim));
 			resultatsConsoRt.put(MapResultsKeys.RDT_CLIM.getLabel(), initializeConsoService.initializeRdtClim(
 					rdtCoutMap, resultatsConsoRt.getMap("Besoins_clim"), pasdeTemps));
 			resultatsConsoRt.put(
@@ -1073,7 +1036,7 @@ public class ProcessServiceRunnable implements Runnable {
 		} else {
 			// Chargement des tables de chauffage
 			resultatsConsoRt.put(MapResultsKeys.BESOIN_CHAUFF.getLabel(),
-					loadTableClimdas.loadMapResultBesoin("Chauffage_init", idAgregParc, pasdeTemps, calageParc));
+					loadTableClimdas.loadMapResultBesoin("Chauffage_init", idAgregParc, pasdeTemps, calageParc, calageEner));
 			resultatsConsoRt.put(
 					MapResultsKeys.RDT_CHAUFF.getLabel(),
 					initializeConsoService.initializeRdtChauff(rdtCoutMap,

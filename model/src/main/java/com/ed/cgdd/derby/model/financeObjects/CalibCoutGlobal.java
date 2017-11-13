@@ -8,7 +8,7 @@ public class CalibCoutGlobal {
 
 	private BigDecimal CInt;
 	private BigDecimal CoutVariable;
-
+	
 	public BigDecimal getCInt() {
 		return CInt;
 	}

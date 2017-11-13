@@ -23,6 +23,7 @@ import com.ed.cgdd.derby.model.calcconso.ParamTxClimExistant;
 import com.ed.cgdd.derby.model.calcconso.ParamTxClimNeuf;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
+import com.ed.cgdd.derby.parc.ParamCalageEner;
 import com.ed.cgdd.derby.usagesrt.LoadTableChauffClimDAS;
 
 public class LoadTableChauffClimDASImpl extends BddUsagesRTDAS implements LoadTableChauffClimDAS {
@@ -163,10 +164,10 @@ public class LoadTableChauffClimDASImpl extends BddUsagesRTDAS implements LoadTa
 	// Renvoie les champs des tables Derby de besoins initiaux de climatisation
 	// sous forme de HashMap
 	public HashMap<String, Conso> loadMapResultBesoin(String tableName, final String idAgregParc, 
-			final int pasdeTemps,  BigDecimal calageParc) {
+			final int pasdeTemps,  BigDecimal calageParc, HashMap<String, ParamCalageEner> calageEner) {
 
 		HashMap<String, Conso> usageMap = new HashMap<String, Conso>();
-		List<Conso> loadParc = getTableMap(tableName, idAgregParc, pasdeTemps, calageParc);
+		List<Conso> loadParc = getTableMap(tableName, idAgregParc, pasdeTemps, calageParc, calageEner);
 		for (Conso parc : loadParc) {
 			usageMap.put(
 					parc.getId() + parc.getAnneeRenovSys() + parc.getTypeRenovSys() + parc.getAnneeRenov()
@@ -179,10 +180,10 @@ public class LoadTableChauffClimDASImpl extends BddUsagesRTDAS implements LoadTa
 	// Renvoie les champs des tables Derby de besoins initiaux de chauffage
 	// sous forme de HashMap
 	public HashMap<String, Conso> loadMapResultBesoinChauff(String tableName, final String idAgregParc,
-			final int pasdeTemps,  BigDecimal calageParc) {
+			final int pasdeTemps,  BigDecimal calageParc, HashMap<String, ParamCalageEner> calageEner) {
 
 		HashMap<String, Conso> usageMap = new HashMap<String, Conso>();
-		List<Conso> loadParc = getTableMapChauff(tableName, idAgregParc, pasdeTemps,  calageParc);
+		List<Conso> loadParc = getTableMapChauff(tableName, idAgregParc, pasdeTemps,  calageParc, calageEner);
 		for (Conso parc : loadParc) {
 			usageMap.put(
 					parc.getId() + parc.getAnneeRenov() + parc.getTypeRenovBat() + parc.getAnneeRenovSys()
@@ -360,7 +361,8 @@ public class LoadTableChauffClimDASImpl extends BddUsagesRTDAS implements LoadTa
 		});
 	}
 
-	protected List<Conso> getTableMap(String tableName, final String idAgregParc, final int pasdeTemps, BigDecimal calageParc) {
+	protected List<Conso> getTableMap(String tableName, final String idAgregParc, final int pasdeTemps, BigDecimal calageParc, 
+			HashMap<String, ParamCalageEner> calageEner) {
 
 		// Charge les tables de consommations initiales pour les usages ne
 		// faisant pas l'objet de financements specifiques
@@ -383,12 +385,25 @@ public class LoadTableChauffClimDASImpl extends BddUsagesRTDAS implements LoadTa
 				for (int i = 1; i <= columncount; i++) {
 
 					parc.setId(rs.getString("ID"));
+					
 					parc.setAnneeRenov(INIT_STATE);
 					parc.setTypeRenovBat(TypeRenovBati.ETAT_INIT);
 					parc.setAnneeRenovSys(INIT_STATE);
 					parc.setTypeRenovSys(TypeRenovSysteme.ETAT_INIT);
-					parc.setAnnee(0, rs.getBigDecimal("BESOIN").multiply(calageParc,MathContext.DECIMAL32));
-
+					
+					// Ajout calage energies
+					BigDecimal calageEnertmp = BigDecimal.ONE;
+					// On recale seulement les besoins de chauffage (ID = longueur 18) pas la clim
+					if (parc.getId().length() == 18){
+					calageEnertmp = calageEner.get(parc.getId().substring(16,18)).getFacteurCalageParc()
+							.multiply(calageEner.get(parc.getId().substring(16,18)).getFacteurCalageConso(),MathContext.DECIMAL32);
+					} else {
+				    calageEnertmp = BigDecimal.ONE;	
+					}
+					
+					parc.setAnnee(0, rs.getBigDecimal("BESOIN").multiply(calageParc,MathContext.DECIMAL32)
+							.multiply(calageEnertmp,MathContext.DECIMAL32));
+					
 					for (int j = 1; j <= pasdeTemps; j++) {
 
 						parc.setAnnee(j, BigDecimal.ZERO);
@@ -402,7 +417,8 @@ public class LoadTableChauffClimDASImpl extends BddUsagesRTDAS implements LoadTa
 		});
 	}
 
-	protected List<Conso> getTableMapChauff(String tableName, final String idAgregParc, final int pasdeTemps,  BigDecimal calageParc) {
+	protected List<Conso> getTableMapChauff(String tableName, final String idAgregParc, final int pasdeTemps,  
+			BigDecimal calageParc, HashMap<String, ParamCalageEner> calageEner) {
 
 		// Charge les tables de consommations initiales pour les usages ne
 		// faisant pas l'objet de financements specifiques
@@ -429,7 +445,19 @@ public class LoadTableChauffClimDASImpl extends BddUsagesRTDAS implements LoadTa
 					parc.setTypeRenovBat(TypeRenovBati.ETAT_INIT);
 					parc.setAnneeRenovSys(INIT_STATE);
 					parc.setTypeRenovSys(TypeRenovSysteme.ETAT_INIT);
-					parc.setAnnee(0, rs.getBigDecimal("BESOIN").multiply(calageParc,MathContext.DECIMAL32));
+					
+					// Ajout calage energies
+					BigDecimal calageEnertmp = BigDecimal.ONE;
+					// On recale seulement les besoins de chauffage (ID = longueur 18) pas la clim
+					if (parc.getId().length() == 18){
+					calageEnertmp = calageEner.get(parc.getId().substring(16,18)).getFacteurCalageParc()
+							.multiply(calageEner.get(parc.getId().substring(16,18)).getFacteurCalageConso(),MathContext.DECIMAL32);
+					} else {
+				    calageEnertmp = BigDecimal.ONE;	
+					}
+					
+					parc.setAnnee(0, rs.getBigDecimal("BESOIN").multiply(calageParc,MathContext.DECIMAL32)
+							.multiply(calageEnertmp,MathContext.DECIMAL32));
 
 					for (int j = 1; j <= pasdeTemps; j++) {
 
