@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.ed.cgdd.derby.finance.CalculCEEService;
+import com.ed.cgdd.derby.model.politiques;
 import com.ed.cgdd.derby.model.calcconso.Conso;
 import com.ed.cgdd.derby.model.financeObjects.*;
 import com.ed.cgdd.derby.model.parc.Parc;
@@ -55,16 +56,36 @@ public class PBCServiceImpl extends TypeFinanceServiceImpl {
 		if (coutRenov.getCTA() != null  && coutRenov.getCTA().compareTo(new BigDecimal("0.0001")) == 1) {
 			coutAFinance = coutAFinance.add(coutRenov.getCTA());
 		}
+		
 		// on enleve du cout a financer les CEE
 		// si l'aide est trop importante, on met le cout a zero et l'aide au
 		// niveau de coutAfinance
-		if (coutAFinance.compareTo(aide) < 0) {
-			aide = BigDecimal.valueOf(coutAFinance.doubleValue());
-			coutAFinance = BigDecimal.ZERO;
+		// si on choisit d'inclure les couts intangibles dans la subvention, on fait le meme calcul sur coutafinance + CINT
+		
+		if (politiques.checkCEECINT){
+			BigDecimal CINTAFinance = coutRenov.getCINT().multiply(BigDecimal.valueOf(coutRenov.getDuree()));
+			BigDecimal CoutAFinanceCINT = coutAFinance.add(CINTAFinance);
+					
+			if (CoutAFinanceCINT.compareTo(aide) < 0 && 
+					aide.compareTo(BigDecimal.ZERO)> 0 && 
+					CoutAFinanceCINT.compareTo(BigDecimal.ZERO)> 0) {
+				
+				aide = CoutAFinanceCINT;
+				coutAFinance = BigDecimal.ZERO.subtract(CINTAFinance);
+			} else {
+				coutAFinance = coutAFinance.subtract(aide);
+			}
 		} else {
-			coutAFinance = coutAFinance.subtract(aide);
+			if (coutAFinance.compareTo(aide) < 0 & aide.compareTo(BigDecimal.ZERO)> 0) {
+				aide = BigDecimal.valueOf(coutAFinance.doubleValue());
+				coutAFinance = BigDecimal.ZERO;
+			} else {
+				coutAFinance = coutAFinance.subtract(aide);
+		}
 		}
 
+		
+		
 		// Pas de partFinance pour le PBC : l'integralite du financement est
 		// assure par un pret
 

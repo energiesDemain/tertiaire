@@ -14,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 
+import com.ed.cgdd.derby.model.CalibParameters;
 import com.ed.cgdd.derby.model.calcconso.Conso;
 import com.ed.cgdd.derby.model.calcconso.ParamDvChauff;
 import com.ed.cgdd.derby.model.calcconso.ParamDvClim;
@@ -396,7 +397,10 @@ public class LoadTableChauffClimDASImpl extends BddUsagesRTDAS implements LoadTa
 					// On recale seulement les besoins de chauffage (ID = longueur 18) pas la clim
 					if (parc.getId().length() == 18){
 					calageEnertmp = calageEner.get(parc.getId().substring(16,18)).getFacteurCalageParc()
-							.multiply(calageEner.get(parc.getId().substring(16,18)).getFacteurCalageConso(),MathContext.DECIMAL32);
+							.multiply(calageEner.get(parc.getId().substring(16,18)).getFacteurCalageConso(),
+									MathContext.DECIMAL32);
+					} else if (parc.getId().substring(parc.getId().length()-2,parc.getId().length()).equals("02")){
+						calageEnertmp = CalibParameters.CalageConsoHorsChauffElec;	
 					} else {
 				    calageEnertmp = BigDecimal.ONE;	
 					}

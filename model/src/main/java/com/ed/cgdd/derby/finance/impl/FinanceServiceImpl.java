@@ -1361,7 +1361,7 @@ public class FinanceServiceImpl implements FinanceService {
 							coutEnergie, evolCoutBati, evolCoutTechno);
 
 					if (inter != null) {
-						long startCoutFinal = System.currentTimeMillis();
+						//long startCoutFinal = System.currentTimeMillis();
 						coutFinalProp = calculCoutService.calculCoutFinal(surface, besoinInitUnitaire, parcIni, inter,
 								annee, idParc, anneeNTab, statutOccup.getTauxActuProp(), coutEnergieMap, emissionsMap,
 								valeurVerte.getValeurProp());

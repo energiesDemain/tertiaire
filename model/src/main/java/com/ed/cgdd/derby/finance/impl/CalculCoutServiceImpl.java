@@ -187,11 +187,13 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 		// les chargesEner economisees
 		// Le proprietaire n'a donc aucune annuite, mais des charges ener
 		// augmentees
-
+//		if(valeurFin.compareTo(BigDecimal.ZERO) <0){
+//			LOG.debug("test");
+//		}
+	
 		// tauxInt = ((PBC) fin).getTauxInteret() + 1
 		BigDecimal tauxInt = BigDecimal.ONE.add(((PBC) fin).getTauxInteret());
-		BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
-
+		BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);		
 		BigDecimal intermediaire = commonService.serieGeometrique(inverse, inverse, duree - 1);
 
 		return valeurFin.divide(intermediaire, MathContext.DECIMAL32);

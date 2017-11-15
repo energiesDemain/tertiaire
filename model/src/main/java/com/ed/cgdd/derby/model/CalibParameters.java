@@ -33,8 +33,12 @@ public class CalibParameters {
 		public final static BigDecimal CalageConsoChauffUrbain 	= new BigDecimal("0.9633484");
 		public final static BigDecimal CalageConsoChauffAutres 	= new BigDecimal("0.9633484");
 		
-	
-	// enlever le recalage 
+	// param recalage conso Elec hors chauffage 
+		public final static BigDecimal CalageConsoHorsChauffElec 	= new BigDecimal("1.0244261");
+		 
+		
+		
+	// Décommenter pour enlever le recalage 
     //public final static boolean noCalage = false;
 //		public final static  BigDecimal  CalageBranche01 = BigDecimal.ONE;
 //		public final static  BigDecimal  CalageBranche02 = BigDecimal.ONE;
@@ -54,5 +58,6 @@ public class CalibParameters {
 //		public final static  BigDecimal  CalageConsoChauffFioul 	 = BigDecimal.ONE;
 //		public final static  BigDecimal  CalageConsoChauffUrbain  = BigDecimal.ONE;
 //		public final static  BigDecimal  CalageConsoChauffAutres  = BigDecimal.ONE;	
+//		public final static BigDecimal CalageConsoHorsChauffElec 	 = BigDecimal.ONE;	
 		
 }

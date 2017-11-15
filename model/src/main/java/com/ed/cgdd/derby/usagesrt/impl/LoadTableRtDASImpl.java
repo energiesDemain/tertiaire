@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 
+import com.ed.cgdd.derby.model.CalibParameters;
 import com.ed.cgdd.derby.model.calcconso.Conso;
 import com.ed.cgdd.derby.model.calcconso.ParamCoutEclVentil;
 import com.ed.cgdd.derby.model.calcconso.ParamCoutEcs;
@@ -504,7 +505,18 @@ public class LoadTableRtDASImpl extends BddUsagesRTDAS implements LoadTableRtDAS
 					conso.setTypeRenovSys(TypeRenovSysteme.ETAT_INIT);
 					conso.setAnneeRenov(INIT_STATE);
 					conso.setTypeRenovBat(TypeRenovBati.ETAT_INIT);
-					conso.setAnnee(0, rs.getBigDecimal("BESOIN").multiply(calageParc,MathContext.DECIMAL32));
+					
+					// Ajout calage energies
+					BigDecimal calageEnertmp = BigDecimal.ONE;
+					// On recale seulement les besoins de chauffage (ID = longueur 18) pas la clim
+					if (conso.getId().substring(conso.getId().length()-2,conso.getId().length()).equals("02")){
+						calageEnertmp = CalibParameters.CalageConsoHorsChauffElec;	
+					} else {
+				    calageEnertmp = BigDecimal.ONE;	
+					}
+					
+					conso.setAnnee(0, rs.getBigDecimal("BESOIN").multiply(calageParc,MathContext.DECIMAL32)
+							.multiply(calageEnertmp,MathContext.DECIMAL32));
 
 					for (int j = 1; j <= pasdeTemps; j++) {
 
