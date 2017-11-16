@@ -12,6 +12,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
+import com.ed.cgdd.derby.excelresult.*;
 import com.ed.cgdd.derby.model.financeObjects.*;
 import com.ed.cgdd.derby.model.parc.*;
 import com.ed.cgdd.derby.model.CalibParameters;
@@ -24,12 +25,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import com.ed.cgdd.derby.calibrageCINT.CalibrageDAS;
 import com.ed.cgdd.derby.calibrageCINT.CalibrageService;
 import com.ed.cgdd.derby.common.CommonService;
-import com.ed.cgdd.derby.excelresult.ExcelCoutsService;
-import com.ed.cgdd.derby.excelresult.ExcelEtiquetteService;
-import com.ed.cgdd.derby.excelresult.ExcelResultService;
-import com.ed.cgdd.derby.excelresult.ExcelXCoutsService;
-import com.ed.cgdd.derby.excelresult.ExcelXEtiquetteService;
-import com.ed.cgdd.derby.excelresult.ExcelXResultService;
 import com.ed.cgdd.derby.finance.CreateNeufService;
 import com.ed.cgdd.derby.finance.FinanceService;
 import com.ed.cgdd.derby.finance.GesteService;
@@ -82,6 +77,8 @@ public class ProcessServiceImpl implements ProcessService {
 
 	private final static int NB_THREAD =40;
 	public static final boolean checkXlsX = true;
+	public static final boolean csvCheck = true;
+	private CSVService csvService;
 	private ParcService parcService;
 	private LoadParcDataDAS loadParcDatadas;
 	private InsertParcDAS insertParcdas;
@@ -128,6 +125,14 @@ public class ProcessServiceImpl implements ProcessService {
 	}
 	public ExcelXCoutsService getExcelXCoutsService() {
 		return excelXCoutsService;
+	}
+
+	public CSVService getCsvService() {
+		return csvService;
+	}
+
+	public void setCsvService(CSVService csvService) {
+		this.csvService = csvService;
 	}
 
 	public void setExcelXCoutsService(ExcelXCoutsService excelXCoutsService) {
@@ -608,18 +613,21 @@ public class ProcessServiceImpl implements ProcessService {
 			//boolean isHidden = true;
 			boolean isHidden = false;
 			progression.setStep(ProgressionStep.EXTRACT);
-			
-			if(checkXlsX){
-				excelXResultService.excelXService(pasdeTempsInit, isHidden);
-				excelXCoutsService.excelXService(pasdeTempsInit, isHidden);
-				excelXCoutsService.getContributionClimat(coutEnergieMap);
-				excelXEtiquetteService.excelXService(pasdeTempsInit, isHidden);
-					
-			}else {
-				excelResultService.excelService(pasdeTempsInit, isHidden);
-				excelCoutsService.excelService(pasdeTempsInit, isHidden);
-				excelCoutsService.getContributionClimat(coutEnergieMap);
-				excelEtiquetteService.excelService(pasdeTempsInit, isHidden);
+			if(csvCheck){
+				csvService.csvService(pasdeTempsInit);
+			} else {
+				if(checkXlsX){
+					excelXResultService.excelXService(pasdeTempsInit, isHidden);
+					excelXCoutsService.excelXService(pasdeTempsInit, isHidden);
+					excelXCoutsService.getContributionClimat(coutEnergieMap);
+					excelXEtiquetteService.excelXService(pasdeTempsInit, isHidden);
+
+				}else {
+					excelResultService.excelService(pasdeTempsInit, isHidden);
+					excelCoutsService.excelService(pasdeTempsInit, isHidden);
+					excelCoutsService.getContributionClimat(coutEnergieMap);
+					excelEtiquetteService.excelService(pasdeTempsInit, isHidden);
+				}
 			}
 			
 			long end = System.currentTimeMillis();

@@ -6,6 +6,7 @@
     <import resource="classpath:datasource.xml"/>
 
 	<bean id="processService" class="com.ed.cgdd.derby.process.impl.ProcessServiceImpl">
+		<property name="csvService" ref="csvService" />
 		<property name="loadParcDatadas" ref="loadParcDataDAS" />
 		<property name="insertParcdas" ref="insertParcDAS" />
 		<property name="truncateParcTabledas" ref="truncateParcTableDAS" />
@@ -253,7 +254,11 @@
 	<bean id="excelCoutsService" class="com.ed.cgdd.derby.excelresult.ExcelCoutsServiceImpl">
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
 	</bean>
-	
+
+	<bean id="csvService" class="com.ed.cgdd.derby.excelresult.CSVServiceImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate" />
+	</bean>
+
 	<bean id="excelResultService" class="com.ed.cgdd.derby.excelresult.ExcelResultServiceImpl">
 		<property name="jdbcTemplate" ref="jdbcTemplate" />
 	</bean>

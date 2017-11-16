@@ -76,8 +76,7 @@ public class ExcelEtiquetteServiceImpl implements ExcelEtiquetteService {
 	/**
 	 * 
 	 * Récupère les données sur le parc pour les inserer dans table_results.xls
-	 * 
-	 * @param pasTemps
+	 *
 	 * @throws SQLException
 	 * @throws IOException
 	 */
