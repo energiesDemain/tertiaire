@@ -95,8 +95,20 @@ public abstract class TypeFinanceServiceImpl implements TypeFinanceService {
 //		long startCINT = System.currentTimeMillis();
 
 		// XXX integration CINT
-		BigDecimal coutIntSys = coutIntangibleSys.multiply(
-				getVariation(geste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32);
+		//BigDecimal coutIntSys = coutIntangibleSys.multiply(
+		//		getVariation(geste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32);
+		// modif barbare test
+		BigDecimal coutIntSys = coutIntangibleSys;
+		if(coutIntangibleSys.compareTo(BigDecimal.ZERO) <0 ){
+		coutIntSys = coutIntangibleSys;
+			
+		} else {
+			double variation = (2009-annee) * (0.05) + 1 ; 
+		coutIntSys = coutIntangibleSys.multiply(new BigDecimal(variation, MathContext.DECIMAL32));
+		}	
+		
+		
+		
 		BigDecimal multi = BigDecimal.ONE;
 		if (geste.getTypeRenovBati() != TypeRenovBati.ETAT_INIT) {
 			multi = getVariation(geste.getTypeRenovBati().getLabel(), annee, evolCoutBati);
