@@ -10,6 +10,7 @@ model/gcc/
 model/logs/
 model/bin/
 model/Result_Excel/
+model/Result_csv/
 *.dat
 *.log
 *.log

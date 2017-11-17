@@ -66,7 +66,7 @@ public class  politiques {
 	public HashMap<Integer, BigDecimal> pCEE = new HashMap<Integer, BigDecimal>();
 
 	// Adaptation CC TODO faire une Hasmap des tcam des besoins
-	public final static boolean  checkAdaptationCC = false;
+	public final static boolean  checkAdaptationCC = true;
 	// taux de croissance annuels moyens des besoin de chauffage par periode
 	public final static BigDecimal tcamBesoinChauff20152020 = new BigDecimal("-0.001068949531");
 	public final static BigDecimal tcamBesoinChauff20202025  = new BigDecimal("-0.001074693510");

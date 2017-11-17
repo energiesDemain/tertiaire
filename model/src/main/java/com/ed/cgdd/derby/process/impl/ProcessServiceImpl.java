@@ -77,7 +77,7 @@ public class ProcessServiceImpl implements ProcessService {
 
 	private final static int NB_THREAD =40;
 	public static final boolean checkXlsX = true;
-	public static final boolean csvCheck = true;
+	public static final boolean csvCheck = false;
 	private CSVService csvService;
 	private ParcService parcService;
 	private LoadParcDataDAS loadParcDatadas;
