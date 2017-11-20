@@ -506,9 +506,9 @@ public class ProcessServiceImpl implements ProcessService {
 
 		// Enregistrement des couts intangibles
 		LOG.debug("Insert couts intangibles");
-		//calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
-		//calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
-		//calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
+		calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
+		calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
+		calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
 		LOG.debug("Insert couts intangibles - done");
 		// Chargement de l'evolution du cout des techno et du bati
 		HashMap<String, BigDecimal> evolCoutBati = recupParamFinDAS.getEvolutionCoutBati();

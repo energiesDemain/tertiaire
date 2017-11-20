@@ -7,18 +7,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import com.ed.cgdd.derby.excelresult.ExcelCoutsService;
-import com.ed.cgdd.derby.excelresult.ExcelEtiquetteService;
-import com.ed.cgdd.derby.excelresult.ExcelResultService;
-import com.ed.cgdd.derby.excelresult.ExcelXCoutsService;
-import com.ed.cgdd.derby.excelresult.ExcelXEtiquetteService;
-import com.ed.cgdd.derby.excelresult.ExcelXResultService;
-
+import com.ed.cgdd.derby.excelresult.*;
+import com.ed.cgdd.derby.model.progression.ProgressionStep;
 
 
 public class LauncherTableResult {
 	public static final boolean checkXlsX = true;
+	public static final boolean csvCheck = true;
 
 	private final static Logger LOG = LogManager.getLogger(LauncherTableResult.class);
 
@@ -26,7 +21,11 @@ public class LauncherTableResult {
 		LOG.info("Start engine");
 
 		ApplicationContext context = new ClassPathXmlApplicationContext("applicationContextProcess.xml");
-		
+		int pasdeTempsInit = 1;
+		if(csvCheck){
+			CSVService csvService = (CSVService)  context.getBean("csvService");
+			csvService.csvService(pasdeTempsInit);
+		} else {
 		if(checkXlsX){
 			ExcelXCoutsService excelXCoutService = (ExcelXCoutsService) context.getBean("excelXCoutsService");
 			ExcelXResultService excelXResultService = (ExcelXResultService) context.getBean("excelXResultService");
@@ -51,7 +50,7 @@ public class LauncherTableResult {
 			excelEtiquetteService.excelService(1, false);
 		}
 		// excelCoutService.getContributionClimat(coutEnergieMap);
-
+		}
 		LOG.info("End engine");
 
 	}
