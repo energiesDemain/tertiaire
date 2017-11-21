@@ -306,6 +306,7 @@ public class LoadInfoDASImpl implements LoadInfoDAS {
 		newTables.add(52, "CINT_BATI");
 		newTables.add(53, "CINT_SYS_NEUF");
 		newTables.add(54, "CINT_SYS_EXISTANT");
+		newTables.add(55, "Evolution_couts_int");
 
 
 		return newTables;

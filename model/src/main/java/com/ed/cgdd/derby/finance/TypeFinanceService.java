@@ -18,10 +18,11 @@ public interface TypeFinanceService {
 
 	GesteFinancement createFinancement(Parc parcIni, Conso consoEner, Geste geste, Financement financement,
 			int anneeNtab, int annee, PBC pretDeBase, CEE valeurCEE, BigDecimal surface,HashMap<String,CalibCoutGlobal> coutIntangible, HashMap<String,CalibCoutGlobal> coutIntangibleBati,
-			BigDecimal coutEnergie, HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno);
+			BigDecimal coutEnergie, HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno
+	,HashMap<String, BigDecimal> evolCoutIntTechno);
 
 	CoutRenovation recupParamSegment(Parc parcIni, Conso consoEner, Geste geste, int anneeNtab, int annee,
 			BigDecimal surface, HashMap<String,CalibCoutGlobal> coutIntangible,HashMap<String,CalibCoutGlobal> coutIntangibleBati, BigDecimal coutEnergie,
-			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno);
+			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno, HashMap<String, BigDecimal> evolCoutIntTechno);
 
 }

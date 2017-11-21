@@ -22,7 +22,7 @@ public abstract class TypeFinanceServiceImpl implements TypeFinanceService {
 	@Override
 	public CoutRenovation recupParamSegment(Parc parcIni, Conso consoEner, Geste geste, int anneeNtab, int annee,
 			BigDecimal surface, HashMap<String,CalibCoutGlobal> coutIntangible,HashMap<String,CalibCoutGlobal> coutIntangibleBati, BigDecimal coutEnergie,
-			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno) {
+			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno, HashMap<String, BigDecimal> evolCoutIntTechno) {
 		// Cette methode recupere toutes les infos du segment pour creer le
 		// CoutRenovation
 
@@ -96,7 +96,7 @@ public abstract class TypeFinanceServiceImpl implements TypeFinanceService {
 
 		// XXX integration CINT
 		BigDecimal coutIntSys = coutIntangibleSys.multiply(
-				getVariation(geste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32);
+				getVariation(geste.getSysChaud(), annee, evolCoutIntTechno), MathContext.DECIMAL32);
 		
 		// modif barbare test
 //		BigDecimal coutIntSys = coutIntangibleSys;

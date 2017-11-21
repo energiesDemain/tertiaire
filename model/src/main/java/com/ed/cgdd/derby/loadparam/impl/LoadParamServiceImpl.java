@@ -95,6 +95,10 @@ public class LoadParamServiceImpl implements LoadParamService {
 		GenericExcelData evolCout = evolutionCouts();
 		truncateParamdas.truncateParam("Evolution_couts");
 		insertParamdas.insert(evolCout, "Evolution_couts", null);
+		// pour l'evolution des couts intangibles de chauffage
+		GenericExcelData evolCoutInt = evolutionCoutsInt();
+		truncateParamdas.truncateParam("Evolution_couts_int");
+		insertParamdas.insert(evolCoutInt, "Evolution_couts_int", null);
 		// pour le bati
 		GenericExcelData evolCoutBati = evolutionCoutsBati();
 		truncateParamdas.truncateParam("Evolution_couts_bati");
@@ -104,6 +108,60 @@ public class LoadParamServiceImpl implements LoadParamService {
 		LOG.info("creation time : {}ms", end - start);
 
 		return paramCint;
+
+	}
+
+
+	protected GenericExcelData evolutionCoutsInt() throws IOException {
+		ExcelParameters param = choixEvolutionCoutsInt();
+		GenericExcelData excelData = importExcelParamdas.importExcel(param, "Evolution_couts_intangibles");
+
+		GenericExcelData newData = new GenericExcelData();
+
+		ArrayList<String> nameNewData = new ArrayList<>();
+		nameNewData.add(0, "SYS_CHAUFF");
+		nameNewData.add(1, "ANNEE");
+		nameNewData.add(2, "EVOLUTION");
+
+		ArrayList<ArrayList<Object>> newDataLine = new ArrayList<>();
+
+		if (param.getFline() == 9) {
+			// utilisation de la formule
+
+			for (ArrayList<Object> nameLine : excelData.getListe()) {
+				String nomSysChauf = (String) nameLine.get(0);
+				BigDecimal courbure = (BigDecimal) nameLine.get(1);
+				BigDecimal reduction = (BigDecimal) nameLine.get(2);
+
+				for (int annee = 2010; annee < 2051; annee++) {
+					ArrayList<Object> ligneRes = new ArrayList<>();
+					ligneRes.add(0, nomSysChauf);
+					ligneRes.add(1, annee);
+					ligneRes.add(2, evolCoutFormule(annee, courbure, reduction));
+
+					newDataLine.add(ligneRes);
+				}
+
+			}
+
+		} else {
+			// utilisation du tableau
+			for (ArrayList<Object> nameLine : excelData.getListe()) {
+				String nomSysChauf = (String) nameLine.get(0);
+				for (int annee = 2010; annee < 2051; annee++) {
+					ArrayList<Object> ligneRes = new ArrayList<>();
+					ligneRes.add(0, nomSysChauf);
+					ligneRes.add(1, annee);
+					ligneRes.add(2, nameLine.get(annee - 2010 + 1));
+
+					newDataLine.add(ligneRes);
+				}
+
+			}
+		}
+		newData.setNames(nameNewData);
+		newData.setListe(newDataLine);
+		return newData;
 
 	}
 
@@ -190,6 +248,38 @@ public class LoadParamServiceImpl implements LoadParamService {
 
 		return param;
 	}
+
+	protected ExcelParameters choixEvolutionCoutsInt() throws IOException {
+		InputStream ExcelFileToUpdate = new FileInputStream("./Tables_param/Parametres_utilisateurs.xls");
+		HSSFWorkbook wb = new HSSFWorkbook(ExcelFileToUpdate);
+		HSSFSheet sheet = wb.getSheet("Evolution_couts_intangibles");
+
+		int i = 3;
+		int c = 2;
+		HSSFCell cell = sheet.getRow(i).getCell(c);
+
+		double choix = cell.getNumericCellValue();
+
+		ExcelParameters param = new ExcelParameters();
+
+		param.setFilename("./Tables_param/Parametres_utilisateurs.xls");
+		param.setSheetname("Evolution_couts_intangibles");
+
+		if (choix == 1) {
+			// utilisation de la formule
+			param.setFline(9);
+			param.setFcolumn(1);
+
+		} else {
+			// utilisation du tableau
+			param.setFline(32);
+			param.setFcolumn(2);
+
+		}
+
+		return param;
+	}
+
 
 	protected BigDecimal evolCoutFormule(int annee, BigDecimal courbure, BigDecimal reduction) {
 

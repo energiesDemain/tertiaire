@@ -69,7 +69,7 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 			HashMap<String, BigDecimal> dvChauffMap, HashMap<String, ParamRdtCout> rdtCoutChauffMap, String idAgreg,
 			int annee, String statut_occup, int nu, HashMap<String,CalibCoutGlobal> coutIntangible,
 			HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
-			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,
+			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,HashMap<String, BigDecimal> evolCoutIntTechno,
 			HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, Maintenance> maintenanceMap) {
 
 		int periode = commonService.correspPeriode(annee);
@@ -124,8 +124,8 @@ public class CreateNeufServiceImpl implements CreateNeufService {
 
 			}
 			
-
-			BigDecimal coutInt = coutIntangible.get(idCoutIntangible).getCInt();
+			// Recuperation des couts intangibles et actualisation selon leur evolution
+			BigDecimal coutInt = coutIntangible.get(idCoutIntangible).getCInt().multiply(getVariation(idSysChaud, annee, evolCoutIntTechno), MathContext.DECIMAL32);
 
 
 			// Ajout des couts de maintenance

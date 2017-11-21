@@ -15,6 +15,7 @@ public interface CreateNeufService {
 			int annee, String statut_occup, int nu, HashMap<String,CalibCoutGlobal> coutIntangible,
 			HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
 			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,
+											 HashMap<String, BigDecimal> evolCoutIntTechno,
 			HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, Maintenance> maintenanceMap);
 
 }

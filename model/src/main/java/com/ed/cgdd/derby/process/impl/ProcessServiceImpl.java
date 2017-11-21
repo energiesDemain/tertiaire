@@ -509,10 +509,11 @@ public class ProcessServiceImpl implements ProcessService {
 		calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
 		calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
 		calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
-		LOG.debug("Insert couts intangibles - done");
-		// Chargement de l'evolution du cout des techno et du bati
+//		LOG.debug("Insert couts intangibles - done");
+//		// Chargement de l'evolution du cout des techno et du bati
 		HashMap<String, BigDecimal> evolCoutBati = recupParamFinDAS.getEvolutionCoutBati();
 		HashMap<String, BigDecimal> evolCoutTechno = recupParamFinDAS.getEvolutionCoutTechno();
+		HashMap<String,BigDecimal> evolCoutIntTechno = recupParamFinDAS.getEvolutionCoutIntTechno();
 
 		// Chargement des periodes de construction
 		Map<String, List<String>> periodeMap = gesteService.getPeriodMap();
@@ -589,7 +590,7 @@ public class ProcessServiceImpl implements ProcessService {
 					bibliRdtEcsMap, rdtPerfEcsMap, partSolaireMap, txCouvSolaireMap, partSysPerfEcsMap, dvEcsMap,
 					coutEcsMap, rdtCoutClimMap, txClimExistantMap, txClimNeufMap, rdtCoutChauffMap, dvChauffMap,
 					dvGesteMap, auxChaud, auxFroid, gainsEclairageMap, gainsVentilationMap, coutsEclVentilMap,
-					coutIntangible, coutIntangibleBati, evolCoutBati, evolCoutTechno, periodeMap, coutEnergieMap,
+					coutIntangible, coutIntangibleBati, evolCoutBati, evolCoutTechno,evolCoutIntTechno, periodeMap, coutEnergieMap,
 					emissionsMap, reglementations, idAgregParc, progression, tauxInteretMap, surfMoyMap, evolVVMap,
 					repartStatutOccupMap, maintenanceMap, elasticiteMap, coutIntangibleNeuf, evolBesoinMap, calageEner, calageBranche);
 			runnable.initServices(parcService, loadParcDatadas, insertParcdas, bureauProcessService,

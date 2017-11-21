@@ -348,7 +348,7 @@ public class LoadInfoParamDASImpl implements LoadInfoParamDAS {
 		param.setFcolumn(1);
 		paramMap.put("Maintenance", param);
 
-		// Couts de maintenance
+		// Elasticite des besoins
 		param = new ExcelParameters();
 		param.setFilename("./Tables_param/Parametres_utilisateurs.xls");
 		param.setSheetname("Elasticite_besoin");

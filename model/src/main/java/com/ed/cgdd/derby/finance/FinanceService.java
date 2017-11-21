@@ -41,7 +41,7 @@ public interface FinanceService {
 		 HashMap<String, ParamCoutEclVentil> coutsEclVentilMap, HashMap<String, ParamCoutEcs> coutEcsMap,
 		 HashMap<String, ParamPMConso> pmEcsNeufMap, HashMap<String, ParamBesoinsNeufs> bNeufsMap,
 		 HashMap<String, ParamGainsUsages> gainsVentilationMap, HashMap<String, ParamRdtEcs> bibliRdtEcsMap,
-		 HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,
+		 HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,HashMap<String, BigDecimal> evolCoutIntTechno,
 		 HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, SurfMoy> surfMoyMap,
 		 HashMap<String, EvolValeurVerte> evolVVMap, HashMap<String, RepartStatutOccup> repartStatutOccupMap,
 		 HashMap<String, Maintenance> maintenanceMap, EvolBesoinMap evolBesoinMap);

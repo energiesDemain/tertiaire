@@ -46,6 +46,8 @@ public interface RecupParamFinDAS {
 
 	HashMap<String, BigDecimal> getEvolutionCoutTechno();
 
+	HashMap<String,BigDecimal> getEvolutionCoutIntTechno();
+
 	HashMap<String, BigDecimal> getEvolutionCoutBati();
 
 	ElasticiteMap elasticite(String tableName, ElasticiteMap elasticiteMap);

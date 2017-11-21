@@ -178,8 +178,7 @@ public class GesteServiceImpl implements GesteService {
 			HashMap<String, ParamCoutEcs> coutEcsMap, HashMap<String, ParamPMConso> pmEcsNeufMap, Conso consoChauff,
 			Conso ventil, Conso aux, HashMap<String, ParamBesoinsNeufs> bNeufsMap, Conso besoinInit,
 			HashMap<String, ParamGainsUsages> gainsVentilationMap, HashMap<String, ParamRdtEcs> bibliRdtEcsMap,
-			PBC tauxActu, HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,
-			HashMap<String, Maintenance> maintenanceMap, HashMap<String, ParamRdtCout> paramRdtCout) {
+			PBC tauxActu, HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno, HashMap<String, Maintenance> maintenanceMap, HashMap<String, ParamRdtCout> paramRdtCout) {
 
 		// Recuperation du niveau minimal attendu par la RT existant
 		String periodeString = commonService.correspPeriodeFin(annee);

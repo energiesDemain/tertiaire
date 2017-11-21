@@ -609,9 +609,40 @@ public class RecupParamFinDASImpl extends BddDAS implements RecupParamFinDAS {
 		return result;
 	}
 
+
+	protected List<EvolutionCout> getListEvolCoutIntTechno() {
+		String requete = getProperty("Evolution_couts_int_LOAD");
+		List<EvolutionCout> result = jdbcTemplate.query(requete, new RowMapper<EvolutionCout>() {
+			@Override
+			public EvolutionCout mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+				EvolutionCout evolutionCout = new EvolutionCout();
+				evolutionCout.setAnnee(rs.getString("ANNEE"));
+				evolutionCout.setType(rs.getString("SYS_CHAUFF"));
+				evolutionCout.setEvolution(rs.getBigDecimal("EVOLUTION"));
+
+				return evolutionCout;
+
+			}
+
+		});
+		return result;
+	}
+
+
 	public HashMap<String, BigDecimal> getEvolutionCoutTechno() {
 		HashMap<String, BigDecimal> result = new HashMap<>();
 		List<EvolutionCout> listeRes = getListEvolCoutTechno();
+		for (EvolutionCout evolutionCout : listeRes) {
+			String cle = evolutionCout.getAnnee() + "_" + evolutionCout.getType();
+			result.put(cle, evolutionCout.getEvolution());
+		}
+		return result;
+	}
+
+	public HashMap<String, BigDecimal> getEvolutionCoutIntTechno() {
+		HashMap<String, BigDecimal> result = new HashMap<>();
+		List<EvolutionCout> listeRes = getListEvolCoutIntTechno();
 		for (EvolutionCout evolutionCout : listeRes) {
 			String cle = evolutionCout.getAnnee() + "_" + evolutionCout.getType();
 			result.put(cle, evolutionCout.getEvolution());

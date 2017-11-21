@@ -29,14 +29,14 @@ public class PretBonifServiceImpl extends TypeFinanceServiceImpl {
 	public GesteFinancement createFinancement(Parc parc, Conso consoEner, Geste geste, Financement financement,
 	  int anneeNtab, int annee, PBC pretDeBase, CEE valeurCEE, BigDecimal surface,
 	HashMap<String,CalibCoutGlobal> coutIntangible, HashMap<String,CalibCoutGlobal> coutIntangibleBati,
-	  BigDecimal coutEnergie, HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno) {
+	  BigDecimal coutEnergie, HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno, HashMap<String, BigDecimal> evolCoutIntTechno) {
 		// on check si le geste est compatible
 		// TODO test pour Systeme/enveloppe Bati
 
 		BigDecimal aide = calculCEEService.calculCEE(surface, geste, valeurCEE);
 //		long startRecupParamSegment = System.currentTimeMillis();
 		CoutRenovation coutRenov = recupParamSegment(parc, consoEner, geste, anneeNtab, annee, surface, coutIntangible,
-				coutIntangibleBati, coutEnergie, evolCoutBati, evolCoutTechno);
+				coutIntangibleBati, coutEnergie, evolCoutBati, evolCoutTechno, evolCoutIntTechno);
 //		long endRecupParamSegment = System.currentTimeMillis();
 //		if(endRecupParamSegment - startRecupParamSegment >1){
 //			LOG.info("Recup Param Segment Pret Bonif : {}ms - geste {}", endRecupParamSegment - startRecupParamSegment);}

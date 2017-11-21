@@ -123,7 +123,7 @@ public class FinanceServiceImpl implements FinanceService {
 			HashMap<String, ParamCoutEclVentil> coutsEclVentilMap, HashMap<String, ParamCoutEcs> coutEcsMap,
 			HashMap<String, ParamPMConso> pmEcsNeufMap, HashMap<String, ParamBesoinsNeufs> bNeufsMap,
 			HashMap<String, ParamGainsUsages> gainsVentilationMap, HashMap<String, ParamRdtEcs> bibliRdtEcsMap,
-			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,
+			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,HashMap<String, BigDecimal> evolCoutIntTechno,
 			HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, SurfMoy> surfMoyMap,
 			HashMap<String, EvolValeurVerte> evolVVMap, HashMap<String, RepartStatutOccup> repartStatutOccupMap,
 			HashMap<String, Maintenance> maintenanceMap, EvolBesoinMap evolBesoinMap ) {
@@ -156,7 +156,7 @@ public class FinanceServiceImpl implements FinanceService {
 				resultConsoRt, anneeNTab, coutIntangible, coutIntangibleBati, paramCintObjects, txRenovBati, avgSurf, statutOccup,
 				bibliGeste, periode, coutEnergieMap, emissionsMap, valeurVerte, reglementations, compteur,
 				coutsEclVentilMap, coutEcsMap, pmEcsNeufMap, bNeufsMap, gainsVentilationMap, bibliRdtEcsMap,
-				evolCoutBati, evolCoutTechno, maintenanceMap, evolBesoinMap);
+				evolCoutBati, evolCoutTechno,evolCoutIntTechno, maintenanceMap, evolBesoinMap);
 		// LOG.debug("end renov");
 
 		return pmResult;
@@ -175,7 +175,7 @@ public class FinanceServiceImpl implements FinanceService {
 			HashMap<String, ParamCoutEclVentil> coutsEclVentilMap, HashMap<String, ParamCoutEcs> coutEcsMap,
 			HashMap<String, ParamPMConso> pmEcsNeufMap, HashMap<String, ParamBesoinsNeufs> bNeufsMap,
 			HashMap<String, ParamGainsUsages> gainsVentilationMap, HashMap<String, ParamRdtEcs> bibliRdtEcsMap,
-			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,
+			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,HashMap<String, BigDecimal> evolCoutIntTechno,
 			HashMap<String, Maintenance> maintenanceMap, EvolBesoinMap evolBesoinMap) {
 
 		HashMap<String, PartMarcheRenov> partGesteFin = new HashMap<String, PartMarcheRenov>();
@@ -229,7 +229,7 @@ public class FinanceServiceImpl implements FinanceService {
 						annee, anneeNTab, coutIntangible, coutIntangibleBati, bibliGeste, statutOccup, paramCintObjects, periode,
 						coutEnergieMap, emissionsMap, valeurVerte, reglementations, coutsEclVentilMap, coutEcsMap,
 						pmEcsNeufMap, ventil, aux, bNeufsMap, gainsVentilationMap, bibliRdtEcsMap, besoinIni,
-						evolCoutBati, evolCoutTechno, maintenanceMap);
+						evolCoutBati, evolCoutTechno,evolCoutIntTechno, maintenanceMap);
 				//long end= System.nanoTime();
 				//if(end- start>100000){			
 				//LOG.info("renov  : {}ns", end - start);
@@ -1296,7 +1296,7 @@ public class FinanceServiceImpl implements FinanceService {
 			HashMap<String, ParamPMConso> pmEcsNeufMap, Conso ventil, Conso aux,
 			HashMap<String, ParamBesoinsNeufs> bNeufsMap, HashMap<String, ParamGainsUsages> gainsVentilationMap,
 			HashMap<String, ParamRdtEcs> bibliRdtEcsMap, Conso besoinInit, HashMap<String, BigDecimal> evolCoutBati,
-			HashMap<String, BigDecimal> evolCoutTechno, HashMap<String, Maintenance> maintenanceMap) {
+			HashMap<String, BigDecimal> evolCoutTechno,HashMap<String, BigDecimal> evolCoutIntTechno, HashMap<String, Maintenance> maintenanceMap) {
 
 		HashMap<String, CoutFinal> coutFinalMapProp = new HashMap<String, CoutFinal>();
 		HashMap<String, CoutFinal> coutFinalMapLoc = new HashMap<String, CoutFinal>();
@@ -1308,7 +1308,7 @@ public class FinanceServiceImpl implements FinanceService {
 				resultConsoURtMap, parcIni, bibliGeste, dvChauffMap, dvGesteMap, annee, periode, rdtIni, anneeNTab,
 				reglementations, coutsEclVentilMap, coutEcsMap, pmEcsNeufMap, consoEner, ventil, aux, bNeufsMap,
 				besoinInit, gainsVentilationMap, bibliRdtEcsMap, statutOccup.getTauxActuProp(), evolCoutBati,
-				evolCoutTechno, maintenanceMap, paramRdtCout);
+				evolCoutTechno,maintenanceMap, paramRdtCout);
 
 		//long endGestesPossibles = System.currentTimeMillis();
 		//if(endGestesPossibles - startGestesPossibles>1){
@@ -1358,7 +1358,7 @@ public class FinanceServiceImpl implements FinanceService {
 				for (Financement financement : listFin) {
 					inter = getFinanceService(financement).createFinancement(parcIni, consoEner, courant, financement,
 							anneeNTab, annee, pretDeBase, subCEE, surface, coutIntangible, coutIntangibleBati,
-							coutEnergie, evolCoutBati, evolCoutTechno);
+							coutEnergie, evolCoutBati, evolCoutTechno, evolCoutIntTechno);
 
 					if (inter != null) {
 						//long startCoutFinal = System.currentTimeMillis();
@@ -1377,15 +1377,9 @@ public class FinanceServiceImpl implements FinanceService {
 						sommeLoc = sommeLoc.add(coutFinalLoc.getCoutGlobal().pow(-paramCintObjects.getGesteBat().getNu(), MathContext.DECIMAL32));
 
 
-//						long endCoutFinal = System.currentTimeMillis();
-//						
-//						if(endCoutFinal - startCoutFinal>1){
-//						// LOG POUR VERIFIER LES COMPOSANTES DU COUT GLOBAL
-//						LOG.info("Calcul cout final : {}ms - bati {} syst {} ", endCoutFinal - startCoutFinal,
-//								courant.getTypeRenovBati(),SysChaud.getEnumName(courant.getSysChaud()));
-//						
-//						BigDecimal CINTsys = BigDecimal.ZERO; 
-//						BigDecimal CINTbati = BigDecimal.ZERO;
+
+						// LOG POUR VERIFIER LES COMPOSANTES DU COUT GLOBAL
+//						BigDecimal CINTsys = BigDecimal.ZERO;
 //						BigDecimal Cadd = BigDecimal.ZERO;
 //
 //						if(!courant.getTypeRenovSys().equals(TypeRenovSysteme.ETAT_INIT)){
@@ -1394,22 +1388,19 @@ public class FinanceServiceImpl implements FinanceService {
 //							Cadd = courant.getCoutTravauxAddGeste().multiply(surface);
 //							}
 //						}
-//						if(!courant.getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)){
-//							
-//							CINTbati = coutIntangibleBati.get(generateIDCoutIntBati(parcIni, courant)).getCInt().multiply(surface);
-//						}
-//					
-//						LOG.info("Cbati {} CINTbati {}  CSyst {} CAdd {} CINTSys {} Maint {} CG {}", 
-//								courant.getCoutGesteBati().multiply(surface),
-//								CINTbati,
+//
+//						LOG.info("ENERGIE : {}, SYSTEME : {} => type Reno bati : {} CSyst {} CINTSys {} CG {} Rdt : {} surface : {} besoin :{}",
+//								courant.getEnergie(),
+//								courant.getSysChaud(),
+//								courant.getTypeRenovBati(),
 //								courant.getCoutGesteSys().multiply(surface),
-//								Cadd,
 //								CINTsys,
-//								courant.getCoutMaintenance().multiply(surface),
-//								coutFinalProp.getCoutGlobal() 
+//								coutFinalProp.getCoutGlobal(),
+//								courant.getRdt(),surface, besoinInitUnitaire
+//
 //								);
-//						}
-					}
+						}
+
 					
 				}
 			}
@@ -1426,6 +1417,7 @@ public class FinanceServiceImpl implements FinanceService {
 
 		return calculPM;
 	}
+
 
 	protected void energieGeste(Parc parcIni, List<Geste> gestesPossibles) {
 		for (Geste geste : gestesPossibles) {
