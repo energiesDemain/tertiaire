@@ -57,8 +57,10 @@ public class CSVServiceImpl implements CSVService {
 			getClimAnnee(pasTemps);
 			LOG.info("csv couts");
 			getCoutAnnee(pasTemps);
-			LOG.info("csv etiquettes");
-			getEtiquetteCSV(pasTemps);
+			LOG.info("csv parts de marche");
+			getPM(pasTemps);
+//			LOG.info("csv etiquettes");
+//			getEtiquetteCSV(pasTemps);
 
 		} catch (SQLException ex) {
 			LOG.error(ex);
@@ -67,9 +69,58 @@ public class CSVServiceImpl implements CSVService {
 		}
 
 	}
+	public void getPM(int pasTemps) throws SQLException, IOException {
+
+		OutputStream os = new FileOutputStream("./Result_csv/part_marche.csv");
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(os, "UTF-8"));
+		CSVPrinter printer = CSVFormat.DEFAULT.withDelimiter(';').withHeader("annee","branche",
+				"periode_simple", "energieChauffage","systeme_chauff", "surface").print(out);
+		List<ConsommationResultatsAnnee> list = getPM();
+		for (ConsommationResultatsAnnee rs : list) {
+			List record = new ArrayList<>();
+			record.add(rs.getAnnee());
+			record.add(rs.getBranche());
+			record.add(rs.getPeriodeSimple());
+			record.add(rs.getEnergieUsage());
+			record.add(rs.getSystemeChaud());
+			record.add(rs.getSurface());
+			printer.printRecord(record);
+		}
+		out.flush();
+		out.close();
+		printer.close();
+		os.close();
+	}
+
+	private List<ConsommationResultatsAnnee> getPM() {
+
+		String requestSelect = "select  annee,substr(id, 1,2) as branche, " +
+				"substr(id, 11,2) as periodeSimple, substr(id,length(id)-1,2) as energieChauffage, " +
+				"substr(id,13,2) as system_chauff,sum(surfaces) as surface " +
+				"from parc_resultats  " +
+				"group by  annee,substr(id, 1,2) , substr(id, 11,2) ,  substr(id,length(id)-1,2),substr(id, 13,2)";
+
+		return jdbcTemplate.query(requestSelect, new RowMapper<ConsommationResultatsAnnee>() {
+			@Override
+			public ConsommationResultatsAnnee mapRow(ResultSet rs, int rowNum) throws SQLException {
+				ConsommationResultatsAnnee sorties = new ConsommationResultatsAnnee();
+				int columncount = rs.getMetaData().getColumnCount();
+				for (int k = 1; k <= columncount; k++) {
+					sorties.setAnnee(rs.getInt("annee"));
+					sorties.setBranche(rs.getString("branche"));
+					sorties.setPeriodeSimple(rs.getString("periodeSimple"));
+					sorties.setEnergieUsage(rs.getString("energieChauffage"));
+					sorties.setSystemeChaud(rs.getString("system_chauff"));
+					sorties.setSurface(rs.getDouble("surface"));
+					}
+				return sorties;
+			};
+		});
+	}
 
 
-	public void getEtiquetteCSV(int pasTemps) throws SQLException, IOException {
+
+			public void getEtiquetteCSV(int pasTemps) throws SQLException, IOException {
 
 		OutputStream os = new FileOutputStream("./Result_csv/etiquette.csv");
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(os, "UTF-8"));
@@ -648,7 +699,7 @@ public class CSVServiceImpl implements CSVService {
 					sorties.setCodePeriodeSimple(rs.getString("COD_PERIODE_SIMPLE"));
 					sorties.setAnnee(rs.getInt("ANNEE"));
 					sorties.setSystemFroid(rs.getString("COD_SYSTEME_FROID"));
-					sorties.setConsoTot(rs.getBigDecimal("SURFACES_TOT"));
+					sorties.setSurfaceTot(rs.getBigDecimal("SURFACES_TOT"));
 				}
 				return sorties;
 

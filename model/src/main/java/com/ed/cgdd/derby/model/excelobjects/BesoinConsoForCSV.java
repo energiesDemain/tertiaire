@@ -13,13 +13,13 @@ public class BesoinConsoForCSV {
 	private BigDecimal consoTot;
 	private BigDecimal besoinTot;
 	private String systemFroid;
-	private String surfaceTot;
+	private BigDecimal surfaceTot;
 
-	public String getSurfaceTot() {
+	public BigDecimal getSurfaceTot() {
 		return surfaceTot;
 	}
 
-	public void setSurfaceTot(String surfaceTot) {
+	public void setSurfaceTot(BigDecimal surfaceTot) {
 		this.surfaceTot = surfaceTot;
 	}
 
