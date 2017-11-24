@@ -13,7 +13,7 @@ import com.ed.cgdd.derby.model.progression.ProgressionStep;
 
 public class LauncherTableResult {
 	public static final boolean checkXlsX = true;
-	public static final boolean csvCheck = true;
+	public static final boolean csvCheck = false;
 
 	private final static Logger LOG = LogManager.getLogger(LauncherTableResult.class);
 

@@ -77,7 +77,7 @@ public class ProcessServiceImpl implements ProcessService {
 
 	private final static int NB_THREAD =40;
 	public static final boolean checkXlsX = true;
-	public static final boolean csvCheck = false;
+	public static final boolean csvCheck = true;
 	private CSVService csvService;
 	private ParcService parcService;
 	private LoadParcDataDAS loadParcDatadas;
@@ -493,7 +493,7 @@ public class ProcessServiceImpl implements ProcessService {
 		HashMap<String, CalibCI> cintMap = calibrageDAS.recupCI();
 		HashMap<String, CalibCI> cintMapNeuf = calibrageDAS.recupCINeuf();
 		HashMap<String, CalibCIBati> cintBatiMap = calibrageDAS.recupCIBati();
-
+		
 		// Ajout 21092017
 		calibrageService.addingRowsInHashMap(cintMapNeuf,coutEnergieMap,bNeufsMap);
 
@@ -504,11 +504,11 @@ public class ProcessServiceImpl implements ProcessService {
 		// Couts intangibles dans le neuf
 		HashMap<String,CalibCoutGlobal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf(), maintenanceMap);
 
-		// Enregistrement des couts intangibles
-		LOG.debug("Insert couts intangibles");
-		calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
-		calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
-		calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
+//		// Enregistrement des couts intangibles
+//		LOG.debug("Insert couts intangibles");
+//		calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
+//		calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
+//		calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
 //		LOG.debug("Insert couts intangibles - done");
 //		// Chargement de l'evolution du cout des techno et du bati
 		HashMap<String, BigDecimal> evolCoutBati = recupParamFinDAS.getEvolutionCoutBati();

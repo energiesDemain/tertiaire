@@ -39,7 +39,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 		HashMap<String, CalibCIRef> calibRef = new HashMap<String, CalibCIRef>();
 		for (String st : dataCalib.keySet()) {
 			if (dataCalib.get(st).getGeste().equals(INIT_STATE)) {
-				calibRef.put(dataCalib.get(st).getBranche(), coutGlobalReference(dataCalib.get(st)));
+				calibRef.put(dataCalib.get(st).getBranche(), coutGlobalReference(dataCalib.get(st), paramCInt));
 			}
 		}
 		// on parcourt la hashmap pour avoir faire le calcul
@@ -97,14 +97,14 @@ public class CalibrageServiceImpl implements CalibrageService {
     }
 
 
-	protected CalibCIRef coutGlobalReference(CalibCIBati calibCIBati) {
+	protected CalibCIRef coutGlobalReference(CalibCIBati calibCIBati, ParamCInt paramCInt) {
 		CalibCIRef reference = new CalibCIRef();
 		// calcul du cout global pour le geste Rien faire
 		// les couts intangibles sont nuls
 		// la duree de vie est de 1
 		// TODO verifier le calcul du cout global ne rien faire dans excel
 		
-		BigDecimal coutGlobal = calibCIBati.getChargeInit();
+		BigDecimal coutGlobal = calibCIBati.getChargeInit().add(paramCInt.getCintRef());
 		reference.setCoutGlobal(coutGlobal);
 		
 		BigDecimal partRef = calibCIBati.getPartMarche();
@@ -265,7 +265,8 @@ public class CalibrageServiceImpl implements CalibrageService {
 		// Ajoute le min entre le cout intangible de reference et 50 % du cout global de reference 
 		
 		// Ajoute le cint de l'option de reference
-		result.setCoutGlobal(calcCG.add(cintRef.min(calcCG.multiply(new BigDecimal("0.5"))), MathContext.DECIMAL32));
+		//result.setCoutGlobal(calcCG.add(cintRef.min(calcCG.multiply(new BigDecimal("0.5"))), MathContext.DECIMAL32));
+		result.setCoutGlobal(calcCG.add(cintRef, MathContext.DECIMAL32));
 		
 		return result;
 	}

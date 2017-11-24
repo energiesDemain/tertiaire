@@ -45,8 +45,10 @@ public class CSVServiceImpl implements CSVService {
 
 			LOG.info("csv Parc");
 			getParcAnneeCSV(pasTemps);
-			LOG.info("csv Conso");
+			LOG.info("csv Conso non RT");
 			getConsoAnneeCSV(pasTemps);
+			LOG.info("csv Conso RT");
+			getConsoRTAnneeCSV(pasTemps);
 			LOG.info("csv GES");
 			getGESAnneeCSV(pasTemps);
 			LOG.info("csv Besoin/Conso RT");
@@ -74,7 +76,7 @@ public class CSVServiceImpl implements CSVService {
 		OutputStream os = new FileOutputStream("./Result_csv/part_marche.csv");
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(os, "UTF-8"));
 		CSVPrinter printer = CSVFormat.DEFAULT.withDelimiter(';').withHeader("annee","branche",
-				"periode_simple", "energieChauffage","systeme_chauff", "surface").print(out);
+				"periodeSimple", "energieChauffage","systeme_chauff", "surface").print(out);
 		List<ConsommationResultatsAnnee> list = getPM();
 		for (ConsommationResultatsAnnee rs : list) {
 			List record = new ArrayList<>();
@@ -260,7 +262,7 @@ public class CSVServiceImpl implements CSVService {
 		OutputStream os = new FileOutputStream("./Result_csv/GESAnnee.csv");
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(os, "UTF-8"));
 		CSVPrinter printer = CSVFormat.DEFAULT.withDelimiter(';').withHeader("branche",
-				"sousBranche",
+//				"sousBranche",
 				"occupation",
 				"periodeSimple", "energieUsage","usage","usageSimple","annee2009", "annee2010", "annee2011", "annee2012",
 				"annee2013", "annee2014", "annee2015", "annee2016", "annee2017",
@@ -275,7 +277,7 @@ public class CSVServiceImpl implements CSVService {
 		for (ConsommationResultatsAnnee rs : list) {
 			List record = new ArrayList<>();
 			record.add(rs.getBranche());
-			record.add(rs.getSousBranche());
+//			record.add(rs.getSousBranche());
 			record.add(rs.getOccupation());
 			record.add(rs.getPeriodeSimple());
 			record.add(rs.getEnergieUsage());
@@ -298,9 +300,10 @@ public class CSVServiceImpl implements CSVService {
 		OutputStream os = new FileOutputStream("./Result_csv/consoAnnee.csv");
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(os, "UTF-8"));
 		CSVPrinter printer = CSVFormat.DEFAULT.withDelimiter(';').withHeader("branche",
-				"sousBranche", "occupation",
+	//			"sousBranche",
+				"occupation",
 				"periodeSimple", "energieUsage", "usage", "usageSimple",
-				"FEP", "annee2009", "annee2010", "annee2011", "annee2012",
+				"facteurEnergiePrimaire", "annee2009", "annee2010", "annee2011", "annee2012",
 				"annee2013", "annee2014", "annee2015", "annee2016", "annee2017",
 				"annee2018", "annee2019", "annee2020", "annee2021", "annee2022",
 				"annee2023", "annee2024", "annee2025", "annee2026", "annee2027",
@@ -313,7 +316,7 @@ public class CSVServiceImpl implements CSVService {
 		for (ConsommationResultatsAnnee rs : list) {
 			List record = new ArrayList<>();
 			record.add(rs.getBranche());
-			record.add(rs.getSousBranche());
+//			record.add(rs.getSousBranche());
 			record.add(rs.getOccupation());
 			record.add(rs.getPeriodeSimple());
 			record.add(rs.getEnergieUsage());
@@ -330,7 +333,44 @@ public class CSVServiceImpl implements CSVService {
 		printer.close();
 		os.close();
 	}
-
+	
+	protected void getConsoRTAnneeCSV(int pasTemps) throws SQLException, IOException {
+		OutputStream os = new FileOutputStream("./Result_csv/consoRTAnnee.csv");
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(os, "UTF-8"));
+		CSVPrinter printer = CSVFormat.DEFAULT.withDelimiter(';').withHeader("branche",
+	//			"sousBranche",
+				"occupation",
+				"periodeSimple", "energieUsage", "usage", "usageSimple",
+				"facteurEnergiePrimaire", "annee2009", "annee2010", "annee2011", "annee2012",
+				"annee2013", "annee2014", "annee2015", "annee2016", "annee2017",
+				"annee2018", "annee2019", "annee2020", "annee2021", "annee2022",
+				"annee2023", "annee2024", "annee2025", "annee2026", "annee2027",
+				"annee2028", "annee2029", "annee2030", "annee2031", "annee2032",
+				"annee2033", "annee2034", "annee2035", "annee2036", "annee2037",
+				"annee2038", "annee2039", "annee2040", "annee2041", "annee2042",
+				"annee2043", "annee2044", "annee2045", "annee2046", "annee2047",
+				"annee2048", "annee2049", "annee2050").print(out);
+		List<ConsommationResultatsAnnee> list = getConsoRTAnnee(pasTemps);
+		for (ConsommationResultatsAnnee rs : list) {
+			List record = new ArrayList<>();
+			record.add(rs.getBranche());
+//			record.add(rs.getSousBranche());
+			record.add(rs.getOccupation());
+			record.add(rs.getPeriodeSimple());
+			record.add(rs.getEnergieUsage());
+			record.add(rs.getUsage());
+			record.add(rs.getUsageSimple());
+			record.add(rs.getFacteurEnergiePrimaire());
+			for (int i = 0; i < rs.getAnnees().length; i++) {
+				record.add(rs.getAnnees(i));
+			}
+			printer.printRecord(record);
+		}
+		out.flush();
+		out.close();
+		printer.close();
+		os.close();
+	}
 	protected void getBesoinAnneeCSV(int pasTemps) throws SQLException, IOException {
 		OutputStream os = new FileOutputStream("./Result_csv/export_BESOIN_RT_PERIODE.csv");
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(os, "UTF-8"));
@@ -363,7 +403,7 @@ public class CSVServiceImpl implements CSVService {
 		CSVPrinter printer = CSVFormat.DEFAULT.withDelimiter(';').withHeader("COD_BRANCHE",
 				"ANNEE", "COD_PERIODE_SIMPLE", "USAGE","COD_ENERGIE","CONSO_TOT"
 		).print(out);
-		List<BesoinConsoForCSV> list = getConsoRTAnnee(pasTemps);
+		List<BesoinConsoForCSV> list = getConsononRTAnnee(pasTemps);
 		for (BesoinConsoForCSV rs : list) {
 			List record = new ArrayList<>();
 			record.add(rs.getBranche());
@@ -405,10 +445,10 @@ public class CSVServiceImpl implements CSVService {
 
 	protected List<ConsommationResultatsAnnee> getConsoAnnee(final int pasTemps) {
 
-		String requestSelect = "select substr(id, 1,2) as branche, substr(id, 3,2) as sousBranche,"
+		String requestSelect = "select substr(id, 1,2) as branche,"
 				+ "substr(id, 7,2) as occupation, substr(id, 11,2) as periodeSimple,"
 				+ " substr(id,13,2) as energieUsage, usage, case when usage in	 ('Eclairage','Ventilation',"
-				+ " 'Bureautique','Froid_alimentaire', 'Process','Auxiliaires') then 'ElectricitÃ© SpÃ©cifique' "
+				+ " 'Bureautique','Froid_alimentaire', 'Process','Auxiliaires') then 'Electricité Spécifique' "
 				+ "	 else usage end as usageSimple,  case when usage in	('Bureautique','Froid_alimentaire', 'Process') then 2.58 "
 
 				+ "when substr(id,13,2)='02' then 2.58 else 1 end as FEP,"
@@ -423,7 +463,7 @@ public class CSVServiceImpl implements CSVService {
 		requestSelect = requestSelect + "	sum(case when annee='2050' then consommation_ef else 0 end) as annee2050 "
 				+ " from conso_non_rt_resultats 	 group by "
 
-				+ "	 substr(id, 1,2), substr(id, 3,2), substr(id,7,2),	 substr(id, 11,2), substr(id,13,2), usage"
+				+ "	 substr(id, 1,2), substr(id,7,2),	 substr(id, 11,2), substr(id,13,2), usage"
 
 				+ " order by 1, 2 , 3, 4, 5, 6 ";
 		LOG.debug(requestSelect);
@@ -434,7 +474,7 @@ public class CSVServiceImpl implements CSVService {
 				int columncount = rs.getMetaData().getColumnCount();
 				for (int k = 1; k <= columncount; k++) {
 					sorties.setBranche(rs.getString("branche"));
-					sorties.setSousBranche(rs.getString("sousBranche"));
+					//sorties.setSousBranche(rs.getString("sousBranche"));
 					sorties.setOccupation(rs.getString("occupation"));
 					sorties.setPeriodeSimple(rs.getString("periodeSimple"));
 					sorties.setEnergieUsage(rs.getString("energieUsage"));
@@ -456,6 +496,55 @@ public class CSVServiceImpl implements CSVService {
 
 	}
 
+	protected List<ConsommationResultatsAnnee> getConsoRTAnnee(final int pasTemps) {
+
+		String requestSelect = "select substr(id, 1,2) as branche, substr(id, 7,2) as occupation, "
+				+ "substr(id, 11,2) as periodeSimple, (case when usage in ('Ventilation','Eclairage','Auxiliaires')  then '02' "
+				+ "else substr(id,length(id)-1,2) end) as energieUsage, usage, case when usage in "
+				+ "('Eclairage','Ventilation', 'Auxiliaires') then 'Electricité Spécifique' "
+				+ "else usage end as usageSimple, case when (case when usage in ('Ventilation','Eclairage','Auxiliaires')"
+				+ " then '02' " + "else substr(id,length(id)-1,2) end)='02' then 2.58 else 1 end as FEP, "
+				+ " sum(case when annee='2009' then consommation_ef else 0 end) as annee2009, ";
+
+		for (int cursorAnnee = 2010; cursorAnnee < 2050; cursorAnnee = cursorAnnee + pasTemps) {
+			requestSelect = requestSelect + "sum(case when annee='" + cursorAnnee
+					+ "' then consommation_ef else 0 end) as annee" + cursorAnnee + ", ";
+		}
+
+		requestSelect = requestSelect + "	sum(case when annee='2050' then consommation_ef else 0 end) as annee2050 "
+
+		+ " from conso_rt_resultats 	 group by 	 substr(id, 1,2), substr(id, 7,2), "
+				+ "	 substr(id, 11,2),usage,substr(id,length(id)-1,2)"
+
+				+ " order by 1, 2 , 3, 4, 5, 6 ";
+
+		return jdbcTemplate.query(requestSelect, new RowMapper<ConsommationResultatsAnnee>() {
+			@Override
+			public ConsommationResultatsAnnee mapRow(ResultSet rs, int rowNum) throws SQLException {
+				ConsommationResultatsAnnee sorties = new ConsommationResultatsAnnee();
+				int columncount = rs.getMetaData().getColumnCount();
+				for (int k = 1; k <= columncount; k++) {
+					sorties.setBranche(rs.getString("branche"));
+					//sorties.setSousBranche(rs.getString("sousBranche"));
+					sorties.setOccupation(rs.getString("occupation"));
+					sorties.setPeriodeSimple(rs.getString("periodeSimple"));
+					sorties.setEnergieUsage(rs.getString("energieUsage"));
+					sorties.setUsage(rs.getString("usage"));
+					sorties.setUsageSimple(rs.getString("usageSimple"));
+					sorties.setFacteurEnergiePrimaire(rs.getDouble("FEP"));
+					int n = 0;
+					for (int i = 2009; i < 2051; i = i + pasTemps) {
+						sorties.setAnnees(n, rs.getDouble("annee" + i));
+						n = n + pasTemps;
+					}
+
+				}
+				return sorties;
+			}
+
+		});
+
+	}
 
 
 	protected List<ConsommationResultatsAnnee> getEtiquette() {
@@ -647,7 +736,7 @@ public class CSVServiceImpl implements CSVService {
 	}
 
 
-	protected List<BesoinConsoForCSV> getConsoRTAnnee(final int pasTemps) {
+	protected List<BesoinConsoForCSV> getConsononRTAnnee(final int pasTemps) {
 		String requestSelect = "SELECT r.COD_BRANCHE, r.ANNEE, r.COD_PERIODE_SIMPLE, r.USAGE,r.COD_ENERGIE, r.CONSO_TOT FROM  " +
 				"(SELECT a.COD_BRANCHE, a.ANNEE, a.COD_PERIODE_SIMPLE, a.USAGE, a.COD_ENERGIE,  sum(a.CONSOMMATION_EF) as CONSO_TOT FROM " +
 				"(SELECT  substr(ci.ID,1,2) as COD_BRANCHE, ci.ANNEE, ci.USAGE, ci.CONSOMMATION_EF, " +
@@ -714,13 +803,13 @@ public class CSVServiceImpl implements CSVService {
 
 	protected List<ConsommationResultatsAnnee> getGESAnnee(final int PasTemps) {
 
-		String requestSelect = "select substr(c.id, 1,2) as branche, substr(c.id, 3,2) as sousBranche,"
+		String requestSelect = "select substr(c.id, 1,2) as branche,"
 				+ " substr(c.id, 7,2) as occupation, substr(c.id, 11,2) as periodeSimple,"
 				+ " case when c.usage in ('Eclairage','Ventilation',"
 
 				+ " 'Bureautique','Froid_alimentaire', 'Process') then '02' else substr(c.id,13,2) end as energieUsage, c.usage as usage,"
 				+ " case when c.usage in ('Eclairage','Ventilation',"
-				+ " 'Bureautique','Froid_alimentaire', 'Process') then 'ElectricitÃ© SpÃ©cifique' "
+				+ " 'Bureautique','Froid_alimentaire', 'Process') then 'Electricité Spécifique' "
 				+ "	 else c.usage end as usageSimple, "
 
 				+ " sum(case when c.annee='2009' then consommation_ef*fe.periode1 else 0 end) as annee2009, ";
@@ -744,7 +833,7 @@ public class CSVServiceImpl implements CSVService {
 				+ "			when c.usage not in ('Chauffage', 'Climatisation', 'Cuisson', 'Eclairage', 'ECS') then 'Autres' "
 				+ "			else c.usage end "
 
-				+ "	group by 	substr(c.id, 1,2), substr(c.id, 3,2), substr(c.id, 7,2),"
+				+ "	group by 	substr(c.id, 1,2), substr(c.id, 7,2),"
 				+ "	substr(c.id, 11,2), substr(c.id,13,2), c.usage "
 
 				+ " order by 1, 2 , 3, 4, 5, 6 ";
@@ -756,7 +845,7 @@ public class CSVServiceImpl implements CSVService {
 				int columncount = rs.getMetaData().getColumnCount();
 				for (int k = 1; k <= columncount; k++) {
 					sorties.setBranche(rs.getString("branche"));
-					sorties.setSousBranche(rs.getString("sousBranche"));
+//					sorties.setSousBranche(rs.getString("sousBranche"));
 					sorties.setOccupation(rs.getString("occupation"));
 					sorties.setPeriodeSimple(rs.getString("periodeSimple"));
 					sorties.setEnergieUsage(rs.getString("energieUsage"));

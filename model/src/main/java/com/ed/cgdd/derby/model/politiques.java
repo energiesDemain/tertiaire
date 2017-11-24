@@ -40,27 +40,27 @@ public class  politiques {
 	//surcout RT 2012 electrique direct
 	public final static boolean  checkSurcoutRT2012 = true;
 	// surcout en euros par m2 pour l'electrique joule
-	public final static BigDecimal surcoutRT = new BigDecimal("15") ;
+	public final static BigDecimal surcoutRT = new BigDecimal("20") ;
 		
 	// CEE prix annuels
 	
-	public final static boolean  checkCEEannuels = true;
+	public final static boolean  checkCEEannuels = false;
 	public final static BigDecimal pCEE2015 = new BigDecimal("0.053");
 	public final static BigDecimal pCEE2016 = new BigDecimal("0.070");
 	public final static BigDecimal pCEE2017 = new BigDecimal("0.080");
-	public final static BigDecimal pCEE2018 = new BigDecimal("0.110");
-	public final static BigDecimal pCEE2019 = new BigDecimal("0.140");
-	public final static BigDecimal pCEE2020 = new BigDecimal("0.180");
+	public final static BigDecimal pCEE2018 = new BigDecimal("0.200");
+	public final static BigDecimal pCEE2019 = new BigDecimal("0.200");
+	public final static BigDecimal pCEE2020 = new BigDecimal("0.200");
 	
 //	public final static BigDecimal pCEE2015 = new BigDecimal("0.053");
 //	public final static BigDecimal pCEE2016 = new BigDecimal("0.090");
 //	public final static BigDecimal pCEE2017 = new BigDecimal("0.100");
-//	public final static BigDecimal pCEE2018 = new BigDecimal("2.000");
-//	public final static BigDecimal pCEE2019 = new BigDecimal("2.000");
-//	public final static BigDecimal pCEE2020 = new BigDecimal("2.000");
+//	public final static BigDecimal pCEE2018 = new BigDecimal("0.110");
+//	public final static BigDecimal pCEE2019 = new BigDecimal("0.140");
+//	public final static BigDecimal pCEE2020 = new BigDecimal("0.180");
 	
 	// couts intangibles subventionnes 
-	public final static boolean  checkCEECINT = true;
+	public final static boolean  checkCEECINT = false;
 	
 	// TODO faire une hasmap annee, pcee;
 	public HashMap<Integer, BigDecimal> pCEE = new HashMap<Integer, BigDecimal>();
