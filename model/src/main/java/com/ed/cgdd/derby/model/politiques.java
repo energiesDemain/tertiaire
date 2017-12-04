@@ -44,14 +44,22 @@ public class  politiques {
 		
 	// CEE prix annuels
 	
-	public final static boolean  checkCEEannuels = false;
-	public final static BigDecimal pCEE2015 = new BigDecimal("0.053");
-	public final static BigDecimal pCEE2016 = new BigDecimal("0.070");
-	public final static BigDecimal pCEE2017 = new BigDecimal("0.080");
-	public final static BigDecimal pCEE2018 = new BigDecimal("0.200");
-	public final static BigDecimal pCEE2019 = new BigDecimal("0.200");
-	public final static BigDecimal pCEE2020 = new BigDecimal("0.200");
+	public final static boolean  checkCEEannuels = true;
+//	public final static BigDecimal pCEE2015 = new BigDecimal("0.030");
+//	public final static BigDecimal pCEE2016 = new BigDecimal("0.030");
+//	public final static BigDecimal pCEE2017 = new BigDecimal("0.030");
+//	public final static BigDecimal pCEE2018 = new BigDecimal("0.100");
+//	public final static BigDecimal pCEE2019 = new BigDecimal("0.100");
+//	public final static BigDecimal pCEE2020 = new BigDecimal("0.100");
 	
+//	valeur où on atteint 23 Twh en 2021 avec CINT subventionnés
+	public final static BigDecimal pCEE2015 = new BigDecimal("0.070");
+	public final static BigDecimal pCEE2016 = new BigDecimal("0.070");
+	public final static BigDecimal pCEE2017 = new BigDecimal("0.100");
+	public final static BigDecimal pCEE2018 = new BigDecimal("0.200");
+	public final static BigDecimal pCEE2019 = new BigDecimal("0.300");
+	public final static BigDecimal pCEE2020 = new BigDecimal("0.400");
+//	
 //	public final static BigDecimal pCEE2015 = new BigDecimal("0.053");
 //	public final static BigDecimal pCEE2016 = new BigDecimal("0.090");
 //	public final static BigDecimal pCEE2017 = new BigDecimal("0.100");
@@ -60,7 +68,7 @@ public class  politiques {
 //	public final static BigDecimal pCEE2020 = new BigDecimal("0.180");
 	
 	// couts intangibles subventionnes 
-	public final static boolean  checkCEECINT = false;
+	public final static boolean  checkCEECINT = true;
 	
 	// TODO faire une hasmap annee, pcee;
 	public HashMap<Integer, BigDecimal> pCEE = new HashMap<Integer, BigDecimal>();

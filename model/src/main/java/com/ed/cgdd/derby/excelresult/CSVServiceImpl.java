@@ -932,7 +932,8 @@ public class CSVServiceImpl implements CSVService {
 
 				+ " case when r.annee_renov_sys ='NP' then r.annee_renov_bat else r.annee_renov_sys end as annee, "
 				+ " r.reglementation as reglementation,  "
-				+ " sum(r.surface) as surface, sum(r.aides) as aides, sum(r.cout_inv) as investissement, sum(r.valeur_pret) as prets, sum(r.valeur_pret_bonif) as prets_bonif "
+				+ " sum(r.surface) as surface, sum(r.aides) as aides, sum(r.cout_inv) as investissement, "
+				+ "sum(r.valeur_pret) as prets, sum(r.valeur_pret_bonif) as prets_bonif "
 
 				+ " from resultats_financements r "
 				+ " group by  r.branche, r.occupant, r.type_renov_bat, r.type_renov_sys, "

@@ -183,7 +183,7 @@ public class ClimatisationServiceImpl implements ClimatisationService {
 			if (tauxEvolBesoin.compareTo(BigDecimal.ONE) == 1) {
 				// Creation des besoins pour un nouveau segment
 				Conso besoinSegmentNew = besoinNewSegment(besoinSegment, tauxEvolBesoin, annee, pasdeTemps, anneeNTab,
-						elasticiteExistantMap);
+						elasticiteExistantMap,  evolBesoinMap);
 				newMapSegment(anneeNTab, besoinMap, besoinSegmentNew);
 				// Creation des rendements a associer au nouveau segment
 				Conso rdtSegmentNew = rdtNeufClim(besoinSegmentNew, rdtCoutClimMap, pasdeTemps, anneeNTab, keyClim,
@@ -226,6 +226,15 @@ public class ClimatisationServiceImpl implements ClimatisationService {
 							.multiply(
 									elasticiteExistantMap.get(Usage.CLIMATISATION.getLabel()
 											+ Energies.ELECTRICITE.getCode())[annee - 2009], MathContext.DECIMAL32);
+
+					// Modification du besoin Evol pour adaptation CC
+					BigDecimal evolBesoinClim = 
+							evolBesoinMap.getEvolBesoin()
+							.get(besoinSegment.getId().substring(START_ID_BRANCHE,LENGTH_ID_BRANCHE)+Usage.CLIMATISATION+annee)
+							.getEvolution();
+					besoinNTemp = besoinNTemp.multiply(BigDecimal.ONE.add(evolBesoinClim),MathContext.DECIMAL32);
+					
+				
 				}
 				besoinSegment.setAnnee(anneeNTab, tauxEvolBesoin.multiply(besoinNTemp));
 				besoinMap.put(keyClim, besoinSegment);
@@ -266,7 +275,7 @@ public class ClimatisationServiceImpl implements ClimatisationService {
 				// Calcul du nouveau besoin pour le segment pre-existant
 				// ou ayant deja subit une renovation
 				besoinSegment = besoinExistantModif(besoinSegment, tauxEvolBesoin, besoinSortant, anneeNTab,
-						elasticiteExistantMap, annee);
+						elasticiteExistantMap, annee, evolBesoinMap);
 				besoinMap.put(keyClim, besoinSegment);
 				// Les rendements n'evoluent pas
 				rdtSegment = calcRdtConstant(besoinSegment, rdtSegment, anneeNTab);
@@ -397,7 +406,7 @@ public class ClimatisationServiceImpl implements ClimatisationService {
 	}
 
 	protected Conso besoinExistantModif(Conso besoinSegment, BigDecimal tauxEvolBesoin, BigDecimal besoinSortant,
-			int anneeNTab, HashMap<String, BigDecimal[]> elasticiteExistantMap, int annee) {
+			int anneeNTab, HashMap<String, BigDecimal[]> elasticiteExistantMap, int annee, EvolBesoinMap evolBesoinMap) {
 
 		// Formule : besoinSegment = besoinEvol - besoinSortant
 		// Test si le resultat est negatif on affecte 0
@@ -411,8 +420,14 @@ public class ClimatisationServiceImpl implements ClimatisationService {
 					.multiply(
 							elasticiteExistantMap.get(Usage.CLIMATISATION.getLabel() + Energies.ELECTRICITE.getCode())[annee - 2009],
 							MathContext.DECIMAL32);
-			besoinSegment.setAnnee(anneeNTab, besoinTemp);
-
+			
+			// Modification du besoin Evol pour adaptation CC
+			BigDecimal evolBesoinClim = 
+					evolBesoinMap.getEvolBesoin()
+					.get(besoinSegment.getId().substring(START_ID_BRANCHE,LENGTH_ID_BRANCHE)+Usage.CLIMATISATION+annee)
+					.getEvolution();
+			 besoinTemp =  besoinTemp.multiply(BigDecimal.ONE.add(evolBesoinClim),MathContext.DECIMAL32);
+			 besoinSegment.setAnnee(anneeNTab, besoinTemp);
 		}
 
 		return besoinSegment;
@@ -484,7 +499,7 @@ public class ClimatisationServiceImpl implements ClimatisationService {
 	}
 
 	protected Conso besoinNewSegment(Conso besoinSegment, BigDecimal tauxEvolBesoin, int annee, int pasdeTemps,
-			int anneeNTab, HashMap<String, BigDecimal[]> elasticiteExistantMap) {
+			int anneeNTab, HashMap<String, BigDecimal[]> elasticiteExistantMap, EvolBesoinMap evolBesoinMap) {
 
 		// besoinNew = besoinN * (1-txEvol)
 		BigDecimal besoinN = BigDecimal.ZERO;
@@ -497,7 +512,14 @@ public class ClimatisationServiceImpl implements ClimatisationService {
 				.multiply(
 						elasticiteExistantMap.get(Usage.CLIMATISATION.getLabel() + Energies.ELECTRICITE.getCode())[annee - 2009],
 						MathContext.DECIMAL32);
-
+		
+		// Modification du besoin Evol pour adaptation CC
+		BigDecimal evolBesoinClim = 
+				evolBesoinMap.getEvolBesoin()
+				.get(besoinSegment.getId().substring(START_ID_BRANCHE,LENGTH_ID_BRANCHE)+Usage.CLIMATISATION+annee)
+				.getEvolution();
+		besoinNew = besoinNew.multiply(BigDecimal.ONE.add(evolBesoinClim),MathContext.DECIMAL32);
+		
 		Conso newSegment = new Conso(pasdeTemps);
 		// remplissage du nouvel objet Conso
 		newSegment.setId(besoinSegment.getId());

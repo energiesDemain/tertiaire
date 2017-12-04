@@ -439,7 +439,6 @@ public class ProcessServiceRunnable implements Runnable {
 
 					// On charge la bonne map des besoins neufs a utiliser en fonction de l'occupant et de l'annee
 					HashMap<String, ParamBesoinsNeufs> bNeufsMap = getBNeufMapToUse(annee);
-		
 					// Calcul des parts de marche dans les batiments neufs
 					//long startMarcheNeuf = System.currentTimeMillis();
 					HashMap<String, BigDecimal> partsMarchesNeuf = createNeufService.pmChauffNeuf(bNeufsMap,

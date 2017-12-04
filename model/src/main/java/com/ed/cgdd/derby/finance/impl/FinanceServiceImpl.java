@@ -1510,8 +1510,9 @@ public class FinanceServiceImpl implements FinanceService {
 			BigDecimal valeurPBC = BigDecimal.ZERO;
 			BigDecimal valeurPretBonif = BigDecimal.ZERO;
 			BigDecimal valeurAide = BigDecimal.ZERO;
-
+			
 			for (ListeFinanceValeur listeFin : temp.getFinancements()) {
+			
 				BigDecimal valueToAdd = listeFin.getValeur().multiply(surfaceMod, MathContext.DECIMAL32)
 						.divide(temp.getSurfaceUnitaire(), MathContext.DECIMAL32);
 				switch (listeFin.getFinance().getType()) {

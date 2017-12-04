@@ -1,6 +1,7 @@
 package com.ed.cgdd.derby.finance.impl;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -64,18 +65,27 @@ public class PBCServiceImpl extends TypeFinanceServiceImpl {
 		// si on choisit d'inclure les couts intangibles dans la subvention, on fait le meme calcul sur coutafinance + CINT
 		
 		if (politiques.checkCEECINT){
-			BigDecimal CINTAFinance = coutRenov.getCINT().multiply(BigDecimal.valueOf(coutRenov.getDuree()));
-			BigDecimal CoutAFinanceCINT = coutAFinance.add(CINTAFinance);
-					
-			if (CoutAFinanceCINT.compareTo(aide) < 0 && 
-					aide.compareTo(BigDecimal.ZERO)> 0 && 
-					CoutAFinanceCINT.compareTo(BigDecimal.ZERO)> 0) {
+			BigDecimal CINTAFinance = coutRenov.getCINT().multiply(BigDecimal.valueOf(coutRenov.getDuree()), 
+					MathContext.DECIMAL32);
+			BigDecimal CoutAFinanceCINT = coutAFinance.add(CINTAFinance, MathContext.DECIMAL32);
+			
+			if (coutAFinance.compareTo(aide) < 0 && aide.compareTo(BigDecimal.ZERO)> 0 && 
+					CINTAFinance.compareTo(BigDecimal.ZERO) < 0) {
+				aide = BigDecimal.valueOf(coutAFinance.doubleValue());
+				coutAFinance = BigDecimal.ZERO;
+			} else if (coutAFinance.compareTo(aide) < 0 && aide.compareTo(BigDecimal.ZERO)> 0 &&
+					CINTAFinance.compareTo(BigDecimal.ZERO) > 0) {
+				coutRenov.setCINT((CINTAFinance.subtract(aide.subtract(coutAFinance, MathContext.DECIMAL32)))
+						.divide(BigDecimal.valueOf(coutRenov.getDuree()), MathContext.DECIMAL32));
+				aide = BigDecimal.valueOf(coutAFinance.doubleValue());
+				coutAFinance = BigDecimal.ZERO;
+				if(coutRenov.getCINT().compareTo(BigDecimal.ZERO) < 0){
+					coutRenov.setCINT(BigDecimal.ZERO);
+				}
 				
-				aide = CoutAFinanceCINT;
-				coutAFinance = BigDecimal.ZERO.subtract(CINTAFinance);
 			} else {
 				coutAFinance = coutAFinance.subtract(aide);
-			}
+			}			
 		} else {
 			if (coutAFinance.compareTo(aide) < 0 & aide.compareTo(BigDecimal.ZERO)> 0) {
 				aide = BigDecimal.valueOf(coutAFinance.doubleValue());
