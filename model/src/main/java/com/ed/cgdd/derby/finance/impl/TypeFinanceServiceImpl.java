@@ -102,6 +102,8 @@ public abstract class TypeFinanceServiceImpl implements TypeFinanceService {
 		if (geste.getTypeRenovBati() != TypeRenovBati.ETAT_INIT) {
 			multi = getVariation(geste.getTypeRenovBati().getLabel(), annee, evolCoutBati);
 		}
+
+		
 		
 		BigDecimal coutIntBati = coutIntangibleBat.multiply(multi,
 				MathContext.DECIMAL32);
