@@ -13,7 +13,7 @@ import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.xmlbeans.impl.tool.Extension;
+import org.apache.poi.ss.usermodel.Cell;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.ed.cgdd.derby.loadparam.ImportExcelParamDAS;
@@ -124,9 +124,9 @@ public class ImportExcelParamDASImpl implements ImportExcelParamDAS {
 
 	private Object getObject(HSSFCell cell) {
 		int type = cell.getCellType();
-		if (type == HSSFCell.CELL_TYPE_STRING) {
+		if (type == Cell.CELL_TYPE_STRING) {
 			return cell.getStringCellValue();
-		} else if (type == HSSFCell.CELL_TYPE_NUMERIC) {
+		} else if (type == Cell.CELL_TYPE_NUMERIC) {
 			double number = cell.getNumericCellValue();
 			return new BigDecimal(String.valueOf(number));
 		} else {

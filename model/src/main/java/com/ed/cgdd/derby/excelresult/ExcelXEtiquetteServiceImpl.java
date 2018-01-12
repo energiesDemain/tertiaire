@@ -10,10 +10,6 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -51,6 +47,7 @@ public class ExcelXEtiquetteServiceImpl implements ExcelXEtiquetteService {
 	 * 
 	 * Il définit si les feuilles d'import sont cachées ou visibles.
 	 */
+	@Override
 	public void excelXService(int pasTemps, boolean isHidden) {
 		try {
 

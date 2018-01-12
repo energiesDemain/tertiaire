@@ -3,16 +3,10 @@ package com.ed.cgdd.derby.excelresult;
 import com.ed.cgdd.derby.excelresult.CSVService;
 import com.ed.cgdd.derby.model.excelobjects.BesoinConsoForCSV;
 import com.ed.cgdd.derby.model.parc.ConsommationResultatsAnnee;
-import com.ed.cgdd.derby.model.parc.TableResult;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -40,6 +34,7 @@ public class CSVServiceImpl implements CSVService {
 	}
 
 
+	@Override
 	public void csvService(int pasTemps) {
 		try {
 

@@ -31,6 +31,7 @@ public class GesteDASImpl extends BddDAS implements GesteDAS {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
+	@Override
 	public List<Geste> getGesteBatiData(String idAggreg) {
 		String requete = "SELECT id_agreg,geste, case when exigence = 'BBC renovation' then 'BBC_RENOVATION' when exigence = 'GTB' then 'GTB' else 'RT_PAR_ELEMENT' end as exigence, gain, cout, cee "
 				+ "FROM GESTE_BATI WHERE SUBSTR(ID_AGREG,1,6) = '"
@@ -39,6 +40,7 @@ public class GesteDASImpl extends BddDAS implements GesteDAS {
 
 		List<Geste> res = jdbcTemplate.query(requete, new RowMapper<Geste>() {
 
+			@Override
 			public Geste mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 				Geste sortie = new Geste();

@@ -27,7 +27,6 @@ import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
 import com.ed.cgdd.derby.model.parc.Usage;
 import com.ed.cgdd.derby.model.parc.EvolBesoinMap;
 import com.ed.cgdd.derby.usagesrt.ChauffageService;
-import com.ed.cgdd.derby.model.politiques;
 
 public class ChauffageServiceImpl implements ChauffageService {
 	private final static Logger LOG = LogManager.getLogger(ChauffageServiceImpl.class);

@@ -8,8 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.ed.cgdd.derby.model.financeObjects.CalibCoutGlobal;
-import com.ed.cgdd.derby.model.parc.Branche;
 import com.ed.cgdd.derby.model.parc.CIntType;
+import com.ed.cgdd.derby.model.parc.PeriodDetail;
+import com.ed.cgdd.derby.model.parc.PeriodDetail2;
+
 //import com.sun.org.apache.bcel.internal.generic.SWITCH;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -44,11 +46,13 @@ public class CalibrageDASImpl extends BddDAS implements CalibrageDAS {
 		this.commonService = commonService;
 	}
 
+	@Override
 	public HashMap<String, CalibCIBati> recupCIBati() {
 		HashMap<String, CalibCIBati> results = new HashMap<String, CalibCIBati>();
 
 		String requete = getProperty("CINT_BATI_INIT_LOAD");
 		List<CalibCIBati> res = jdbcTemplate.query(requete, new RowMapper<CalibCIBati>() {
+			@Override
 			public CalibCIBati mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 				CalibCIBati sortie = new CalibCIBati();
@@ -79,6 +83,7 @@ public class CalibrageDASImpl extends BddDAS implements CalibrageDAS {
 		return key;
 	}
 
+	@Override
 	public HashMap<String, CalibCI> recupCI() {
 		HashMap<String, CalibCI> results = new HashMap<String, CalibCI>();
 
@@ -86,6 +91,7 @@ public class CalibrageDASImpl extends BddDAS implements CalibrageDAS {
 
 		List<CalibCI> res = jdbcTemplate.query(requete, new RowMapper<CalibCI>() {
 
+			@Override
 			public CalibCI mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 				CalibCI sortie = new CalibCI();
@@ -118,6 +124,7 @@ public class CalibrageDASImpl extends BddDAS implements CalibrageDAS {
 
 
 	// Ajout 21092017
+	@Override
 	public HashMap<String, CalibCI> recupCINeuf() {
 		HashMap<String, CalibCI> results = new HashMap<String, CalibCI>();
 
@@ -125,6 +132,7 @@ public class CalibrageDASImpl extends BddDAS implements CalibrageDAS {
 
 		List<CalibCI> res = jdbcTemplate.query(requete, new RowMapper<CalibCI>() {
 
+			@Override
 			public CalibCI mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 				CalibCI sortie = new CalibCI();
@@ -228,5 +236,44 @@ public class CalibrageDASImpl extends BddDAS implements CalibrageDAS {
 		}
 
 	}
+	
+	public void insertCIntDesag(HashMap<String,CalibCoutGlobal> coutIntangibleMap, CIntType cIntType) {
+		List<Object[]> objectInsert = new ArrayList<Object[]>();
+		if (cIntType.equals(CIntType.BATI)){
+			for (String key : coutIntangibleMap.keySet()) {
+				Object[] object = new Object[9];
+				object[0] = key;			
+				object[1] = key;
+				object[2] = key;
+				object[3] = key;
+				object[4] = key;
+				object[5] = PeriodDetail2.getEnumName(key.substring(8,10));
+				object[6] = key;
+				object[7] = coutIntangibleMap.get(key).getCInt();
+				object[8] = coutIntangibleMap.get(key).getCoutVariable();
+				objectInsert.add(object);
+			}
+		} else {
+			for (String key : coutIntangibleMap.keySet()) {
+				Object[] object = new Object[6];
+				object[0] = key;
+				object[1] = key;
+				object[2] = key;
+				object[3] = key;
+				object[4] = coutIntangibleMap.get(key).getCInt();
+				object[5] = coutIntangibleMap.get(key).getCoutVariable();
+				objectInsert.add(object);
+			}
 
+		}
+
+
+		if (!objectInsert.isEmpty()) {
+			// Truncate de la table avant insertion
+			jdbcTemplate.update(getProperty(TRUNCATE_CINT + cIntType.toString()));
+			// Insertion des valeurs
+			jdbcTemplate.batchUpdate(getProperty(INSERT_CINT + cIntType.toString() + "_DESAG"), objectInsert);
+		}
+
+	}
 }

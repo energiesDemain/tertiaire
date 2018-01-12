@@ -3,7 +3,12 @@ package com.ed.cgdd.derby.model;
 import java.math.BigDecimal;
 
 public class CalibParameters {
-
+	
+	// annee de calibration (prix des energies)
+	public static final Integer YEAR_CALIB=2009;
+	
+	public static final BigDecimal TAUX_ACTU_CALIB = new BigDecimal("0.04");
+	
 	// param surcout fuel switch en % du cout d'investissement
 		public final static boolean  checkSurcoutFuelSwitch = true;
 		public final static BigDecimal FacteurFuelCentrElec = new BigDecimal("1");

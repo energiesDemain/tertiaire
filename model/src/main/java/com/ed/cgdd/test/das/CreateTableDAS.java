@@ -8,7 +8,6 @@ import java.util.List;
 import com.ed.cgdd.test.model.Contrainte;
 import com.ed.cgdd.test.model.Determinant;
 import com.ed.cgdd.test.model.LigneBat;
-import com.ed.cgdd.test.model.TestMapper;
 
 public interface CreateTableDAS {
 	public void createTable() ;

@@ -1,8 +1,6 @@
 package com.ed.cgdd.derby.model.financeObjects;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
 
 public class CalibCoutGlobal {
 

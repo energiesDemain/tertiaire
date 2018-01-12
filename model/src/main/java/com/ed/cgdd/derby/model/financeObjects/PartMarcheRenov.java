@@ -74,10 +74,12 @@ public class PartMarcheRenov extends Segment {
 		this.energie = energie;
 	}
 
+	@Override
 	public String getId() {
 		return id;
 	}
 
+	@Override
 	public void setId(String id) {
 		this.id = id;
 	}

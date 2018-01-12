@@ -2,8 +2,6 @@ package com.ed.cgdd.derby.finance;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
-
 import com.ed.cgdd.derby.model.calcconso.Conso;
 import com.ed.cgdd.derby.model.financeObjects.*;
 import com.ed.cgdd.derby.model.parc.Parc;

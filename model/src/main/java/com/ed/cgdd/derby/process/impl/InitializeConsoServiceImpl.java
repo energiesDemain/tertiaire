@@ -41,6 +41,7 @@ public class InitializeConsoServiceImpl implements InitializeConsoService {
 	}
 
 	// Methode initialisant la HashMap de rendements pour l'usage ECS
+	@Override
 	public HashMap<String, Conso> initializeRdtEcs(HashMap<String, ParamRdtEcs> bibliRdtEcsMap,
 			HashMap<String, Conso> besoinsInit, int pasdeTemps) {
 
@@ -87,6 +88,7 @@ public class InitializeConsoServiceImpl implements InitializeConsoService {
 
 	// Methode initialisant la HashMap de rendements pour l'usage de
 	// climatisation
+	@Override
 	public HashMap<String, Conso> initializeRdtClim(HashMap<String, ParamRdtCout> rdtCoutClimMap,
 			HashMap<String, Conso> besoinsInit, int pasdeTemps) {
 
@@ -112,6 +114,7 @@ public class InitializeConsoServiceImpl implements InitializeConsoService {
 
 	// Methode initialisant la HashMap de rendements pour l'usage de
 	// chauffage
+	@Override
 	public HashMap<String, Conso> initializeRdtChauff(HashMap<String, ParamRdtCout> rdtCoutChauffMap,
 			HashMap<String, Conso> besoinsInit, int pasdeTemps) {
 
@@ -165,6 +168,7 @@ public class InitializeConsoServiceImpl implements InitializeConsoService {
 
 	// Methode initialisant la HashMap de resultats de consommations pour
 	// l'usage d'ECS
+	@Override
 	public HashMap<String, Conso> initializeConsoEcs(HashMap<String, Conso> rdtEcsMap,
 			HashMap<String, Conso> besoinsInit, int pasdeTemps, HashMap<String, ResultConsoURt> resultConsoURtMap) {
 		int anneeNTab = 0;
@@ -208,6 +212,7 @@ public class InitializeConsoServiceImpl implements InitializeConsoService {
 
 	}
 
+	@Override
 	public void insertResultConsoUExistEcl(HashMap<String, ResultConsoURt> resultConsoURtMap, int anneeNTab,
 			String idResultRtClim, BigDecimal consoEF, BigDecimal consoEP, int annee) {
 		int index = anneeNTab;
@@ -238,6 +243,7 @@ public class InitializeConsoServiceImpl implements InitializeConsoService {
 		resultConsoURtMap.put(resultInsert.getId(), resultInsert);
 	}
 
+	@Override
 	public void insertResultConsoUExistECS(HashMap<String, ResultConsoURt> resultConsoURtMap, int anneeNTab,
 			String idResultRtClim, BigDecimal consoEF, BigDecimal consoEP, int annee) {
 		int index = anneeNTab;
@@ -268,6 +274,7 @@ public class InitializeConsoServiceImpl implements InitializeConsoService {
 		resultConsoURtMap.put(resultInsert.getId(), resultInsert);
 	}
 
+	@Override
 	public void insertResultConsoUExistClim(HashMap<String, ResultConsoUClim> resultConsoUClimMap, int anneeNTab,
 			String idResultRtClim, BigDecimal consoEF, BigDecimal consoEP, int annee) {
 		int index = anneeNTab;
@@ -300,6 +307,7 @@ public class InitializeConsoServiceImpl implements InitializeConsoService {
 
 	// Methode initialisant la HashMap de resultats de consommations pour
 	// l'usage de climatisation
+	@Override
 	public HashMap<String, Conso> initializeConsoChauffClim(HashMap<String, Conso> rdtMap,
 			HashMap<String, Conso> besoinsInit, int pasdeTemps) {
 
@@ -328,6 +336,7 @@ public class InitializeConsoServiceImpl implements InitializeConsoService {
 
 	// Methode initialisant la HashMap de resultats de consommations pour
 	// l'usage de climatisation
+	@Override
 	public HashMap<String, Conso> initializeConsoClim(HashMap<String, ResultConsoUClim> resultConsoUClimMap,
 			HashMap<String, Conso> rdtMap, HashMap<String, Conso> besoinsInit, int pasdeTemps) {
 

@@ -8,7 +8,8 @@ import org.springframework.jdbc.core.RowMapper;
 
 
 public class TestMapper implements RowMapper<LigneBat> {
-    public LigneBat mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
+    @Override
+	public LigneBat mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
         LigneBat batiment = new LigneBat();
         batiment.setId(resultSet.getString("ID"));
         batiment.setAge(resultSet.getInt("AGE"));

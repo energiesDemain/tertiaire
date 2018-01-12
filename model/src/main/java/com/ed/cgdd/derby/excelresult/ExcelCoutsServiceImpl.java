@@ -44,6 +44,7 @@ public class ExcelCoutsServiceImpl implements ExcelCoutsService {
 	 * setImportSheetHidden(isHidden), et updateXls().
 	 * 
 	 */
+	@Override
 	public void excelService(int pasTemps, boolean isHidden) {
 		try {
 			LOG.info("Classeur table_resultat.xls");
@@ -385,6 +386,7 @@ public class ExcelCoutsServiceImpl implements ExcelCoutsService {
 	 * @throws IOException
 	 */
 
+	@Override
 	public void getContributionClimat(HashMap<Integer, CoutEnergie> coutEnergieMap) throws IOException {
 
 		// LOG.info("test");

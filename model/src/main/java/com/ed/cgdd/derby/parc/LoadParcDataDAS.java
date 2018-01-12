@@ -2,7 +2,6 @@ package com.ed.cgdd.derby.parc;
 
 import java.util.List;
 
-import com.ed.cgdd.derby.model.parc.ParamCintObjects;
 import com.ed.cgdd.derby.model.parc.ParamParcArray;
 import com.ed.cgdd.derby.model.parc.Parc;
 

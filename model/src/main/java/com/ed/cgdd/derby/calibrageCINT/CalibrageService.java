@@ -1,14 +1,18 @@
 package com.ed.cgdd.derby.calibrageCINT;
 
 import java.util.HashMap;
+import java.util.List;
 
 import com.ed.cgdd.derby.model.calcconso.ParamBesoinsNeufs;
 import com.ed.cgdd.derby.model.financeObjects.CalibCI;
 import com.ed.cgdd.derby.model.financeObjects.CalibCIBati;
 import com.ed.cgdd.derby.model.financeObjects.CalibCoutGlobal;
 import com.ed.cgdd.derby.model.financeObjects.CoutEnergie;
+import com.ed.cgdd.derby.model.financeObjects.Geste;
 import com.ed.cgdd.derby.model.financeObjects.Maintenance;
+import com.ed.cgdd.derby.model.financeObjects.TauxInteret;
 import com.ed.cgdd.derby.model.parc.ParamCInt;
+import com.ed.cgdd.derby.model.parc.ParamCalib;
 
 public interface CalibrageService {
 
@@ -34,5 +38,12 @@ public interface CalibrageService {
 	 * @param coutEnergieMap
 	 * @param bNeufsMap
 	 */
+	
+	HashMap<String, CalibCoutGlobal> calibreCIBatidesag(HashMap<String, CalibCIBati> dataCalib, 
+			ParamCInt paramCInt, HashMap<String, ParamCalib> paramCalibMap,  
+			HashMap<String, List<Geste>>  bibliGesteBatiMap, HashMap<String, TauxInteret> tauxInteretMap);
+	
+	
+	
     void addingRowsInHashMap(HashMap<String, CalibCI> cintMapNeuf, HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, ParamBesoinsNeufs> bNeufsMap);
 }

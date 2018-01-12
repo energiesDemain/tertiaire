@@ -394,7 +394,7 @@ public class FinanceServiceImpl implements FinanceService {
 		partsMarcheModif.setPartRenouvSys(modifPartRenouvSys(sommeSysRegl, partsMarcheModif.getPartRenouvSys()));
 		// Ajout des gestes non imposes par des reglementations
 		partGesteFin = calcPMHorsRegl(partsMarcheModif, partGesteFin, compilHorsRegl, surfInit);
-	
+		
 
 	}
 
@@ -1378,23 +1378,28 @@ public class FinanceServiceImpl implements FinanceService {
 
 
 
-						// LOG POUR VERIFIER LES COMPOSANTES DU COUT GLOBAL
+//						// LOG POUR VERIFIER LES COMPOSANTES DU COUT GLOBAL
 //						BigDecimal CINTsys = BigDecimal.ZERO;
+//						BigDecimal CINTbat = BigDecimal.ZERO;
 //						BigDecimal Cadd = BigDecimal.ZERO;
 //
 //						if(!courant.getTypeRenovSys().equals(TypeRenovSysteme.ETAT_INIT)){
-//							CINTsys = coutIntangible.get(generateIDCoutInt(parcIni, courant)).getCInt().multiply(surface);
+//							CINTsys = coutIntangible.get(generateIDCoutInt(parcIni, courant)).getCInt();
 //							if(!(courant.getCoutTravauxAddGeste() == null)){
 //							Cadd = courant.getCoutTravauxAddGeste().multiply(surface);
 //							}
 //						}
-//
-//						LOG.info("ENERGIE : {}, SYSTEME : {} => type Reno bati : {} CSyst {} CINTSys {} CG {} Rdt : {} surface : {} besoin :{}",
+//						if(!courant.getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)){
+//							CINTbat = coutIntangibleBati.get(generateIDCoutIntBati(parcIni, courant)).getCInt();
+//						}
+//						
+//						LOG.info("ENERGIE : {}, SYSTEME : {} => type Reno bati : {} CSyst {} CINTSys {} Cbati{} CINTbat {} CG {} "
+//								+ "Rdt : {} surface : {} besoin :{}",
 //								courant.getEnergie(),
 //								courant.getSysChaud(),
 //								courant.getTypeRenovBati(),
-//								courant.getCoutGesteSys().multiply(surface),
-//								CINTsys,
+//								courant.getCoutGesteSys(),
+//								CINTsys, courant.getCoutGesteBati(), CINTbat,
 //								coutFinalProp.getCoutGlobal(),
 //								courant.getRdt(),surface, besoinInitUnitaire
 //
@@ -1426,6 +1431,7 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	// Methode pour avoir tous les financements "valides" (on enleve les CEE)
+	@Override
 	public List<CEE> cleanListeFinancement(List<Financement> listeFin) {
 		List<CEE> result = new ArrayList<CEE>();
 
@@ -1469,6 +1475,7 @@ public class FinanceServiceImpl implements FinanceService {
 		return idAgreg.substring(START_ID_BRANCHE, START_ID_BRANCHE + LENGTH_ID_BRANCHE);
 	}
 
+	@Override
 	public void extractionResult(HashMap<ResFin, ValeurFinancement> resultFinance, String idAgregParc,
 			PartMarcheRenov temp, HashMap<String, Parc> parcTotMap, int anneeNTab, int annee) {
 
@@ -1550,6 +1557,7 @@ public class FinanceServiceImpl implements FinanceService {
 	}
 
 	// methode d'agregation des valeurs
+	@Override
 	public void agregateResFinancement(HashMap<ResFin, ValeurFinancement> resultatsIni, ResultatsFinancements result,
 			String idAgregParc) {
 		HashMap<ResFin, ValeurFinancement> resultats = resultatsIni;
@@ -1595,8 +1603,13 @@ public class FinanceServiceImpl implements FinanceService {
 		return parcIni.getIdbranche().concat(parcIni.getIdbattype()).concat(geste.getSysChaud())
 				.concat(geste.getEnergie()).concat(perfor);
 	}
+//	protected String generateIDCoutIntBati(Parc parcIni, Geste geste) {
+//		String key = parcIni.getIdbranche() + geste.getTypeRenovBati().getLabel();
+//		return key;
+//	}
 	protected String generateIDCoutIntBati(Parc parcIni, Geste geste) {
-		String key = parcIni.getIdbranche() + geste.getTypeRenovBati().getLabel();
+		String key = parcIni.getIdbranche()+parcIni.getIdssbranche()
+		+parcIni.getIdbattype()+parcIni.getIdoccupant()+parcIni.getIdperiodedetail()+ geste.getTypeRenovBati().getLabel();
 		return key;
 	}
 }

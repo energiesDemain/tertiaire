@@ -54,6 +54,7 @@ public class CommonServiceImpl implements CommonService {
 		this.coutEnergieService = coutEnergieService;
 	}
 
+	@Override
 	public HashMap<String, BigDecimal[]> getFacteurElasticiteExistant(String idAgreg,
 			HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
 			ElasticiteMap elasticiteMap) {
@@ -119,6 +120,7 @@ public class CommonServiceImpl implements CommonService {
 		return elasticiteSegment;
 	}
 
+	@Override
 	public HashMap<String, BigDecimal[]> getFacteurElasticiteNeuf(String idAgreg,
 			HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
 			ElasticiteMap elasticiteMap) {
@@ -210,11 +212,13 @@ public class CommonServiceImpl implements CommonService {
 
 	}
 
+	@Override
 	public String codeCreateEnerg(String energPmKey) {
 		Energies energies = Enum.valueOf(Energies.class, energPmKey);
 		return energies.getCode();
 	}
 
+	@Override
 	public int correspPeriode(int annee) {
 
 		int periode;
@@ -234,6 +238,7 @@ public class CommonServiceImpl implements CommonService {
 
 	}
 
+	@Override
 	public String correspPeriodeString(int annee) {
 
 		String periodeStrg;
@@ -253,6 +258,7 @@ public class CommonServiceImpl implements CommonService {
 
 	}
 
+	@Override
 	public String correspPeriodeFin(int annee) {
 		String periodeStrg;
 		if (annee > 2009 && annee < 2016) {
@@ -270,6 +276,7 @@ public class CommonServiceImpl implements CommonService {
 		return periodeStrg;
 	}
 
+	@Override
 	public int anneeDebutPeriode(int periode) {
 		int anneeDebut;
 		if (periode == 1) {
@@ -286,6 +293,7 @@ public class CommonServiceImpl implements CommonService {
 		return anneeDebut;
 	}
 	
+	@Override
 	public String concatID(Parc parcAgreg, String usage) {
 
 		StringBuffer concatID = new StringBuffer();
@@ -297,6 +305,7 @@ public class CommonServiceImpl implements CommonService {
 
 	}
 
+	@Override
 	public int correspPeriodeCstr(Parc parcExistant, int annee) {
 		int periodCstr = 0;
 		if (parcExistant.getIdperiodesimple().equals(Period.PERIODE_BEFORE_1980.getCode())
@@ -317,6 +326,7 @@ public class CommonServiceImpl implements CommonService {
 		return periodCstr;
 	}
 
+	@Override
 	public HashMap<String, Parc> aggregateParc(HashMap<String, Parc> parcTotMap, int anneeNTab) {
 
 		HashMap<String, Parc> parcAgreg = new HashMap<String, Parc>();
@@ -363,6 +373,7 @@ public class CommonServiceImpl implements CommonService {
 		return parcAgreg;
 	}
 
+	@Override
 	public HashMap<String, Parc> aggregateParcEcs(HashMap<String, Parc> parcTotMap, int anneeNTab,
 			HashMap<String, ResultConsoURt> resultConsoURtMap, int pasdeTemps) {
 
@@ -433,6 +444,7 @@ public class CommonServiceImpl implements CommonService {
 		return parcAgreg;
 	}
 
+	@Override
 	public HashMap<String, Parc> aggregateParcEclairage(HashMap<String, Parc> parcTotMap, int anneeNTab) {
 
 		HashMap<String, Parc> parcAgreg = new HashMap<String, Parc>();
@@ -484,6 +496,7 @@ public class CommonServiceImpl implements CommonService {
 		return parcAgreg;
 	}
 
+	@Override
 	public HashMap<String, Conso> aggregateBesoinEclairage(HashMap<String, Conso> besoinTotMap, int anneeNTab) {
 
 		HashMap<String, Conso> besoinAgreg = new HashMap<String, Conso>();
@@ -535,6 +548,7 @@ public class CommonServiceImpl implements CommonService {
 		return besoinAgreg;
 	}
 
+	@Override
 	public HashMap<String, Parc> aggregateParcRehab(HashMap<String, Parc> parcTotMap, int anneeNTab) {
 
 		HashMap<String, Parc> parcAgreg = new HashMap<String, Parc>();
@@ -582,6 +596,7 @@ public class CommonServiceImpl implements CommonService {
 		return parcAgreg;
 	}
 
+	@Override
 	public HashMap<String, Conso> aggregateConsoEcs(HashMap<String, Conso> besoinMap, int anneeNTab) {
 
 		HashMap<String, Conso> parcAgreg = new HashMap<String, Conso>();
@@ -634,6 +649,7 @@ public class CommonServiceImpl implements CommonService {
 		return parcAgreg;
 	}
 
+	@Override
 	public HashMap<String, List<String>> idAgregList(HashMap<String, Conso> besoinMap,
 			HashMap<String, Parc> parcTotMapAgreg) {
 
@@ -657,6 +673,7 @@ public class CommonServiceImpl implements CommonService {
 
 	}
 
+	@Override
 	public HashMap<String, List<String>> idAgregBoucleList(List<String> listeId) {
 
 		HashMap<String, List<String>> keyMap = new HashMap<String, List<String>>();
@@ -682,6 +699,7 @@ public class CommonServiceImpl implements CommonService {
 	}
 
 	// methode pour avoir la somme d'une serie geometrique de raison "facteur"
+	@Override
 	public BigDecimal serieGeometrique(BigDecimal multiplicatif, BigDecimal facteur, int duree) {
 		return multiplicatif.multiply(
 				BigDecimal.ONE.subtract(facteur.pow(duree + 1, MathContext.DECIMAL32), MathContext.DECIMAL32),
@@ -690,6 +708,7 @@ public class CommonServiceImpl implements CommonService {
 
 	}
 
+	@Override
 	public ResultConsoRdt agregateResultECS(final ResultConsoRdt resultatsConso, int pasdeTemps, String usage) {
 		int lenght_id = 0;
 		lenght_id = LENGTH_ID_ECS;
@@ -733,6 +752,7 @@ public class CommonServiceImpl implements CommonService {
 		return resultConsoTemp;
 	}
 
+	@Override
 	public ResultConsoRt agregateResultRtClim(final ResultConsoRt resultatsConsoRt, int pasdeTemps, String usage) {
 		int lenght_id = 0;
 		lenght_id = LENGTH_ID_CLIM;
@@ -780,6 +800,7 @@ public class CommonServiceImpl implements CommonService {
 	}
 
 	// Agrege les resultats du parc
+	@Override
 	public ResultParc agregateResultParc(final ResultParc resultatsParc, int pasdeTemps) {
 
 		ResultParc resultParcTemp = new ResultParc();
@@ -821,6 +842,7 @@ public class CommonServiceImpl implements CommonService {
 		return resultParcTemp;
 	}
 
+	@Override
 	public ResultConsoRt agregateResultRt(final ResultConsoRt resultatsConso, int pasdeTemps) {
 
 		ResultConsoRt resultConsoTemp = new ResultConsoRt();
@@ -877,6 +899,7 @@ public class CommonServiceImpl implements CommonService {
 	}
 
 	// Genere les id pour les hashMap de resultats (ecs/climatisation/eclairage)
+	@Override
 	public String generateIdMapResultRt(Conso besoin) {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append(besoin.getId());
@@ -888,6 +911,7 @@ public class CommonServiceImpl implements CommonService {
 		return buffer.toString();
 	}
 
+	@Override
 	public HashMap<String, Parc> aggregateParcConsoU(HashMap<String, ResultConsoUClim> resultConsoUClimMap,
 			HashMap<String, Parc> parcTotMap, int anneeNTab, int pasdeTemps) {
 
@@ -957,6 +981,7 @@ public class CommonServiceImpl implements CommonService {
 		return parcAgreg;
 	}
 
+	@Override
 	public HashMap<String, Conso> aggregateBesoinClim(HashMap<String, Conso> besoinMap, int anneeNTab, int pasdeTemps) {
 
 		HashMap<String, Conso> besoinAgreg = new HashMap<String, Conso>();

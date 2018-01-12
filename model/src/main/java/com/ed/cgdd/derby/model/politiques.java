@@ -1,10 +1,6 @@
 package com.ed.cgdd.derby.model;
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.Callable;
 
 public class  politiques {
 	
@@ -44,21 +40,21 @@ public class  politiques {
 		
 	// CEE prix annuels
 	
-	public final static boolean  checkCEEannuels = true;
-//	public final static BigDecimal pCEE2015 = new BigDecimal("0.030");
-//	public final static BigDecimal pCEE2016 = new BigDecimal("0.030");
-//	public final static BigDecimal pCEE2017 = new BigDecimal("0.030");
-//	public final static BigDecimal pCEE2018 = new BigDecimal("0.100");
-//	public final static BigDecimal pCEE2019 = new BigDecimal("0.100");
-//	public final static BigDecimal pCEE2020 = new BigDecimal("0.100");
+	public final static boolean  checkCEEannuels = false;
+	public final static BigDecimal pCEE2015 = new BigDecimal("0.010");
+	public final static BigDecimal pCEE2016 = new BigDecimal("0.010");
+	public final static BigDecimal pCEE2017 = new BigDecimal("0.010");
+	public final static BigDecimal pCEE2018 = new BigDecimal("0.015");
+	public final static BigDecimal pCEE2019 = new BigDecimal("0.015");
+	public final static BigDecimal pCEE2020 = new BigDecimal("0.015");
 	
-//	valeur où on atteint 23 Twh en 2021 avec CINT subventionnés
-	public final static BigDecimal pCEE2015 = new BigDecimal("0.070");
-	public final static BigDecimal pCEE2016 = new BigDecimal("0.070");
-	public final static BigDecimal pCEE2017 = new BigDecimal("0.100");
-	public final static BigDecimal pCEE2018 = new BigDecimal("0.200");
-	public final static BigDecimal pCEE2019 = new BigDecimal("0.300");
-	public final static BigDecimal pCEE2020 = new BigDecimal("0.400");
+////	valeur où on atteint 23 Twh en 2021 avec CINT subventionnés
+//	public final static BigDecimal pCEE2015 = new BigDecimal("0.070");
+//	public final static BigDecimal pCEE2016 = new BigDecimal("0.070");
+//	public final static BigDecimal pCEE2017 = new BigDecimal("0.100");
+//	public final static BigDecimal pCEE2018 = new BigDecimal("0.200");
+//	public final static BigDecimal pCEE2019 = new BigDecimal("0.300");
+//	public final static BigDecimal pCEE2020 = new BigDecimal("0.400");
 //	
 //	public final static BigDecimal pCEE2015 = new BigDecimal("0.053");
 //	public final static BigDecimal pCEE2016 = new BigDecimal("0.090");
@@ -68,7 +64,7 @@ public class  politiques {
 //	public final static BigDecimal pCEE2020 = new BigDecimal("0.180");
 	
 	// couts intangibles subventionnes 
-	public final static boolean  checkCEECINT = true;
+	public final static boolean  checkCEECINT = false;
 	
 	// TODO faire une hasmap annee, pcee;
 	public HashMap<Integer, BigDecimal> pCEE = new HashMap<Integer, BigDecimal>();

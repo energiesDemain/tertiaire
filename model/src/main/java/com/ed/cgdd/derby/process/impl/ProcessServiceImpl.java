@@ -10,8 +10,6 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.stream.Collectors;
-
 import com.ed.cgdd.derby.excelresult.*;
 import com.ed.cgdd.derby.model.financeObjects.*;
 import com.ed.cgdd.derby.model.parc.*;
@@ -31,6 +29,7 @@ import com.ed.cgdd.derby.finance.GesteService;
 import com.ed.cgdd.derby.finance.InsertResultFinancementDAS;
 import com.ed.cgdd.derby.finance.RecupParamFinDAS;
 import com.ed.cgdd.derby.finance.TruncateTableResFinanceDAS;
+import com.ed.cgdd.derby.model.calcconso.Conso;
 import com.ed.cgdd.derby.model.calcconso.EffetRebond;
 import com.ed.cgdd.derby.model.calcconso.ParamBesoinsNeufs;
 import com.ed.cgdd.derby.model.calcconso.ParamCoutEclVentil;
@@ -393,6 +392,16 @@ public class ProcessServiceImpl implements ProcessService {
 		this.gesteService = gesteService;
 	}
 
+	private static final int START_PERIOD_DETAIL = 6;
+	private static final int LENGTH_PERIOD_DETAIL = 2;
+
+	private static final int START_ID_BRANCHE = 0;
+	private static final int LENGTH_ID_BRANCHE = 2;
+
+	private static final int START_ID_BAT = 4;
+	private static final int LENGTH_ID_BAT = 2;
+	private static final String INIT_STATE = "Etat initial";
+
 	@Override
 	public void process(Progression progression, ParamCintObjects paramCintObjects) throws IOException {
 
@@ -440,7 +449,7 @@ public class ProcessServiceImpl implements ProcessService {
 		HashMap<String, ParamRdtEcs> bibliRdtEcsMap = loadTableRtdas.loadTableRdtEcs("Rendement_ECS");
 
 		HashMap<String, ParamRdtPerfEcs> rdtPerfEcsMap = loadTableRtdas.loadTableRdtPerfEcs("Rendement_performant_ECS");
-
+		
 		HashMap<String, ParamPartSolaireEcs> partSolaireMap = loadTableRtdas.loadTablePartSolaireEcs("Solaire_ECS");
 
 		HashMap<String, ParamTauxCouvEcs> txCouvSolaireMap = loadTableRtdas
@@ -489,27 +498,7 @@ public class ProcessServiceImpl implements ProcessService {
 		// Chargement du prix des energies et de la contribution climat energie
 		HashMap<Integer, CoutEnergie> coutEnergieMap = recupParamFinDAS.recupCoutEnergie("Cout_energie");
 
-		// Initialisation des couts intangibles
-		HashMap<String, CalibCI> cintMap = calibrageDAS.recupCI();
-		HashMap<String, CalibCI> cintMapNeuf = calibrageDAS.recupCINeuf();
-		HashMap<String, CalibCIBati> cintBatiMap = calibrageDAS.recupCIBati();
-		
-		// Ajout 21092017
-		calibrageService.addingRowsInHashMap(cintMapNeuf,coutEnergieMap,bNeufsMap);
-
-		// Couts intangibles dans l'existant
-		HashMap<String,CalibCoutGlobal> coutIntangible = calibrageService.calibreCI(cintMap, paramCintObjects.getSysExist(), maintenanceMap);
-		HashMap<String,CalibCoutGlobal> coutIntangibleBati = calibrageService.calibreCIBati(cintBatiMap, paramCintObjects.getGesteBat());
-
-		// Couts intangibles dans le neuf
-		HashMap<String,CalibCoutGlobal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf(), maintenanceMap);
-
-//		// Enregistrement des couts intangibles
-//		LOG.debug("Insert couts intangibles");
-//		calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
-//		calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
-//		calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
-//		LOG.debug("Insert couts intangibles - done");
+	
 //		// Chargement de l'evolution du cout des techno et du bati
 		HashMap<String, BigDecimal> evolCoutBati = recupParamFinDAS.getEvolutionCoutBati();
 		HashMap<String, BigDecimal> evolCoutTechno = recupParamFinDAS.getEvolutionCoutTechno();
@@ -517,7 +506,7 @@ public class ProcessServiceImpl implements ProcessService {
 
 		// Chargement des periodes de construction
 		Map<String, List<String>> periodeMap = gesteService.getPeriodMap();
-
+		
 		// Chargement des emissions de ges par energie, usage et periode (la cle
 		// de la map est code energie + usage)
 		HashMap<String, Emissions> emissionsMap = recupParamFinDAS.recupEmissions("Emissions");
@@ -558,10 +547,9 @@ public class ProcessServiceImpl implements ProcessService {
 		LOG.info("Truncate done");
 
 		// Creation des deux maps de besoins pour les batiments entrant
-
 		HashMap<String, ParamBesoinsNeufs> copyMapNeuf = modifBesoinUBatEx(copyBNeufs);
 
-		// Creation de la HashMap contenant
+		// Creation de la HashMap contenant les id agreg du parc
 		List<String> listeId = loadParcDatadas.getParamParcListeMapper();
 		HashMap<String, List<String>> idAgregListMap = commonService.idAgregBoucleList(listeId);
 
@@ -570,14 +558,52 @@ public class ProcessServiceImpl implements ProcessService {
 		EvolBesoinMap  evolBesoinMap = new EvolBesoinMap();
 	    setEvolBesoin(evolBesoinMap,idAgregListMap); 
 
-	  
-
 	    // Remplissage de la Map de calage du parc par energie
 	    HashMap<String, ParamCalageEner> calageEner = putCalageEner();
 	 // Remplissage de la Map de calage du parc par branche
 	    HashMap<String, BigDecimal> calageBranche = putCalageBranche();
-	   
+	 
+	
+	 // chargement des données intiales necessaires au calibrage des CINT du parc existant
+	    HashMap<String, ParamCalib> paramCalibMap = 
+	    		GetparamCalibMap(idAgregListMap, pasdeTempsInit, calageBranche, 
+	    				calageEner, rdtCoutChauffMap, coutEnergieMap);
+//	    HashMap<String, ParamCalib> paramCalibMap = 
+//	    		GetparamCalibMapDesag(idAgregListMap, pasdeTempsInit, calageBranche, 
+//	    				calageEner, rdtCoutChauffMap, coutEnergieMap);
+//	    
 	    
+	    // chargements et creation des donnees de couts et gains sur les gestes bati
+	    HashMap<String, List<Geste>> bibliGesteBatiMap =
+	    		GetparamGesteMap(idAgregListMap, periodeMap);
+
+		// Initialisation des couts intangibles
+		HashMap<String, CalibCI> cintMap = calibrageDAS.recupCI();
+		HashMap<String, CalibCI> cintMapNeuf = calibrageDAS.recupCINeuf();
+		HashMap<String, CalibCIBati> cintBatiMap = calibrageDAS.recupCIBati();
+		
+		// Ajout de donnees pour la calibration du neuf (prix et besoins)
+		calibrageService.addingRowsInHashMap(cintMapNeuf,coutEnergieMap,bNeufsMap);
+
+		// Couts intangibles des systemes dans l'existant
+		HashMap<String,CalibCoutGlobal> coutIntangible = calibrageService.calibreCI(cintMap, paramCintObjects.getSysExist(), maintenanceMap);
+		// Couts intangibles du bati dans l'existant
+		//HashMap<String,CalibCoutGlobal> coutIntangibleBati = calibrageService.calibreCIBati(cintBatiMap, paramCintObjects.getGesteBat());
+		// Version desagrege de la calibration du bati par segment de parc (batiment type, occupant)
+		HashMap<String,CalibCoutGlobal> coutIntangibleBati = 
+				calibrageService.calibreCIBatidesag(cintBatiMap,paramCintObjects.getGesteBat(),
+						paramCalibMap, bibliGesteBatiMap,tauxInteretMap);
+
+		// Couts intangibles dans le neuf
+		HashMap<String,CalibCoutGlobal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf(), maintenanceMap);
+
+//		// Enregistrement des couts intangibles
+//		LOG.debug("Insert couts intangibles");
+//		calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
+//		calibrageDAS.insertCIntDesag(coutIntangibleBati, CIntType.BATI);
+//		calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
+//		LOG.debug("Insert couts intangibles - done");	
+		
 		progression.setStep(ProgressionStep.CALCUL);
 		progression.setParcSize(idAgregListMap.size());
 
@@ -638,6 +664,196 @@ public class ProcessServiceImpl implements ProcessService {
 		}
 
 	}
+
+private HashMap<String, List<Geste>> GetparamGesteMap(HashMap<String, List<String>> idAgregListMap, 
+		Map<String, List<String>> periodeMap) {
+	
+		HashMap<String, List<Geste>> bibliGesteBatiMap = new HashMap<String, List<Geste>>();
+	   
+	    for (String idAgregParc : idAgregListMap.keySet()) {
+		List<Geste> listGest = recupParamFinDAS.getGesteBatiData(idAgregParc);
+		List<String> periodList = periodeMap.get(idAgregParc.substring(START_ID_BRANCHE, START_ID_BRANCHE
+				+ LENGTH_ID_BRANCHE)
+				+ idAgregParc.substring(START_ID_BAT, START_ID_BAT + LENGTH_ID_BAT));
+
+		for (String periode : periodList) {
+			Geste rienFaire = new Geste(INIT_STATE + "AUCUNE");
+			rienFaire.setTypeRenovBati(TypeRenovBati.ETAT_INIT);
+			rienFaire.setCoutGesteBati(BigDecimal.ZERO);
+			rienFaire.setCoutGesteSys(BigDecimal.ZERO);
+			rienFaire.setValeurCEE(BigDecimal.ZERO);
+			rienFaire.setGainEner(BigDecimal.ZERO);
+			rienFaire.setDureeBati(1);
+			rienFaire.setExigence(Exigence.AUCUNE);
+			List<Geste> gestes = new ArrayList<Geste>();
+			gestes.add(rienFaire);
+			bibliGesteBatiMap.put(idAgregParc + periode, gestes);
+		}
+
+		for (Geste geste : listGest) {
+			bibliGesteBatiMap
+					.get(idAgregParc + geste.getIdGesteAggreg().substring(START_PERIOD_DETAIL,
+							START_PERIOD_DETAIL + LENGTH_PERIOD_DETAIL)).add(geste);
+		}
+	    }
+	    return bibliGesteBatiMap;
+	}
+
+private HashMap<String, ParamCalib> GetparamCalibMap(HashMap<String, List<String>> idAgregListMap, 
+		int pasdeTempsInit, HashMap<String, BigDecimal> calageBranche, 
+		HashMap<String, ParamCalageEner> calageEner, HashMap<String, ParamRdtCout> rdtCoutChauffMap, 
+		HashMap<Integer, CoutEnergie> coutEnergieMap) {
+	
+	HashMap<String, ParamCalib> paramCalibMap = new HashMap<String, ParamCalib>();
+
+	for (String idAgregParc : idAgregListMap.keySet()) {
+		
+		// Chargement du parc initial
+		List<Parc> parc = loadParcDatadas.getParamParcMapper(idAgregParc, pasdeTempsInit);
+		// selectionne param Recalage parc init
+	
+		BigDecimal calageParc = BigDecimal.ZERO;
+		calageParc = calageBranche.get(idAgregParc.substring(0,2));
+	
+		// Initialisation objet de parametres a recuperer
+		HashMap<String, BigDecimal> surfaceTot = new HashMap<String, BigDecimal>(); 
+		HashMap<String, BigDecimal> consoTot = new HashMap<String, BigDecimal>(); 
+		HashMap<String, BigDecimal> besoinTot = new HashMap<String, BigDecimal>(); 
+		HashMap<String, BigDecimal> chargesTot =  new HashMap<String, BigDecimal>();
+		
+		for(PeriodDetail period : PeriodDetail.values()){
+			surfaceTot.put(period.getCode(), BigDecimal.ZERO);
+			consoTot.put(period.getCode(), BigDecimal.ZERO);
+			besoinTot.put(period.getCode(), BigDecimal.ZERO);
+			 chargesTot.put(period.getCode(), BigDecimal.ZERO);
+		}
+		
+		// Recalage du parc par branche et calcul surface totale par period de construction
+		for (Parc parcTemp : parc) {
+			parcTemp.setAnnee(0,parcTemp.getAnnee(0).multiply(calageParc,MathContext.DECIMAL32)
+			.multiply(calageEner.get(parcTemp.getIdenergchauff()).getFacteurCalageParc(),MathContext.DECIMAL32));
+			
+			surfaceTot.put(parcTemp.getIdperiodedetail(), 
+					surfaceTot.get(parcTemp.getIdperiodedetail()).add(parcTemp.getAnnee(0)));		
+		}
+	
+	// Chargement des tables de besoins initiaux et recalage
+	HashMap<String, Conso> besoinChauffInitDesagMap = new HashMap<String, Conso>() ;
+	besoinChauffInitDesagMap = loadTableClimdas.loadMapResultBesoin("Chauffage_init", idAgregParc, 
+			pasdeTempsInit, 
+			calageParc, calageEner);
+
+	// Calcul Conso total et besoin total et consou
+
+	for(String idDesagParc :  besoinChauffInitDesagMap.keySet()){
+		 
+		 BigDecimal BesoinIni = besoinChauffInitDesagMap.get(idDesagParc).getAnnee(0);
+		 
+		 BigDecimal rdtIni = rdtCoutChauffMap.get(
+				 besoinChauffInitDesagMap.get(idDesagParc).getIdbranche()+
+				 besoinChauffInitDesagMap.get(idDesagParc).getIdssbranche() +
+				 besoinChauffInitDesagMap.get(idDesagParc).getIdbattype() +
+				 besoinChauffInitDesagMap.get(idDesagParc).getIdsyschaud() + 
+				 besoinChauffInitDesagMap.get(idDesagParc).getIdenergchauff() + "1").getRdt();
+		 
+		 besoinTot.put(besoinChauffInitDesagMap.get(idDesagParc).getIdperiodedetail(), 
+				 besoinTot.get(besoinChauffInitDesagMap.get(idDesagParc).getIdperiodedetail()).add(BesoinIni));
+		 
+		 consoTot.put(besoinChauffInitDesagMap.get(idDesagParc).getIdperiodedetail(), 
+				 consoTot.get(besoinChauffInitDesagMap.get(idDesagParc).getIdperiodedetail())
+				 .add((BesoinIni.divide(rdtIni, MathContext.DECIMAL32))));
+		 
+		 chargesTot.put(besoinChauffInitDesagMap.get(idDesagParc).getIdperiodedetail(), 
+				 chargesTot.get(besoinChauffInitDesagMap.get(idDesagParc).getIdperiodedetail())
+				 .add((BesoinIni.divide(rdtIni, MathContext.DECIMAL32) 
+				 .multiply(coutEnergieMap.get(CalibParameters.YEAR_CALIB).
+						 getEnergie(Energies.getEnumName(besoinChauffInitDesagMap.get(idDesagParc).
+								 getIdenergchauff())), MathContext.DECIMAL32)
+				 )));	 
+		}
+	
+	// ajouts des paramcalib pour le segment idagregparc a la map globale
+	
+	for(PeriodDetail period : PeriodDetail.values()){
+		ParamCalib paramcalib = new ParamCalib();
+		if(surfaceTot.get(period.getCode()).compareTo(BigDecimal.ZERO) != 0){
+		paramcalib.setSurface(surfaceTot.get(period.getCode()));
+		paramcalib.setBesoinChauff(besoinTot.get(period.getCode()));
+		paramcalib.setConsoChauff(consoTot.get(period.getCode()));
+		paramcalib.setChargesChauff(chargesTot.get(period.getCode()));
+		paramCalibMap.put(idAgregParc + period.getCode(),  paramcalib);
+		}
+		}
+
+
+	}
+	return paramCalibMap;
+	}
+
+private HashMap<String, ParamCalib> GetparamCalibMapDesag(HashMap<String, List<String>> idAgregListMap, 
+		int pasdeTempsInit, HashMap<String, BigDecimal> calageBranche, 
+		HashMap<String, ParamCalageEner> calageEner, HashMap<String, ParamRdtCout> rdtCoutChauffMap, 
+		HashMap<Integer, CoutEnergie> coutEnergieMap) {
+	
+	HashMap<String, ParamCalib> paramCalibMap = new HashMap<String, ParamCalib>();
+
+	for (String idAgregParc : idAgregListMap.keySet()) {
+		
+		// Chargement du parc initial
+		List<Parc> parc = loadParcDatadas.getParamParcMapper(idAgregParc, pasdeTempsInit);
+		// selectionne param Recalage parc init
+		
+		BigDecimal calageParc = BigDecimal.ZERO;
+		calageParc = calageBranche.get(idAgregParc.substring(0,2));
+		
+		// Chargement des tables de besoins initiaux et recalage
+		HashMap<String, Conso> besoinChauffInitDesagMap = new HashMap<String, Conso>() ;
+		besoinChauffInitDesagMap = loadTableClimdas.loadMapResultBesoin("Chauffage_init", idAgregParc, 
+				pasdeTempsInit, 
+				calageParc, calageEner);
+
+		for (Parc parcTemp : parc) {
+			
+		// Recalage du parc par branche et calcul surface totale par period de construction
+		
+		parcTemp.setAnnee(0,parcTemp.getAnnee(0).multiply(calageParc,MathContext.DECIMAL32)
+		.multiply(calageEner.get(parcTemp.getIdenergchauff()).getFacteurCalageParc(),MathContext.DECIMAL32));
+			
+		BigDecimal surfaceTot = parcTemp.getAnnee(0);
+		
+		// Calcul Conso total et besoin total et consou
+
+		 BigDecimal BesoinIni = besoinChauffInitDesagMap.get(parcTemp.getId() +
+				 "Etat initialETAT_INITEtat initialETAT_INIT").getAnnee(0);
+		 
+			
+		 BigDecimal rdtIni = rdtCoutChauffMap.get(parcTemp.getIdbranche()+
+				 parcTemp.getIdssbranche() + parcTemp.getIdbattype() +
+				 parcTemp.getIdsyschaud() + 
+				 parcTemp.getIdenergchauff() + "1").getRdt();
+		 
+		 BigDecimal consoTot = BesoinIni.divide(rdtIni, MathContext.DECIMAL32);
+		 
+		 BigDecimal chargesTot = BesoinIni.divide(rdtIni, MathContext.DECIMAL32) 
+				 .multiply(coutEnergieMap.get(CalibParameters.YEAR_CALIB).
+						 getEnergie(Energies.getEnumName(parcTemp.
+								 getIdenergchauff())), MathContext.DECIMAL32);
+	
+	// ajouts des paramcalib pour le segment idagregparc a la map globale
+	
+		ParamCalib paramcalib = new ParamCalib();
+		if(surfaceTot.compareTo(BigDecimal.ZERO) != 0){
+		paramcalib.setSurface(surfaceTot);
+		paramcalib.setBesoinChauff(BesoinIni);
+		paramcalib.setConsoChauff(consoTot);
+		paramcalib.setChargesChauff(chargesTot);
+		paramCalibMap.put(parcTemp.getId(),  paramcalib);
+		}
+		}
+	}
+	return paramCalibMap;
+	}
+
 
 private HashMap<String, ParamCalageEner> putCalageEner() {
 	 

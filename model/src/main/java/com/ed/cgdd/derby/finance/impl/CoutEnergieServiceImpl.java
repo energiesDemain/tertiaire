@@ -11,10 +11,8 @@ import com.ed.cgdd.derby.common.CommonService;
 import com.ed.cgdd.derby.finance.CoutEnergieService;
 import com.ed.cgdd.derby.model.financeObjects.CoutEnergie;
 import com.ed.cgdd.derby.model.financeObjects.Emissions;
-import com.ed.cgdd.derby.model.financeObjects.Exigence;
 import com.ed.cgdd.derby.model.financeObjects.Geste;
 import com.ed.cgdd.derby.model.parc.Energies;
-import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
 
 public class CoutEnergieServiceImpl implements CoutEnergieService {
 	private CommonService commonService;
@@ -33,6 +31,7 @@ public class CoutEnergieServiceImpl implements CoutEnergieService {
 		this.commonService = commonService;
 	}
 
+	@Override
 	public BigDecimal chargesEnerAnnuelles(BigDecimal surface, BigDecimal besoinEnerUnitaireIni, Geste geste,
 			BigDecimal coutEnergie, int annee) {
 		
@@ -41,6 +40,7 @@ public class CoutEnergieServiceImpl implements CoutEnergieService {
 				.multiply(coutEnergie);
 	}
 
+	@Override
 	public BigDecimal coutEnergie(HashMap<Integer, CoutEnergie> coutEnergieMap,
 			HashMap<String, Emissions> emissionsMap, int annee, String energie, String usage, BigDecimal tva) {
 		CoutEnergie coutEnergie = coutEnergieMap.get(annee);

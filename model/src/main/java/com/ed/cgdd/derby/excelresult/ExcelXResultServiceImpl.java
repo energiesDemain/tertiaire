@@ -15,7 +15,6 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.*;
 //import org.apache.poi.ss.usermodel.Cell;
 //import org.apache.poi.xssf.usermodel.XSSFCell;
 //import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -63,6 +62,7 @@ public class ExcelXResultServiceImpl implements ExcelXResultService {
 	 * 
 	 * Il définit si les feuilles d'import sont cachées ou visibles.
 	 */
+	@Override
 	public void excelXService(int pasTemps, boolean isHidden) {
 		try {
 

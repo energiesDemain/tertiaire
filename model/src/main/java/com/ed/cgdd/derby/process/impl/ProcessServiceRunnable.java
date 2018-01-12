@@ -50,7 +50,6 @@ import com.ed.cgdd.derby.parc.ParamCalageEner;
 import com.ed.cgdd.derby.parc.ParcService;
 import com.ed.cgdd.derby.process.InitializeConsoService;
 import com.ed.cgdd.derby.model.politiques;
-import com.ed.cgdd.derby.model.CalibParameters;
 import com.ed.cgdd.derby.usagesnonrt.BureauProcessService;
 import com.ed.cgdd.derby.usagesnonrt.CuissonAutreService;
 import com.ed.cgdd.derby.usagesnonrt.FroidAlimService;
@@ -63,7 +62,6 @@ import com.ed.cgdd.derby.usagesrt.EcsService;
 import com.ed.cgdd.derby.usagesrt.InsertUsagesRTDAS;
 import com.ed.cgdd.derby.usagesrt.LoadTableChauffClimDAS;
 import com.ed.cgdd.derby.usagesrt.LoadTableRtDAS;
-import org.apache.xmlbeans.impl.tool.Extension;
 
 public class ProcessServiceRunnable implements Runnable {
 	private final static Logger LOG = LogManager.getLogger(ProcessServiceImpl.class);
@@ -304,7 +302,7 @@ public class ProcessServiceRunnable implements Runnable {
 		ResultParc resultatsParc;
 		long timingSegmentStart = new Date().getTime();
 		ThreadContext.put(ID_PARC, idAgregParc);
-		//if (idAgregParc.equals("01018403")) {
+		//if (idAgregParc.equals("03076604")) {
 		//if (idAgregParc.substring(0,2).equals("01") && idAgregParc.substring(4,6).equals("42") && idAgregParc.substring(6,8).equals("03")){
 		//if (idAgregParc.substring(6,8).equals("03")) {
 		//if (idAgregParc.equals("05141304")){
@@ -356,7 +354,9 @@ public class ProcessServiceRunnable implements Runnable {
 						resultConsoURtMap,calageParc);
 				// Chargement des tables de besoins initiaux d'eclairage,
 				// ventilation , et rempli egalement resultConsoURtMap
-				ResultConsoRt resultatsConsoRt = loadInitConsoRt(idAgregParc, pasdeTemps, resultConsoURtMap, calageParc);
+				ResultConsoRt resultatsConsoRt = loadInitConsoRt(idAgregParc, pasdeTemps, resultConsoURtMap,
+						calageParc);
+				
 				// Initialisation du chauffage
 				resultatsConsoRt = initializeChauffClim(resultConsoUClimMap, resultatsConsoRt, idAgregParc, pasdeTemps,
 						rdtCoutChauffMap, Usage.CHAUFFAGE.getLabel(), calageParc,  calageEner);
@@ -403,7 +403,7 @@ public class ProcessServiceRunnable implements Runnable {
 				// HashMap<String,
 				// BigDecimal>();
 				//for (int annee = 2010; annee <= 2050; annee++) {
-			    for (int annee = 2010; annee <= 2050; annee++) {
+			    for (int annee = 2010; annee <= 2025; annee++) {
 //					long start2 = System.currentTimeMillis();
 			    	//BV prise en compte travaux embarques
 			    	if(politiques.checkTravEmb && annee == 2017){
@@ -1035,7 +1035,8 @@ public class ProcessServiceRunnable implements Runnable {
 		} else {
 			// Chargement des tables de chauffage
 			resultatsConsoRt.put(MapResultsKeys.BESOIN_CHAUFF.getLabel(),
-					loadTableClimdas.loadMapResultBesoin("Chauffage_init", idAgregParc, pasdeTemps, calageParc, calageEner));
+					loadTableClimdas.loadMapResultBesoin("Chauffage_init", idAgregParc, pasdeTemps, 
+							calageParc, calageEner));
 			resultatsConsoRt.put(
 					MapResultsKeys.RDT_CHAUFF.getLabel(),
 					initializeConsoService.initializeRdtChauff(rdtCoutMap,

@@ -7,6 +7,7 @@ import com.ed.cgdd.derby.model.financeObjects.CEE;
 import com.ed.cgdd.derby.model.financeObjects.Geste;
 
 public class CalculCEEServiceImpl implements CalculCEEService {
+	@Override
 	public BigDecimal calculCEE(BigDecimal surface, Geste geste, CEE valeur) {
 
 		BigDecimal aides = valeur.getPrixKWhCumac().multiply(surface).multiply(geste.getValeurCEE());

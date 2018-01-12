@@ -3,37 +3,54 @@ package com.ed.cgdd.derby.calibrageCINT.impl;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 
 import com.ed.cgdd.derby.model.financeObjects.*;
 import com.ed.cgdd.derby.model.parc.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import com.ed.cgdd.derby.calibrageCINT.CalibrageService;
 import com.ed.cgdd.derby.model.calcconso.ParamBesoinsNeufs;
 import com.ed.cgdd.derby.common.CommonService;
-//import com.ed.cgdd.derby.process.impl.ProcessServiceImpl;
+import com.ed.cgdd.derby.model.CalibParameters;
+import com.ed.cgdd.derby.finance.RecupParamFinDAS;
 
 public class CalibrageServiceImpl implements CalibrageService {
 	private final static Logger LOG = LogManager.getLogger(CalibrageServiceImpl.class);
-	public CommonService commonService;
+	private CommonService commonService;
+	private RecupParamFinDAS recupParamFinDAS;
 
 	public CommonService getCommonService() {
 		return commonService;
 	}
-
+	
+	public void initServices(CommonService commonService,
+			RecupParamFinDAS recupParamFinDAS) {
+		this.commonService = commonService;
+		this.recupParamFinDAS = recupParamFinDAS;
+	}
 	public void setCommonService(CommonService commonService) {
 		this.commonService = commonService;
 	}
 	
+	public RecupParamFinDAS getRecupParamFinDAS() {
+		return recupParamFinDAS;
+	}
+
+	public void setRecupParamFinDAS(RecupParamFinDAS recupParamFinDAS) {
+		this.recupParamFinDAS = recupParamFinDAS;
+	}
+	
 	private static final String INIT_STATE = "Etat initial";
-	private static final Integer YEAR_CALIB=2009;
 	private static final int PERIOD_CALIB=1;
-	private static final BigDecimal TAUX_ACTU_CALIB = new BigDecimal("0.04");
+	
 	// methode de calcul des CI pour le BATI --> cette methode renvoie une
 	// hashmap de CI pour le BATI
 	// la cle contient la branche et le geste (voir methode recupCIBati)
-	public HashMap<String, CalibCoutGlobal> calibreCIBati(HashMap<String, CalibCIBati> dataCalib, ParamCInt paramCInt) {
+	
+	public HashMap<String, CalibCoutGlobal> calibreCIBati(HashMap<String, CalibCIBati> dataCalib, 
+			ParamCInt paramCInt) {
 		HashMap<String,CalibCoutGlobal> results = new HashMap<>();
 		// pour le calage, on utilise ne rien faire
 		HashMap<String, CalibCIRef> calibRef = new HashMap<String, CalibCIRef>();
@@ -53,7 +70,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 			
 			// BV ajout actualisation 
 			// TODO mettre un taux d'actualisation different pour le public et le prive voire pptaire/locataire
-			BigDecimal tauxInt = BigDecimal.ONE.add(TAUX_ACTU_CALIB);
+			BigDecimal tauxInt = BigDecimal.ONE.add(CalibParameters.TAUX_ACTU_CALIB);
 			BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
 
 			// BigDecimal coefactu = commonService.serieGeometrique(inverse, inverse, dataCalib.get(str).getDureeVie() - 1);
@@ -83,20 +100,254 @@ public class CalibrageServiceImpl implements CalibrageService {
 		return results;
 
 	}
-	// Ajout des besoins et des prix de l'energie en 2009 pour la calibration des PM dans le neuf
-    @Override
-    public void addingRowsInHashMap(HashMap<String, CalibCI> cintMapNeuf, HashMap<Integer,
-			CoutEnergie> coutEnergieMap, HashMap<String, ParamBesoinsNeufs> bNeufsMap) {
-        for (String calibKey : cintMapNeuf.keySet()){
-        	CalibCI calib = cintMapNeuf.get(calibKey);
-    		calib.setCoutEner(coutEnergieMap.get(YEAR_CALIB).getEnergie(Energies.getEnumName(calib.getEnergies())));
-    		calib.setBesoinUnitaire(bNeufsMap.get(calib.getBranche()+calib.getBatType()+ Usage.CHAUFFAGE.getLabel()).getPeriode(PERIOD_CALIB));
-			cintMapNeuf.put(calibKey,calib);
+	
+	
+//	public HashMap<String, CalibCoutGlobal> calibreCIBatidesag(HashMap<String, CalibCIBati> dataCalib, 
+//			ParamCInt paramCInt, HashMap<String, ParamCalib> paramCalibMap,  
+//			HashMap<String, List<Geste>>  bibliGesteBatiMap, HashMap<String, TauxInteret> tauxInteretMap) {
+//		HashMap<String,CalibCoutGlobal> results = new HashMap<>();
+//
+//		for (String st : paramCalibMap.keySet()) {
+//			List<Geste> listGest = bibliGesteBatiMap.get(st.substring(0,10));
+//			// On commence par atribuer des PM aux gestes pour le segment de par st
+//			
+//			HashMap<String, BigDecimal> PMgeste = new HashMap<String, BigDecimal>();
+//			
+//			// PM ne rien faire
+//			PMgeste.put(TypeRenovBati.ETAT_INIT.getLabel(), dataCalib.get(st.substring(0,2) + INIT_STATE).getPartMarche());
+//			
+//			// Pour les gestes sans couts renseignes, on ajoute leur PM au geste ne rien faire et 
+//			// on met leur PM a zero.
+//			// Pour les autres on met les PM du fichier de parametre cout_intangibles_init	    
+//			
+//			for(TypeRenovBati typeRenov : TypeRenovBati.values()){
+//				
+//				if(typeRenov.equals(TypeRenovBati.ETAT_INIT) == false){
+//					
+//					Geste gestetmp = listGest.stream()
+//							.filter(x -> typeRenov.equals(x.getTypeRenovBati()) && 
+//									x.getCoutGesteBati().equals(BigDecimal.ZERO) == false).findAny()
+//			                .orElse(null);
+//					
+//					if(gestetmp == null){	
+//						PMgeste.put(typeRenov.getLabel(), BigDecimal.ZERO);
+//						PMgeste.put(TypeRenovBati.ETAT_INIT.getLabel(), 
+//								PMgeste.get(TypeRenovBati.ETAT_INIT.getLabel())
+//										.add(dataCalib.get(st.substring(0,2) + typeRenov).getPartMarche()));
+//					} else {
+//						PMgeste.put(typeRenov.getLabel(), dataCalib.get(st.substring(0,2) + typeRenov).getPartMarche());
+//					}
+//				}
+//			}	
+//		
+//		// pour le calage, on utilise ne rien faire
+//		HashMap<String, CalibCIRef> calibRef = new HashMap<String, CalibCIRef>();
+//		// on calcule le cout global du geste ne rien faire 
+//		calibRef.put(st, coutGlobalReferenceDesag(
+//				dataCalib.get(st.substring(0,2) + INIT_STATE),
+//				PMgeste.get(TypeRenovBati.ETAT_INIT.getLabel()),
+//				paramCInt, paramCalibMap.get(st)));
+//					
+//				BigDecimal coutVariableRef = calibRef.get(st).getCoutGlobal().subtract(paramCInt.getCintRef(), MathContext.DECIMAL32);
+//				BigDecimal coutIntangibleRef = paramCInt.getCintRef();
+//				results.put(st+TypeRenovBati.ETAT_INIT.getLabel(), 
+//						new CalibCoutGlobal(coutIntangibleRef,coutVariableRef));
+//				
+//		// ajouts des periodes de simulations : on met les memes couts intangibles que pour les batiments les plus recents
+//				if(st.substring(8,10).equals("11") || st.substring(8,10).equals("12")){
+//					if(results.get(st.substring(0,8)+"19"+ st.substring(10)+TypeRenovBati.ETAT_INIT.getLabel()) == null){
+//					results.put(st.substring(0,8)+"19"+ st.substring(10)+TypeRenovBati.ETAT_INIT.getLabel(),new CalibCoutGlobal(coutIntangibleRef,coutVariableRef));
+//					results.put(st.substring(0,8)+"20"+ st.substring(10)+TypeRenovBati.ETAT_INIT.getLabel(),new CalibCoutGlobal(coutIntangibleRef,coutVariableRef));
+//					results.put(st.substring(0,8)+"21"+ st.substring(10)+TypeRenovBati.ETAT_INIT.getLabel(),new CalibCoutGlobal(coutIntangibleRef,coutVariableRef));
+//					results.put(st.substring(0,8)+"22"+ st.substring(10)+TypeRenovBati.ETAT_INIT.getLabel(),new CalibCoutGlobal(coutIntangibleRef,coutVariableRef));
+//					results.put(st.substring(0,8)+"23"+ st.substring(10)+TypeRenovBati.ETAT_INIT.getLabel(),new CalibCoutGlobal(coutIntangibleRef,coutVariableRef));
+//					}
+//					}
+//				
+//		// on parcourt la liste des autres gestes pour faire le calcul des CINT sur chaque geste 
+//			
+//			for (Geste geste : listGest) {
+//				if (geste.getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT) == false ) {	
+//					
+//				Double intermed = (PMgeste.get(geste.getTypeRenovBati().getLabel())
+//						.divide(calibRef.get(st).getPartMarche2009(), MathContext.DECIMAL32)).doubleValue();
+//				Double intermed2 = BigDecimal.ONE.divide(BigDecimal.valueOf(-paramCInt.getNu()), MathContext.DECIMAL32).doubleValue();
+//				BigDecimal intermed3 = BigDecimal.valueOf(Math.pow(intermed, intermed2));
+//				BigDecimal coutGlobalGeste = intermed3.multiply(calibRef.get(st).getCoutGlobal(), MathContext.DECIMAL32);
+//				
+//				// ajout actualisation 
+//				BigDecimal tauxInt = BigDecimal.ONE.add(tauxInteretMap.get(st.substring(0,2) + st.substring(6,8) + "Proprietaire").getPBC().getTauxInteret());
+//				BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
+//
+//
+//				BigDecimal coefactu = inverse.multiply(BigDecimal.ONE
+//						.subtract(inverse.pow(dataCalib.get(st.substring(0,2) + geste.getTypeRenovBati()).getDureeVie(), MathContext.DECIMAL32), 
+//						MathContext.DECIMAL32),MathContext.DECIMAL32)
+//				.divide(BigDecimal.ONE.subtract(inverse, MathContext.DECIMAL32),
+//				MathContext.DECIMAL32);
+//
+//				BigDecimal coutVariable = geste.getCoutGesteBati()
+//						.divide(coefactu, MathContext.DECIMAL32)
+//						.add((paramCalibMap.get(st).getChargesChauff()
+//								.divide(paramCalibMap.get(st).getSurface(), MathContext.DECIMAL32))
+//								.multiply(BigDecimal.ONE.subtract(geste.getGainEner(),MathContext.DECIMAL32), 
+//										MathContext.DECIMAL32),MathContext.DECIMAL32);
+//				
+//				BigDecimal coutIntangible = coutGlobalGeste.subtract(coutVariable, MathContext.DECIMAL32);
+//				
+//				results.put(st+geste.getTypeRenovBati().getLabel(),new CalibCoutGlobal(coutIntangible,coutVariable));
+//				
+//				// ajouts des periodes de simulations : on met les memes couts intangibles que pour les batiments les plus recents
+//				if(st.substring(8,10).equals("11") || st.substring(8,10).equals("12")){
+//					if(results.get(st.substring(0,8)+"19"+ st.substring(10)+geste.getTypeRenovBati().getLabel()) == null){
+//					results.put(st.substring(0,8)+"19"+ st.substring(10)+geste.getTypeRenovBati().getLabel(),new CalibCoutGlobal(coutIntangible,coutVariable));
+//					results.put(st.substring(0,8)+"20"+ st.substring(10)+geste.getTypeRenovBati().getLabel(),new CalibCoutGlobal(coutIntangible,coutVariable));
+//					results.put(st.substring(0,8)+"21"+ st.substring(10)+geste.getTypeRenovBati().getLabel(),new CalibCoutGlobal(coutIntangible,coutVariable));
+//					results.put(st.substring(0,8)+"22"+ st.substring(10)+geste.getTypeRenovBati().getLabel(),new CalibCoutGlobal(coutIntangible,coutVariable));
+//					results.put(st.substring(0,8)+"23"+ st.substring(10)+geste.getTypeRenovBati().getLabel(),new CalibCoutGlobal(coutIntangible,coutVariable));
+//					}
+//					}
+//				}	
+//				
+//			}
+//			
+//		}	
+//		return results;
+//	}
+
+	public HashMap<String, CalibCoutGlobal> calibreCIBatidesag(HashMap<String, CalibCIBati> dataCalib, 
+			ParamCInt paramCInt, HashMap<String, ParamCalib> paramCalibMap,  
+			HashMap<String, List<Geste>>  bibliGesteBatiMap, HashMap<String, TauxInteret> tauxInteretMap) {
+		HashMap<String,CalibCoutGlobal> results = new HashMap<>();
+
+		for (String st : paramCalibMap.keySet()) {
+			List<Geste> listGest = bibliGesteBatiMap.get(st);
+			// On commence par atribuer des PM aux gestes pour le segment de par st
+			
+			HashMap<String, BigDecimal> PMgeste = new HashMap<String, BigDecimal>();
+			
+			// PM ne rien faire
+			PMgeste.put(TypeRenovBati.ETAT_INIT.getLabel(), dataCalib.get(st.substring(0,2) + INIT_STATE).getPartMarche());
+			
+			// Pour les gestes sans couts renseignes, on ajoute leur PM au geste ne rien faire et 
+			// on met leur PM a zero.
+			// Pour les autres on met les PM du fichier de parametre cout_intangibles_init	    
+			
+			for(TypeRenovBati typeRenov : TypeRenovBati.values()){
+				
+				if(typeRenov.equals(TypeRenovBati.ETAT_INIT) == false){
+					
+					Geste gestetmp = listGest.stream()
+							.filter(x -> typeRenov.equals(x.getTypeRenovBati()) && 
+									x.getCoutGesteBati().equals(BigDecimal.ZERO) == false).findAny()
+			                .orElse(null);
+					
+					if(gestetmp == null){	
+						PMgeste.put(typeRenov.getLabel(), BigDecimal.ZERO);
+						PMgeste.put(TypeRenovBati.ETAT_INIT.getLabel(), 
+								PMgeste.get(TypeRenovBati.ETAT_INIT.getLabel())
+										.add(dataCalib.get(st.substring(0,2) + typeRenov).getPartMarche()));
+					} else {
+						PMgeste.put(typeRenov.getLabel(), dataCalib.get(st.substring(0,2) + typeRenov).getPartMarche());
+					}
+				}
+			}	
+		
+		// pour le calage, on utilise ne rien faire
+		HashMap<String, CalibCIRef> calibRef = new HashMap<String, CalibCIRef>();
+		// on calcule le cout global du geste ne rien faire 
+		calibRef.put(st, coutGlobalReferenceDesag(
+				dataCalib.get(st.substring(0,2) + INIT_STATE),
+				PMgeste.get(TypeRenovBati.ETAT_INIT.getLabel()),
+				paramCInt, paramCalibMap.get(st)));
+					
+				BigDecimal coutVariableRef = calibRef.get(st).getCoutGlobal().subtract(paramCInt.getCintRef(), MathContext.DECIMAL32);
+				BigDecimal coutIntangibleRef = paramCInt.getCintRef();
+				results.put(st+TypeRenovBati.ETAT_INIT.getLabel(), 
+						new CalibCoutGlobal(coutIntangibleRef,coutVariableRef));
+				
+		// ajouts des periodes de simulations : on met les memes couts intangibles que pour les batiments les plus recents
+				if(st.substring(8,10).equals("11") || st.substring(8,10).equals("12")){
+					if(results.get(st.substring(0,8)+"19"+TypeRenovBati.ETAT_INIT.getLabel()) == null){
+					results.put(st.substring(0,8)+"19"+TypeRenovBati.ETAT_INIT.getLabel(),new CalibCoutGlobal(coutIntangibleRef,coutVariableRef));
+					results.put(st.substring(0,8)+"20"+TypeRenovBati.ETAT_INIT.getLabel(),new CalibCoutGlobal(coutIntangibleRef,coutVariableRef));
+					results.put(st.substring(0,8)+"21"+TypeRenovBati.ETAT_INIT.getLabel(),new CalibCoutGlobal(coutIntangibleRef,coutVariableRef));
+					results.put(st.substring(0,8)+"22"+TypeRenovBati.ETAT_INIT.getLabel(),new CalibCoutGlobal(coutIntangibleRef,coutVariableRef));
+					results.put(st.substring(0,8)+"23"+TypeRenovBati.ETAT_INIT.getLabel(),new CalibCoutGlobal(coutIntangibleRef,coutVariableRef));
+					}
+					}
+				
+		// on parcourt la liste des autres gestes pour faire le calcul des CINT sur chaque geste 
+			
+			for (Geste geste : listGest) {
+				if (geste.getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT) == false ) {	
+					
+				Double intermed = (PMgeste.get(geste.getTypeRenovBati().getLabel())
+						.divide(calibRef.get(st).getPartMarche2009(), MathContext.DECIMAL32)).doubleValue();
+				Double intermed2 = BigDecimal.ONE.divide(BigDecimal.valueOf(-paramCInt.getNu()), MathContext.DECIMAL32).doubleValue();
+				BigDecimal intermed3 = BigDecimal.valueOf(Math.pow(intermed, intermed2));
+				BigDecimal coutGlobalGeste = intermed3.multiply(calibRef.get(st).getCoutGlobal(), MathContext.DECIMAL32);
+				
+				// ajout actualisation 
+				BigDecimal tauxInt = BigDecimal.ONE.add(tauxInteretMap.get(st.substring(0,2) + st.substring(6,8) + "Proprietaire").getPBC().getTauxInteret());
+				BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
+
+
+				BigDecimal coefactu = inverse.multiply(BigDecimal.ONE
+						.subtract(inverse.pow(dataCalib.get(st.substring(0,2) + geste.getTypeRenovBati()).getDureeVie(), MathContext.DECIMAL32), 
+						MathContext.DECIMAL32),MathContext.DECIMAL32)
+				.divide(BigDecimal.ONE.subtract(inverse, MathContext.DECIMAL32),
+				MathContext.DECIMAL32);
+
+				BigDecimal coutVariable = geste.getCoutGesteBati()
+						.divide(coefactu, MathContext.DECIMAL32)
+						.add((paramCalibMap.get(st).getChargesChauff()
+								.divide(paramCalibMap.get(st).getSurface(), MathContext.DECIMAL32))
+								.multiply(BigDecimal.ONE.subtract(geste.getGainEner(),MathContext.DECIMAL32), 
+										MathContext.DECIMAL32),MathContext.DECIMAL32);
+				
+				BigDecimal coutIntangible = coutGlobalGeste.subtract(coutVariable, MathContext.DECIMAL32);
+				
+				results.put(st+geste.getTypeRenovBati().getLabel(),new CalibCoutGlobal(coutIntangible,coutVariable));
+				
+				// ajouts des periodes de simulations : on met les memes couts intangibles que pour les batiments les plus recents
+				if(st.substring(8,10).equals("11") || st.substring(8,10).equals("12")){
+					if(results.get(st.substring(0,8)+"19"+geste.getTypeRenovBati().getLabel()) == null){
+					results.put(st.substring(0,8)+"19"+geste.getTypeRenovBati().getLabel(),new CalibCoutGlobal(coutIntangible,coutVariable));
+					results.put(st.substring(0,8)+"20"+geste.getTypeRenovBati().getLabel(),new CalibCoutGlobal(coutIntangible,coutVariable));
+					results.put(st.substring(0,8)+"21"+geste.getTypeRenovBati().getLabel(),new CalibCoutGlobal(coutIntangible,coutVariable));
+					results.put(st.substring(0,8)+"22"+geste.getTypeRenovBati().getLabel(),new CalibCoutGlobal(coutIntangible,coutVariable));
+					results.put(st.substring(0,8)+"23"+geste.getTypeRenovBati().getLabel(),new CalibCoutGlobal(coutIntangible,coutVariable));
+					}
+					}
+				}	
+				
+			}
+				
+		}	
+		
+		// periode manquant TODO faire une map avec la derniere periode existante
+		for (String st : paramCalibMap.keySet()) {
+			List<Geste> listGest = bibliGesteBatiMap.get(st);
+			for (Geste geste : listGest) {
+				
+			if(results.get(st.substring(0,8)+"19"+geste.getTypeRenovBati().getLabel()) == null){		
+				results.put(st.substring(0,8)+"19"+geste.getTypeRenovBati().getLabel(),
+						results.get(st.substring(0,10)+geste.getTypeRenovBati().getLabel()));
+				results.put(st.substring(0,8)+"20"+geste.getTypeRenovBati().getLabel(),
+						results.get(st.substring(0,10)+geste.getTypeRenovBati().getLabel()));
+				results.put(st.substring(0,8)+"21"+geste.getTypeRenovBati().getLabel(),
+						results.get(st.substring(0,10)+geste.getTypeRenovBati().getLabel()));
+				results.put(st.substring(0,8)+"22"+geste.getTypeRenovBati().getLabel(),
+						results.get(st.substring(0,10)+geste.getTypeRenovBati().getLabel()));
+				results.put(st.substring(0,8)+"23"+geste.getTypeRenovBati().getLabel(),
+						results.get(st.substring(0,10)+geste.getTypeRenovBati().getLabel()));
+			}
+			}
 		}
-
-    }
-
-
+		
+		return results;
+	}
 	protected CalibCIRef coutGlobalReference(CalibCIBati calibCIBati, ParamCInt paramCInt) {
 		CalibCIRef reference = new CalibCIRef();
 		// calcul du cout global pour le geste Rien faire
@@ -112,9 +363,32 @@ public class CalibrageServiceImpl implements CalibrageService {
 
 		return reference;
 	}
+    
 
+	
+	protected CalibCIRef coutGlobalReferenceDesag(CalibCIBati calibCIBati, BigDecimal pmNRF, ParamCInt paramCInt, 
+			ParamCalib paramCalib) {
+		CalibCIRef reference = new CalibCIRef();
+		// calcul du cout global pour le geste Rien faire
+		// les couts intangibles sont nuls
+		// la duree de vie est de 1
+		// TODO verifier le calcul du cout global ne rien faire dans excel
+		//paramCalib.getConsoChauff().divide(paramCalib.getSurface(),MathContext.DECIMAL32);
+		//paramCalib.getBesoinChauff().divide(paramCalib.getSurface(),MathContext.DECIMAL32);
+	
+		BigDecimal coutGlobal = paramCalib.getChargesChauff()
+				.divide(paramCalib.getSurface(),MathContext.DECIMAL32).add(paramCInt.getCintRef());
+		reference.setCoutGlobal(coutGlobal);
+		reference.setPartMarche2009( pmNRF);
+
+		return reference;
+	}
+	
+	
 	// methode de calcul des CI --> cette methode renvoie une hashmap de CI
-	public HashMap<String, CalibCoutGlobal> calibreCI(HashMap<String, CalibCI> dataCalib, ParamCInt paramCint, HashMap<String, Maintenance> maintenanceMap) {
+	@Override
+	public HashMap<String, CalibCoutGlobal> calibreCI(HashMap<String, CalibCI> dataCalib, 
+			ParamCInt paramCint, HashMap<String, Maintenance> maintenanceMap) {
 		
 		HashMap<String,CalibCoutGlobal> results = new HashMap<String,CalibCoutGlobal>();
 
@@ -160,7 +434,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 				// BV ajout actualisation de l'investissement (4%)
 				// TODO mettre un taux d'actualisation different pour le public et le prive voire pptaire/locataire
 				
-				BigDecimal tauxInt = BigDecimal.ONE.add(TAUX_ACTU_CALIB);
+				BigDecimal tauxInt = BigDecimal.ONE.add(CalibParameters.TAUX_ACTU_CALIB);
 				BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
 				// BigDecimal coefactu = commonService.serieGeometrique(inverse, inverse, dataCalib.get(str).getDureeVie() - 1);
 				
@@ -216,7 +490,18 @@ public class CalibrageServiceImpl implements CalibrageService {
 		return results;
 
 	}
+	// Ajout des besoins et des prix de l'energie en 2009 pour la calibration des PM dans le neuf
+    @Override
+    public void addingRowsInHashMap(HashMap<String, CalibCI> cintMapNeuf, HashMap<Integer,
+			CoutEnergie> coutEnergieMap, HashMap<String, ParamBesoinsNeufs> bNeufsMap) {
+        for (String calibKey : cintMapNeuf.keySet()){
+        	CalibCI calib = cintMapNeuf.get(calibKey);
+    		calib.setCoutEner(coutEnergieMap.get(CalibParameters.YEAR_CALIB).getEnergie(Energies.getEnumName(calib.getEnergies())));
+    		calib.setBesoinUnitaire(bNeufsMap.get(calib.getBranche()+calib.getBatType()+ Usage.CHAUFFAGE.getLabel()).getPeriode(PERIOD_CALIB));
+			cintMapNeuf.put(calibKey,calib);
+		}
 
+    }
 	protected String modif(String stri) {
 
 		String membre1 = stri.substring(0, 4);
@@ -233,7 +518,8 @@ public class CalibrageServiceImpl implements CalibrageService {
 		return stri.substring(0, stri.length() - 1) + "0";
 	}
 
-	protected CalibCIRef refCopy(CalibCI calibCI, BigDecimal cintRef, HashMap<String, Maintenance> maintenanceMap) {
+	protected CalibCIRef refCopy(CalibCI calibCI, BigDecimal cintRef, 
+			HashMap<String, Maintenance> maintenanceMap) {
 		CalibCIRef result = new CalibCIRef();
 		
 		BigDecimal chargesEner = calibCI.getBesoinUnitaire().multiply(calibCI.getCoutEner(), MathContext.DECIMAL32)
@@ -246,8 +532,7 @@ public class CalibrageServiceImpl implements CalibrageService {
 		// BV ajout actualisation de l'investissement (4%)
 		// TODO mettre un taux d'actualisation different pour le public et le prive voire pptaire/locataire
 		
-		
-		BigDecimal tauxInt = BigDecimal.ONE.add(TAUX_ACTU_CALIB);
+		BigDecimal tauxInt = BigDecimal.ONE.add(CalibParameters.TAUX_ACTU_CALIB);
 		BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
 		
 		// BigDecimal coefactu = commonService.serieGeometrique(inverse, inverse, calibCI.getDureeVie() - 1);
@@ -274,4 +559,6 @@ public class CalibrageServiceImpl implements CalibrageService {
 	protected String generateKey(CalibCI calibCI) {
 		return calibCI.getBranche().concat(calibCI.getBatType());
 	}
+
+	
 }

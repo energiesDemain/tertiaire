@@ -1,9 +1,5 @@
 package com.ed.cgdd.derby.model.parc;
 
-import org.apache.xmlbeans.impl.tool.Extension;
-
-import java.math.BigDecimal;
-
 public class ParamCintObjects {
 	private ParamCInt sysNeuf;
 	private ParamCInt sysExist;

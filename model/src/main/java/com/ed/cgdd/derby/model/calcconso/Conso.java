@@ -6,7 +6,6 @@ import java.util.Arrays;
 public class Conso extends SegmentConso {
 
 	private BigDecimal[] annee;
-
 	public BigDecimal getAnnee(int index) {
 		return annee[index];
 	}

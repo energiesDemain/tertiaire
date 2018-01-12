@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -69,9 +70,9 @@ public class ImportExcelDASImpl implements ImportExcelDAS {
 
 	private Object getObject(XSSFCell cell) {
 		int type = cell.getCellType();
-		if (type == XSSFCell.CELL_TYPE_STRING) {
+		if (type == Cell.CELL_TYPE_STRING) {
 			return cell.getStringCellValue();
-		} else if (type == XSSFCell.CELL_TYPE_NUMERIC) {
+		} else if (type == Cell.CELL_TYPE_NUMERIC) {
 			double number = cell.getNumericCellValue();
 			return new BigDecimal(String.valueOf(number));
 		} else {

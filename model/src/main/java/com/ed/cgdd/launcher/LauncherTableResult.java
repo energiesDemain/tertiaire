@@ -8,12 +8,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import com.ed.cgdd.derby.excelresult.*;
-import com.ed.cgdd.derby.model.progression.ProgressionStep;
 
 
 public class LauncherTableResult {
-	public static final boolean checkXlsX = true;
-	public static final boolean csvCheck = false;
+	public static final boolean checkXlsX = false;
+	public static final boolean csvCheck = true;
 
 	private final static Logger LOG = LogManager.getLogger(LauncherTableResult.class);
 

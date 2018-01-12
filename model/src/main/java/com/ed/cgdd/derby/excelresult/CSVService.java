@@ -1,10 +1,5 @@
 package com.ed.cgdd.derby.excelresult;
 
-import com.ed.cgdd.derby.model.financeObjects.CoutEnergie;
-
-import java.io.IOException;
-import java.util.HashMap;
-
 public interface CSVService {
 
 	/**

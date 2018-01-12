@@ -45,6 +45,7 @@ public class LoadTableUsagesNonRTDASImpl extends BddUsagesNonRTDAS implements Lo
 
 	// Renvoie les champs des tables Derby de besoins initiaux sous forme de
 	// HashMap
+	@Override
 	public HashMap<String, Parc> loadMapResultBesoin(String tableName, final String idAgregParc, 
 			final int pasdeTemps, BigDecimal calageParc) {
 
@@ -58,6 +59,7 @@ public class LoadTableUsagesNonRTDASImpl extends BddUsagesNonRTDAS implements Lo
 	}
 
 	// Renvoie les champs de la table de besoins Neufs sous forme de HashMap
+	@Override
 	public HashMap<String, ParamBesoinsNeufs> loadTableBesoinsNeufs(String tableName) {
 
 		HashMap<String, ParamBesoinsNeufs> besoinsNeufsMap = new HashMap<String, ParamBesoinsNeufs>();
@@ -72,6 +74,7 @@ public class LoadTableUsagesNonRTDASImpl extends BddUsagesNonRTDAS implements Lo
 
 	// Renvoie les champs des tables de PM des energies dans les consommations
 	// non RT sous forme de HashMap
+	@Override
 	public HashMap<String, ParamPMConso> loadTablePMConso(String tableName) {
 
 		HashMap<String, ParamPMConso> besoinsNeufsMap = new HashMap<String, ParamPMConso>();
@@ -85,6 +88,7 @@ public class LoadTableUsagesNonRTDASImpl extends BddUsagesNonRTDAS implements Lo
 
 	// Renvoie les champs des tables de PM des energies dans les consommations
 	// non RT sous forme de HashMap
+	@Override
 	public HashMap<String, ParamPMConsoChgtSys> loadTablePMConsoChgtSys(String tableName) {
 
 		HashMap<String, ParamPMConsoChgtSys> pmConsoChgtSysMap = new HashMap<String, ParamPMConsoChgtSys>();
@@ -98,6 +102,7 @@ public class LoadTableUsagesNonRTDASImpl extends BddUsagesNonRTDAS implements Lo
 
 	// Renvoie les champs de la table des durees de vie des equipements pour les
 	// usages non RT
+	@Override
 	public HashMap<String, BigDecimal> loadTableDVNonRT(String tableName) {
 
 		HashMap<String, BigDecimal> dvNonRTMap = new HashMap<String, BigDecimal>();
@@ -111,6 +116,7 @@ public class LoadTableUsagesNonRTDASImpl extends BddUsagesNonRTDAS implements Lo
 
 	// Renvoie les champs de la table des rythmes de fermeture des meubles
 	// frigorifiques defini par la reglementation
+	@Override
 	public HashMap<String, BigDecimal> loadTableRythmeFroidRglt(String tableName) {
 
 		HashMap<String, BigDecimal> rythmeFroidMap = new HashMap<String, BigDecimal>();
@@ -125,6 +131,7 @@ public class LoadTableUsagesNonRTDASImpl extends BddUsagesNonRTDAS implements Lo
 	// Renvoie les champs de la table des gains obtenus lors de la fermeture des
 	// meubles
 	// frigorifiques defini par la reglementation
+	@Override
 	public HashMap<String, BigDecimal> loadTableGainFroidRglt(String tableName) {
 
 		HashMap<String, BigDecimal> gainFroidMap = new HashMap<String, BigDecimal>();
@@ -138,6 +145,7 @@ public class LoadTableUsagesNonRTDASImpl extends BddUsagesNonRTDAS implements Lo
 
 	// Renvoie les champs de la table des gains atteignables pour les usages non
 	// reglementes
+	@Override
 	public HashMap<String, ParamGainsUsages> loadTableGainsNonRT(String tableName) {
 
 		HashMap<String, ParamGainsUsages> gainsNonRTMap = new HashMap<String, ParamGainsUsages>();
@@ -368,6 +376,7 @@ public class LoadTableUsagesNonRTDASImpl extends BddUsagesNonRTDAS implements Lo
 		String request = getProperty(key);
 
 		return jdbcTemplate.query(request, new PreparedStatementSetter() {
+			@Override
 			public void setValues(PreparedStatement preparedStatement) throws SQLException {
 				preparedStatement.setString(1, idAgregParc);
 			}

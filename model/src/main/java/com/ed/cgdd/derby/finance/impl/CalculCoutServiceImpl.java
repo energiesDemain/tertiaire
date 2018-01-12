@@ -2,7 +2,6 @@ package com.ed.cgdd.derby.finance.impl;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import com.ed.cgdd.derby.common.CommonService;
@@ -23,8 +22,6 @@ import com.ed.cgdd.derby.model.parc.Parc;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
 import com.ed.cgdd.derby.model.parc.Usage;
-import com.ed.cgdd.derby.process.impl.ProcessServiceImpl;
-import com.ed.cgdd.derby.common.CommonService;
 
 public class CalculCoutServiceImpl implements CalculCoutService {
 
@@ -48,6 +45,7 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 		this.coutEnergieService = coutEnergieService;
 	}
 
+	@Override
 	public String outputName(String idParc, GesteFinancement courant, int annee, CoutFinal coutFinal) {
 
 		return idParc + "|" + String.valueOf(annee) + "|" + coutFinal.getSysChaud() + "|" + coutFinal.getEnergieFin()

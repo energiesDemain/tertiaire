@@ -47,6 +47,7 @@ public class ExcelEtiquetteServiceImpl implements ExcelEtiquetteService {
 	 * 
 	 * Il définit si les feuilles d'import sont cachées ou visibles.
 	 */
+	@Override
 	public void excelService(int pasTemps, boolean isHidden) {
 		try {
 

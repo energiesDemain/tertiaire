@@ -1,9 +1,6 @@
 package com.ed.cgdd.derby.calibrageCINT;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
-
 import com.ed.cgdd.derby.model.financeObjects.CalibCI;
 import com.ed.cgdd.derby.model.financeObjects.CalibCIBati;
 import com.ed.cgdd.derby.model.financeObjects.CalibCoutGlobal;
@@ -22,4 +19,5 @@ public interface CalibrageDAS {
 	 * @param cIntType
 	 */
 	void insertCInt(HashMap<String,CalibCoutGlobal> coutIntangibleMap, CIntType cIntType);
+	void insertCIntDesag(HashMap<String,CalibCoutGlobal> coutIntangibleMap, CIntType cIntType);
 }
