@@ -40,7 +40,7 @@ public class  politiques {
 		
 	// CEE prix annuels
 	
-	public final static boolean  checkCEEannuels = false;
+	public final static boolean  checkCEEannuels = true;
 	public final static BigDecimal pCEE2015 = new BigDecimal("0.010");
 	public final static BigDecimal pCEE2016 = new BigDecimal("0.010");
 	public final static BigDecimal pCEE2017 = new BigDecimal("0.010");
@@ -64,7 +64,7 @@ public class  politiques {
 //	public final static BigDecimal pCEE2020 = new BigDecimal("0.180");
 	
 	// couts intangibles subventionnes 
-	public final static boolean  checkCEECINT = false;
+	public final static boolean  checkCEECINT = true;
 	
 	// TODO faire une hasmap annee, pcee;
 	public HashMap<Integer, BigDecimal> pCEE = new HashMap<Integer, BigDecimal>();

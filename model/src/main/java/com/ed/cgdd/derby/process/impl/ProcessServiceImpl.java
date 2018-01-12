@@ -675,7 +675,11 @@ private HashMap<String, List<Geste>> GetparamGesteMap(HashMap<String, List<Strin
 		List<String> periodList = periodeMap.get(idAgregParc.substring(START_ID_BRANCHE, START_ID_BRANCHE
 				+ LENGTH_ID_BRANCHE)
 				+ idAgregParc.substring(START_ID_BAT, START_ID_BAT + LENGTH_ID_BAT));
-
+		periodList.add("19");
+		periodList.add("20");
+		periodList.add("21");
+		periodList.add("22");
+		periodList.add("23");
 		for (String periode : periodList) {
 			Geste rienFaire = new Geste(INIT_STATE + "AUCUNE");
 			rienFaire.setTypeRenovBati(TypeRenovBati.ETAT_INIT);
@@ -691,8 +695,7 @@ private HashMap<String, List<Geste>> GetparamGesteMap(HashMap<String, List<Strin
 		}
 
 		for (Geste geste : listGest) {
-			bibliGesteBatiMap
-					.get(idAgregParc + geste.getIdGesteAggreg().substring(START_PERIOD_DETAIL,
+			bibliGesteBatiMap.get(idAgregParc + geste.getIdGesteAggreg().substring(START_PERIOD_DETAIL,
 							START_PERIOD_DETAIL + LENGTH_PERIOD_DETAIL)).add(geste);
 		}
 	    }

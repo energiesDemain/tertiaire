@@ -348,6 +348,8 @@ public class CalibrageServiceImpl implements CalibrageService {
 		
 		return results;
 	}
+	
+	
 	protected CalibCIRef coutGlobalReference(CalibCIBati calibCIBati, ParamCInt paramCInt) {
 		CalibCIRef reference = new CalibCIRef();
 		// calcul du cout global pour le geste Rien faire
@@ -384,7 +386,33 @@ public class CalibrageServiceImpl implements CalibrageService {
 		return reference;
 	}
 	
-	
+//	protected HashMap<String, CalibCoutGlobal> addMissingPeriodsCINTBati(HashMap<String,CalibCoutGlobal> coutIntangibleBati, 
+//			HashMap<String, List<String>> idAgregListMap) {
+//
+//		for (String st : idAgregListMap.keySet()) {
+//			for (Geste geste : listGest) {
+//				
+//				if(results.get(st+"19"+TypeRenovBati.ETAT_INIT) == null){
+//					
+//				}
+//				
+//			if(results.get(st+"19"+geste.getTypeRenovBati().getLabel()) == null){		
+//				results.put(st.substring(0,8)+"19"+geste.getTypeRenovBati().getLabel(),
+//						results.get(st.substring(0,10)+geste.getTypeRenovBati().getLabel()));
+//				results.put(st.substring(0,8)+"20"+geste.getTypeRenovBati().getLabel(),
+//						results.get(st.substring(0,10)+geste.getTypeRenovBati().getLabel()));
+//				results.put(st.substring(0,8)+"21"+geste.getTypeRenovBati().getLabel(),
+//						results.get(st.substring(0,10)+geste.getTypeRenovBati().getLabel()));
+//				results.put(st.substring(0,8)+"22"+geste.getTypeRenovBati().getLabel(),
+//						results.get(st.substring(0,10)+geste.getTypeRenovBati().getLabel()));
+//				results.put(st.substring(0,8)+"23"+geste.getTypeRenovBati().getLabel(),
+//						results.get(st.substring(0,10)+geste.getTypeRenovBati().getLabel()));
+//			}
+//			}
+//		}
+//		
+//	}
+//	
 	// methode de calcul des CI --> cette methode renvoie une hashmap de CI
 	@Override
 	public HashMap<String, CalibCoutGlobal> calibreCI(HashMap<String, CalibCI> dataCalib, 
