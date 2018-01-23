@@ -410,7 +410,7 @@ public class LoadTableChauffClimDASImpl extends BddUsagesRTDAS implements LoadTa
 							.multiply(calageEner.get(parc.getId().substring(16,18)).getFacteurCalageConso(),
 									MathContext.DECIMAL32);
 					} else if (parc.getId().substring(parc.getId().length()-2,parc.getId().length()).equals("02")){
-						calageEnertmp = CalibParameters.CalageConsoHorsChauffElec;	
+						calageEnertmp = CalibParameters.CalageConsoElecAutres;	
 					} else {
 				    calageEnertmp = BigDecimal.ONE;	
 					}

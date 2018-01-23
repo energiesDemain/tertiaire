@@ -302,7 +302,7 @@ public class ProcessServiceRunnable implements Runnable {
 		ResultParc resultatsParc;
 		long timingSegmentStart = new Date().getTime();
 		ThreadContext.put(ID_PARC, idAgregParc);
-		//if (idAgregParc.equals("03076604")) {
+		//if (idAgregParc.equals("01018401")) {
 		//if (idAgregParc.substring(0,2).equals("01") && idAgregParc.substring(4,6).equals("42") && idAgregParc.substring(6,8).equals("03")){
 		//if (idAgregParc.substring(6,8).equals("03")) {
 		//if (idAgregParc.equals("05141304")){
@@ -403,7 +403,7 @@ public class ProcessServiceRunnable implements Runnable {
 				// HashMap<String,
 				// BigDecimal>();
 				//for (int annee = 2010; annee <= 2050; annee++) {
-			    for (int annee = 2010; annee <= 2025; annee++) {
+			    for (int annee = 2010; annee <= 2050; annee++) {
 //					long start2 = System.currentTimeMillis();
 			    	//BV prise en compte travaux embarques
 			    	if(politiques.checkTravEmb && annee == 2017){

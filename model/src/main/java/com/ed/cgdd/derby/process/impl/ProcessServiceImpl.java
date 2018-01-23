@@ -588,11 +588,11 @@ public class ProcessServiceImpl implements ProcessService {
 		// Couts intangibles des systemes dans l'existant
 		HashMap<String,CalibCoutGlobal> coutIntangible = calibrageService.calibreCI(cintMap, paramCintObjects.getSysExist(), maintenanceMap);
 		// Couts intangibles du bati dans l'existant
-		//HashMap<String,CalibCoutGlobal> coutIntangibleBati = calibrageService.calibreCIBati(cintBatiMap, paramCintObjects.getGesteBat());
+		HashMap<String,CalibCoutGlobal> coutIntangibleBati = calibrageService.calibreCIBati(cintBatiMap, paramCintObjects.getGesteBat());
 		// Version desagrege de la calibration du bati par segment de parc (batiment type, occupant)
-		HashMap<String,CalibCoutGlobal> coutIntangibleBati = 
-				calibrageService.calibreCIBatidesag(cintBatiMap,paramCintObjects.getGesteBat(),
-						paramCalibMap, bibliGesteBatiMap,tauxInteretMap);
+		//HashMap<String,CalibCoutGlobal> coutIntangibleBati = 
+		//		calibrageService.calibreCIBatidesag(cintBatiMap,paramCintObjects.getGesteBat(),
+		//				paramCalibMap, bibliGesteBatiMap,tauxInteretMap);
 
 		// Couts intangibles dans le neuf
 		HashMap<String,CalibCoutGlobal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf(), maintenanceMap);

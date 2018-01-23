@@ -126,29 +126,30 @@ public abstract class TypeFinanceServiceImpl implements TypeFinanceService {
 		return evolCout.get(cle);
 	}
 
-//	protected String generateIDCoutIntBati(Parc parcIni, Geste geste) {
-//		String key = parcIni.getIdbranche() + geste.getTypeRenovBati().getLabel();
-//		return key;
-//	}
 	protected String generateIDCoutIntBati(Parc parcIni, Geste geste) {
-		String key = parcIni.getIdbranche()+parcIni.getIdssbranche()
-		+parcIni.getIdbattype()+parcIni.getIdoccupant()+parcIni.getIdperiodedetail()+ geste.getTypeRenovBati().getLabel();
+		String key = parcIni.getIdbranche() + geste.getTypeRenovBati().getLabel();
 		return key;
-//		BigDecimal sysChaudTemp = new BigDecimal(parcIni.getIdsyschaud());
-//		String key = "";
-//		if (sysChaudTemp.compareTo(new BigDecimal("30")) > 0) {
-//			key = parcIni.getIdbranche() + parcIni.getIdssbranche() + parcIni.getIdbattype() + parcIni.getIdoccupant() 
-//			+ parcIni.getIdperiodedetail() + parcIni.getIdperiodesimple()+"1" + parcIni.getIdsyschaud().substring(1,2)
-//			+ parcIni.getIdsysfroid() + parcIni.getIdenergchauff() + geste.getTypeRenovBati().getLabel();
-//		} else if (sysChaudTemp.compareTo(new BigDecimal("20")) > 0) {
-//		    key = parcIni.getIdbranche() + parcIni.getIdssbranche() + parcIni.getIdbattype() + parcIni.getIdoccupant() 
-//			+ parcIni.getIdperiodedetail() + parcIni.getIdperiodesimple()+"0" + parcIni.getIdsyschaud().substring(1,2)
-//			+ parcIni.getIdsysfroid() + parcIni.getIdenergchauff() + geste.getTypeRenovBati().getLabel();
-//		} else {
-//			key = parcIni.getId() + geste.getTypeRenovBati().getLabel();
-//		}
-//		return key;
 	}
+	
+//	protected String generateIDCoutIntBati(Parc parcIni, Geste geste) {
+//		String key = parcIni.getIdbranche()+parcIni.getIdssbranche()
+//		+parcIni.getIdbattype()+parcIni.getIdoccupant()+parcIni.getIdperiodedetail()+ geste.getTypeRenovBati().getLabel();
+//		return key;
+////		BigDecimal sysChaudTemp = new BigDecimal(parcIni.getIdsyschaud());
+////		String key = "";
+////		if (sysChaudTemp.compareTo(new BigDecimal("30")) > 0) {
+////			key = parcIni.getIdbranche() + parcIni.getIdssbranche() + parcIni.getIdbattype() + parcIni.getIdoccupant() 
+////			+ parcIni.getIdperiodedetail() + parcIni.getIdperiodesimple()+"1" + parcIni.getIdsyschaud().substring(1,2)
+////			+ parcIni.getIdsysfroid() + parcIni.getIdenergchauff() + geste.getTypeRenovBati().getLabel();
+////		} else if (sysChaudTemp.compareTo(new BigDecimal("20")) > 0) {
+////		    key = parcIni.getIdbranche() + parcIni.getIdssbranche() + parcIni.getIdbattype() + parcIni.getIdoccupant() 
+////			+ parcIni.getIdperiodedetail() + parcIni.getIdperiodesimple()+"0" + parcIni.getIdsyschaud().substring(1,2)
+////			+ parcIni.getIdsysfroid() + parcIni.getIdenergchauff() + geste.getTypeRenovBati().getLabel();
+////		} else {
+////			key = parcIni.getId() + geste.getTypeRenovBati().getLabel();
+////		}
+////		return key;
+//	}
 
 	// version sans cout intangible
 	@Override

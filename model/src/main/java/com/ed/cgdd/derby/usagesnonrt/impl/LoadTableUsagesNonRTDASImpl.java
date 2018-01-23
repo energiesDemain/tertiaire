@@ -395,16 +395,22 @@ public class LoadTableUsagesNonRTDASImpl extends BddUsagesNonRTDAS implements Lo
 					
 					// Ajout calage energies
 					BigDecimal calageEnertmp = BigDecimal.ONE;
-					// On recale seulement les besoins de chauffage (ID = longueur 18) pas la clim
+					
 					if (parc.getId().substring(parc.getId().length()-2,parc.getId().length()).equals("02")){
-						calageEnertmp = CalibParameters.CalageConsoHorsChauffElec;	
+						if(tableName.equals("Bureautique_init") || tableName.equals("Froid_alimentaire_init") 
+								|| tableName.contentEquals("Eclairage_init") || tableName.contentEquals("Ventilation_init") ||
+								tableName.contentEquals("Process_init")){
+						calageEnertmp = CalibParameters.CalageConsoElecspe;	
+						} else {
+						calageEnertmp = CalibParameters.CalageConsoElecAutres;	
+						}
 					} else {
 				    calageEnertmp = BigDecimal.ONE;	
 					}
 					
 					parc.setAnnee(0, rs.getBigDecimal("BESOIN").multiply(calageParc,MathContext.DECIMAL32)
 							.multiply(calageEnertmp,MathContext.DECIMAL32));
-					
+			
 					for (int j = 1; j <= pasdeTemps; j++) {
 
 						parc.setAnnee(j, BigDecimal.ZERO);

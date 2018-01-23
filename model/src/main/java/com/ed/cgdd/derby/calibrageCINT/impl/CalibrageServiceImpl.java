@@ -16,6 +16,11 @@ import com.ed.cgdd.derby.common.CommonService;
 import com.ed.cgdd.derby.model.CalibParameters;
 import com.ed.cgdd.derby.finance.RecupParamFinDAS;
 
+import org.chocosolver.solver.Model;
+import org.chocosolver.solver.Solution;
+import org.chocosolver.solver.variables.IntVar;
+
+
 public class CalibrageServiceImpl implements CalibrageService {
 	private final static Logger LOG = LogManager.getLogger(CalibrageServiceImpl.class);
 	private CommonService commonService;
@@ -518,6 +523,120 @@ public class CalibrageServiceImpl implements CalibrageService {
 		return results;
 
 	}
+	
+	// methode de calcul des CI --> cette methode renvoie une hashmap de CI
+	
+		public HashMap<String, CalibCoutGlobal> calibreCISolve(HashMap<String, CalibCI> dataCalib, 
+				ParamCInt paramCint, HashMap<String, Maintenance> maintenanceMap) {
+			
+			HashMap<String,CalibCoutGlobal> results = new HashMap<String,CalibCoutGlobal>();
+
+			// pour le calage : Chaudiere gaz
+			HashMap<String, CalibCIRef> calibRef = new HashMap<String, CalibCIRef>();
+
+			Model cintSystSolve = new Model("Solving Cint for heating systems");
+			IntVar cintSum = cintSystSolve.intVar("C", 0, 99999, true);
+			IntVar cintRef = cintSystSolve.intVar("C", -10, 10, true);
+				
+			for (String st : dataCalib.keySet()) {
+
+				// traitement specifique pour la branche transport
+				if (dataCalib.get(st).getBranche().equals(Branche.TRANSPORT.getCode())
+						&& dataCalib.get(st).getEnergies().equals(Energies.GAZ.getCode())) {
+					calibRef.put(generateKey(dataCalib.get(st)), refCopy(dataCalib.get(st), BigDecimal.valueOf(cintRef.getValue()), maintenanceMap));
+
+				} else {
+					if ((dataCalib.get(st).getSysteme().equals(SysChaud.CHAUDIERE_GAZ.getCode()))
+							&& (dataCalib.get(st).getEnergies().equals(Energies.GAZ.getCode()) && (!dataCalib.get(st)
+									.getPerformant()))) {
+						calibRef.put(generateKey(dataCalib.get(st)), refCopy(dataCalib.get(st), BigDecimal.valueOf(cintRef.getValue()), maintenanceMap));
+					}
+				}
+			}
+			
+
+			for (String str : dataCalib.keySet()) {
+				// if (!(dataCalib.get(str).getPerformant())) {
+				if (paramCint.getNu() == 0) { // dans ce cas les PM sont les memes pour tous et
+								// les CI ne peuvent pas etre calcule
+					results.put(str,new CalibCoutGlobal(BigDecimal.valueOf(cintRef.getValue()),BigDecimal.ZERO));
+//					cintSum = cintSum.add(cintRef);
+				} else {
+
+				
+					// dans ce cas les pm ne sont pas nulles
+					// inter1 rapport entre la part de marche de l'option calibree et celle de l'option de reference 
+					Double inter1 = dataCalib
+							.get(str)
+							.getPartMarche2009()
+							.divide(calibRef.get(generateKey(dataCalib.get(str))).getPartMarche2009(),
+									MathContext.DECIMAL32).doubleValue();
+					
+					
+					Double inter2 = BigDecimal.ONE.divide(BigDecimal.valueOf(-paramCint.getNu()), MathContext.DECIMAL32).doubleValue();
+					BigDecimal intermediaire = BigDecimal.valueOf(Math.pow(inter1, inter2));
+					
+					// BV ajout actualisation de l'investissement (4%)
+					// TODO mettre un taux d'actualisation different pour le public et le prive voire pptaire/locataire
+					
+					BigDecimal tauxInt = BigDecimal.ONE.add(CalibParameters.TAUX_ACTU_CALIB);
+					BigDecimal inverse = BigDecimal.ONE.divide(tauxInt, MathContext.DECIMAL32);
+					// BigDecimal coefactu = commonService.serieGeometrique(inverse, inverse, dataCalib.get(str).getDureeVie() - 1);
+					
+					BigDecimal coefactu = inverse.multiply(BigDecimal.ONE.subtract(inverse.pow(dataCalib.get(str).getDureeVie(), MathContext.DECIMAL32), 
+							MathContext.DECIMAL32),MathContext.DECIMAL32)
+					.divide(BigDecimal.ONE.subtract(inverse, MathContext.DECIMAL32),
+					MathContext.DECIMAL32);
+					
+					BigDecimal besoinUnitaire =  dataCalib.get(str).getBesoinUnitaire();	
+					
+					// 	calcul charges energetiques annuelles, agent myope
+					BigDecimal chargesEnerinter = dataCalib.get(str).getCoutEner()
+					.multiply(besoinUnitaire
+					.divide(dataCalib.get(str).getRdt(), MathContext.DECIMAL32), 
+					MathContext.DECIMAL32);
+					
+					// ajout des couts de maintenance dans la calibration 
+					BigDecimal coutMaintenance = dataCalib.get(str).getCoutM2().multiply(maintenanceMap.get(dataCalib.get(str).getSysteme())
+							.getPart(), MathContext.DECIMAL32);
+					
+					// Calcul du cout variable annualise en divisant l'investissement par le coef d'actualisation
+					
+					BigDecimal coutVariable = (dataCalib.get(str).getCoutM2().divide(
+							coefactu, MathContext.DECIMAL32)).add(chargesEnerinter,
+							MathContext.DECIMAL32).add(coutMaintenance, MathContext.DECIMAL32 );
+					
+					
+					BigDecimal interFinal = (intermediaire.multiply(calibRef.get(generateKey(dataCalib.get(str)))
+					.getCoutGlobal(), MathContext.DECIMAL32)).subtract(coutVariable, MathContext.DECIMAL32);
+
+					// version initiale
+//					BigDecimal interFinal = (intermediaire.multiply(calibRef.get(generateKey(dataCalib.get(str)))
+//							.getCoutGlobal(), MathContext.DECIMAL32)).subtract((dataCalib.get(str).getCoutM2().divide(
+//							BigDecimal.valueOf(dataCalib.get(str).getDureeVie()), MathContext.DECIMAL32)).add(
+//							dataCalib
+//									.get(str)
+//									.getCoutEner()
+//									.multiply(
+//											dataCalib.get(str).getBesoinUnitaire()
+//													.divide(dataCalib.get(str).getRdt(), MathContext.DECIMAL32),
+//											MathContext.DECIMAL32), MathContext.DECIMAL32), MathContext.DECIMAL32);
+//					
+					
+					if (!dataCalib.get(str).getPerformant()) {
+						results.put(str,new CalibCoutGlobal(interFinal,coutVariable));
+					} else {
+						results.put(modif(str),new CalibCoutGlobal(interFinal,coutVariable));
+					}
+
+				}
+			}
+
+			return results;
+
+		}
+	
+	
 	// Ajout des besoins et des prix de l'energie en 2009 pour la calibration des PM dans le neuf
     @Override
     public void addingRowsInHashMap(HashMap<String, CalibCI> cintMapNeuf, HashMap<Integer,

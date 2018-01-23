@@ -6,14 +6,14 @@ public class  politiques {
 	
 	// Activation politiques publiques
 	// individualisation des frais de chauffage
-	public final static boolean checkIFC=true;
+	public final static boolean checkIFC=false;
 	//public final static BigDecimal GainBU_2017 = new BigDecimal("0.993625");
 	//public final static BigDecimal GainBU_2018 = new BigDecimal("0.98725");
 	//public final static BigDecimal GainBU_2019 = new BigDecimal("0.980875");
 	public final static BigDecimal GainBU_IFC_annuel = new BigDecimal("-0.006375");
 
 	// RT existant 2018
-	public final static boolean checkRTex=true;
+	public final static boolean checkRTex=false;
 
 	public final static BigDecimal GainSupRTex = new BigDecimal("0.06");
 	public final static BigDecimal CoutSupRTex = new BigDecimal("0.09");
@@ -25,14 +25,16 @@ public class  politiques {
 	public final static BigDecimal CoutRdtSupRTexElecJoule = new BigDecimal("0.075");
 	
 	// batiment exemplaire
-	public final static boolean  checkBatex = true;
+	public final static boolean  checkBatex = false;
 	public final static BigDecimal modifBUBatEx = new BigDecimal("0.8325");
 
 	//travaux embarques
 	public final static boolean  checkTravEmb =  true;
 	// taux de renovation tendanciel supplementaire
-	public static float  txRenovTravEmb = 0.011f;
-
+	//public static float  txRenovTravEmb = 0.011f;
+	public static float  txRenovTravEmb = 0.0000001f;
+	
+	
 	//surcout RT 2012 electrique direct
 	public final static boolean  checkSurcoutRT2012 = true;
 	// surcout en euros par m2 pour l'electrique joule
@@ -40,7 +42,15 @@ public class  politiques {
 		
 	// CEE prix annuels
 	
-	public final static boolean  checkCEEannuels = true;
+	public final static boolean  checkCEEannuels = false;
+	
+//	public final static BigDecimal pCEE2015 = new BigDecimal("0.020");
+//	public final static BigDecimal pCEE2016 = new BigDecimal("0.020");
+//	public final static BigDecimal pCEE2017 = new BigDecimal("0.020");
+//	public final static BigDecimal pCEE2018 = new BigDecimal("0.050");
+//	public final static BigDecimal pCEE2019 = new BigDecimal("0.050");
+//	public final static BigDecimal pCEE2020 = new BigDecimal("0.050");
+//	
 	public final static BigDecimal pCEE2015 = new BigDecimal("0.010");
 	public final static BigDecimal pCEE2016 = new BigDecimal("0.010");
 	public final static BigDecimal pCEE2017 = new BigDecimal("0.010");
@@ -48,7 +58,7 @@ public class  politiques {
 	public final static BigDecimal pCEE2019 = new BigDecimal("0.015");
 	public final static BigDecimal pCEE2020 = new BigDecimal("0.015");
 	
-////	valeur où on atteint 23 Twh en 2021 avec CINT subventionnés
+////valeur où on atteint 23 Twh en 2021 avec CINT subventionnés
 //	public final static BigDecimal pCEE2015 = new BigDecimal("0.070");
 //	public final static BigDecimal pCEE2016 = new BigDecimal("0.070");
 //	public final static BigDecimal pCEE2017 = new BigDecimal("0.100");
@@ -64,8 +74,11 @@ public class  politiques {
 //	public final static BigDecimal pCEE2020 = new BigDecimal("0.180");
 	
 	// couts intangibles subventionnes 
-	public final static boolean  checkCEECINT = true;
+	public final static boolean  checkCEECINT =false;
 	
+	// Subvention aux economies d energie actualisees
+	public final static boolean  checkSubEcoEner = false;
+		
 	// TODO faire une hasmap annee, pcee;
 	public HashMap<Integer, BigDecimal> pCEE = new HashMap<Integer, BigDecimal>();
 

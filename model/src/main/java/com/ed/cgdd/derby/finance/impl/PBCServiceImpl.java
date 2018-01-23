@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.ed.cgdd.derby.finance.CalculCEEService;
+import com.ed.cgdd.derby.model.CalibParameters;
 import com.ed.cgdd.derby.model.politiques;
 import com.ed.cgdd.derby.model.calcconso.Conso;
 import com.ed.cgdd.derby.model.financeObjects.*;
@@ -33,19 +34,28 @@ public class PBCServiceImpl extends TypeFinanceServiceImpl {
 			BigDecimal coutEnergie, HashMap<String, BigDecimal> evolCoutBati,
 			HashMap<String, BigDecimal> evolCoutTechno,HashMap<String, BigDecimal> evolCoutIntTechno) {
 
-//		long startRecupParamSegment = System.currentTimeMillis();
 		CoutRenovation coutRenov = recupParamSegment(parcIni, consoEner, geste, anneeNtab, annee, surface,
 				coutIntangible, coutIntangibleBati, coutEnergie, evolCoutBati, evolCoutTechno, evolCoutIntTechno);
-//		long endRecupParamSegment = System.currentTimeMillis();
-//		if(endRecupParamSegment - startRecupParamSegment >1){
-//			LOG.info("Recup Param Segment PBC : {}ms - geste {}", endRecupParamSegment - startRecupParamSegment);}
 
+		// subvention sur les economies denergie actualisees
+		if(politiques.checkSubEcoEner && geste.getGainEner().equals(BigDecimal.ZERO) == false){
+		// calcul gain en cumac du geste
+		int dureeDeVieTravaux = Math.max(geste.getDureeBati(), geste.getDureeSys());
+		BigDecimal tauxInt = BigDecimal.ONE.add(CalibParameters.TAUX_ACTU_CALIB);
+		// calcul coef actu sur la duree de vie des travaux
+		BigDecimal coefactu = (BigDecimal.ONE
+						.subtract(BigDecimal.ONE.divide(tauxInt.pow(dureeDeVieTravaux), MathContext.DECIMAL32), MathContext.DECIMAL32))
+						.divide(tauxInt.subtract(BigDecimal.ONE), MathContext.DECIMAL32);
+				
+		BigDecimal gainCumac = consoEner.getAnnee(anneeNtab - 1).multiply(geste.getGainEner(), MathContext.DECIMAL32)
+				.divide(parcIni.getAnnee(anneeNtab - 1), MathContext.DECIMAL32).multiply(coefactu, MathContext.DECIMAL32);
+
+		geste.setValeurCEE(gainCumac);
+		
+		}
+		
 		BigDecimal aide = calculCEEService.calculCEE(surface, geste, valeurCEE);
-//		long startCreate = System.currentTimeMillis();
 		GesteFinancement returnGeste = createFinancementPBC(geste, (PBC) financement, aide, coutRenov);
-//		long endCreate = System.currentTimeMillis();
-//		if(endCreate - startCreate >1){
-//			LOG.info("Create financement PBC : {}ms", endCreate - startCreate);}
 
 		return returnGeste;
 	}

@@ -524,7 +524,13 @@ public class LoadTableRtDASImpl extends BddUsagesRTDAS implements LoadTableRtDAS
 					BigDecimal calageEnertmp = BigDecimal.ONE;
 					// On recale seulement les besoins de chauffage (ID = longueur 18) pas la clim
 					if (conso.getId().substring(conso.getId().length()-2,conso.getId().length()).equals("02")){
-						calageEnertmp = CalibParameters.CalageConsoHorsChauffElec;	
+						if(tableName.equals("Bureautique_init") || tableName.equals("Froid_alimentaire_init") 
+								|| tableName.contentEquals("Eclairage_init") || tableName.contentEquals("Ventilation_init") ||
+								tableName.contentEquals("Process_init")){
+						calageEnertmp = CalibParameters.CalageConsoElecspe;	
+						} else {
+						calageEnertmp = CalibParameters.CalageConsoElecAutres;	
+						}	
 					} else {
 				    calageEnertmp = BigDecimal.ONE;	
 					}

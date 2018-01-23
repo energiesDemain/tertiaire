@@ -1359,7 +1359,7 @@ public class FinanceServiceImpl implements FinanceService {
 					inter = getFinanceService(financement).createFinancement(parcIni, consoEner, courant, financement,
 							anneeNTab, annee, pretDeBase, subCEE, surface, coutIntangible, coutIntangibleBati,
 							coutEnergie, evolCoutBati, evolCoutTechno, evolCoutIntTechno);
-
+					
 					if (inter != null) {
 						//long startCoutFinal = System.currentTimeMillis();
 						coutFinalProp = calculCoutService.calculCoutFinal(surface, besoinInitUnitaire, parcIni, inter,
@@ -1372,6 +1372,9 @@ public class FinanceServiceImpl implements FinanceService {
 								coutFinalProp);
 						coutFinalMapLoc.put(calculCoutService.outputName(idParc, inter, annee, coutFinalLoc),
 								coutFinalLoc);
+						
+//						LOG.info("coutF : {} {} {} {} {}", coutFinalLoc, courant.getCoutGesteBati(), courant.getCoutGesteSys(), 
+//								courant.getGesteNom(), idParc);
 						
 						sommeProp = sommeProp.add(coutFinalProp.getCoutGlobal().pow(-paramCintObjects.getGesteBat().getNu(), MathContext.DECIMAL32));
 						sommeLoc = sommeLoc.add(coutFinalLoc.getCoutGlobal().pow(-paramCintObjects.getGesteBat().getNu(), MathContext.DECIMAL32));
