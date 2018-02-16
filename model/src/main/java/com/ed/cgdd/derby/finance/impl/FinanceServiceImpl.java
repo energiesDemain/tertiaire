@@ -158,7 +158,7 @@ public class FinanceServiceImpl implements FinanceService {
 				coutsEclVentilMap, coutEcsMap, pmEcsNeufMap, bNeufsMap, gainsVentilationMap, bibliRdtEcsMap,
 				evolCoutBati, evolCoutTechno,evolCoutIntTechno, maintenanceMap, evolBesoinMap);
 		// LOG.debug("end renov");
-
+		 
 		return pmResult;
 
 	}
@@ -202,6 +202,7 @@ public class FinanceServiceImpl implements FinanceService {
 			// LOG.info("Segment {}", idParc);
 			Parc parc = parcTotMap.get(idParc);
 			BigDecimal surfN = parc.getAnnee(anneeNTab - 1);
+		
 			if (surfN != null && surfN.signum() != 0) {
 				surfaceSegmentTot = surfaceSegmentTot.add(surfN, MathContext.DECIMAL32);
 			}
@@ -250,7 +251,7 @@ public class FinanceServiceImpl implements FinanceService {
 		//LOG.info("countrenov : {}ms", countrenov/100000f);
 		
 		//ajout de la reno tendancielle
-
+		
 	    partGesteFin = renoTendancielle(partGesteFin, txRenovBatiVentile, surfaceSegmentTot, parcTotMap, anneeNTab);
 		return partGesteFin;
 		
@@ -299,6 +300,7 @@ public class FinanceServiceImpl implements FinanceService {
 			Parc parcInit, int anneeNTab, Reglementations reglementations, int annee, BigDecimal compteur,
 			BigDecimal[] tauxRenovBatiVentile, BigDecimal surfParc) {
 		// Initialisation des objets de resultats
+		
 		CompilResultGeste compilHorsRegl = new CompilResultGeste();
 		CompilResultGeste compilOblig = new CompilResultGeste();
 		CompilResultGeste compilDecret = new CompilResultGeste();
@@ -384,6 +386,7 @@ public class FinanceServiceImpl implements FinanceService {
 
 		// Ajout des parts de marche des gestes imposes par l'obligation de
 		// travaux
+		
 		partGesteFin = loadResultFinOblig(partGesteFin, compilOblig, partsMarcheModif, surfInit);
 		// Ajout des parts de marche des gestes imposes par le decret
 		partGesteFin = loadResultFinDecret(partGesteFin, compilDecret, partsMarcheModif, surfInit);
@@ -393,8 +396,9 @@ public class FinanceServiceImpl implements FinanceService {
 		// systemes renouveles par l'obligation de travaux
 		partsMarcheModif.setPartRenouvSys(modifPartRenouvSys(sommeSysRegl, partsMarcheModif.getPartRenouvSys()));
 		// Ajout des gestes non imposes par des reglementations
-		partGesteFin = calcPMHorsRegl(partsMarcheModif, partGesteFin, compilHorsRegl, surfInit);
 		
+		partGesteFin = calcPMHorsRegl(partsMarcheModif, partGesteFin, compilHorsRegl, surfInit);
+			
 
 	}
 
@@ -455,6 +459,11 @@ public class FinanceServiceImpl implements FinanceService {
 					if (mapIdSegKey.get(temp).isRienFaire())
 						LOG.info("trop de rien faire !!!");
 
+					
+					if(partGesteFin.get(key).getPart().compareTo(BigDecimal.ZERO) <0){
+						LOG.info("pb nerien faire");
+						
+				}
 					// if
 					// (partGesteFin.get(key).getPart().compareTo(tauxRenovBatiVentile[0])
 					// >= 0) {
@@ -634,6 +643,11 @@ public class FinanceServiceImpl implements FinanceService {
 			HashMap<String, PartMarcheRenov> partGesteFin, CompilResultGeste compilHorsRegl, BigDecimal surfInit) {
 		boolean testSys = false;
 		BigDecimal partHorsReglBat = partsMarcheModif.getPartHorsRegl().subtract(partsMarcheModif.getPartRenouvSys());
+		// BV ajout modif car bug si < 0
+		if(partHorsReglBat.compareTo(BigDecimal.ZERO)<0){
+			 partHorsReglBat = BigDecimal.ZERO;
+		}
+		
 		BigDecimal sommeBat = BigDecimal.ZERO;
 		BigDecimal sommeSys = BigDecimal.ZERO;
 		BigDecimal sommeNonChgtSys = BigDecimal.ZERO;
@@ -1133,7 +1147,7 @@ public class FinanceServiceImpl implements FinanceService {
 			if ((dvSys.subtract(compteurSpec)).signum() <= 0) {
 				partRenouv = BigDecimal.ONE;
 			} else {
-				// partRenouv = 1/(dvSys-compteur)
+				// partRenouv = 1/(dvSys-compteur)  ???
 				partRenouv = BigDecimal.ONE.divide((dvSys.subtract(compteurSpec)), MathContext.DECIMAL32);
 			}
 		} else {

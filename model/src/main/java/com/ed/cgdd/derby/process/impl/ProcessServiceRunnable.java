@@ -318,8 +318,8 @@ public class ProcessServiceRunnable implements Runnable {
 		// // if (idAgregParc.substring(0, 2).equals("08")) {
 		// // {equals("08356005")
 		// || idAgregParc.equals("01024401")) {
-//		 if (idAgregParc.equals("02186705")) {
-		if (true) {
+		if (idAgregParc.equals("01024201")) {
+		//if (true) {
 			int pasdeTemps = pasdeTempsInit;
 			LOG.info("idAgregParc = {}", idAgregParc);
 			try {
@@ -477,7 +477,7 @@ public class ProcessServiceRunnable implements Runnable {
 							evolBesoinMap);
 					//long endPM = System.currentTimeMillis();
 					//LOG.info("PM existant : {}ms", endPM - startPM);
-
+			
 					//long startConso = System.currentTimeMillis();
 					resultatsConsoRt = chauffageService.evolChauffageConso(resultFinance, idAgregParc, auxChaud,
 							parcTotMap, partMarcheMap, bNeufsMap, rdtCoutChauffMap, anneeNTab, pasdeTemps, annee,
