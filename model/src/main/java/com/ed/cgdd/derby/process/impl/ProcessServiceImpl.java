@@ -586,21 +586,29 @@ public class ProcessServiceImpl implements ProcessService {
 		calibrageService.addingRowsInHashMap(cintMapNeuf,coutEnergieMap,bNeufsMap);
 
 		// Couts intangibles des systemes dans l'existant
-		HashMap<String,CalibCoutGlobal> coutIntangible = calibrageService.calibreCI(cintMap, paramCintObjects.getSysExist(), maintenanceMap);
+		//HashMap<String,CalibCoutGlobal> coutIntangible = calibrageService.calibreCI(cintMap, paramCintObjects.getSysExist(), maintenanceMap);
+		HashMap<String,CalibCoutGlobal> coutIntangible = calibrageService.calibreCIsystZERO(cintMap, paramCintObjects.getSysExist(), maintenanceMap);
+	
+		// Couts intangibles dans le neuf
+		HashMap<String,CalibCoutGlobal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf(), maintenanceMap);
+
 		// Couts intangibles du bati dans l'existant
-		HashMap<String,CalibCoutGlobal> coutIntangibleBati = calibrageService.calibreCIBati(cintBatiMap, paramCintObjects.getGesteBat());
+		// HashMap<String,CalibCoutGlobal> coutIntangibleBati = calibrageService.calibreCIBati(cintBatiMap, paramCintObjects.getGesteBat());
 		// Version desagrege de la calibration du bati par segment de parc (batiment type, occupant)
 		//HashMap<String,CalibCoutGlobal> coutIntangibleBati = 
 		//		calibrageService.calibreCIBatidesag(cintBatiMap,paramCintObjects.getGesteBat(),
 		//				paramCalibMap, bibliGesteBatiMap,tauxInteretMap);
-
-		// Couts intangibles dans le neuf
-		HashMap<String,CalibCoutGlobal> coutIntangibleNeuf = calibrageService.calibreCI(cintMapNeuf, paramCintObjects.getSysNeuf(), maintenanceMap);
-
-//		// Enregistrement des couts intangibles
+		// Version plus simple uniquement basee sur le cout intangible de ne rien faire
+		HashMap<String,CalibCoutGlobal> coutIntangibleBati = calibrageService.calibreCIBatiNRFonly(cintBatiMap, paramCintObjects.getGesteBat());
+	
+		// Lamdba par branche : pourcentage de reduction du cout intial de ne rien faire
+	    HashMap<String, BigDecimal> LambdaNRF = calibrageService.setLambdaNRF();
+		
+////		// Enregistrement des couts intangibles
 //		LOG.debug("Insert couts intangibles");
 //		calibrageDAS.insertCInt(coutIntangible, CIntType.SYS_EXISTANT);
-//		calibrageDAS.insertCIntDesag(coutIntangibleBati, CIntType.BATI);
+////      calibrageDAS.insertCIntDesag(coutIntangibleBati, CIntType.BATI);
+//		calibrageDAS.insertCInt(coutIntangibleBati, CIntType.BATI);
 //		calibrageDAS.insertCInt(coutIntangibleNeuf, CIntType.SYS_NEUF);
 //		LOG.debug("Insert couts intangibles - done");	
 		
@@ -618,7 +626,8 @@ public class ProcessServiceImpl implements ProcessService {
 					dvGesteMap, auxChaud, auxFroid, gainsEclairageMap, gainsVentilationMap, coutsEclVentilMap,
 					coutIntangible, coutIntangibleBati, evolCoutBati, evolCoutTechno,evolCoutIntTechno, periodeMap, coutEnergieMap,
 					emissionsMap, reglementations, idAgregParc, progression, tauxInteretMap, surfMoyMap, evolVVMap,
-					repartStatutOccupMap, maintenanceMap, elasticiteMap, coutIntangibleNeuf, evolBesoinMap, calageEner, calageBranche);
+					repartStatutOccupMap, maintenanceMap, elasticiteMap, coutIntangibleNeuf, evolBesoinMap, calageEner, calageBranche, 
+					LambdaNRF);
 			runnable.initServices(parcService, loadParcDatadas, insertParcdas, bureauProcessService,
 					cuissonAutreService, froidAlimService, insertUsagesNonRTdas, loadTableUsagesNonRTdas, ecsService,
 					climatisationService, chauffageService, eclairageService, insertUsagesRTdas, loadTableRtdas,

@@ -1,5 +1,6 @@
 package com.ed.cgdd.derby.calibrageCINT;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,8 +23,10 @@ public interface CalibrageService {
 	 * @param paramCint
 	 * @return
 	 */
-	HashMap<String, CalibCoutGlobal> calibreCI(HashMap<String, CalibCI> dataCalib, ParamCInt paramCint, HashMap<String, Maintenance> maintenanceMap);
-
+	HashMap<String, CalibCoutGlobal> calibreCI(HashMap<String, CalibCI> dataCalib, 
+			ParamCInt paramCint, HashMap<String, Maintenance> maintenanceMap);
+	HashMap<String, CalibCoutGlobal> calibreCIsystZERO(HashMap<String, CalibCI> dataCalib, 
+			ParamCInt paramCint, HashMap<String, Maintenance> maintenanceMap);
 	/**
 	 * Calculate CInt and return all cost parameters
 	 * @param dataCalib
@@ -43,7 +46,10 @@ public interface CalibrageService {
 			ParamCInt paramCInt, HashMap<String, ParamCalib> paramCalibMap,  
 			HashMap<String, List<Geste>>  bibliGesteBatiMap, HashMap<String, TauxInteret> tauxInteretMap);
 	
-	
+	HashMap<String, CalibCoutGlobal> 	calibreCIBatiNRFonly(HashMap<String, CalibCIBati> dataCalib, ParamCInt paramCint);
+
+
+	HashMap<String, BigDecimal> setLambdaNRF();
 	
     void addingRowsInHashMap(HashMap<String, CalibCI> cintMapNeuf, HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, ParamBesoinsNeufs> bNeufsMap);
 }

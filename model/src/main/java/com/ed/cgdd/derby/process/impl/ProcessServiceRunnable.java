@@ -171,6 +171,7 @@ public class ProcessServiceRunnable implements Runnable {
 	EvolBesoinMap evolBesoinMap;
 	HashMap<String, ParamCalageEner> calageEner;  
 	HashMap<String, BigDecimal> calageBranche;
+	HashMap<String, BigDecimal> LambdaNRF;
 	
 	public ProcessServiceRunnable(int pasdeTempsInit, ParamCintObjects paramCintObject, float txRenovBati,
   HashMap<String, ParamParcArray> entreesMap, HashMap<String, ParamParcArray> sortiesMap,
@@ -198,7 +199,7 @@ public class ProcessServiceRunnable implements Runnable {
   HashMap<String, EvolValeurVerte> evolVVMap, HashMap<String, RepartStatutOccup> repartStatutOccupMap,
   HashMap<String, Maintenance> maintenanceMap, ElasticiteMap elasticiteMap, HashMap<String,CalibCoutGlobal> coutIntangibleNeuf,
   EvolBesoinMap evolBesoinMap,HashMap<String, ParamCalageEner> calageEner,
-  HashMap<String, BigDecimal> calageBranche) {
+  HashMap<String, BigDecimal> calageBranche, HashMap<String, BigDecimal> LambdaNRF) {
 		this.pasdeTempsInit = pasdeTempsInit;
 		this.paramCintObject = paramCintObject;
 		this.txRenovBati = txRenovBati;
@@ -256,6 +257,7 @@ public class ProcessServiceRunnable implements Runnable {
 		this.evolBesoinMap = evolBesoinMap;
 		this.calageEner = calageEner;
 		this.calageBranche = calageBranche;
+		this.LambdaNRF = LambdaNRF;
 	}
 
 	public void initServices(ParcService parcService, LoadParcDataDAS loadParcDatadas, InsertParcDAS insertParcdas,
@@ -302,7 +304,7 @@ public class ProcessServiceRunnable implements Runnable {
 		ResultParc resultatsParc;
 		long timingSegmentStart = new Date().getTime();
 		ThreadContext.put(ID_PARC, idAgregParc);
-		//if (idAgregParc.equals("01018401")) {
+		//if (idAgregParc.equals("01018401") || idAgregParc.equals("01024403")) {
 		//if (idAgregParc.substring(0,2).equals("01") && idAgregParc.substring(4,6).equals("42") && idAgregParc.substring(6,8).equals("03")){
 		//if (idAgregParc.substring(6,8).equals("03")) {
 		//if (idAgregParc.equals("05141304")){
@@ -318,8 +320,10 @@ public class ProcessServiceRunnable implements Runnable {
 		// // if (idAgregParc.substring(0, 2).equals("08")) {
 		// // {equals("08356005")
 		// || idAgregParc.equals("01024401")) {
-		if (idAgregParc.equals("01024201")) {
-		//if (true) {
+		//if (idAgregParc.equals("01024201")) {
+		//if ( idAgregParc.equals("01024403")) {
+			
+		if (true) {
 			int pasdeTemps = pasdeTempsInit;
 			LOG.info("idAgregParc = {}", idAgregParc);
 			try {
@@ -474,7 +478,7 @@ public class ProcessServiceRunnable implements Runnable {
 							coutEnergieMap, emissionsMap, reglementations, compteur, coutsEclVentilMap, coutEcsMap,
 							pmEcsNeufMap, bNeufsMap, gainsVentilationMap, bibliRdtEcsMap, evolCoutBati, evolCoutTechno,evolCoutIntTechno,
 							tauxInteretMap, surfMoyMap, evolVVMap, repartStatutOccupMap, maintenanceMap, 
-							evolBesoinMap);
+							evolBesoinMap, LambdaNRF);
 					//long endPM = System.currentTimeMillis();
 					//LOG.info("PM existant : {}ms", endPM - startPM);
 			

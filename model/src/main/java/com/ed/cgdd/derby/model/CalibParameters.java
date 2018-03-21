@@ -11,8 +11,39 @@ public class CalibParameters {
 	
 	// param surcout fuel switch en % du cout d'investissement
 		public final static boolean  checkSurcoutFuelSwitch = true;
-		public final static BigDecimal FacteurFuelCentrElec = new BigDecimal("1");
+		public final static BigDecimal FacteurFuelCentrElec = new BigDecimal("0");
 		public final static BigDecimal FacteurFuelElecCentr = new BigDecimal("1");
+	
+	// param surcout ENSBBC (facteur multiplicatif des couts)
+		public final static boolean  checkSurcoutENSBBC = true;
+		public final static BigDecimal FacteurENSBBC = new BigDecimal("1");
+		public final static boolean  checkSurcoutENSMOD =true;
+		public final static BigDecimal FacteurENSMOD = new BigDecimal("1");
+		public final static boolean  checkSurcoutall = false;
+		public final static BigDecimal Facteurall = new BigDecimal("1");
+		
+	// lambda cout intangible ne rien faire (pourcentage de reduction des charges initiales)
+		public final static BigDecimal LambdaNRF = new BigDecimal("1");
+	
+//	// lambda par branche
+//		public final static BigDecimal LambdaNRF01 = new BigDecimal("0.4");
+//		public final static BigDecimal LambdaNRF02 = new BigDecimal("0.7");
+//		public final static BigDecimal LambdaNRF03 = new BigDecimal("0.8");
+//		public final static BigDecimal LambdaNRF04 = new BigDecimal("0.85");
+//		public final static BigDecimal LambdaNRF05 = new BigDecimal("0.95");
+//		public final static BigDecimal LambdaNRF06 = new BigDecimal("0.25");
+//		public final static BigDecimal LambdaNRF07 = new BigDecimal("0.7");
+//		public final static BigDecimal LambdaNRF08 = new BigDecimal("0.65");
+//		
+		// lambda par branche
+		public final static BigDecimal LambdaNRF01 = new BigDecimal("0.3");
+		public final static BigDecimal LambdaNRF02 = new BigDecimal("0.7");
+		public final static BigDecimal LambdaNRF03 = new BigDecimal("0.7");
+		public final static BigDecimal LambdaNRF04 = new BigDecimal("0.7");
+		public final static BigDecimal LambdaNRF05 = new BigDecimal("0.7");
+		public final static BigDecimal LambdaNRF06 = new BigDecimal("0.5");
+		public final static BigDecimal LambdaNRF07 = new BigDecimal("0.7");
+		public final static BigDecimal LambdaNRF08 = new BigDecimal("0.7");
 		
 	// param recalage du parc par branche en fonction du CEREN 2010 
 		public final static BigDecimal CalageBranche01 = new BigDecimal("1.0239862");
@@ -31,7 +62,6 @@ public class CalibParameters {
 		public final static BigDecimal CalageParcChauffUrbain 	= new BigDecimal("1.1050800");
 		public final static BigDecimal CalageParcChauffAutres 	= new BigDecimal("1.1050800");
 		
-		
 //	// param recalage du parc par énergie de chauffage en fonction du CEREN 2010 
 //		public final static BigDecimal CalageParcChauffElec 	= new BigDecimal("1.0649036");
 //		public final static BigDecimal CalageParcChauffGaz 		= new BigDecimal("0.9970268");
@@ -45,9 +75,7 @@ public class CalibParameters {
 //		public final static BigDecimal CalageConsoChauffFioul 	= new BigDecimal("0.9932186");
 //		public final static BigDecimal CalageConsoChauffUrbain 	= new BigDecimal("0.9633484");
 //		public final static BigDecimal CalageConsoChauffAutres 	= new BigDecimal("0.9633484");
-//		
 
-//		
 	// param recalage conso Elec specifique hors clim AME
 		public final static BigDecimal CalageConsoElecspe 	= new BigDecimal("1.28");
 		

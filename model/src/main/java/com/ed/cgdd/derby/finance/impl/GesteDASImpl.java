@@ -1,5 +1,6 @@
 package com.ed.cgdd.derby.finance.impl;
 
+import java.math.MathContext;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.ed.cgdd.derby.finance.GesteDAS;
+import com.ed.cgdd.derby.model.CalibParameters;
 import com.ed.cgdd.derby.model.financeObjects.Exigence;
 import com.ed.cgdd.derby.model.financeObjects.Geste;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
@@ -54,6 +56,18 @@ public class GesteDASImpl extends BddDAS implements GesteDAS {
 				sortie.setGainEner(rs.getBigDecimal("GAIN"));
 				sortie.setValeurCEE(rs.getBigDecimal("CEE"));
 
+				//Ajouts surcouts geste ENSBBC
+				if(geste.equals("ENSBBC") & CalibParameters.checkSurcoutENSBBC){
+					sortie.setCoutGesteBati(rs.getBigDecimal("COUT").multiply(CalibParameters.FacteurENSBBC, MathContext.DECIMAL32));
+				}
+				//Ajouts surcouts geste ENSMOD
+				if(geste.equals("ENSMOD") & CalibParameters.checkSurcoutENSMOD){
+					sortie.setCoutGesteBati(rs.getBigDecimal("COUT").multiply(CalibParameters.FacteurENSMOD, MathContext.DECIMAL32));
+				}
+				if(CalibParameters.checkSurcoutall){
+					sortie.setCoutGesteBati(rs.getBigDecimal("COUT").multiply(CalibParameters.Facteurall, MathContext.DECIMAL32));
+				}
+				
 				return sortie;
 
 			}

@@ -198,15 +198,15 @@ public class GesteServiceImpl implements GesteService {
 		// Application de la reglementation des 2014 dans le cas des batiments
 		// de l'Etat
 		
-		
-		if ((annee == 2014 || annee == 2015) && surfOblig.signum() == 0
-				&& parc.getIdoccupant().equals(Occupant.ETAT.getCode())
-				&& reglementations.getOblSurf().get(parc.getIdoccupant()).getPartSurf(2).signum() != 0) {
-			surfOblig = reglementations.getOblSurf().get(parc.getIdoccupant()).getPartSurf(2);
-			obligExig = reglementations.getOblExig().get(parc.getIdoccupant()).getExigence(2);
-			
-			
-		}
+//		
+//		if ((annee == 2014 || annee == 2015) && surfOblig.signum() == 0
+//				&& parc.getIdoccupant().equals(Occupant.ETAT.getCode())
+//				&& reglementations.getOblSurf().get(parc.getIdoccupant()).getPartSurf(2).signum() != 0) {
+//			surfOblig = reglementations.getOblSurf().get(parc.getIdoccupant()).getPartSurf(2);
+//			obligExig = reglementations.getOblExig().get(parc.getIdoccupant()).getExigence(2);
+//			
+//			
+//		}
 		//LOG.debug(" {} ",surfOblig, surfOblig.signum());
 		// Generation d'une HashMap ne contenant que les gestes sur le bati
 		HashMap<TypeRenovBati, Geste> gesteBatiMap = generateBatiGesteMap(bibliGeste.getGestesBati().get(
@@ -259,21 +259,28 @@ public class GesteServiceImpl implements GesteService {
 					copyGeste.setCoutGesteSys(copyGeste.getCoutGesteSys().multiply(
 							getVariation(copyGeste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32));
 					BigDecimal coutAdd = BigDecimal.ZERO;
-					if (travauxAdd(copyGeste, parc)) {
+					
+					// verifie si des travaux additionnels sont a prevoir 
+					ArrayList<Boolean> travauxAddcheck = travauxAdd(copyGeste, parc);
+					if (travauxAddcheck.get(0) & CalibParameters.checkSurcoutFuelSwitch) {
+						// si le booleen est vrai alors des travaux additionnels
+						// sont a prevoir
+						// Ceux-ci sont egaux aux couts initiaux du changement que multiplie un facteur en parametre
+						// de systeme
+						coutAdd = copyGeste.getCoutGesteSys().multiply(CalibParameters.FacteurFuelElecCentr, MathContext.DECIMAL32).multiply(
+								getVariation(copyGeste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32);
+					}
+					
+					if (travauxAddcheck.get(1) && CalibParameters.checkSurcoutFuelSwitch) {
 						// si le booleen est vrai alors des travaux additionnels
 						// sont a prevoir
 						// Ceux-ci sont egaux aux couts initiaux du changement
 						// de systeme
-						if(CalibParameters.checkSurcoutFuelSwitch){
 						coutAdd = copyGeste.getCoutGesteSys().multiply(CalibParameters.FacteurFuelCentrElec, MathContext.DECIMAL32).multiply(
 								getVariation(copyGeste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32);
-						} else 
-						{coutAdd = copyGeste.getCoutGesteSys().multiply(
-								getVariation(copyGeste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32);
-						}
+						
 					}
 					
-					// BV ces additionnels couts ne sont jamais utilises il me semble. Il n'y a pas de setter. test de modifier le code
 					// On ajoute les couts additionnels aux couts d'investissement
 					if(coutAdd.compareTo(new BigDecimal("0.0001")) == 1){
 					copyGeste.setCoutTravauxAddGeste(coutAdd); 
@@ -300,9 +307,10 @@ public class GesteServiceImpl implements GesteService {
 						coutMaintenance = partMaintenance.multiply(copyGeste.getCoutGesteSys().multiply(
 								getVariation(copyGeste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32));
 						
-						// si pas de changement de systeme (cout du geste chgt de syst nul), on va chercher le cout du systeme dans la bdd des couts des systemes pour calculer les couts de maintenance
+						// si pas de changement de systeme (cout du geste chgt de syst nul), on va chercher le cout 
+						// du systeme dans la bdd des couts des systemes pour calculer les couts de maintenance
 						
-				    if (copyGeste.getTypeRenovSys() == TypeRenovSysteme.ETAT_INIT) {
+				    if (copyGeste.getTypeRenovSys().equals(TypeRenovSysteme.ETAT_INIT)) {
 				    	coutMaintenance = partMaintenance.multiply(paramRdtCout.get(parc.getIdbranche() + parc.getIdssbranche() + parc.getIdbattype() + parc.getIdsyschaud() + parc.getIdenergchauff() + periode).getCout().multiply(
 								getVariation(copyGeste.getSysChaud(), annee, evolCoutTechno), MathContext.DECIMAL32));
 				    }
@@ -311,6 +319,8 @@ public class GesteServiceImpl implements GesteService {
 					// on ajoute les couts de maintenance annuels au geste
 				if(coutMaintenance.compareTo(new BigDecimal("0.0001")) == 1){
 						copyGeste.setCoutMaintenance(coutMaintenance); 
+				} else {
+					copyGeste.setCoutMaintenance(BigDecimal.ZERO);
 				}
 
 				
@@ -385,7 +395,7 @@ public class GesteServiceImpl implements GesteService {
 					} else {
 						// 3eme test : si le parc a subit une renovation de type
 						// "ENSBBC"
-						boolean addToMap = ensBbcMethode(parc, dvGesteMap, copyGeste, anneeRenovBat, anneeEnCours);
+						boolean addToMap = ensBbcMethode(gesteBatiMap, parc, dvGesteMap, copyGeste, anneeRenovBat, anneeEnCours);
 						// 4eme test : si le parc a subit une renovation de type
 						// "ENSMOD"
 						addToMap = addToMap
@@ -445,9 +455,10 @@ public class GesteServiceImpl implements GesteService {
 
 	}
 
-	protected boolean travauxAdd(Geste copyGeste, Parc parcInit) {
-
-		boolean travauxAdd = false;
+	protected ArrayList<Boolean> travauxAdd(Geste copyGeste, Parc parcInit) {
+		ArrayList<Boolean> travauxAdd = new ArrayList<Boolean>();
+		boolean travauxAddElecCentr = false;
+		boolean travauxAddCentrElec = false;
 		// Test : si l'ancien systeme de chauffage est un systeme decentralise
 		if (parcInit.getIdsyschaud().equals(SysChaud.CASSETTE_RAYONNANTE.getCode())
 				|| parcInit.getIdsyschaud().equals(SysChaud.CASSETTE_RAYONNANTE_PERFORMANT.getCode())
@@ -471,10 +482,10 @@ public class GesteServiceImpl implements GesteService {
 					|| copyGeste.getSysChaud().equals(SysChaud.PAC_PERFORMANT.getCode())
 					|| copyGeste.getSysChaud().equals(SysChaud.ROOFTOP.getCode())
 					|| copyGeste.getSysChaud().equals(SysChaud.ROOFTOP_PERFORMANT.getCode())) {
-				travauxAdd = false;
+				travauxAddElecCentr = false;
 			} else {
 				// Sinon, des travaux additionnels sont a prevoir
-				travauxAdd = true;
+				travauxAddElecCentr = true;
 			}
 
 			//BV sinon on part d'un systeme non centralise pour aller vers un centralise, on aussi des surcouts
@@ -490,15 +501,16 @@ public class GesteServiceImpl implements GesteService {
 					|| copyGeste.getSysChaud().equals(SysChaud.PAC_PERFORMANT.getCode())
 					|| copyGeste.getSysChaud().equals(SysChaud.ROOFTOP.getCode())
 					|| copyGeste.getSysChaud().equals(SysChaud.ROOFTOP_PERFORMANT.getCode())) {
-				travauxAdd = true;
+				travauxAddCentrElec  = true;
 			} else {
 				// Sinon, des travaux additionnels sont a prevoir
-				travauxAdd = false;
+				travauxAddCentrElec  = false;
 			}
 			
 			
 		}
-
+		travauxAdd.add(travauxAddElecCentr);
+		travauxAdd.add(travauxAddCentrElec);
 		return travauxAdd;
 	}
 
@@ -888,15 +900,21 @@ public class GesteServiceImpl implements GesteService {
 		return obligBool;
 	}
 
+	
+	// BV 032018 grosses modifs sur ces methodes qui comportent des erreurs 
+	// notamment : ne rien faire doit avoir un gain negatif a la fin de vie du geste ce qui n etait pas le cas tout le temps (ex :ENSBBC)
+	// avant la fin de duree de vie, on autorise les gestes de meme exigences mais plus performants
+	// apres la fin de duree de vie, on autorise tous les gestes
+	// gain geste precedent =0 
+	// gains autres gestes = geste precedent - gain nouveau geste (y compris ne rien faire)
+	// gain GTB = gain GTB
+	
 	protected boolean GTBMethode(Parc parc, Geste geste, BigDecimal anneeRenovBat, BigDecimal anneeEnCours) {
-
+		
 		if (parc.getTypeRenovBat().equals(TypeRenovBati.GTB) && !geste.getTypeRenovBati().equals(TypeRenovBati.GTB)) {
 			// Si un geste GTB a deja ete mene alors il ne peut plus l'etre
-
 			return true;
-
 		} else {
-
 			return false;
 		}
 	}
@@ -904,9 +922,11 @@ public class GesteServiceImpl implements GesteService {
 	protected boolean fenMurModMethode(HashMap<TypeRenovBati, Geste> gesteBatiMap, Parc parc,
 			HashMap<TypeRenovBati, BigDecimal> dvGesteMap, Geste geste, BigDecimal anneeRenovBat,
 			BigDecimal anneeEnCours, BigDecimal evolCoutBatUnit) {
+		
+		// avant la fin de duree de vie, on autorise que ENSMOD
 		if (parc.getTypeRenovBat().equals(TypeRenovBati.FEN_MURMOD)
 				&& (anneeRenovBat.add(dvGesteMap.get(TypeRenovBati.FEN_MURMOD))).compareTo(anneeEnCours) > 0) {
-			// Seuls les gestes sur les systemes sont conserves ainsi que ENSMOD
+			
 			if (geste.getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)
 					|| geste.getTypeRenovBati().equals(TypeRenovBati.ENSMOD)
 					|| geste.getTypeRenovBati().equals(TypeRenovBati.GTB)) {
@@ -922,32 +942,38 @@ public class GesteServiceImpl implements GesteService {
 
 					geste.setCoutGesteBati(geste.getCoutGesteBati().subtract(
 							coutInit.multiply(evolCoutBatUnit, MathContext.DECIMAL32)));
-					geste.setGainEner(geste.getGainEner().subtract(gainInit));
+					
+					BigDecimal newGain = BigDecimal.ONE.subtract(
+							(BigDecimal.ONE.subtract(geste.getGainEner()))
+							.divide(BigDecimal.ONE.subtract(gainInit), MathContext.DECIMAL32)
+							);
+					geste.setGainEner(newGain);
+					
 				}
 				return true;
 			}
-
+			// apres la fin de duree de vie
 		} else if (parc.getTypeRenovBat().equals(TypeRenovBati.FEN_MURMOD)
 				&& (anneeRenovBat.add(dvGesteMap.get(TypeRenovBati.FEN_MURMOD))).compareTo(anneeEnCours) <= 0) {
+			
 			BigDecimal gainInit = gesteBatiMap.get(TypeRenovBati.FEN_MURMOD).getGainEner();
-			// Sinon tous les gestes sont conserves
-			// Les gestes FEN_MURMOD et FENMOD ont des gains nulls
-			// Le gain du geste ENSMOD est diminue
-
-			if (geste.getExigence().equals(Exigence.RT_PAR_ELEMENT)) {
-				// Calcul du gain initial realise en changeant les fenetres
-				// et en isolant les murs
-				BigDecimal newGain = BigDecimal.ZERO;
-				if (geste.getTypeRenovBati().equals(TypeRenovBati.ENSMOD)) {
-					newGain = geste.getGainEner().subtract(gainInit);
-				}
-				geste.setGainEner(newGain);
-
+			BigDecimal newGain = BigDecimal.ZERO;
+			if (!geste.getTypeRenovBati().equals(TypeRenovBati.FEN_MURMOD)) {
+			
+				newGain =  BigDecimal.ONE.subtract(
+						(BigDecimal.ONE.subtract(geste.getGainEner()))
+						.divide(BigDecimal.ONE.subtract(gainInit), MathContext.DECIMAL32)
+						);	
+			
+				
 			}
+			// LOG.debug("newGain {} geste {} " ,newGain, geste.getTypeRenovBati());
+			geste.setGainEner(newGain);
+			// on autorise que le meme geste ou mieux 
+			if (newGain.compareTo(BigDecimal.ZERO) >=0) {
 			return true;
-
+			}
 		}
-
 		return false;
 	}
 
@@ -956,24 +982,29 @@ public class GesteServiceImpl implements GesteService {
 			BigDecimal anneeEnCours, BigDecimal evolCoutBatUnit) {
 		// si le parc a deja subit une renovation du meme type et que sa duree
 		// de vie n'est pas terminee
+		// BV avant la fin de duree de vie, on autorise que ENSMOD et FEN_MURMOD
 		if (parc.getTypeRenovBat().equals(TypeRenovBati.FENMOD)
 				&& (anneeRenovBat.add(dvGesteMap.get(TypeRenovBati.FENMOD))).compareTo(anneeEnCours) > 0) {
 			// Seuls les gestes sur les systemes sont conserves ainsi que tous
-			// sauf FENMOD, FENBBC et FEN_MURBBC
+			// sauf FENMOD, FENBBC et FEN_MURBBC et ENSBBC
 			if (!geste.getTypeRenovBati().equals(TypeRenovBati.FENMOD)
 					&& !geste.getTypeRenovBati().equals(TypeRenovBati.FENBBC)
-					&& !geste.getTypeRenovBati().equals(TypeRenovBati.FEN_MURBBC)) {
+					&& !geste.getTypeRenovBati().equals(TypeRenovBati.FEN_MURBBC)
+					&& !geste.getTypeRenovBati().equals(TypeRenovBati.ENSBBC)) {
 				// Calcul du cout initial des fenetres
 				BigDecimal coutInit = gesteBatiMap.get(TypeRenovBati.FENMOD).getCoutGesteBati();
 				// Calcul du gain initial realise en changeant les fenetres
 				BigDecimal gainInit = gesteBatiMap.get(TypeRenovBati.FENMOD).getGainEner();
-				// Calcul du nouveau gain et du nouveau cout dans le cas ou
-				// est realisee une renovation ENSBBC
+				// nouveau gain et nouveau cout
 				if (!geste.getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)
 						&& !geste.getTypeRenovBati().equals(TypeRenovBati.GTB)) {
 					geste.setCoutGesteBati(geste.getCoutGesteBati().subtract(
 							coutInit.multiply(evolCoutBatUnit, MathContext.DECIMAL32)));
-					geste.setGainEner(geste.getGainEner().subtract(gainInit));
+					BigDecimal newGain = BigDecimal.ONE.subtract(
+							(BigDecimal.ONE.subtract(geste.getGainEner()))
+							.divide(BigDecimal.ONE.subtract(gainInit), MathContext.DECIMAL32)
+							);
+					geste.setGainEner(newGain);
 				}
 				return true;
 
@@ -982,18 +1013,23 @@ public class GesteServiceImpl implements GesteService {
 		} // si la duree de vie arrive a echeance
 		else if (parc.getTypeRenovBat().equals(TypeRenovBati.FENMOD)
 				&& (anneeRenovBat.add(dvGesteMap.get(TypeRenovBati.FENMOD))).compareTo(anneeEnCours) <= 0) {
+			
 			BigDecimal gainInit = gesteBatiMap.get(TypeRenovBati.FENMOD).getGainEner();
-			// Tous les gestes sont conserves
-
-			if (!geste.getTypeRenovBati().equals(TypeRenovBati.GTB)) {
-				BigDecimal newGain = BigDecimal.ZERO;
-				if ((geste.getGainEner().subtract(gainInit)).signum() > 0) {
-					newGain = geste.getGainEner().subtract(gainInit);
-				}
-				geste.setGainEner(newGain);
+			BigDecimal newGain = BigDecimal.ZERO;
+			if (!geste.getTypeRenovBati().equals(TypeRenovBati.FENMOD)) {
+				
+				newGain =BigDecimal.ONE.subtract(
+						(BigDecimal.ONE.subtract(geste.getGainEner()))
+						.divide(BigDecimal.ONE.subtract(gainInit), MathContext.DECIMAL32)
+						);
+		
 			}
-			return true;
-
+			// LOG.debug("newGain {} geste {} " ,newGain, geste.getTypeRenovBati());
+			geste.setGainEner(newGain);
+			// on autorise que le meme geste ou mieux 
+						if (newGain.compareTo(BigDecimal.ZERO) >=0) {
+						return true;
+						}
 		}
 		return false;
 	}
@@ -1002,9 +1038,10 @@ public class GesteServiceImpl implements GesteService {
 			HashMap<TypeRenovBati, BigDecimal> dvGesteMap, Geste geste, BigDecimal anneeRenovBat,
 			BigDecimal anneeEnCours, BigDecimal evolCoutBatUnit) {
 
+		// avant le fin de duree de vie, on garde seulement ENSBBC
 		if (parc.getTypeRenovBat().equals(TypeRenovBati.FEN_MURBBC)
 				&& (anneeRenovBat.add(dvGesteMap.get(TypeRenovBati.FEN_MURBBC))).compareTo(anneeEnCours) > 0) {
-			// Seuls les gestes sur les systemes sont conserves ainsi que ENSBBC
+	
 			if (geste.getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)
 					|| geste.getTypeRenovBati().equals(TypeRenovBati.ENSBBC)
 					|| geste.getTypeRenovBati().equals(TypeRenovBati.GTB)) {
@@ -1018,29 +1055,33 @@ public class GesteServiceImpl implements GesteService {
 					BigDecimal coutInit = gesteBatiMap.get(TypeRenovBati.FEN_MURBBC).getCoutGesteBati();
 					geste.setCoutGesteBati(geste.getCoutGesteBati().subtract(
 							coutInit.multiply(evolCoutBatUnit, MathContext.DECIMAL32)));
-					geste.setGainEner(geste.getGainEner().subtract(gainInit));
+					BigDecimal newGain = BigDecimal.ONE.subtract(
+							(BigDecimal.ONE.subtract(geste.getGainEner()))
+							.divide(BigDecimal.ONE.subtract(gainInit), MathContext.DECIMAL32)
+							);
+					geste.setGainEner(newGain);
 				}
 				return true;
 
 			}
+			// apres la fin de duree de vie, on autorise tout
 		} else if (parc.getTypeRenovBat().equals(TypeRenovBati.FEN_MURBBC)
 				&& (anneeRenovBat.add(dvGesteMap.get(TypeRenovBati.FEN_MURBBC))).compareTo(anneeEnCours) <= 0) {
 
-			// Sinon seuls les gestes d'exigence "BBC" et ne rien faire sont
-			// conserves
-
-			if (geste.getExigence().equals(Exigence.BBC_RENOVATION) || geste.getExigence().equals(Exigence.AUCUNE)
-					|| geste.getExigence().equals(Exigence.GTB)) {
-				// Calcul du gain initial realise en changeant les fenetres
-
-				BigDecimal newGain = BigDecimal.ZERO;
-				if (geste.getTypeRenovBati().equals(TypeRenovBati.ENSBBC)) {
-					// Calcul du gain initial realise en changeant les fenetres
-					BigDecimal gainInit = gesteBatiMap.get(TypeRenovBati.FEN_MURBBC).getGainEner();
-					geste.setGainEner(geste.getGainEner().subtract(gainInit));
-				}
-				geste.setGainEner(newGain);
-				return true;
+			BigDecimal gainInit = gesteBatiMap.get(TypeRenovBati.FEN_MURBBC).getGainEner();
+			BigDecimal newGain = BigDecimal.ZERO;
+			if (!geste.getTypeRenovBati().equals(TypeRenovBati.FEN_MURBBC)) {
+				
+					newGain = BigDecimal.ONE.subtract(
+							(BigDecimal.ONE.subtract(geste.getGainEner()))
+							.divide(BigDecimal.ONE.subtract(gainInit), MathContext.DECIMAL32)
+							);	
+			}
+			// LOG.debug("newGain {} geste {} " ,newGain, geste.getTypeRenovBati());
+			geste.setGainEner(newGain);
+			// on autorise que le meme geste ou mieux 
+			if (newGain.compareTo(BigDecimal.ZERO) >=0) {
+			return true;
 			}
 		}
 		return false;
@@ -1049,11 +1090,14 @@ public class GesteServiceImpl implements GesteService {
 	protected boolean fenBbcMethode(HashMap<TypeRenovBati, Geste> gesteBatiMap, Parc parc,
 			HashMap<TypeRenovBati, BigDecimal> dvGesteMap, Geste geste, BigDecimal anneeRenovBat,
 			BigDecimal anneeEnCours, BigDecimal evolCoutBatUnit) {
+		
+		// avant la fin de duree de vie, on autorise que FEN_MURBBC et ENSBBC
 		if (parc.getTypeRenovBat().equals(TypeRenovBati.FENBBC)
 				&& (anneeRenovBat.add(dvGesteMap.get(TypeRenovBati.FENBBC))).compareTo(anneeEnCours) > 0) {
-			// Seuls les gestes sur les systemes sont conserves ainsi que ENSBBC
+	
 			if (geste.getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)
 					|| geste.getTypeRenovBati().equals(TypeRenovBati.ENSBBC)
+					|| geste.getTypeRenovBati().equals(TypeRenovBati.FEN_MURBBC)
 					|| geste.getTypeRenovBati().equals(TypeRenovBati.GTB)) {
 
 				// Calcul du cout initial des fenetres
@@ -1062,35 +1106,39 @@ public class GesteServiceImpl implements GesteService {
 				BigDecimal gainInit = gesteBatiMap.get(TypeRenovBati.FENBBC).getGainEner();
 				// Calcul du nouveau gain et du nouveau cout dans le cas ou
 				// est realisee une renovation ENSBBC
-				if (geste.getTypeRenovBati().equals(TypeRenovBati.ENSBBC)) {
+				if (geste.getTypeRenovBati().equals(TypeRenovBati.ENSBBC)
+						|| geste.getTypeRenovBati().equals(TypeRenovBati.FEN_MURBBC)) {
 					geste.setCoutGesteBati(geste.getCoutGesteBati().subtract(
 							coutInit.multiply(evolCoutBatUnit, MathContext.DECIMAL32)));
-					geste.setGainEner(geste.getGainEner().subtract(gainInit));
-				}
-				return true;
-
-			}
-
-		} else if (parc.getTypeRenovBat().equals(TypeRenovBati.FENBBC)
-				&& (anneeRenovBat.add(dvGesteMap.get(TypeRenovBati.FENBBC))).compareTo(anneeEnCours) <= 0) {
-			BigDecimal gainInit = gesteBatiMap.get(TypeRenovBati.FENBBC).getGainEner();
-			// Sinon seuls les gestes d'exigence "BBC" et ne rien faire sont
-			// conserves
-
-			if (geste.getExigence().equals(Exigence.BBC_RENOVATION) || geste.getExigence().equals(Exigence.AUCUNE)
-					|| geste.getExigence().equals(Exigence.GTB)) {
-				// Calcul du gain initial realise en changeant les fenetres
-
-				BigDecimal newGain = BigDecimal.ZERO;
-				if ((geste.getGainEner().subtract(gainInit)).signum() > 0
-						&& !geste.getTypeRenovBati().equals(TypeRenovBati.GTB)) {
-					newGain = geste.getGainEner().subtract(gainInit);
+					BigDecimal newGain = BigDecimal.ONE.subtract(
+							(BigDecimal.ONE.subtract(geste.getGainEner()))
+							.divide(BigDecimal.ONE.subtract(gainInit), MathContext.DECIMAL32)
+							);
 					geste.setGainEner(newGain);
 				}
-
 				return true;
-			}
 
+			}
+		// apres la fin de DV, on autorise tout
+		} else if (parc.getTypeRenovBat().equals(TypeRenovBati.FENBBC)
+				&& (anneeRenovBat.add(dvGesteMap.get(TypeRenovBati.FENBBC))).compareTo(anneeEnCours) <= 0) {
+
+			BigDecimal gainInit = gesteBatiMap.get(TypeRenovBati.FENBBC).getGainEner();
+			BigDecimal newGain = BigDecimal.ZERO;
+			if (!geste.getTypeRenovBati().equals(TypeRenovBati.FENBBC)) {
+				
+					newGain =  BigDecimal.ONE.subtract(
+							(BigDecimal.ONE.subtract(geste.getGainEner()))
+							.divide(BigDecimal.ONE.subtract(gainInit), MathContext.DECIMAL32)
+							);	
+				
+			}
+			// LOG.debug("newGain {} geste {} " ,newGain, geste.getTypeRenovBati());
+			geste.setGainEner(newGain);
+			// on autorise que le meme geste ou mieux 
+			if (newGain.compareTo(BigDecimal.ZERO) >=0) {
+			return true;
+			}
 		}
 		return false;
 	}
@@ -1098,37 +1146,39 @@ public class GesteServiceImpl implements GesteService {
 	protected boolean ensModMethode(HashMap<TypeRenovBati, Geste> gesteBatiMap, Parc parc,
 			HashMap<TypeRenovBati, BigDecimal> dvGesteMap, Geste geste, BigDecimal anneeRenovBat,
 			BigDecimal anneeEnCours) {
+		// avant la fin de DV, on autorise seulement NRF
 		if (parc.getTypeRenovBat().equals(TypeRenovBati.ENSMOD)
 				&& (anneeRenovBat.add(dvGesteMap.get(TypeRenovBati.ENSMOD))).compareTo(anneeEnCours) > 0) {
 			// Seuls les gestes sur les systemes sont conserves
 			if (geste.getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)) {
 				return true;
 			}
+			// sinon on autorise tout
 		} else if (parc.getTypeRenovBat().equals(TypeRenovBati.ENSMOD)
 				&& (anneeRenovBat.add(dvGesteMap.get(TypeRenovBati.ENSMOD))).compareTo(anneeEnCours) <= 0) {
-			// Sinon on retient tous les gestes, les gains des gestes modestes
-			// etant nulls
-			// Dans le cas d'une renovation bbc, les gains initiaux sont
-			// soustraits
-			// Calcul du gain initial realise
 			BigDecimal gainInit = gesteBatiMap.get(TypeRenovBati.ENSMOD).getGainEner();
+			BigDecimal newGain = BigDecimal.ZERO;
+			newGain =  BigDecimal.ONE.subtract(
+						(BigDecimal.ONE.subtract(geste.getGainEner()))
+						.divide(BigDecimal.ONE.subtract(gainInit), MathContext.DECIMAL32)
+						);
 
-			if (geste.getExigence().equals(Exigence.RT_PAR_ELEMENT)) {
-
-				geste.setGainEner(BigDecimal.ZERO);
-			} else if (!geste.getExigence().equals(Exigence.GTB)) {
-				geste.setGainEner(geste.getGainEner().subtract(gainInit));
-
-			}
+	//		LOG.debug("newGain {} geste {} " ,newGain, geste.getTypeRenovBati());
+			geste.setGainEner(newGain);
+			// on autorise que le meme geste ou mieux 
+			if (newGain.compareTo(BigDecimal.ZERO) >=0) {
 			return true;
+			}
 		}
 		return false;
 	}
 
-	protected boolean ensBbcMethode(Parc parc, HashMap<TypeRenovBati, BigDecimal> dvGesteMap, Geste geste,
+	protected boolean ensBbcMethode(HashMap<TypeRenovBati, Geste> gesteBatiMap, Parc parc, HashMap<TypeRenovBati, BigDecimal> dvGesteMap, Geste geste,
 			BigDecimal anneeRenovBat, BigDecimal anneeEnCours) {
+		
 		if (parc.getTypeRenovBat().equals(TypeRenovBati.ENSBBC)
-				&& (anneeRenovBat.add(dvGesteMap.get(TypeRenovBati.ENSBBC))).compareTo(anneeEnCours) > 0) {
+				&& (anneeRenovBat.add(dvGesteMap.get(TypeRenovBati.ENSBBC))).compareTo(anneeEnCours) > 0
+				) {
 			// Seuls les gestes sur les systemes sont conserves
 			if (geste.getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)) {
 				return true;
@@ -1136,45 +1186,53 @@ public class GesteServiceImpl implements GesteService {
 
 		} else if (parc.getTypeRenovBat().equals(TypeRenovBati.ENSBBC)
 				&& (anneeRenovBat.add(dvGesteMap.get(TypeRenovBati.ENSBBC))).compareTo(anneeEnCours) <= 0) {
-			// Seuls les gestes "ne rien faire" et "ENSBBC" avec un gain
-			// null sont retenus
-			if (geste.getExigence().equals(Exigence.AUCUNE) || geste.getExigence().equals(Exigence.BBC_RENOVATION)) {
-				if (geste.getExigence().equals(Exigence.BBC_RENOVATION)) {
-					geste.setGainEner(BigDecimal.ZERO);
-				}
-				return true;
+			
+			BigDecimal gainInit = gesteBatiMap.get(TypeRenovBati.ENSBBC).getGainEner();
+			BigDecimal newGain = BigDecimal.ZERO;
+			if (!geste.getTypeRenovBati().equals(TypeRenovBati.ENSBBC)) {
+			
+					newGain =  BigDecimal.ONE.subtract(
+							(BigDecimal.ONE.subtract(geste.getGainEner()))
+							.divide(BigDecimal.ONE.subtract(gainInit), MathContext.DECIMAL32)
+							);
+				
+			}
+			// LOG.debug("newGain {} geste {} " ,newGain, geste.getTypeRenovBati());
+			geste.setGainEner(newGain);
+			// on autorise que le meme geste ou mieux 
+			if (newGain.compareTo(BigDecimal.ZERO) >=0) {
+			return true;
 			}
 		}
 		return false;
 	}
 
 	protected boolean etatInitialEtNeufs(Parc parc, Geste geste, BigDecimal anneeRenovBat, BigDecimal anneeEnCours) {
-
-		if ((parc.getTypeRenovBat().equals(TypeRenovBati.ETAT_INIT) && (anneeRenovBat.add(new BigDecimal("20")))
-				.compareTo(anneeEnCours) > 0)
-				|| (!parc.getTypeRenovBat().equals(TypeRenovBati.ETAT_INIT) && (anneeRenovBat.add(BigDecimal.TEN))
-						.compareTo(anneeEnCours) > 0)) {
-			// si le segment est un segment neuf, alors il des renovations sont
-			// menees a partir de 20 ans.
-
-			// si le segment a deja ete renove, alors une autre renovation peut
-			// etre envisagee dans 10 ans
-
-			if (geste.getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)) {
-				return true;
-			}
-		} else if (parc.getTypeRenovBat().equals(TypeRenovBati.ETAT_INIT)
+		
+		if (geste.getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)) {
+			return true;
+		}	
+		
+		// si le segment est un segment neuf, alors il des renovations sont
+		// menees a partir de 20 ans.
+		
+	    if (parc.getTypeRenovBat().equals(TypeRenovBati.ETAT_INIT)
 				&& (anneeRenovBat.add(new BigDecimal("20"))).compareTo(anneeEnCours) <= 0) {
 			// cas des batiments neufs construits il y a vingt ans
 			// tous les gestes sont retenus
 			return true;
-		} else if ((!parc.getTypeRenovBat().equals(TypeRenovBati.ETAT_INIT) && (anneeRenovBat.add(BigDecimal.TEN))
-				.compareTo(anneeEnCours) <= 0)) {
-			// cas des batiments ayant subi une renovation il y a plus de 10
-			// ans. ils peuvent en subir une nouvelle
-
-			return true;
-		}
+	    }
+	    
+		// si le segment a deja ete renove, alors une autre renovation peut
+		// etre envisagee dans 10 ans
+		// BV On desactive cette limitation de 10 ans sur une nouvelle renov 
+	    // on la met a 5 ans
+	    if (!parc.getTypeRenovBat().equals(TypeRenovBati.ETAT_INIT) 
+	    		 && (anneeRenovBat.add(new BigDecimal("5"))).compareTo(anneeEnCours) <= 0
+				){	
+	    	return true;
+	    	}
+		
 		return false;
 	}
 

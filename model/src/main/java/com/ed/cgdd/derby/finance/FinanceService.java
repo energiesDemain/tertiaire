@@ -44,7 +44,7 @@ public interface FinanceService {
 		 HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,HashMap<String, BigDecimal> evolCoutIntTechno,
 		 HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, SurfMoy> surfMoyMap,
 		 HashMap<String, EvolValeurVerte> evolVVMap, HashMap<String, RepartStatutOccup> repartStatutOccupMap,
-		 HashMap<String, Maintenance> maintenanceMap, EvolBesoinMap evolBesoinMap);
+		 HashMap<String, Maintenance> maintenanceMap, EvolBesoinMap evolBesoinMap, HashMap<String, BigDecimal> LambdaNRF);
 
 	// public HashMap<String, PartMarcheRenov>
 	// traitementReglementation(HashMap<String, PartMarcheRenov> partMarcheIni);

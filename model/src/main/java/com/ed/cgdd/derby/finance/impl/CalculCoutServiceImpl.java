@@ -22,6 +22,7 @@ import com.ed.cgdd.derby.model.parc.Parc;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
 import com.ed.cgdd.derby.model.parc.TypeRenovSysteme;
 import com.ed.cgdd.derby.model.parc.Usage;
+import com.ed.cgdd.derby.model.CalibParameters;
 
 public class CalculCoutServiceImpl implements CalculCoutService {
 
@@ -57,7 +58,7 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 	public CoutFinal calculCoutFinal(BigDecimal surface, BigDecimal besoinInitUnitaire, Parc parcInit,
 			GesteFinancement gesteFin, int annee, String idParc, int anneeNTab, PBC tauxActu,
 			HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
-			BigDecimal valeurVerte) {
+			BigDecimal valeurVerte, HashMap<String, BigDecimal> LambdaNRF) {
 
 		CoutFinal coutFin = new CoutFinal();
 		int dureeDeVieTravaux = Math.max(gesteFin.getGeste().getDureeBati(), gesteFin.getGeste().getDureeSys());
@@ -96,13 +97,26 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 		BigDecimal charge;
 		if (gesteFin.getGeste().getTypeRenovSys().equals(TypeRenovSysteme.ETAT_INIT)
 				&& gesteFin.getGeste().getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)) {
-			charge = new BigDecimal(gesteFin.getCoutRenov().getCEini().toString());
+			BigDecimal chargeold = new BigDecimal(gesteFin.getCoutRenov().getCEini().toString());
+			
+			BigDecimal coutEnergie = coutEnergieService.coutEnergie(coutEnergieMap, emissionsMap, annee, gesteFin
+					.getGeste().getEnergie(), Usage.CHAUFFAGE.getLabel(), BigDecimal.ONE);
+			charge = coutEnergieService.chargesEnerAnnuelles(surface, besoinInitUnitaire, gesteFin.getGeste(),
+					coutEnergie,annee);
+			// ajout du lambda ne rien faire (remplace le cout intangible)
+			charge = charge.multiply(LambdaNRF.get(parcInit.getIdbranche()), MathContext.DECIMAL32);
+			
 			// on ajoute la maintenance meme sans changement de systeme
 			charge = charge.add(gesteFin.getGeste().getCoutMaintenance().multiply(surface, MathContext.DECIMAL32));
+			
 		} else {
 			BigDecimal coutEnergie = coutEnergieService.coutEnergie(coutEnergieMap, emissionsMap, annee, gesteFin
 					.getGeste().getEnergie(), Usage.CHAUFFAGE.getLabel(), BigDecimal.ONE);
-
+			
+			if (gesteFin.getGeste().getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)) {
+				besoinInitUnitaire = besoinInitUnitaire.multiply(LambdaNRF.get(parcInit.getIdbranche()), MathContext.DECIMAL32);
+			}
+			
 			charge = coutEnergieService.chargesEnerAnnuelles(surface, besoinInitUnitaire, gesteFin.getGeste(),
 					coutEnergie,annee);
 
@@ -174,6 +188,17 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 //		if(endFillCout - startFillCout>1){
 //			LOG.info("Remplissage cout final : {}ms", endFillCout - startFillCout);}
 
+		if((annee == 2040 && parcInit.getAnneeRenov().equals("2010")) | annee == 2010){
+			if(parcInit.getId().substring(0, 12).equals("010244031102")){
+		LOG.debug("id {} renovini {} anneerenov{} renovgeste {} BU {} gainener {} charge {} CG {}",
+				parcInit.getId(),
+				parcInit.getTypeRenovBat(),
+				parcInit.getAnneeRenov(),
+				gesteFin.getGeste().getTypeRenovBati(),
+				besoinInitUnitaire,
+				gesteFin.getGeste().getGainEner(),charge,coutGlobal);
+			}
+		}
 		return coutFin;
 	}
 

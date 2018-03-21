@@ -18,5 +18,5 @@ public interface CalculCoutService {
 	CoutFinal calculCoutFinal(BigDecimal surface, BigDecimal besoinInitUnitaire, Parc parcInit,
 			GesteFinancement gesteFin, int annee, String idParc, int anneeNTab, PBC tauxActu,
 			HashMap<Integer, CoutEnergie> coutEnergieMap, HashMap<String, Emissions> emissionsMap,
-			BigDecimal valeurVerte);
+			BigDecimal valeurVerte, HashMap<String, BigDecimal> LambdaNRF);
 }

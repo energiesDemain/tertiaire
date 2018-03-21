@@ -29,16 +29,16 @@ public class  politiques {
 	public final static BigDecimal modifBUBatEx = new BigDecimal("0.8325");
 
 	//travaux embarques
-	public final static boolean  checkTravEmb =  true;
+	public final static boolean  checkTravEmb =  false;
 	// taux de renovation tendanciel supplementaire
-	public static float  txRenovTravEmb = 0.011f;
-	//public static float  txRenovTravEmb = 0.0000001f;
+	//public static float  txRenovTravEmb = 0.011f;
+	public static float  txRenovTravEmb = 0.0000001f;
 	
 	
 	//surcout RT 2012 electrique direct
 	public final static boolean  checkSurcoutRT2012 = true;
 	// surcout en euros par m2 pour l'electrique joule
-	public final static BigDecimal surcoutRT = new BigDecimal("20") ;
+	public final static BigDecimal surcoutRT = new BigDecimal("20");
 		
 	// CEE prix annuels
 	public final static boolean  checkCEEannuels = true;
@@ -49,10 +49,10 @@ public class  politiques {
 //	public final static BigDecimal pCEE2018 = new BigDecimal("0.050");
 //	public final static BigDecimal pCEE2019 = new BigDecimal("0.050");
 //	public final static BigDecimal pCEE2020 = new BigDecimal("0.050");
-//	
-	public final static BigDecimal pCEE2015 = new BigDecimal("0.010");
-	public final static BigDecimal pCEE2016 = new BigDecimal("0.010");
-	public final static BigDecimal pCEE2017 = new BigDecimal("0.010");
+	
+	public final static BigDecimal pCEE2015 = new BigDecimal("0.000");
+	public final static BigDecimal pCEE2016 = new BigDecimal("0.005");
+	public final static BigDecimal pCEE2017 = new BigDecimal("0.005");
 	public final static BigDecimal pCEE2018 = new BigDecimal("0.015");
 	public final static BigDecimal pCEE2019 = new BigDecimal("0.015");
 	public final static BigDecimal pCEE2020 = new BigDecimal("0.015");
@@ -73,7 +73,7 @@ public class  politiques {
 //	public final static BigDecimal pCEE2020 = new BigDecimal("0.180");
 	
 	// couts intangibles subventionnes 
-	public final static boolean  checkCEECINT =true;
+	public final static boolean  checkCEECINT =false;
 	
 	// Subvention aux economies d energie actualisees
 	public final static boolean  checkSubEcoEner = false;
@@ -94,6 +94,5 @@ public class  politiques {
 	public final static BigDecimal tcamBesoinClim20202025  = new BigDecimal("0.007576624052");
 	public final static BigDecimal tcamBesoinClim20252030  = new BigDecimal("0.007300045195");
 	public final static BigDecimal tcamBesoinClim20302050  = new BigDecimal("0.006304199098");
-	
-	
+
 }

@@ -126,7 +126,7 @@ public class FinanceServiceImpl implements FinanceService {
 			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,HashMap<String, BigDecimal> evolCoutIntTechno,
 			HashMap<String, TauxInteret> tauxInteretMap, HashMap<String, SurfMoy> surfMoyMap,
 			HashMap<String, EvolValeurVerte> evolVVMap, HashMap<String, RepartStatutOccup> repartStatutOccupMap,
-			HashMap<String, Maintenance> maintenanceMap, EvolBesoinMap evolBesoinMap ) {
+			HashMap<String, Maintenance> maintenanceMap, EvolBesoinMap evolBesoinMap , HashMap<String, BigDecimal> LambdaNRF) {
 
 		int periode = commonService.correspPeriode(annee);
 		// recuperation des id
@@ -156,7 +156,7 @@ public class FinanceServiceImpl implements FinanceService {
 				resultConsoRt, anneeNTab, coutIntangible, coutIntangibleBati, paramCintObjects, txRenovBati, avgSurf, statutOccup,
 				bibliGeste, periode, coutEnergieMap, emissionsMap, valeurVerte, reglementations, compteur,
 				coutsEclVentilMap, coutEcsMap, pmEcsNeufMap, bNeufsMap, gainsVentilationMap, bibliRdtEcsMap,
-				evolCoutBati, evolCoutTechno,evolCoutIntTechno, maintenanceMap, evolBesoinMap);
+				evolCoutBati, evolCoutTechno,evolCoutIntTechno, maintenanceMap, evolBesoinMap, LambdaNRF);
 		// LOG.debug("end renov");
 		 
 		return pmResult;
@@ -176,7 +176,7 @@ public class FinanceServiceImpl implements FinanceService {
 			HashMap<String, ParamPMConso> pmEcsNeufMap, HashMap<String, ParamBesoinsNeufs> bNeufsMap,
 			HashMap<String, ParamGainsUsages> gainsVentilationMap, HashMap<String, ParamRdtEcs> bibliRdtEcsMap,
 			HashMap<String, BigDecimal> evolCoutBati, HashMap<String, BigDecimal> evolCoutTechno,HashMap<String, BigDecimal> evolCoutIntTechno,
-			HashMap<String, Maintenance> maintenanceMap, EvolBesoinMap evolBesoinMap) {
+			HashMap<String, Maintenance> maintenanceMap, EvolBesoinMap evolBesoinMap, HashMap<String, BigDecimal> LambdaNRF) {
 
 		HashMap<String, PartMarcheRenov> partGesteFin = new HashMap<String, PartMarcheRenov>();
 
@@ -222,7 +222,9 @@ public class FinanceServiceImpl implements FinanceService {
 				// on calcul le besoin unitaire par m2
 				BigDecimal besoinIniUnitaire = besoinIni.getAnnee(anneeNTab - 1).divide(parc.getAnnee(anneeNTab - 1),
 						MathContext.DECIMAL32);
-				//LOG.debug("id = {} annee = {} BesoinU ={}", idParc, annee,besoinIniUnitaire);
+//				if(idParc.substring(0, 18).equals("010244030701240204")){
+//				LOG.debug("id = {} annee = {} BesoinU ={}", idParc, annee,besoinIniUnitaire);
+//				}
 				
 				//long start= System.nanoTime();
 				CalculPM coutGestes = renovSegment(resultConsoUClimMap, resultConsoURtMap, idParc, avgSurf, listFin,
@@ -230,7 +232,7 @@ public class FinanceServiceImpl implements FinanceService {
 						annee, anneeNTab, coutIntangible, coutIntangibleBati, bibliGeste, statutOccup, paramCintObjects, periode,
 						coutEnergieMap, emissionsMap, valeurVerte, reglementations, coutsEclVentilMap, coutEcsMap,
 						pmEcsNeufMap, ventil, aux, bNeufsMap, gainsVentilationMap, bibliRdtEcsMap, besoinIni,
-						evolCoutBati, evolCoutTechno,evolCoutIntTechno, maintenanceMap);
+						evolCoutBati, evolCoutTechno,evolCoutIntTechno, maintenanceMap, LambdaNRF);
 				//long end= System.nanoTime();
 				//if(end- start>100000){			
 				//LOG.info("renov  : {}ns", end - start);
@@ -289,7 +291,7 @@ public class FinanceServiceImpl implements FinanceService {
 		txRenovBatiVentile[3] = txRenovBatiVentile[0].multiply(temp3.divide(sumTemp, MathContext.DECIMAL32));
 		// 4 : taux ventile pour GTB
 		txRenovBatiVentile[4] = txRenovBatiVentile[0].multiply(temp4.divide(sumTemp, MathContext.DECIMAL32));
-
+ 
 		return txRenovBatiVentile;
 	}
 
@@ -317,12 +319,12 @@ public class FinanceServiceImpl implements FinanceService {
 		// Initialisation des parts surfaciques touchees par une obligation de
 		// travaux
 		BigDecimal partOblig = reglementations.getOblSurf().get(parcInit.getIdoccupant()).getPartSurf(periodeInt);
-		if ((annee == 2014 || annee == 2015) && partOblig.signum() == 0
-				&& parcInit.getIdoccupant().equals(Occupant.ETAT.getCode())
-				&& reglementations.getOblSurf().get(parcInit.getIdoccupant()).getPartSurf(2).signum() != 0) {
-			partOblig = reglementations.getOblSurf().get(parcInit.getIdoccupant()).getPartSurf(2);
-
-		}
+//		if ((annee == 2014 || annee == 2015) && partOblig.signum() == 0
+//				&& parcInit.getIdoccupant().equals(Occupant.ETAT.getCode())
+//				&& reglementations.getOblSurf().get(parcInit.getIdoccupant()).getPartSurf(2).signum() != 0) {
+//			partOblig = reglementations.getOblSurf().get(parcInit.getIdoccupant()).getPartSurf(2);
+//
+//		}
 		// Initialisation des parametres des reglementations
 		PartsMarche partsMarcheModif = new PartsMarche();
 		partsMarcheModif.setPartOblig(partOblig);
@@ -1310,7 +1312,8 @@ public class FinanceServiceImpl implements FinanceService {
 			HashMap<String, ParamPMConso> pmEcsNeufMap, Conso ventil, Conso aux,
 			HashMap<String, ParamBesoinsNeufs> bNeufsMap, HashMap<String, ParamGainsUsages> gainsVentilationMap,
 			HashMap<String, ParamRdtEcs> bibliRdtEcsMap, Conso besoinInit, HashMap<String, BigDecimal> evolCoutBati,
-			HashMap<String, BigDecimal> evolCoutTechno,HashMap<String, BigDecimal> evolCoutIntTechno, HashMap<String, Maintenance> maintenanceMap) {
+			HashMap<String, BigDecimal> evolCoutTechno,HashMap<String, BigDecimal> evolCoutIntTechno, 
+			HashMap<String, Maintenance> maintenanceMap, HashMap<String, BigDecimal> LambdaNRF) {
 
 		HashMap<String, CoutFinal> coutFinalMapProp = new HashMap<String, CoutFinal>();
 		HashMap<String, CoutFinal> coutFinalMapLoc = new HashMap<String, CoutFinal>();
@@ -1357,10 +1360,10 @@ public class FinanceServiceImpl implements FinanceService {
 						pretDeBase, surface, coutEnergie);
 				coutFinalProp = calculCoutService.calculCoutFinal(surface, besoinInitUnitaire, parcIni, inter, annee,
 						idParc, anneeNTab, statutOccup.getTauxActuProp(), coutEnergieMap, emissionsMap,
-						valeurVerte.getValeurProp());
+						valeurVerte.getValeurProp(), LambdaNRF);
 				coutFinalLoc = calculCoutService.calculCoutFinal(surface, besoinInitUnitaire, parcIni, inter, annee,
 						idParc, anneeNTab, statutOccup.getTauxActuLoc(), coutEnergieMap, emissionsMap,
-						valeurVerte.getValeurLoc());
+						valeurVerte.getValeurLoc(), LambdaNRF);
 
 				coutFinalMapProp.put(calculCoutService.outputName(idParc, inter, annee, coutFinalProp), coutFinalProp);
 				coutFinalMapLoc.put(calculCoutService.outputName(idParc, inter, annee, coutFinalLoc), coutFinalLoc);
@@ -1378,10 +1381,10 @@ public class FinanceServiceImpl implements FinanceService {
 						//long startCoutFinal = System.currentTimeMillis();
 						coutFinalProp = calculCoutService.calculCoutFinal(surface, besoinInitUnitaire, parcIni, inter,
 								annee, idParc, anneeNTab, statutOccup.getTauxActuProp(), coutEnergieMap, emissionsMap,
-								valeurVerte.getValeurProp());
+								valeurVerte.getValeurProp(), LambdaNRF);
 						coutFinalLoc = calculCoutService.calculCoutFinal(surface, besoinInitUnitaire, parcIni, inter,
 								annee, idParc, anneeNTab, statutOccup.getTauxActuLoc(), coutEnergieMap, emissionsMap,
-								valeurVerte.getValeurLoc());
+								valeurVerte.getValeurLoc(),LambdaNRF);
 						coutFinalMapProp.put(calculCoutService.outputName(idParc, inter, annee, coutFinalProp),
 								coutFinalProp);
 						coutFinalMapLoc.put(calculCoutService.outputName(idParc, inter, annee, coutFinalLoc),

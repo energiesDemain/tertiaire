@@ -235,7 +235,7 @@ public class CalibrageDASImpl extends BddDAS implements CalibrageDAS {
 			jdbcTemplate.batchUpdate(getProperty(INSERT_CINT + cIntType.toString()), objectInsert);
 		}
 
-	}
+	} 
 	
 	public void insertCIntDesag(HashMap<String,CalibCoutGlobal> coutIntangibleMap, CIntType cIntType) {
 		List<Object[]> objectInsert = new ArrayList<Object[]>();
