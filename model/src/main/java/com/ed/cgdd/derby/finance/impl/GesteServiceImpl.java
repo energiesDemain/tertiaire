@@ -442,6 +442,8 @@ public class GesteServiceImpl implements GesteService {
 									resultConsoURtMap, reglementations, coutsEclVentilMap, coutEcsMap, pmEcsNeufMap,
 									consoChauff, anneeNTab, ventil, aux, bNeufsMap, gainsVentilationMap,
 									bibliRdtEcsMap, annee, besoinInit, tauxActu);
+							
+							
 							gestesFinaux.add(copyGeste);
 
 						}

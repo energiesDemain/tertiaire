@@ -48,6 +48,8 @@ public class CSVServiceImpl implements CSVService {
 			getGESAnneeCSV(pasTemps);
 			LOG.info("csv Besoin/Conso RT");
 			getBesoinAnneeCSV(pasTemps);
+			LOG.info("csv Besoin/Conso RT avec systemes");
+			getBesoinAnneeSystCSV(pasTemps);
 			LOG.info("csv Conso non RT");
 			getConsoNonRTAnneeCSV(pasTemps);
 			LOG.info("Surfaces climatisees");
@@ -102,14 +104,14 @@ public class CSVServiceImpl implements CSVService {
 			public ConsommationResultatsAnnee mapRow(ResultSet rs, int rowNum) throws SQLException {
 				ConsommationResultatsAnnee sorties = new ConsommationResultatsAnnee();
 				int columncount = rs.getMetaData().getColumnCount();
-				for (int k = 1; k <= columncount; k++) {
+	//			for (int k = 1; k <= columncount; k++) {
 					sorties.setAnnee(rs.getInt("annee"));
 					sorties.setBranche(rs.getString("branche"));
 					sorties.setPeriodeSimple(rs.getString("periodeSimple"));
 					sorties.setEnergieUsage(rs.getString("energieChauffage"));
 					sorties.setSystemeChaud(rs.getString("system_chauff"));
 					sorties.setSurface(rs.getDouble("surface"));
-					}
+	//				}
 				return sorties;
 			};
 		});
@@ -391,7 +393,32 @@ public class CSVServiceImpl implements CSVService {
 
 	}
 
+	protected void getBesoinAnneeSystCSV(int pasTemps) throws SQLException, IOException {
+		OutputStream os = new FileOutputStream("./Result_csv/export_BESOIN_RT_PERIODE_SYST.csv");
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(os, "UTF-8"));
+		CSVPrinter printer = CSVFormat.DEFAULT.withDelimiter(';').withHeader("COD_BRANCHE",
+				"ANNEE", "COD_PERIODE_SIMPLE", "USAGE","COD_SYSTEME_CHAUD","COD_ENERGIE","CONSO_TOT","BESOIN_TOT"
+		).print(out);
+		List<BesoinConsoForCSV> list = getBesoinAnneeSyst(pasTemps);
+		
+		for (BesoinConsoForCSV rs : list) {
+			List record = new ArrayList<>();
+			record.add(rs.getBranche());
+			record.add(rs.getAnnee());
+			record.add(rs.getCodePeriodeSimple());
+			record.add(rs.getUsage());
+			record.add(rs.getSystemChaud());
+			record.add(rs.getEnergie());
+			record.add(rs.getConsoTot());
+			record.add(rs.getBesoinTot());
+			printer.printRecord(record);
+		}
+		out.flush();
+		out.close();
+		printer.close();
+		os.close();
 
+	}
 	protected void getConsoNonRTAnneeCSV(int pasTemps) throws SQLException, IOException {
 		OutputStream os = new FileOutputStream("./Result_csv/export_CONSO_NON_RT_PERIODE.csv");
 		PrintWriter out = new PrintWriter(new OutputStreamWriter(os, "UTF-8"));
@@ -710,10 +737,11 @@ public class CSVServiceImpl implements CSVService {
 			LOG.debug(requestSelect);
 		return jdbcTemplate.query(requestSelect, new RowMapper<BesoinConsoForCSV>() {
 			@Override
+			
 			public BesoinConsoForCSV mapRow(ResultSet rs, int rowNum) throws SQLException {
 				BesoinConsoForCSV sorties = new BesoinConsoForCSV();
 				int columncount = rs.getMetaData().getColumnCount();
-				for (int k = 1; k <= columncount; k++) {
+	//			for (int k = 1; k <= columncount; k++) {
 					sorties.setBranche(rs.getString("COD_BRANCHE"));
 					sorties.setCodePeriodeSimple(rs.getString("COD_PERIODE_SIMPLE"));
 					sorties.setAnnee(rs.getInt("ANNEE"));
@@ -721,7 +749,7 @@ public class CSVServiceImpl implements CSVService {
 					sorties.setEnergie(rs.getString("COD_ENERGIE"));
 					sorties.setBesoinTot(rs.getBigDecimal("BESOIN_TOT"));
 					sorties.setConsoTot(rs.getBigDecimal("CONSO_TOT"));
-				}
+	//			}
 				return sorties;
 
 			}
@@ -730,7 +758,50 @@ public class CSVServiceImpl implements CSVService {
 
 	}
 
+	protected List<BesoinConsoForCSV> getBesoinAnneeSyst(final int pasTemps) {
+		String requestSelect = "SELECT r.COD_BRANCHE, r.ANNEE,r.COD_PERIODE_SIMPLE,r.USAGE,r.COD_SYSTEME_CHAUD,r.COD_ENERGIE, r.CONSO_TOT,s.BESOIN_TOT FROM  " +
+					"(SELECT a.COD_BRANCHE, a.ANNEE,a.COD_PERIODE_SIMPLE, a.USAGE, a.COD_SYSTEME_CHAUD, a.COD_ENERGIE,  sum(a.CONSOMMATION_EF) as CONSO_TOT FROM " +
+					"(SELECT  substr(ci.ID,1,2) as COD_BRANCHE, ci.ANNEE, ci.USAGE, ci.CONSOMMATION_EF, " +
+					"substr(ci.ID,11,2) as COD_PERIODE_SIMPLE, " +
+					"(case when ci.usage in ('Ventilation','Eclairage','Auxiliaires') then '02' else substr(ci.ID,length(ci.ID)-1,2) end) as COD_ENERGIE, " +
+					"(case when ci.usage in ('Chauffage') THEN substr(ci.ID,13,2) ELSE '' end) AS COD_SYSTEME_CHAUD " +
+					"FROM CONSO_RT_RESULTATS ci " +
+					") a  " +
+					"GROUP BY a.COD_BRANCHE, a.ANNEE,a.COD_PERIODE_SIMPLE, a.USAGE,a.COD_SYSTEME_CHAUD,  a.COD_ENERGIE) r " +
+					"JOIN " +
+					"(SELECT  b.COD_BRANCHE, b.ANNEE,b.COD_PERIODE_SIMPLE, b.USAGE, b.COD_SYSTEME_CHAUD, b.COD_ENERGIE,sum(b.BESOIN) as BESOIN_TOT FROM " +
+					"(SELECT substr(cs.ID,1,2) as COD_BRANCHE,cs.ANNEE, cs.USAGE, cs.BESOIN,substr(cs.ID,11,2) as COD_PERIODE_SIMPLE, " +
+					"(case when cs.usage in ('Ventilation','Eclairage','Auxiliaires') then '02' else substr(cs.ID,length(cs.ID)-1,2) end) as COD_ENERGIE, " +
+					"substr(cs.ID,13,2) AS COD_SYSTEME_CHAUD " +
+					"FROM BESOIN_RT_RESULTATS cs " +
+					") b " +
+					"GROUP BY b.COD_BRANCHE,b.ANNEE,b.COD_PERIODE_SIMPLE, b.USAGE,b.COD_SYSTEME_CHAUD,  b.COD_ENERGIE) s " +
+					"on r.COD_BRANCHE= s.COD_BRANCHE AND r.ANNEE = s.ANNEE AND r.USAGE = s.USAGE AND r.COD_ENERGIE = s.COD_ENERGIE " +
+					"AND r.COD_PERIODE_SIMPLE = s.COD_PERIODE_SIMPLE AND r.COD_SYSTEME_CHAUD= s.COD_SYSTEME_CHAUD ";
+		
+		LOG.debug(requestSelect);
+	return jdbcTemplate.query(requestSelect, new RowMapper<BesoinConsoForCSV>() {
+		@Override
+		public BesoinConsoForCSV mapRow(ResultSet rs, int rowNum) throws SQLException {
+			BesoinConsoForCSV sorties = new BesoinConsoForCSV();
+			int columncount = rs.getMetaData().getColumnCount();
+//			for (int k = 1; k <= columncount; k++) {
+				sorties.setBranche(rs.getString("COD_BRANCHE"));
+				sorties.setCodePeriodeSimple(rs.getString("COD_PERIODE_SIMPLE"));
+				sorties.setAnnee(rs.getInt("ANNEE"));
+				sorties.setUsage(rs.getString("USAGE"));
+				sorties.setSystemChaud(rs.getString("COD_SYSTEME_CHAUD"));
+				sorties.setEnergie(rs.getString("COD_ENERGIE"));
+				sorties.setBesoinTot(rs.getBigDecimal("BESOIN_TOT"));
+				sorties.setConsoTot(rs.getBigDecimal("CONSO_TOT"));
+	//		}
+			return sorties;
 
+		}
+
+	});
+
+}
 	protected List<BesoinConsoForCSV> getConsononRTAnnee(final int pasTemps) {
 		String requestSelect = "SELECT r.COD_BRANCHE, r.ANNEE, r.COD_PERIODE_SIMPLE, r.USAGE,r.COD_ENERGIE, r.CONSO_TOT FROM  " +
 				"(SELECT a.COD_BRANCHE, a.ANNEE, a.COD_PERIODE_SIMPLE, a.USAGE, a.COD_ENERGIE,  sum(a.CONSOMMATION_EF) as CONSO_TOT FROM " +
@@ -746,14 +817,14 @@ public class CSVServiceImpl implements CSVService {
 			public BesoinConsoForCSV mapRow(ResultSet rs, int rowNum) throws SQLException {
 				BesoinConsoForCSV sorties = new BesoinConsoForCSV();
 				int columncount = rs.getMetaData().getColumnCount();
-				for (int k = 1; k <= columncount; k++) {
+//				for (int k = 1; k <= columncount; k++) {
 					sorties.setBranche(rs.getString("COD_BRANCHE"));
 					sorties.setCodePeriodeSimple(rs.getString("COD_PERIODE_SIMPLE"));
 					sorties.setAnnee(rs.getInt("ANNEE"));
 					sorties.setUsage(rs.getString("USAGE"));
 					sorties.setEnergie(rs.getString("COD_ENERGIE"));
 					sorties.setConsoTot(rs.getBigDecimal("CONSO_TOT"));
-				}
+//				}
 				return sorties;
 
 			}
@@ -762,6 +833,7 @@ public class CSVServiceImpl implements CSVService {
 
 	}
 
+	
 
 
 	protected List<BesoinConsoForCSV> getSurfaceClimAnnee(final int pasTemps) {
@@ -778,13 +850,13 @@ public class CSVServiceImpl implements CSVService {
 			public BesoinConsoForCSV mapRow(ResultSet rs, int rowNum) throws SQLException {
 				BesoinConsoForCSV sorties = new BesoinConsoForCSV();
 				int columncount = rs.getMetaData().getColumnCount();
-				for (int k = 1; k <= columncount; k++) {
+//				for (int k = 1; k <= columncount; k++) {
 					sorties.setBranche(rs.getString("COD_BRANCHE"));
 					sorties.setCodePeriodeSimple(rs.getString("COD_PERIODE_SIMPLE"));
 					sorties.setAnnee(rs.getInt("ANNEE"));
 					sorties.setSystemFroid(rs.getString("COD_SYSTEME_FROID"));
 					sorties.setSurfaceTot(rs.getBigDecimal("SURFACES_TOT"));
-				}
+//				}
 				return sorties;
 
 			}

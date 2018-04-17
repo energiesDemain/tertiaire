@@ -14,7 +14,8 @@ public class BesoinConsoForCSV {
 	private BigDecimal besoinTot;
 	private String systemFroid;
 	private BigDecimal surfaceTot;
-
+	private String systemChaud;
+	
 	public BigDecimal getSurfaceTot() {
 		return surfaceTot;
 	}
@@ -85,5 +86,13 @@ public class BesoinConsoForCSV {
 
 	public void setBesoinTot(BigDecimal besoinTot) {
 		this.besoinTot = besoinTot;
+	}
+
+	public String getSystemChaud() {
+		return systemChaud;
+	}
+
+	public void setSystemChaud(String systemChaud) {
+		this.systemChaud = systemChaud;
 	}
 }

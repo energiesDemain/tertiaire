@@ -18,14 +18,14 @@ public class  politiques {
 	public final static BigDecimal GainSupRTex = new BigDecimal("0.06");
 	public final static BigDecimal CoutSupRTex = new BigDecimal("0.09");
 	
-	public final static BigDecimal GainRdtSupRTex = new BigDecimal("0.10");
-	public final static BigDecimal CoutRdtSupRTex = new BigDecimal("0.15");
+	public final static BigDecimal GainRdtSupRTex = new BigDecimal("0.05");
+	public final static BigDecimal CoutRdtSupRTex = new BigDecimal("0.075");
 	
 	public final static BigDecimal GainRdtSupRTexElecJoule = new BigDecimal("0.05");
 	public final static BigDecimal CoutRdtSupRTexElecJoule = new BigDecimal("0.075");
 	
 	// batiment exemplaire
-	public final static boolean  checkBatex = true;
+	public final static boolean  checkBatex =true;
 	public final static BigDecimal modifBUBatEx = new BigDecimal("0.8325");
 
 	//travaux embarques
@@ -41,7 +41,7 @@ public class  politiques {
 	public final static BigDecimal surcoutRT = new BigDecimal("20");
 		
 	// CEE prix annuels
-	public final static boolean  checkCEEannuels = true;
+	public final static boolean  checkCEEannuels =true;
 	
 //	public final static BigDecimal pCEE2015 = new BigDecimal("0.020");
 //	public final static BigDecimal pCEE2016 = new BigDecimal("0.020");
@@ -56,6 +56,9 @@ public class  politiques {
 	public final static BigDecimal pCEE2018 = new BigDecimal("0.015");
 	public final static BigDecimal pCEE2019 = new BigDecimal("0.015");
 	public final static BigDecimal pCEE2020 = new BigDecimal("0.015");
+	
+	// prix apres 2020, mettre a zero pour arreter les CEE
+	public final static BigDecimal pCEEsup2020 = new BigDecimal("0.000");
 	
 ////valeur où on atteint 23 Twh en 2021 avec CINT subventionnés
 //	public final static BigDecimal pCEE2015 = new BigDecimal("0.070");

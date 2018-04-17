@@ -273,9 +273,24 @@ public class LoadTableChauffClimDASImpl extends BddUsagesRTDAS implements LoadTa
 					rdtCoutChauf.setId(rs.getString("ID_AGREG"));
 					rdtCoutChauf.setPeriode(rs.getString("PERIODE"));
 					rdtCoutChauf.setRdt(rs.getBigDecimal("RDT"));
-					rdtCoutChauf.setCout(rs.getBigDecimal("COUT"));
 					rdtCoutChauf.setCEE(rs.getBigDecimal("CEE"));
-
+					rdtCoutChauf.setCout(rs.getBigDecimal("COUT"));	
+					if(CalibParameters.checkSurcoutSyst){
+						if(rs.getString("ID_AGREG").substring(6,10).equals("0602") || 
+								rs.getString("ID_AGREG").substring(6,10).equals("0202") || 
+								rs.getString("ID_AGREG").substring(6,10).equals("0802")){
+							rdtCoutChauf.setCout(rs.getBigDecimal("COUT").multiply(CalibParameters.FacteurCINVelecJoule,MathContext.DECIMAL32));
+						} else if(rs.getString("ID_AGREG").substring(6,10).equals("2602") || 
+								rs.getString("ID_AGREG").substring(6,10).equals("2202") || 
+								rs.getString("ID_AGREG").substring(6,10).equals("0802")){
+							rdtCoutChauf.setCout(rs.getBigDecimal("COUT").multiply(CalibParameters.FacteurCINVelecPAC,MathContext.DECIMAL32));
+						} else if(rs.getString("ID_AGREG").substring(6,10).equals("0404") || 
+								rs.getString("ID_AGREG").substring(6,10).equals("0804")){
+							rdtCoutChauf.setCout(rs.getBigDecimal("COUT").multiply(CalibParameters.FacteurCINVGaz,MathContext.DECIMAL32));
+						} else if(rs.getString("ID_AGREG").substring(6,10).equals("2404")){
+							rdtCoutChauf.setCout(rs.getBigDecimal("COUT").multiply(CalibParameters.FacteurCINVGazPerf,MathContext.DECIMAL32));
+						}	
+					}
 				}
 				return rdtCoutChauf;
 

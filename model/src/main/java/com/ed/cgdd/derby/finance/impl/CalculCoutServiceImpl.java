@@ -104,7 +104,7 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 			charge = coutEnergieService.chargesEnerAnnuelles(surface, besoinInitUnitaire, gesteFin.getGeste(),
 					coutEnergie,annee);
 			// ajout du lambda ne rien faire (remplace le cout intangible)
-			charge = charge.multiply(LambdaNRF.get(parcInit.getIdbranche()), MathContext.DECIMAL32);
+			charge = charge.multiply(LambdaNRF.get(parcInit.getIdbranche()+Integer.toString(annee)), MathContext.DECIMAL32);
 			
 			// on ajoute la maintenance meme sans changement de systeme
 			charge = charge.add(gesteFin.getGeste().getCoutMaintenance().multiply(surface, MathContext.DECIMAL32));
@@ -114,7 +114,7 @@ public class CalculCoutServiceImpl implements CalculCoutService {
 					.getGeste().getEnergie(), Usage.CHAUFFAGE.getLabel(), BigDecimal.ONE);
 			
 			if (gesteFin.getGeste().getTypeRenovBati().equals(TypeRenovBati.ETAT_INIT)) {
-				besoinInitUnitaire = besoinInitUnitaire.multiply(LambdaNRF.get(parcInit.getIdbranche()), MathContext.DECIMAL32);
+				besoinInitUnitaire = besoinInitUnitaire.multiply(LambdaNRF.get(parcInit.getIdbranche()+Integer.toString(annee)), MathContext.DECIMAL32);
 			}
 			
 			charge = coutEnergieService.chargesEnerAnnuelles(surface, besoinInitUnitaire, gesteFin.getGeste(),

@@ -271,15 +271,40 @@ public class CalibrageServiceImpl implements CalibrageService {
 	
 	public HashMap<String, BigDecimal> setLambdaNRF() {
 		HashMap<String, BigDecimal> lambdaBranche = new HashMap<>();
+		// assigne les lambda du geste ne rien faire par branche
+		// le lambda croit lineairement entre 2010 et 2050 depuis une valeur initiale lambda_i jusque une valeur finale lambda_2050
+		// lambda_t = (lambda_i + (lambda_2050 - lambda_i)*(t+1-2050)/40)
+		for (int annee = 2010; annee < 2050; annee++) {
+			BigDecimal reductionLambdaDebutSimu = new BigDecimal((annee + 1 -2010)).divide(new BigDecimal("40"));
+			
+		lambdaBranche.put("01" + Integer.toString(annee), (CalibParameters.LambdaNRF01Debut.add(
+				(CalibParameters.LambdaNRF01.subtract(CalibParameters.LambdaNRF01Debut)).multiply(reductionLambdaDebutSimu))));
+		lambdaBranche.put("02" + Integer.toString(annee), (CalibParameters.LambdaNRF02Debut.add(
+				(CalibParameters.LambdaNRF02.subtract(CalibParameters.LambdaNRF02Debut)).multiply(reductionLambdaDebutSimu))));
+		lambdaBranche.put("03" + Integer.toString(annee), (CalibParameters.LambdaNRF03Debut.add(
+				(CalibParameters.LambdaNRF03.subtract(CalibParameters.LambdaNRF03Debut)).multiply(reductionLambdaDebutSimu))));
+		lambdaBranche.put("04" + Integer.toString(annee), (CalibParameters.LambdaNRF04Debut.add(
+				(CalibParameters.LambdaNRF04.subtract(CalibParameters.LambdaNRF04Debut)).multiply(reductionLambdaDebutSimu))));
+		lambdaBranche.put("05" + Integer.toString(annee), (CalibParameters.LambdaNRF05Debut.add(
+				(CalibParameters.LambdaNRF05.subtract(CalibParameters.LambdaNRF05Debut)).multiply(reductionLambdaDebutSimu))));
+		lambdaBranche.put("06" + Integer.toString(annee), (CalibParameters.LambdaNRF06Debut.add(
+				(CalibParameters.LambdaNRF06.subtract(CalibParameters.LambdaNRF06Debut)).multiply(reductionLambdaDebutSimu))));
+		lambdaBranche.put("07" + Integer.toString(annee), (CalibParameters.LambdaNRF07Debut.add(
+				(CalibParameters.LambdaNRF07.subtract(CalibParameters.LambdaNRF07Debut)).multiply(reductionLambdaDebutSimu))));
+		lambdaBranche.put("08" + Integer.toString(annee), (CalibParameters.LambdaNRF08Debut.add(
+				(CalibParameters.LambdaNRF08.subtract(CalibParameters.LambdaNRF08Debut)).multiply(reductionLambdaDebutSimu))));
+		}
 		
-		lambdaBranche.put("01", CalibParameters.LambdaNRF01);
-		lambdaBranche.put("02", CalibParameters.LambdaNRF02);
-		lambdaBranche.put("03", CalibParameters.LambdaNRF03);
-		lambdaBranche.put("04", CalibParameters.LambdaNRF04);
-		lambdaBranche.put("05", CalibParameters.LambdaNRF05);
-		lambdaBranche.put("06", CalibParameters.LambdaNRF06);
-		lambdaBranche.put("07", CalibParameters.LambdaNRF07);
-		lambdaBranche.put("08", CalibParameters.LambdaNRF08);
+		for (int annee = 2050; annee <= 2050; annee++) {
+			lambdaBranche.put("01" + Integer.toString(annee), CalibParameters.LambdaNRF01);
+			lambdaBranche.put("02"+ Integer.toString(annee), CalibParameters.LambdaNRF02);
+			lambdaBranche.put("03"+ Integer.toString(annee), CalibParameters.LambdaNRF03);
+			lambdaBranche.put("04"+ Integer.toString(annee), CalibParameters.LambdaNRF04);
+			lambdaBranche.put("05"+ Integer.toString(annee), CalibParameters.LambdaNRF05);
+			lambdaBranche.put("06"+ Integer.toString(annee), CalibParameters.LambdaNRF06);
+			lambdaBranche.put("07"+ Integer.toString(annee), CalibParameters.LambdaNRF07);
+			lambdaBranche.put("08"+ Integer.toString(annee), CalibParameters.LambdaNRF08);
+		}
 		
 		return lambdaBranche;
 		

@@ -1129,7 +1129,10 @@ public class ProcessServiceRunnable implements Runnable {
 		}else
 		if(annee == 2020){
 			subCEE.setPrixKWhCumac(politiques.pCEE2020);
-		}else {
+		}else 
+		if(annee > 2020){
+			subCEE.setPrixKWhCumac(politiques.pCEEsup2020);
+		} else {
 			subCEE.setPrixKWhCumac(BigDecimal.ZERO);
 		}
 			
