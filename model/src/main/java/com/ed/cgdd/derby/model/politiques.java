@@ -29,14 +29,14 @@ public class  politiques {
 	public final static BigDecimal modifBUBatEx = new BigDecimal("0.8325");
 
 	//travaux embarques
-	public final static boolean  checkTravEmb =  false;
+	public final static boolean  checkTravEmb =true;
 	// taux de renovation tendanciel supplementaire
 	//public static float  txRenovTravEmb = 0.011f;
 	public static float  txRenovTravEmb = 0.0000001f;
 	
 	
 	//surcout RT 2012 electrique direct
-	public final static boolean  checkSurcoutRT2012 = true;
+	public final static boolean  checkSurcoutRT2012 =true;
 	// surcout en euros par m2 pour l'electrique joule
 	public final static BigDecimal surcoutRT = new BigDecimal("20");
 		
@@ -53,13 +53,19 @@ public class  politiques {
 	public final static BigDecimal pCEE2015 = new BigDecimal("0.000");
 	public final static BigDecimal pCEE2016 = new BigDecimal("0.005");
 	public final static BigDecimal pCEE2017 = new BigDecimal("0.005");
-	public final static BigDecimal pCEE2018 = new BigDecimal("0.015");
-	public final static BigDecimal pCEE2019 = new BigDecimal("0.015");
-	public final static BigDecimal pCEE2020 = new BigDecimal("0.015");
+	public final static BigDecimal pCEE2018 = new BigDecimal("0.006");
+	public final static BigDecimal pCEE2019 = new BigDecimal("0.006");
+	public final static BigDecimal pCEE2020 = new BigDecimal("0.006");
 	
-	// prix apres 2020, mettre a zero pour arreter les CEE
-	public final static BigDecimal pCEEsup2020 = new BigDecimal("0.000");
+	// prix apres 2020, mettre a zero pour arreter les CEE valeur AMS2
+	public final static BigDecimal pCEEsup2020 = new BigDecimal("0.006");
+	public final static BigDecimal tcamCEEsup2020 = new BigDecimal("0.012");
+	public final static BigDecimal tcamCEEsup2030 = new BigDecimal("0.07");
 	
+//	// prix apres 2020, mettre a zero pour arreter les CEE
+//		public final static BigDecimal pCEEsup2020 = new BigDecimal("0");
+//		public final static BigDecimal tcamCEEsup2020 = new BigDecimal("0");
+//		public final static BigDecimal tcamCEEsup2030 = new BigDecimal("0");
 ////valeur où on atteint 23 Twh en 2021 avec CINT subventionnés
 //	public final static BigDecimal pCEE2015 = new BigDecimal("0.070");
 //	public final static BigDecimal pCEE2016 = new BigDecimal("0.070");
@@ -98,4 +104,12 @@ public class  politiques {
 	public final static BigDecimal tcamBesoinClim20252030  = new BigDecimal("0.007300045195");
 	public final static BigDecimal tcamBesoinClim20302050  = new BigDecimal("0.006304199098");
 
+	
+	// baisse du besoin en ECS (amelioration equipements, mitigeur)
+	public final static boolean checkBaisseBesoinECS =true;
+	public final static BigDecimal tcamBesoinECS20152050 = new BigDecimal("-0.0063552495"); 
+
+	
+	
+	
 }

@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.ed.cgdd.derby.finance.CalculCEEService;
+import com.ed.cgdd.derby.model.politiques;
 import com.ed.cgdd.derby.model.calcconso.Conso;
 import com.ed.cgdd.derby.model.financeObjects.*;
 import com.ed.cgdd.derby.model.parc.Parc;
@@ -65,16 +66,49 @@ public class PretBonifServiceImpl extends TypeFinanceServiceImpl {
 			if (coutRenov.getCTA() != null) {
 				coutAFinance = coutAFinance.add(coutRenov.getCTA());
 			}
+
+
 			// on enleve du cout a financer les CEE
 			// si l'aide est trop importante, on met le cout a zero et l'aide au
 			// niveau de coutAfinance
-			if (coutAFinance.compareTo(aide) < 0) {
-				aide = BigDecimal.valueOf(coutAFinance.doubleValue());
-				coutAFinance = BigDecimal.ZERO;
+			// si on choisit d'inclure les couts intangibles dans la subvention, on fait le meme calcul sur coutafinance + CINT
+//			if (coutAFinance.compareTo(aide) < 0) {
+//			aide = BigDecimal.valueOf(coutAFinance.doubleValue());
+//			coutAFinance = BigDecimal.ZERO;
+//		} else {
+//			coutAFinance = coutAFinance.subtract(aide);
+//		}
+			
+			if (politiques.checkCEECINT){
+				BigDecimal CINTAFinance = coutRenov.getCINT().multiply(BigDecimal.valueOf(coutRenov.getDuree()), 
+						MathContext.DECIMAL32);
+				BigDecimal CoutAFinanceCINT = coutAFinance.add(CINTAFinance, MathContext.DECIMAL32);
+				
+				if (coutAFinance.compareTo(aide) < 0 && aide.compareTo(BigDecimal.ZERO)> 0 && 
+						CINTAFinance.compareTo(BigDecimal.ZERO) < 0) {
+					aide = BigDecimal.valueOf(coutAFinance.doubleValue());
+					coutAFinance = BigDecimal.ZERO;
+				} else if (coutAFinance.compareTo(aide) < 0 && aide.compareTo(BigDecimal.ZERO)> 0 &&
+						CINTAFinance.compareTo(BigDecimal.ZERO) > 0) {
+					coutRenov.setCINT((CINTAFinance.subtract(aide.subtract(coutAFinance, MathContext.DECIMAL32)))
+							.divide(BigDecimal.valueOf(coutRenov.getDuree()), MathContext.DECIMAL32));
+					aide = BigDecimal.valueOf(coutAFinance.doubleValue());
+					coutAFinance = BigDecimal.ZERO;
+					if(coutRenov.getCINT().compareTo(BigDecimal.ZERO) < 0){
+						coutRenov.setCINT(BigDecimal.ZERO);
+					}
+					
+				} else {
+					coutAFinance = coutAFinance.subtract(aide);
+				}			
 			} else {
-				coutAFinance = coutAFinance.subtract(aide);
+				if (coutAFinance.compareTo(aide) < 0 & aide.compareTo(BigDecimal.ZERO)> 0) {
+					aide = BigDecimal.valueOf(coutAFinance.doubleValue());
+					coutAFinance = BigDecimal.ZERO;
+				} else {
+					coutAFinance = coutAFinance.subtract(aide);
 			}
-
+			}
 			// condition specifique BPI
 
 			BigDecimal financementPretBPI = (financement.getPretMax().multiply(BigDecimal.valueOf(1000),

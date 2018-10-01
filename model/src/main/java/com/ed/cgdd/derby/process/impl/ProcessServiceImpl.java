@@ -553,7 +553,7 @@ public class ProcessServiceImpl implements ProcessService {
 		List<String> listeId = loadParcDatadas.getParamParcListeMapper();
 		HashMap<String, List<String>> idAgregListMap = commonService.idAgregBoucleList(listeId);
 
-		//Remplissage de la map pour l'evolution des besoins de chauffage et de climatisation 
+		//Remplissage de la map pour l'evolution des besoins de chauffage et de climatisation et d'ECS
 		// (adaptation au CC et individualisation des frais de chauffage)
 		EvolBesoinMap  evolBesoinMap = new EvolBesoinMap();
 	    setEvolBesoin(evolBesoinMap,idAgregListMap); 
@@ -957,6 +957,11 @@ private EvolBesoinMap setEvolBesoin(EvolBesoinMap evolBesoinMap, HashMap<String,
 								evolution =  evolution.add(politiques.GainBU_IFC_annuel, MathContext.DECIMAL32);
 						}
 			
+						
+						if(politiques.checkBaisseBesoinECS && usage.equals(Usage.ECS) && annee > 2015 && annee <= 2050){
+							evolution =  evolution.add(politiques.tcamBesoinECS20152050, MathContext.DECIMAL32);
+						}
+						
 			evolbesoin.setEvolution(evolution);
 			evolBesoinMap.putEvolutionBesoin(evolbesoin);
 			

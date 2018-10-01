@@ -14,6 +14,7 @@ import com.ed.cgdd.derby.model.calcconso.ParamRdtPerfEcs;
 import com.ed.cgdd.derby.model.calcconso.ParamTauxCouvEcs;
 import com.ed.cgdd.derby.model.calcconso.ResultConsoRdt;
 import com.ed.cgdd.derby.model.calcconso.ResultConsoURt;
+import com.ed.cgdd.derby.model.parc.EvolBesoinMap;
 import com.ed.cgdd.derby.model.parc.Parc;
 
 public interface EcsService {
@@ -26,6 +27,6 @@ public interface EcsService {
 			HashMap<String, ParamRdtPerfEcs> rdtPerfEcsMap, HashMap<String, ParamPartSysPerfEcs> partSysPerfEcsMap,
 			int anneeNTab, int pasdeTemps, int annee, BigDecimal compteur, String usage,
 			HashMap<String, ResultConsoURt> resultConsoURtMap, HashMap<String, BigDecimal[]> elasticiteNeufMap,
-			HashMap<String, BigDecimal[]> elasticiteExistantMap);
+			HashMap<String, BigDecimal[]> elasticiteExistantMap, EvolBesoinMap  evolBesoinMap);
 
 }

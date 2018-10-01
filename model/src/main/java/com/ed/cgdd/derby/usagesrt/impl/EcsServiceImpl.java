@@ -23,6 +23,7 @@ import com.ed.cgdd.derby.model.calcconso.ParamTauxCouvEcs;
 import com.ed.cgdd.derby.model.calcconso.ResultConsoRdt;
 import com.ed.cgdd.derby.model.calcconso.ResultConsoURt;
 import com.ed.cgdd.derby.model.parc.Energies;
+import com.ed.cgdd.derby.model.parc.EvolBesoinMap;
 import com.ed.cgdd.derby.model.parc.MapResultsKeys;
 import com.ed.cgdd.derby.model.parc.Parc;
 import com.ed.cgdd.derby.model.parc.TypeRenovBati;
@@ -39,6 +40,8 @@ public class EcsServiceImpl implements EcsService {
 	private static final int LENGHT_ENERG_AGREG = 2;
 	private static final BigDecimal FACTEUR_EP = new BigDecimal("2.58");
 	private static final String INIT_STATE = "Etat initial";
+	private static final int LENGTH_ID_BRANCHE = 2;
+	private static final int START_ID_BRANCHE = 0;
 
 	public CommonService getCommonService() {
 		return commonService;
@@ -66,7 +69,7 @@ public class EcsServiceImpl implements EcsService {
 			HashMap<String, ParamRdtPerfEcs> rdtPerfEcsMap, HashMap<String, ParamPartSysPerfEcs> partSysPerfEcsMap,
 			int anneeNTab, int pasdeTemps, int annee, BigDecimal compteur, String usage,
 			HashMap<String, ResultConsoURt> resultConsoURtMap, HashMap<String, BigDecimal[]> elasticiteNeufMap,
-			HashMap<String, BigDecimal[]> elasticiteExistantMap) {
+			HashMap<String, BigDecimal[]> elasticiteExistantMap, EvolBesoinMap  evolBesoinMap) {
 
 		// Initialisation des objets
 
@@ -107,7 +110,7 @@ public class EcsServiceImpl implements EcsService {
 				batimentsExistants(coutMap, besoinAgreg, coutEcsMap, pmEcsChgtMap, partSysPerfEcsMap, dvEcsMap,
 						bibliRdtEcsMap, rdtPerfEcsMap, anneeNTab, pasdeTemps, annee, compteur, besoinMap, rdtMapEcs,
 						consoMap, keyMap, idAgregParc, parcAgreg, periodeCstr, periode, resultConsoURtMap,
-						elasticiteExistantMap);
+						elasticiteExistantMap, evolBesoinMap);
 
 			}
 
@@ -127,11 +130,13 @@ public class EcsServiceImpl implements EcsService {
 			int pasdeTemps, int annee, BigDecimal compteur, HashMap<String, Conso> besoinMap,
 			HashMap<String, Conso> rdtMapEcs, HashMap<String, Conso> consoMap, HashMap<String, List<String>> keyMap,
 			String idAgregParc, Parc parcAgreg, int periodeCstr, int periode,
-			HashMap<String, ResultConsoURt> resultConsoURtMap, HashMap<String, BigDecimal[]> elasticiteExistantMap) {
+			HashMap<String, ResultConsoURt> resultConsoURtMap, HashMap<String, BigDecimal[]> elasticiteExistantMap, EvolBesoinMap evolBesoinMap) {
 		// cas des segments existants
 		List<String> keyList = keyMap.get(idAgregParc);
 		// boucle sur les idAgregEcs,
 		// idAgreg+EnergEcs+AnneeRenovSys+TypeRenovSys+AnneeRenovBat+TypeRenovBat
+		
+		
 		for (String idEcsMap : keyList) {
 
 			Conso besoinSegment = besoinMap.get(idEcsMap);
@@ -190,9 +195,19 @@ public class EcsServiceImpl implements EcsService {
 				}
 				BigDecimal facteurElasticite = elasticiteExistantMap.get(Usage.ECS.getLabel()
 						+ besoinSegment.getId().substring(START_ENERG_AGREG, START_ENERG_AGREG + LENGHT_ENERG_AGREG))[annee - 2009];
+				
+				//On modifie le besoin d'ECS (baisse tendancielle du besoin due a l amelioration des equipements
+				BigDecimal evolBesoinECS = 
+						evolBesoinMap.getEvolBesoin()
+						.get(idAgregParc.substring(START_ID_BRANCHE,LENGTH_ID_BRANCHE)+Usage.ECS+annee)
+						.getEvolution();
+				
+				
 				besoinSegment.setAnnee(anneeNTab,
-						(tauxEvolBesoin.multiply(besoinNTemp)).multiply(facteurElasticite, MathContext.DECIMAL32));
+						(tauxEvolBesoin.multiply(besoinNTemp)).multiply(facteurElasticite, MathContext.DECIMAL32)
+						.multiply(BigDecimal.ONE.add(evolBesoinECS), MathContext.DECIMAL32));
 				besoinMap.put(idEcsMap, besoinSegment);
+				
 				// Les rendements n'evoluent pas
 				rdtSegment = calcRdtConstant(besoinSegment, rdtSegment, anneeNTab);
 				rdtMapEcs.put(idEcsMap, rdtSegment);
@@ -245,7 +260,7 @@ public class EcsServiceImpl implements EcsService {
 				// Calcul du nouveau besoin pour le segment pre-existant
 				// ou ayant deja subit une renovation
 				besoinSegment = besoinExistantModif(besoinSegment, tauxEvolBesoin, besoinSortant, anneeNTab,
-						elasticiteExistantMap, annee);
+						elasticiteExistantMap, annee, evolBesoinMap);
 				besoinMap.put(idEcsMap, besoinSegment);
 				// Les rendements n'evoluent pas
 				rdtSegment = calcRdtConstant(besoinSegment, rdtSegment, anneeNTab);
@@ -259,7 +274,7 @@ public class EcsServiceImpl implements EcsService {
 				// sont transferes les besoins sortant si il y a
 				// substitution energetique
 				besoinMap = besoinModifTrans(parcAgreg, besoinSegment.getIdagreg(), besoinMap, besoinTransMap,
-						energCodeSegment, annee, anneeNTab, pasdeTemps, elasticiteExistantMap);
+						energCodeSegment, annee, anneeNTab, pasdeTemps, elasticiteExistantMap, evolBesoinMap);
 				rdtMapEcs = rdtModifTrans(parcAgreg, besoinSegment.getIdagreg(), rdtMapEcs, besoinMap, besoinTransMap,
 						energCodeSegment, bibliRdtEcsMap, rdtPerfEcsMap, partSysPerfEcsMap, periode, periodeCstr,
 						pasdeTemps, anneeNTab, annee);
@@ -613,12 +628,19 @@ public class EcsServiceImpl implements EcsService {
 
 	protected HashMap<String, Conso> besoinModifTrans(Parc parcAgreg, String idAgregSegment,
 			HashMap<String, Conso> besoinMap, HashMap<String, BigDecimal> besoinTransMap, String energCodeSegment,
-			int annee, int anneeNTab, int pasdeTemps, HashMap<String, BigDecimal[]> elasticiteExistantMap) {
+			int annee, int anneeNTab, int pasdeTemps, HashMap<String, BigDecimal[]> elasticiteExistantMap, EvolBesoinMap evolBesoinMap) {
 		// boucle sur les energies a transferer
 		for (String energ : besoinTransMap.keySet()) {
 			String energCode = commonService.codeCreateEnerg(energ);
 			// Prise en compte du facteur d'elasticite des besoins
 			BigDecimal facteurElasticite = elasticiteExistantMap.get(Usage.ECS.getLabel() + energCode)[annee - 2009];
+			
+			//On modifie le besoin d'ECS (baisse tendancielle du besoin due a l amelioration des equipements
+			BigDecimal evolBesoinECS = 
+					evolBesoinMap.getEvolBesoin()
+					.get(idAgregSegment.substring(START_ID_BRANCHE,LENGTH_ID_BRANCHE)+Usage.ECS+annee)
+					.getEvolution();
+			
 			// si le segment existe deja :
 			if (besoinMap.containsKey(generateIDNew(parcAgreg, energCode, idAgregSegment, annee))) {
 
@@ -627,11 +649,11 @@ public class EcsServiceImpl implements EcsService {
 				if (besoinSegment.getAnnee(anneeNTab) != null) {
 					besoinSegment.setAnnee(anneeNTab,
 							(besoinTransMap.get(energ).add(besoinSegment.getAnnee(anneeNTab))).multiply(
-									facteurElasticite, MathContext.DECIMAL32));
+									facteurElasticite, MathContext.DECIMAL32).multiply(BigDecimal.ONE.add(evolBesoinECS), MathContext.DECIMAL32));
 				} else {
 
 					besoinSegment.setAnnee(anneeNTab,
-							besoinTransMap.get(energ).multiply(facteurElasticite, MathContext.DECIMAL32));
+							besoinTransMap.get(energ).multiply(facteurElasticite, MathContext.DECIMAL32).multiply(evolBesoinECS, MathContext.DECIMAL32));
 				}
 				besoinMap.put(generateIDNew(parcAgreg, energCode, idAgregSegment, annee), besoinSegment);
 			} else {
@@ -708,7 +730,7 @@ public class EcsServiceImpl implements EcsService {
 	}
 
 	protected Conso besoinExistantModif(Conso besoinSegment, BigDecimal tauxEvolBesoin, BigDecimal besoinTransfert,
-			int anneeNTab, HashMap<String, BigDecimal[]> elasticiteExistantMap, int annee) {
+			int anneeNTab, HashMap<String, BigDecimal[]> elasticiteExistantMap, int annee, EvolBesoinMap evolBesoinMap) {
 
 		BigDecimal facteurElasticite = elasticiteExistantMap.get(Usage.ECS.getLabel()
 				+ besoinSegment.getId().substring(START_ENERG_AGREG, START_ENERG_AGREG + LENGHT_ENERG_AGREG))[annee - 2009];
@@ -718,9 +740,19 @@ public class EcsServiceImpl implements EcsService {
 		if ((besoinEvol.subtract(besoinTransfert)).signum() == -1) {
 			besoinSegment.setAnnee(anneeNTab, BigDecimal.ZERO);
 		} else {
+			
+			//On modifie le besoin d'ECS (baisse tendancielle du besoin due a l amelioration des equipements
+			BigDecimal evolBesoinECS = 
+					evolBesoinMap.getEvolBesoin()
+					.get(besoinSegment.getId().substring(START_ID_BRANCHE,LENGTH_ID_BRANCHE)+Usage.ECS+annee)
+					.getEvolution();
+			
 			// Prise en compte du facteur d'elasticite du besoin
 			besoinSegment.setAnnee(anneeNTab,
-					(besoinEvol.subtract(besoinTransfert).multiply(facteurElasticite, MathContext.DECIMAL32)));
+					(besoinEvol.subtract(besoinTransfert).multiply(facteurElasticite, MathContext.DECIMAL32)
+							.multiply(BigDecimal.ONE.add(evolBesoinECS), MathContext.DECIMAL32)));
+		
+			
 
 		}
 

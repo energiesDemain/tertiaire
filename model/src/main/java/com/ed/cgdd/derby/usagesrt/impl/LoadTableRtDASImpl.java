@@ -228,7 +228,6 @@ public class LoadTableRtDASImpl extends BddUsagesRTDAS implements LoadTableRtDAS
 		List<ParamCoutEcs> loadParam = getParamCoutEcs(tableName);
 		for (ParamCoutEcs paramCout : loadParam) {
 			coutEcsMap.put(paramCout.getIdenergie() + paramCout.getPerformance(), paramCout);
-
 		}
 
 		return coutEcsMap;

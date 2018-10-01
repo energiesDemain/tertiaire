@@ -320,7 +320,7 @@ public class ProcessServiceRunnable implements Runnable {
 		// // if (idAgregParc.substring(0, 2).equals("08")) {
 		// // {equals("08356005")
 		// || idAgregParc.equals("01024401")) {
-		//if (idAgregParc.equals("01024201")) {
+		//if (idAgregParc.equals("02046201")) {
 		//if ( idAgregParc.equals("01024403")) {
 			
 		if (true) {
@@ -416,6 +416,7 @@ public class ProcessServiceRunnable implements Runnable {
 			    	txRenovBati = txRenovBati + politiques.txRenovTravEmb;
 			    	//LOG.debug("taux apres ={}", txRenovBati);
 			    	}
+			    	
 //					long end2 = System.currentTimeMillis();
 //					LOG.info("Travaux embarques : {}ms", end2 - start2);
 			    	//LOG.debug("taux renov ={}", txRenovBati);
@@ -533,7 +534,7 @@ public class ProcessServiceRunnable implements Runnable {
 					resultatsConsoEcs = ecsService.evolEcsConso(coutEcsMap, parcTotMap, resultatsConsoEcs,
 							pmEcsNeufMap, pmEcsChgtMap, bNeufsMap, partSolaireMap, txCouvSolaireMap, dvEcsMap,
 							bibliRdtEcsMap, rdtPerfEcsMap, partSysPerfEcsMap, anneeNTab, pasdeTemps, annee, compteur,
-							Usage.ECS.getLabel(), resultConsoURtMap, elasticiteNeufMap, elasticiteExistantMap);
+							Usage.ECS.getLabel(), resultConsoURtMap, elasticiteNeufMap, elasticiteExistantMap, evolBesoinMap);
 					// LOG.info("ECS Done !");
 					resultatsConsoRt = eclairageService.evolEclairageConso(coutsEclVentilMap, parcTotMap,
 							resultatsConsoRt, gainsEclairageMap, bNeufsMap, dvUsagesMap, anneeNTab, pasdeTemps, annee,
@@ -1130,9 +1131,14 @@ public class ProcessServiceRunnable implements Runnable {
 		if(annee == 2020){
 			subCEE.setPrixKWhCumac(politiques.pCEE2020);
 		}else 
-		if(annee > 2020){
-			subCEE.setPrixKWhCumac(politiques.pCEEsup2020);
-		} else {
+		if(annee > 2020 && annee < 2031){
+			subCEE.setPrixKWhCumac(politiques.pCEEsup2020.multiply(((BigDecimal.ONE.add(politiques.tcamCEEsup2020)).pow(annee-2020))));
+		} else 
+		if(annee > 2030){
+				subCEE.setPrixKWhCumac(politiques.pCEEsup2020.multiply(((BigDecimal.ONE.add(politiques.tcamCEEsup2020)).pow(2030-2020)))
+						.multiply(((BigDecimal.ONE.add(politiques.tcamCEEsup2030)).pow(annee-2030))));
+		} else
+		{
 			subCEE.setPrixKWhCumac(BigDecimal.ZERO);
 		}
 			
