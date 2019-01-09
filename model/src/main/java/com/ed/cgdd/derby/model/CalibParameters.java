@@ -46,26 +46,52 @@ public class CalibParameters {
 //		public final static BigDecimal LambdaNRF06 = new BigDecimal("1");
 //		public final static BigDecimal LambdaNRF07 = new BigDecimal("1");
 //		public final static BigDecimal LambdaNRF08 = new BigDecimal("1");
-////		// lambda par branche 2050 AMS-AME 2017
-		public final static BigDecimal LambdaNRF01 = new BigDecimal("0.4");
-		public final static BigDecimal LambdaNRF02 = new BigDecimal("0.7");
-		public final static BigDecimal LambdaNRF03 = new BigDecimal("0.7");
-		public final static BigDecimal LambdaNRF04 = new BigDecimal("0.7");
-		public final static BigDecimal LambdaNRF05 = new BigDecimal("0.8");
-		public final static BigDecimal LambdaNRF06 = new BigDecimal("0.5");
-		public final static BigDecimal LambdaNRF07 = new BigDecimal("0.65");
-		public final static BigDecimal LambdaNRF08 = new BigDecimal("0.65");
-//				
-//		// lambda par branche debut de periode
-		public final static BigDecimal LambdaNRF01Debut  =  new BigDecimal("0.2");
-		public final static BigDecimal LambdaNRF02Debut  = new BigDecimal("0.7");
-		public final static BigDecimal LambdaNRF03Debut  = new BigDecimal("0.7");
-		public final static BigDecimal LambdaNRF04Debut  = new BigDecimal("0.7");
-		public final static BigDecimal LambdaNRF05Debut  = new BigDecimal("0.8");
-		public final static BigDecimal LambdaNRF06Debut  = new BigDecimal("0.3");
-		public final static BigDecimal LambdaNRF07Debut  = new BigDecimal("0.6");
-		public final static BigDecimal LambdaNRF08Debut  = new BigDecimal("0.6");
+		
+//		
+//////		// lambda par branche 2050 AMS-AME 2017
+//		public final static BigDecimal LambdaNRF01 = new BigDecimal("0.4");
+//		public final static BigDecimal LambdaNRF02 = new BigDecimal("0.7");
+//		public final static BigDecimal LambdaNRF03 = new BigDecimal("0.7");
+//		public final static BigDecimal LambdaNRF04 = new BigDecimal("0.7");
+//		public final static BigDecimal LambdaNRF05 = new BigDecimal("0.8");
+//		public final static BigDecimal LambdaNRF06 = new BigDecimal("0.5");
+//		public final static BigDecimal LambdaNRF07 = new BigDecimal("0.65");
+//		public final static BigDecimal LambdaNRF08 = new BigDecimal("0.65");
+////				
+////		// lambda par branche debut de periode
+//		public final static BigDecimal LambdaNRF01Debut  =  new BigDecimal("0.2");
+//		public final static BigDecimal LambdaNRF02Debut  = new BigDecimal("0.7");
+//		public final static BigDecimal LambdaNRF03Debut  = new BigDecimal("0.7");
+//		public final static BigDecimal LambdaNRF04Debut  = new BigDecimal("0.7");
+//		public final static BigDecimal LambdaNRF05Debut  = new BigDecimal("0.8");
+//		public final static BigDecimal LambdaNRF06Debut  = new BigDecimal("0.3");
+//		public final static BigDecimal LambdaNRF07Debut  = new BigDecimal("0.6");
+//		public final static BigDecimal LambdaNRF08Debut  = new BigDecimal("0.6");
+//		
+//		
+	//// lambda analyse de sensib	INV - 20 %	
+	// lambda par branche 2050 AMS-AME 2017
+	public final static BigDecimal LambdaNRF01 = new BigDecimal("0.32");
+	public final static BigDecimal LambdaNRF02 = new BigDecimal("0.56");
+	public final static BigDecimal LambdaNRF03 = new BigDecimal("0.56");
+	public final static BigDecimal LambdaNRF04 = new BigDecimal("0.56");
+	public final static BigDecimal LambdaNRF05 = new BigDecimal("0.64");
+	public final static BigDecimal LambdaNRF06 = new BigDecimal("0.4");
+	public final static BigDecimal LambdaNRF07 = new BigDecimal("0.52");
+	public final static BigDecimal LambdaNRF08 = new BigDecimal("0.52");
+//			
+//	// lambda par branche debut de periode
+	public final static BigDecimal LambdaNRF01Debut  =  new BigDecimal("0.2");
+	public final static BigDecimal LambdaNRF02Debut  = new BigDecimal("0.56");
+	public final static BigDecimal LambdaNRF03Debut  = new BigDecimal("0.56");
+	public final static BigDecimal LambdaNRF04Debut  = new BigDecimal("0.56");
+	public final static BigDecimal LambdaNRF05Debut  = new BigDecimal("0.64");
+	public final static BigDecimal LambdaNRF06Debut  = new BigDecimal("0.3");
+	public final static BigDecimal LambdaNRF07Debut  = new BigDecimal("0.52");
+	public final static BigDecimal LambdaNRF08Debut  = new BigDecimal("0.52");
 
+		
+		
 //// lambda analyse de sensib
 //////	// lambda par branche 2050
 //	public final static BigDecimal LambdaNRF01 = new BigDecimal("0.2");
