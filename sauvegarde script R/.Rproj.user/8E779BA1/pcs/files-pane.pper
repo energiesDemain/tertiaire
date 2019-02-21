@@ -1,0 +1,13 @@
+{
+    "path" : "H:/modele_tertiaire/tertiaire/sauvegarde script R",
+    "sortOrder" : [
+        {
+            "ascending" : false,
+            "columnIndex" : 3
+        },
+        {
+            "ascending" : true,
+            "columnIndex" : 2
+        }
+    ]
+}

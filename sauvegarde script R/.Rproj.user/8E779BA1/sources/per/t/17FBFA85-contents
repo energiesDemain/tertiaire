@@ -9,8 +9,6 @@ output:
   word_document:
     fig_height: 6
     fig_width: 8
-editor_options: 
-  chunk_output_type: console
 ---
 
 ```{r global_options, include=FALSE}
@@ -79,12 +77,14 @@ color_energie = data.table(ENERGIE = factor(c("Gaz", "Fioul","Electricité","Urb
 
 #### liste des fichiers à lire
    
-wbfiles  = "../Sauvegardes_resultats_thema/avec_calib_CODAH/avec_calib_CODAH/2050_nopol_prixconstant"
-wbfiles[2]  = "../Sauvegardes_resultats_thema/avec_calib_CODAH/avec_calib_CODAH/2050_nopol_prixcroissants"
-wbfiles[3]  = "../Sauvegardes_resultats_thema/avec_calib_CODAH/avec_calib_CODAH/2050_AME_nouveauxprix"
-wbfiles[4]  = "../Sauvegardes_resultats_thema/avec_calib_CODAH/avec_calib_CODAH/2050_AMS2_sansdecarb"
-wbfiles[5]  = "../Sauvegardes_resultats_thema/avec_calib_CODAH/avec_calib_CODAH/2050_AMS1_biog150"
-wbfiles[6]  = "../Sauvegardes_resultats_thema/avec_calib_CODAH/avec_calib_CODAH/2050_AMS2"
+wbfiles  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_nopol_prixconstant"
+#wbfiles  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_nopol_prixcroissants_noRT2012"
+wbfiles[2]  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_nopol_prixcroissants"
+wbfiles[3]  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_AME_nouveauxprix"
+wbfiles[4]  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_AMS2_sansdecarb"
+#wbfiles[3]  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_AMS_nosubENR"
+wbfiles[5]  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_AMS1_biog150"
+wbfiles[6]  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_AMS2"
 
 
 
@@ -106,7 +106,7 @@ wbname = c("S0 P0",
 
 ### choix du scenario de référence pour le bilan socio_eco
 
-#scenario_ref =c("S0b REF")
+scenario_ref =c("S0b REF")
 scenario_ref =c("S1 AME")
 
 ### scenarios pour graph type consultant des conso unitaires
@@ -118,15 +118,14 @@ scenario_order = c("S0 P0","S0b REF","S1 AME","S4 AMSDec0")
 scenario_consoubranche = c("S1 AME","S4 AMSDec0")
 
 #### choix écriture des excels ou non
-write_excel =F
-
+write_excel =T
 ##### choix des parties à afficher
 check_calib =F
 check_parc =F
 check_conso =T
-check_PM= F
-check_perf= F
-check_INV = F
+check_PM= T
+check_perf= T
+check_INV = T
 check_Em = T
 check_bilan_socio=T
 
@@ -218,7 +217,7 @@ tax_to_use = data.table(scenario=wbname,taxe=c(
 
 #### facteurs d'émissions constants par énergie et usage pour le scénrio de référence et l'AME
 
-  FE_AME = data.table(read_excel("../parametrage modèle/Facteuremissions_thema.xls", sheet = "FEexportAME"))
+FE_AME = data.table(read_excel("../tertiaire/parametrage modèle/Facteuremissions_thema.xls", sheet = "FEexportAME"))
 
 FE_AME = melt(FE_AME, id.vars = c("energie","usage"),variable.name = "annee",value.name = "FE_AME")
 FE_AME[,annee:=as.character(annee)]
@@ -263,7 +262,6 @@ prix_usager_AMS2GJ = data.table(read_excel("../publication_thema/hypothèses_pri
 prix_usager_AMS1nodecarb = data.table(read_excel("../publication_thema/hypothèses_prix/Prix_scenario_thema_clean_sansdecarb.xls", sheet = "prix_usager_AMS1"))
 prix_usager_AMS2nodecarb = data.table(read_excel("../publication_thema/hypothèses_prix/Prix_scenario_thema_clean_sansdecarb.xls", sheet = "prix_usager_AMS2"))
 
-#### donne un nom à chaque scénario de prix 
 prix_usager_2018= melt(prix_usager_2018, id.vars = c("annee"),variable.name = "energie",value.name = "prix_usager_2018")
 prix_usager_Nopol= melt(prix_usager_Nopol, id.vars = c("annee"),variable.name = "energie",value.name = "prix_usager_Nopol")
 prix_usager_AME= melt(prix_usager_AME, id.vars = c("annee"),variable.name = "energie",value.name = "prix_usager_AME")
