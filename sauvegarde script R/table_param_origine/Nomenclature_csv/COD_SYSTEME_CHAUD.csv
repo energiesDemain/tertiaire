@@ -1,0 +1,21 @@
+SYSTEME_CHAUD;COD_SYSTEME_CHAUD
+Autre système centralisé;01
+Cassette rayonnante;02
+Chaudière fioul;03
+Chaudière gaz;04
+DRV;05
+Electrique direct;06
+Non chauffé;07
+nr;08
+PAC;09
+Rooftop;10
+Tube radiant;11
+Autre système centralisé performant;21
+Cassette rayonnante performant;22
+Chaudière condensation fioul;23
+Chaudière condensation gaz;24
+DRV performant;25
+Electrique direct performant;26
+PAC performant;29
+Rooftop performant;30
+Tube radiant performant;31

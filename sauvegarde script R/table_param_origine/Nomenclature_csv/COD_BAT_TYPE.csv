@@ -1,0 +1,97 @@
+BAT_TYPE;COD_BAT_TYPE
+Cabinet médical;01
+Cantine collége;02
+Cantine élémentaire;03
+Cantine LEGT;04
+Cantine LP;05
+Cantine préélémentaire;06
+Centre accueil;07
+Collège;08
+Complexe brico;09
+école;10
+Elémentaire;11
+Entrepôt;12
+Foyers;13
+Garderie;14
+Grand alimentaire;15
+Grand bar café tabac;16
+Grand brico;17
+Grand cinéma;18
+Grand commerce de gros;19
+Grand Hotel avec restaurant Bas de gamme;20
+Grand Hotel avec restaurant Haut de gamme;21
+Grand Hotel avec restaurant Luxe;22
+Grand Hotel sans restaurant Bas de gamme;23
+Grand Hotel sans restaurant Haut de gamme;24
+Grand Hotel sans restaurant Luxe;25
+Grand librairie;26
+Grand Mode;27
+Grand process;28
+Grand restaurant rapide;29
+Grand restaurant traditionnel;30
+Grande cantine;31
+Grande salle de spectacle;32
+Grande salle multisport;33
+Hopital bloc;34
+Hopital maison;35
+Hopital pavillonnaire;36
+Hotel d'affaire avec restaurant Haut de gamme;37
+Hotel d'affaire avec restaurant Luxe;38
+Hotel d'affaire sans restaurant Haut de Gamme;39
+Hotel d'affaire sans restaurant Luxe;40
+Hypermarché;41
+immeuble peri urbain;42
+Immeuble péri urbain;43
+immeuble rénové;44
+immeuble résidentiel;45
+Internat college;46
+Internat LEGT;47
+Internat LP;48
+Lycée d’enseignement général et technologique (LEGT);49
+Lycée professionnel (LP);50
+Maison de pré-retraite;51
+Maison retraite médicalisée;52
+Moyen Hotel avec restaurant Bas de gamme;53
+Moyen Hotel avec restaurant Haut de gamme;54
+Moyen Hotel avec restaurant Luxe;55
+Moyen Hotel sans restaurant Bas de gamme;56
+Moyen Hotel sans restaurant Haut de gamme;57
+Moyen Hotel sans restaurant Luxe;58
+Musée;59
+nr;60
+Patinoire;61
+Petit bar café tabac;62
+Petit boulangerie;63
+Petit brico;64
+Petit cinéma;65
+Petit commerce de gros;66
+Petit Hotel avec restaurant Bas de gamme;67
+Petit Hotel avec restaurant Haut de gamme;68
+Petit Hotel avec restaurant Luxe;69
+Petit Hotel sans restaurant Bas de gamme;70
+Petit Hotel sans restaurant Haut de gamme;71
+Petit Hotel sans restaurant Luxe;72
+Petit librairie;73
+Petit mode;74
+Petit poissonnerie;75
+Petit process;76
+Petit restaurant rapide;77
+Petit restaurant traditionnel;78
+Petite cantine;79
+Petite salle de spectacle;80
+Petite salle multisport;81
+Piscine;82
+plateau large bureau paysagés;83
+plateau large bureaux cloisonnés;84
+plateau mince;85
+Préélémentaire;86
+R&D en sciences humaines et sociales;87
+R&D sciences physiques et naturelles;88
+Résidence universitaire;89
+Résidentiel;90
+Salle non spécialisée;91
+Superette;92
+Supermarché;93
+université;94
+Vestiaire et rangement;95
+ZAC Mode;96

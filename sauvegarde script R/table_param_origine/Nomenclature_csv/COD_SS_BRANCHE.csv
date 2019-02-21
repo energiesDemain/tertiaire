@@ -1,0 +1,36 @@
+SS_BRANCHE;COD_SS_BRANCHE
+Administration;01
+Bureaux;02
+Cabinet médical;03
+Café, cantine, traiteur;04
+Centre accueil;05
+Commerce de détail non alimentaire;06
+Commerce de gros;07
+Culture;08
+Enseignement primaire;09
+Enseignement secondaire;10
+Enseignement supérieur et recherche;11
+Entrepôt;12
+Equipement collectif;13
+Foyer;14
+Garderie;15
+Grand commerce alimentaire;16
+Hôpital;17
+Hôtel avec restaurant;18
+Hôtel sans restaurant;19
+Loisir;20
+Maison de pré-retraite;21
+Maison retraite médicalisée;22
+Petit commerce alimentaire;23
+Process;24
+Résidence universitaire;25
+Restaurant;26
+Service;27
+Service à la personne;28
+Sport;29
+Transport aérien;30
+Transport autre;31
+Transport ferroviaire;32
+Transport maritime et fluvial;33
+Transport routier;34
+Transport urbain;35

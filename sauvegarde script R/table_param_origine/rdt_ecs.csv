@@ -1,0 +1,41 @@
+BRANCHE;ENERGIE;ref2009;2010-2015;2015-2020;2020-2030;2030-2040;2040-2050
+Bureaux Administration;Autres;0.55;0.675;0.7375;0.8;0.8;0.8
+Bureaux Administration;Electricité;0.9;1.35;1.575;1.8;1.8;1.8
+Bureaux Administration;Fioul;0.5;0.65;0.725;0.8;0.8;0.8
+Bureaux Administration;Gaz;0.7;0.8;0.85;0.9;0.9;0.9
+Bureaux Administration;Urbain;0.55;0.675;0.7375;0.8;0.8;0.8
+Café Hôtel Restaurant;Autres;0.55;0.675;0.7375;0.8;0.8;0.8
+Café Hôtel Restaurant;Electricité;0.9;1.35;1.575;1.8;1.8;1.8
+Café Hôtel Restaurant;Fioul;0.5;0.65;0.725;0.8;0.8;0.8
+Café Hôtel Restaurant;Gaz;0.7;0.8;0.85;0.9;0.9;0.9
+Café Hôtel Restaurant;Urbain;0.55;0.675;0.7375;0.8;0.8;0.8
+Commerce;Autres;0.605;0.7025;0.75125;0.8;0.8;0.8
+Commerce;Electricité;0.99;1.395;1.5975;1.8;1.8;1.8
+Commerce;Fioul;0.55;0.675;0.7375;0.8;0.8;0.8
+Commerce;Gaz;0.77;0.835;0.8675;0.9;0.9;0.9
+Commerce;Urbain;0.605;0.7025;0.75125;0.8;0.8;0.8
+Enseignement Recherche;Autres;0.55;0.675;0.7375;0.8;0.8;0.8
+Enseignement Recherche;Electricité;0.9;1.35;1.575;1.8;1.8;1.8
+Enseignement Recherche;Fioul;0.5;0.65;0.725;0.8;0.8;0.8
+Enseignement Recherche;Gaz;0.7;0.8;0.85;0.9;0.9;0.9
+Enseignement Recherche;Urbain;0.55;0.675;0.7375;0.8;0.8;0.8
+Habitat Communautaire;Autres;0.55;0.675;0.7375;0.8;0.8;0.8
+Habitat Communautaire;Electricité;0.9;1.35;1.575;1.8;1.8;1.8
+Habitat Communautaire;Fioul;0.5;0.65;0.725;0.8;0.8;0.8
+Habitat Communautaire;Gaz;0.7;0.8;0.85;0.9;0.9;0.9
+Habitat Communautaire;Urbain;0.55;0.675;0.7375;0.8;0.8;0.8
+Santé Action Sociale;Autres;0.55;0.675;0.7375;0.8;0.8;0.8
+Santé Action Sociale;Electricité;0.9;1.35;1.575;1.8;1.8;1.8
+Santé Action Sociale;Fioul;0.5;0.65;0.725;0.8;0.8;0.8
+Santé Action Sociale;Gaz;0.7;0.8;0.85;0.9;0.9;0.9
+Santé Action Sociale;Urbain;0.55;0.675;0.7375;0.8;0.8;0.8
+Sport Loisir Culture;Autres;0.65;0.725;0.7625;0.8;0.8;0.8
+Sport Loisir Culture;Electricité;0.95;1.375;1.5875;1.8;1.8;1.8
+Sport Loisir Culture;Fioul;0.6;0.7;0.75;0.8;0.8;0.8
+Sport Loisir Culture;Gaz;0.8;0.85;0.875;0.9;0.9;0.9
+Sport Loisir Culture;Urbain;0.65;0.725;0.7625;0.8;0.8;0.8
+Transport;Autres;0.55;0.675;0.7375;0.8;0.8;0.8
+Transport;Electricité;0.9;1.35;1.575;1.8;1.8;1.8
+Transport;Fioul;0.5;0.65;0.725;0.8;0.8;0.8
+Transport;Gaz;0.7;0.8;0.85;0.9;0.9;0.9
+Transport;Urbain;0.55;0.675;0.7375;0.8;0.8;0.8
