@@ -1,0 +1,20 @@
+"PRODUCTION_CHAUD";"COUT";"RDT"
+"Autre système centralisé";31.6021586662163;1.1604349025736
+"Chaudière fioul";19.6536960845277;0.632771968177491
+"Chaudière gaz";15.4132460700843;0.760888820025274
+"DRV";20.4765589116423;2.45701711046511
+"Electrique direct";10.4;0.919675536253362
+"Autre système centralisé performant";37.6216174597813;1.35298542528125
+"Chaudière condensation fioul";23.3972572434854;0.751663533761708
+"Chaudière condensation gaz";18.349102464386;0.977922735115467
+"DRV performant";24.3768558471932;3.17730976744185
+"Electrique direct performant";12;1
+"PAC";66.4824021159071;2.96661693275912
+"PAC performant";79.1457168046513;3.35339528364398
+"Rooftop";38.7340539331003;2.80337565957447
+"Rooftop performant";46.1119689679765;3.32774808510638
+"Cassette rayonnante";10.4;0.84
+"Cassette rayonnante performant";12;1
+"Tube radiant";10.4;0.84
+"Tube radiant performant";12;1
+"nr";29.7272050847924;1.05

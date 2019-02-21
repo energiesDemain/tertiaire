@@ -1,0 +1,281 @@
+Vitrage;BRANCHE;BAT_TYPE;PERIODE_SIMPLE;REPART_FEN;REPART_FENMUR;REPART_ENS
+Vitré3Ancien;Bureaux Administration;immeuble peri urbain;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Bureaux Administration;immeuble peri urbain;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Bureaux Administration;immeuble peri urbain;1999-2008;0,1482738095;0,2685714286;1
+Vitré6Ancien;Bureaux Administration;immeuble rénové;Av 1980;0,258;0,44;1
+Vitré6Ancien;Bureaux Administration;immeuble rénové;1981-1998;0,258;0,44;1
+Vitré6Récent;Bureaux Administration;immeuble rénové;1999-2008;0,29952;0,4992;1
+Vitré3Ancien;Bureaux Administration;immeuble résidentiel;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Bureaux Administration;immeuble résidentiel;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Bureaux Administration;immeuble résidentiel;1999-2008;0,1482738095;0,2685714286;1
+Vitré12Ancien;Bureaux Administration;plateau large bureau paysagés;Av 1980;0,6;0,84;1
+Vitré12Ancien;Bureaux Administration;plateau large bureau paysagés;1981-1998;0,6;0,84;1
+Vitré12Récent;Bureaux Administration;plateau large bureau paysagés;1999-2008;0,53;0,96;1
+Vitré12Ancien;Bureaux Administration;plateau large bureaux cloisonnés;Av 1980;0,6;0,84;1
+Vitré12Ancien;Bureaux Administration;plateau large bureaux cloisonnés;1981-1998;0,6;0,84;1
+Vitré12Récent;Bureaux Administration;plateau large bureaux cloisonnés;1999-2008;0,53;0,96;1
+Vitré12Ancien;Bureaux Administration;plateau mince;Av 1980;0,6;0,84;1
+Vitré12Ancien;Bureaux Administration;plateau mince;1981-1998;0,6;0,84;1
+Vitré12Récent;Bureaux Administration;plateau mince;1999-2008;0,53;0,96;1
+Vitré3Ancien;Café Hôtel Restaurant;Grand bar café tabac;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Café Hôtel Restaurant;Grand bar café tabac;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Café Hôtel Restaurant;Grand bar café tabac;1999-2008;0,1482738095;0,2685714286;1
+Vitré6Ancien;Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Grand Hotel sans restaurant Luxe;Av 1980;0,258;0,44;1
+Vitré3Ancien;Café Hôtel Restaurant;Grand restaurant rapide;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Café Hôtel Restaurant;Grand restaurant rapide;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Café Hôtel Restaurant;Grand restaurant rapide;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Café Hôtel Restaurant;Grand restaurant traditionnel;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Café Hôtel Restaurant;Grand restaurant traditionnel;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Café Hôtel Restaurant;Grand restaurant traditionnel;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Café Hôtel Restaurant;Grande cantine;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Café Hôtel Restaurant;Grande cantine;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Café Hôtel Restaurant;Grande cantine;1999-2008;0,1482738095;0,2685714286;1
+Vitré6Ancien;Café Hôtel Restaurant;Hotel d'affaire avec restaurant Haut de gamme;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Hotel d'affaire sans restaurant Luxe;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;1999-2008;0,29952;0,4992;1
+Vitré3Ancien;Café Hôtel Restaurant;Petit bar café tabac;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Café Hôtel Restaurant;Petit bar café tabac;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Café Hôtel Restaurant;Petit bar café tabac;1999-2008;0,1482738095;0,2685714286;1
+Vitré6Ancien;Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Petit Hotel sans restaurant Haut de gamme;Av 1980;0,258;0,44;1
+Vitré6Ancien;Café Hôtel Restaurant;Petit Hotel sans restaurant Haut de gamme;1981-1998;0,258;0,44;1
+Vitré6Récent;Café Hôtel Restaurant;Petit Hotel sans restaurant Haut de gamme;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Café Hôtel Restaurant;Petit Hotel sans restaurant Luxe;Av 1980;0,258;0,44;1
+Vitré3Ancien;Café Hôtel Restaurant;Petit restaurant rapide;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Café Hôtel Restaurant;Petit restaurant rapide;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Café Hôtel Restaurant;Petit restaurant rapide;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Café Hôtel Restaurant;Petit restaurant traditionnel;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Café Hôtel Restaurant;Petit restaurant traditionnel;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Café Hôtel Restaurant;Petit restaurant traditionnel;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Café Hôtel Restaurant;Petite cantine;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Café Hôtel Restaurant;Petite cantine;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Café Hôtel Restaurant;Petite cantine;1999-2008;0,1482738095;0,2685714286;1
+Peu vitré1Ancien;Commerce;Complexe brico;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Complexe brico;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Complexe brico;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Entrepôt;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Entrepôt;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Entrepôt;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Grand alimentaire;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Grand alimentaire;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Grand alimentaire;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Grand brico;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Grand brico;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Grand brico;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Grand commerce de gros;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Grand commerce de gros;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Grand commerce de gros;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Grand librairie;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Grand librairie;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Grand librairie;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Grand Mode;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Grand Mode;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Grand Mode;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Grand process;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Grand process;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Grand process;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Hypermarché;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Hypermarché;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Hypermarché;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Petit boulangerie;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Petit boulangerie;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Petit boulangerie;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Petit brico;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Petit brico;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Petit brico;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Petit commerce de gros;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Petit commerce de gros;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Petit commerce de gros;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Petit librairie;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Petit librairie;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Petit librairie;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Petit mode;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Petit mode;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Petit mode;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Petit poissonnerie;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Petit poissonnerie;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Petit poissonnerie;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Petit process;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Petit process;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Petit process;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Superette;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Superette;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Superette;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Supermarché;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;Supermarché;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;Supermarché;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Commerce;ZAC Mode;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Commerce;ZAC Mode;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Commerce;ZAC Mode;1999-2008;0,12;0,25;1
+Vitré3Ancien;Enseignement Recherche;Cantine collége;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;Cantine collége;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;Cantine collége;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;Cantine élémentaire;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;Cantine élémentaire;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;Cantine élémentaire;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;Cantine LEGT;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;Cantine LEGT;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;Cantine LEGT;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;Cantine LP;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;Cantine LP;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;Cantine LP;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;Cantine préélémentaire;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;Cantine préélémentaire;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;Cantine préélémentaire;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;Collège;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;Collège;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;Collège;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;école;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;école;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;école;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;Elémentaire;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;Elémentaire;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;Elémentaire;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;Internat college;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;Internat college;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;Internat college;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;Internat LEGT;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;Internat LEGT;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;Internat LEGT;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;Internat LP;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;Internat LP;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;Internat LP;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;Lycée d’enseignement général et technologique (LEGT);Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;Lycée d’enseignement général et technologique (LEGT);1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;Lycée d’enseignement général et technologique (LEGT);1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;Lycée professionnel (LP);Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;Lycée professionnel (LP);1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;Lycée professionnel (LP);1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;Préélémentaire;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;Préélémentaire;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;Préélémentaire;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;R&D en sciences humaines et sociales;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;R&D en sciences humaines et sociales;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;R&D en sciences humaines et sociales;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;R&D sciences physiques et naturelles;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;R&D sciences physiques et naturelles;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;R&D sciences physiques et naturelles;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Enseignement Recherche;université;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Enseignement Recherche;université;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Enseignement Recherche;université;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Habitat Communautaire;Foyers;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Habitat Communautaire;Foyers;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Habitat Communautaire;Foyers;1999-2008;0,1482738095;0,2685714286;1
+Vitré3Ancien;Habitat Communautaire;Maison de pré-retraite;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Habitat Communautaire;Maison de pré-retraite;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Habitat Communautaire;Maison de pré-retraite;1999-2008;0,1482738095;0,2685714286;1
+Vitré6Ancien;Habitat Communautaire;Maison retraite médicalisée;Av 1980;0,258;0,44;1
+Vitré6Ancien;Habitat Communautaire;Maison retraite médicalisée;1981-1998;0,258;0,44;1
+Vitré6Récent;Habitat Communautaire;Maison retraite médicalisée;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Habitat Communautaire;Résidence universitaire;Av 1980;0,258;0,44;1
+Vitré6Ancien;Habitat Communautaire;Résidence universitaire;1981-1998;0,258;0,44;1
+Vitré6Récent;Habitat Communautaire;Résidence universitaire;1999-2008;0,29952;0,4992;1
+Vitré3Ancien;Habitat Communautaire;Résidentiel;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Habitat Communautaire;Résidentiel;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Habitat Communautaire;Résidentiel;1999-2008;0,1482738095;0,2685714286;1
+Vitré6Ancien;Santé Action Sociale;Cabinet médical;Av 1980;0,258;0,44;1
+Vitré6Ancien;Santé Action Sociale;Cabinet médical;1981-1998;0,258;0,44;1
+Vitré6Récent;Santé Action Sociale;Cabinet médical;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Santé Action Sociale;Centre accueil;Av 1980;0,258;0,44;1
+Vitré6Ancien;Santé Action Sociale;Centre accueil;1981-1998;0,258;0,44;1
+Vitré6Récent;Santé Action Sociale;Centre accueil;1999-2008;0,29952;0,4992;1
+Vitré3Ancien;Santé Action Sociale;Garderie;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Santé Action Sociale;Garderie;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Santé Action Sociale;Garderie;1999-2008;0,1482738095;0,2685714286;1
+Vitré12Ancien;Santé Action Sociale;Hopital bloc;Av 1980;0,6;0,84;1
+Vitré6Ancien;Santé Action Sociale;Hopital maison;Av 1980;0,258;0,44;1
+Vitré6Ancien;Santé Action Sociale;Hopital maison;1981-1998;0,258;0,44;1
+Vitré6Récent;Santé Action Sociale;Hopital maison;1999-2008;0,29952;0,4992;1
+Vitré6Ancien;Santé Action Sociale;Hopital pavillonnaire;Av 1980;0,258;0,44;1
+Vitré3Ancien;Sport Loisir Culture;Grand bar café tabac;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Sport Loisir Culture;Grand bar café tabac;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Sport Loisir Culture;Grand bar café tabac;1999-2008;0,1482738095;0,2685714286;1
+Peu vitré1Ancien;Sport Loisir Culture;Grand cinéma;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Grand cinéma;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Sport Loisir Culture;Grand cinéma;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Grande salle de spectacle;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Grande salle de spectacle;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Sport Loisir Culture;Grande salle de spectacle;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Grande salle multisport;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Grande salle multisport;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Sport Loisir Culture;Grande salle multisport;1999-2008;0,12;0,25;1
+Vitré3Ancien;Sport Loisir Culture;Immeuble péri urbain;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Sport Loisir Culture;Immeuble péri urbain;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Sport Loisir Culture;Immeuble péri urbain;1999-2008;0,1482738095;0,2685714286;1
+Peu vitré1Ancien;Sport Loisir Culture;Musée;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Musée;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Sport Loisir Culture;Musée;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;nr;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;nr;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Sport Loisir Culture;nr;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Patinoire;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Patinoire;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Sport Loisir Culture;Patinoire;1999-2008;0,12;0,25;1
+Vitré3Ancien;Sport Loisir Culture;Petit cinéma;Av 1980;0,1678571429;0,235;1
+Vitré3Ancien;Sport Loisir Culture;Petit cinéma;1981-1998;0,1678571429;0,235;1
+Vitré3Récent;Sport Loisir Culture;Petit cinéma;1999-2008;0,1482738095;0,2685714286;1
+Peu vitré1Ancien;Sport Loisir Culture;Petite salle de spectacle;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Petite salle de spectacle;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Sport Loisir Culture;Petite salle de spectacle;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Petite salle multisport;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Petite salle multisport;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Sport Loisir Culture;Petite salle multisport;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Piscine;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Piscine;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Sport Loisir Culture;Piscine;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Salle non spécialisée;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Salle non spécialisée;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Sport Loisir Culture;Salle non spécialisée;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Vestiaire et rangement;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Sport Loisir Culture;Vestiaire et rangement;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Sport Loisir Culture;Vestiaire et rangement;1999-2008;0,12;0,25;1
+Peu vitré1Ancien;Transport;nr;Av 1980;0,12;0,25;1
+Peu vitré1Ancien;Transport;nr;1981-1998;0,12;0,25;1
+Peu vitré1Récent;Transport;nr;1999-2008;0,12;0,25;1
