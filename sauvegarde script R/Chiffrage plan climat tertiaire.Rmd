@@ -1,0 +1,408 @@
+---
+title: "Chiffrage Plan climat tertiaire"
+author: "CGDD/SEEIDD/MA3"
+date: "25 juillet 2017"
+output: pdf_document
+---
+
+```{r, echo=F, message=FALSE, warning=F, cache=F, results=F}
+require(knitr)
+require(data.table)
+require(ggplot2)
+require(Hmisc)
+require(reshape2)
+require(plyr)
+require(ggthemes)
+require(texreg)
+require(texreg)
+require(descr)
+require(survey)
+require(questionr)
+
+library(pander)
+panderOptions('table.alignment.default', function(df)
+    ifelse(sapply(df, is.numeric), 'right', 'left'))
+panderOptions('table.split.table', Inf)
+panderOptions('big.mark', ",")
+panderOptions('keep.trailing.zeros', TRUE)
+
+##### thèmes graphiques #####
+
+orange_logement = rgb(0.94,0.51,0)
+vert_DD = rgb(0.47,0.70,0.12)
+light_vert_DD = rgb(0.47,0.70,0.12) 
+light_orange_logement=rgb(0.94,0.51,0) 
+violet_transport = rgb(0.35,0.31,0.59)
+light_violet_transport= rgb(0.35,0.31,0.59)
+turquoise_enerclimat = rgb(0,0.65,0.71)
+
+mytheme_plot <-   theme(legend.background = element_blank(),
+                        plot.margin = unit(c("2","2","3","3"),"cm"),
+                        plot.background = element_blank(),
+                        panel.background = element_blank() ,
+                        axis.title.x = element_text(size = 30, vjust =-3),
+                        axis.title.y = element_text(size = 30, vjust =3),
+                        text = element_text(size = 30),axis.line = element_line(linetype = 1),
+                        legend.key = element_blank(), 
+                        panel.grid.minor = element_blank(),
+                        panel.grid.major.x = element_blank(),
+                        panel.margin = unit(0, "cm"), 
+                        panel.border = element_rect(color = "black", fill=NA),
+                        panel.grid.major.y = element_line(colour = "grey70"),
+                        legend.key.height = unit(2, "cm"))
+
+mytheme_facet_plot <- 
+  theme(legend.background = element_blank(),
+        plot.margin = unit(c("2","2","3","3"),"cm"),
+        plot.background = element_blank(),
+        panel.background = element_blank() ,
+        axis.title.x = element_text(size = 30, vjust =-3),
+        axis.title.y = element_text(size = 30, vjust =3),
+        text = element_text(size = 30),axis.line = element_line(linetype = 1),
+        legend.key = element_blank(), 
+        panel.grid.minor = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.margin = unit(0, "cm"), 
+        panel.grid.major.y = element_line(colour = "grey70"),
+        legend.key.height = unit(2, "cm"), 
+        panel.border = element_rect(color = "black", fill=NA), 
+        strip.background = element_rect(color = "black", fill=NA)) 
+
+
+mytheme_map  = theme(plot.margin = unit(c("2","2","3","3"),"cm"),
+                     plot.background = element_blank(),
+                     axis.title.x = element_text(size = 30, vjust =-3),
+                     axis.title.y = element_text(size = 30, vjust =3),
+                     panel.grid.major.y = element_line(size =0.5,color="grey80"),
+                     panel.grid.minor.y = element_blank(),
+                     text = element_text(size = 30),axis.line = element_line(linetype = 1),
+                     legend.key.height = unit(2, "cm"), axis.ticks = element_blank(), axis.text=element_blank(),
+                     panel.grid = element_blank(), panel.background =element_rect(fill = "white",color = "black"), 
+                     legend.position = "right",legend.background = element_rect(fill = "white",color = "black"))
+```
+
+# 1) Etat des lieux du parc et des consommations 
+
+## Ensemble du parc 
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = T,include = F}
+
+source("analyse_param_utilisateurs.R")
+#### part des différents occupants
+etiq_ini[, OCCUPANT := factor(OCCUPANT, levels = c("Etat","Régions","Départements","Bloc communal","Para public","Privé"))]
+
+
+parc_total = etiq_ini[,sum(SURFACES)]
+tab_occupant = etiq_ini[, list(Surface = sum(SURFACES)/10^6,Part = sum(SURFACES)/parc_total ), by="OCCUPANT"][order(OCCUPANT)]
+
+
+#### verif calcul conso 
+etiq_ini[, sum(SURFACES)/10^6]
+etiq_ini[, sum(CONSOU_TOT*SURFACES)/10^9]
+etiq_ini[, sum(CONSO_CHAUFF_EP,na.rm=T)/10^9]
+
+#### part des étiquettes 
+
+tab_etiq = etiq_ini[, list(Surface = sum(SURFACES)/10^6,Part=round(sum(SURFACES)/parc_total,digits= 2)), by=ETIQUETTE][order(ETIQUETTE)]
+
+```
+
+
+
+```{r, echo=F, warning=F,}
+pander(tab_occupant  ,format = "pandoc", digits = 2, caption = "Surfaces en Mm² et part du parc par occupant")
+```
+
+```{r, echo=F, warning=F,}
+pander(tab_etiq   ,format = "pandoc", digits = 2, caption = "Surfaces en Mm² et part du parc par étiquette énergie")
+```
+
+## Parc public
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = T,include = F}
+
+#### batiment_publics 
+parc_public = etiq_ini[COD_OCCUPANT%in% c("01","02","03","04","06"), ]
+
+parc_public[,sum(SURFACES)]/10^6
+
+#### part des différents occupants
+
+parc_public[, sum(SURFACES)/sum(parc_public$SURFACES) , by="OCCUPANT"]
+
+
+#### part des différentes branche par occupant
+parc_public_occupant = parc_public[, list(Surf_occupant = sum(SURFACES)/10^6) , by=c("OCCUPANT")]
+
+parc_public_occupant_branche = parc_public[, list(surf_branche = sum(SURFACES)/10^6) , by=c("OCCUPANT","BRANCHE")]
+
+parc_public_occupant_branche = merge(parc_public_occupant_branche,parc_public_occupant ,by="OCCUPANT")
+parc_public_occupant_branche[,Part_branche:=round(surf_branche/Surf_occupant,digits=3)][order(OCCUPANT)]
+
+#### part des etiquettes dans le parc public 
+
+
+tab_etiq_public = parc_public[, list(Surface = sum(SURFACES)/10^6,Part=round(sum(SURFACES)/parc_total,digits= 2)), by=ETIQUETTE][order(ETIQUETTE)]
+
+#### passoires parc public 
+parc_public_passoire = 
+  parc_public[ETIQUETTE %in% c("F","G"),]
+
+tab_conso_passoire_public = parc_public_passoire[,list(SURFACES = sum(SURFACES)/10^6, 
+                                           CONSOU_TOT = sum(CONSOU_TOT*SURFACES)/sum(SURFACES),
+                                           CONSOU_CHAUFF_AUX = sum(CONSO_CHAUFF,BESOIN_AUXILIAIRES_CALC,
+                                                BESOIN_VENTILATION)/sum(SURFACES),
+                                           CONSOTOT = sum(CONSOU_TOT*SURFACES)/10^9,
+                                           CONSO_CHAUFF_AUX = sum(CONSO_CHAUFF,BESOIN_AUXILIAIRES_CALC,
+                                                BESOIN_VENTILATION)/10^9,
+                                           Part_Chauff = sum(CONSO_CHAUFF)/sum(CONSOU_TOT*SURFACES)), by="OCCUPANT"][order(OCCUPANT)]
+
+setnames(tab_conso_passoire_public,c("Occupant","Surfaces","Conso uni tot","Conso uni chauff","Conso tot","conso chauff","Part du chauffage"))
+
+
+tab_conso_passoire_public2 = parc_public_passoire[,list(SURFACES = sum(SURFACES)/10^6, 
+                                           CONSOU_TOT = sum(CONSOU_TOT*SURFACES)/sum(SURFACES),
+                                           CONSOU_CHAUFF_AUX = sum(CONSO_CHAUFF,BESOIN_AUXILIAIRES_CALC,
+                                                BESOIN_VENTILATION)/sum(SURFACES),
+                                           CONSOTOT = sum(CONSOU_TOT*SURFACES)/10^9,
+                                           CONSO_CHAUFF_AUX = sum(CONSO_CHAUFF,BESOIN_AUXILIAIRES_CALC,
+                                                BESOIN_VENTILATION)/10^9,
+                                           Part_Chauff = sum(CONSO_CHAUFF)/sum(CONSOU_TOT*SURFACES)), by="BRANCHE"][order(BRANCHE)]
+
+setnames(tab_conso_passoire_public2,c("Branche","Surfaces","Conso uni tot","Conso uni chauff","Conso tot","conso chauff","Part du chauffage"))
+
+#### part des différents occupants dans les passoires 
+
+parc_public_passoire[, sum(SURFACES)/sum(parc_public_passoire$SURFACES) , by="OCCUPANT"]
+
+### part des différentes branche par occupant dans les passoires
+parc_public_passoire_occupant = parc_public_passoire[, list(Surf_occupant = sum(SURFACES)) , by=c("OCCUPANT")]
+
+parc_public_passoire_occupant_branche = parc_public_passoire[, list(surf_branche = sum(SURFACES)) , by=c("OCCUPANT","BRANCHE")]
+
+parc_public_passoire_occupant_branche = merge(parc_public_passoire_occupant_branche,parc_public_passoire_occupant ,by="OCCUPANT")
+parc_public_passoire_occupant_branche[,Part_branche:=surf_branche/Surf_occupant]
+
+
+## Part du chauffage dans la conso tot
+
+parc_public_passoire[, Part_Chauff:=(CONSO_CHAUFF + BESOIN_AUXILIAIRES_CALC+
+                                                BESOIN_VENTILATION)/(CONSOU_TOT*SURFACES)]
+
+```
+
+```{r, echo=F, warning=F, message=FALSE}
+pander(dcast(parc_public_occupant_branche, OCCUPANT ~ BRANCHE, value.var  = "Part_branche") ,
+       format = "pandoc", digits = 2, caption = "Part de chaque branche par occupant dans le parc public")
+```
+
+```{r, echo=F, warning=F, message=FALSE}
+pander(tab_etiq_public ,
+       format = "pandoc", digits = 2, caption = "Surfaces en Mm² et Part du parc public par étiquette")
+```
+
+```{r, echo=F, warning=F, message=FALSE}
+pander(tab_conso_passoire_public  ,
+       format = "pandoc", digits = 2, caption = "Surfaces (en Mm²), consommations unitaires (en kWh EF par m²) et consommations totales (en tWh EF) des bâtiments publics énergivores (F et G)")
+```
+
+```{r, echo=F, warning=F, message=FALSE}
+pander(tab_conso_passoire_public2  ,
+       format = "pandoc", digits = 2, caption = "Surfaces (en Mm²), consommations unitaires (en kWh EF par m²) et consommations totales (en tWh EF) des bâtiments publics énergivores (F et G)")
+```
+
+# 2) Coûts de rénovation des bâtiments publics énergivores 
+
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = T,include = F}
+##### ajouts coûts de rénovation du bâti
+
+cout_geste_tmp = cout_geste[,list(COD_PERIODE_SIMPLE,COD_PERIODE_DETAIL,
+                                  COD_BAT_TYPE,COD_SS_BRANCHE,COD_BRANCHE,BRANCHE,
+                                  GESTE, GAIN, COUT,CEE)]
+
+
+cout_geste_tmp[, ID_merge := paste0(COD_BRANCHE,COD_SS_BRANCHE,COD_BAT_TYPE, COD_PERIODE_DETAIL,
+                                    COD_PERIODE_SIMPLE),]
+
+cout_geste_tmp = melt(cout_geste_tmp[,list( ID_merge,BRANCHE,GESTE, GAIN, COUT,CEE)], id.vars = c("ID_merge","BRANCHE", "GESTE"))
+
+
+cout_geste_casted = dcast.data.table(cout_geste_tmp,  ID_merge + BRANCHE   ~ variable + GESTE)
+
+#### on impute le coût et le gain moyen pour les segments où il est manquant
+var_imput = c(paste("COUT",c("ENSBBC","ENSMOD","FENBBC","FENMOD","FEN_MURBBC","FEN_MURMOD","GTB"),sep="_"),
+              paste("GAIN",c("ENSBBC","ENSMOD","FENBBC","FENMOD","FEN_MURBBC","FEN_MURMOD","GTB"),sep="_")
+              )
+                    
+for(vartmp in var_imput){
+  cout_geste_casted[is.na(get(vartmp)), vartmp] <-
+                       cout_geste_casted[,mean(get(vartmp), na.rm=T)]
+  
+}
+
+tab_cout_moyen = cout_geste_casted[,lapply(X = .SD,FUN = mean),.SDcols = paste("COUT",c( "ENSBBC","ENSMOD","FEN_MURBBC","FEN_MURMOD","FENBBC","FENMOD","GTB"),sep="_"),by="BRANCHE"]
+tab_gain_moyen = cout_geste_casted[,lapply(X = .SD,FUN = mean),.SDcols = paste("GAIN",c("ENSBBC","ENSMOD","FEN_MURBBC","FEN_MURMOD","FENBBC","FENMOD","GTB"),sep="_"),by="BRANCHE"]
+
+setnames(tab_cout_moyen,c("BRANCHE", "ENSBBC","ENSMOD","FEN_MURBBC","FEN_MURMOD","FENBBC","FENMOD","GTB"))
+setnames(tab_gain_moyen,c("BRANCHE", "ENSBBC","ENSMOD","FEN_MURBBC","FEN_MURMOD","FENBBC","FENMOD","GTB"))
+
+parc_public_passoire[, ID_merge := paste0(COD_BRANCHE,COD_SS_BRANCHE,COD_BAT_TYPE, COD_PERIODE_DETAIL,
+                                 COD_PERIODE_SIMPLE)]
+cout_geste_casted[,BRANCHE:=NULL]
+parc_public_passoire  = merge(parc_public_passoire ,cout_geste_casted, by= "ID_merge" ,all.x=T)
+
+for(vartmp in var_imput){
+  parc_public_passoire[is.na(get(vartmp)), vartmp] <-
+                       cout_geste_casted[,mean(get(vartmp), na.rm=T)]
+  
+}
+summary(parc_public_passoire)
+
+```
+
+## Hypothèses de coûts et gains en énergie
+```{r, echo=F, warning=F, message=FALSE}
+pander(tab_cout_moyen  ,
+       format = "pandoc", digits = 2, caption = "Coûts moyens en euros par m² des gestes de rénovation par branche")
+```
+
+```{r, echo=F, warning=F, message=FALSE}
+pander(tab_gain_moyen  ,
+       format = "pandoc", digits = 2, caption = "Gains moyens en % sur les consommations de chauffage (et auxiliaires) des gestes de rénovation par branche")
+```
+
+## Coût de rénovation minimum pour atteindre -25 % de consommations (tous usages) dans les bâtiments énergivores
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = T,include = F}
+tab_conso_passoire_public2[,gain_mini_chauff := 0.25/get("Part du chauffage")]
+parc_public_passoire[,gain_mini_chauff := 0.25/get("Part_Chauff")]
+
+listgeste = c("GTB","FENMOD","FENBBC","FEN_MURMOD","FEN_MURBBC","ENSMOD","ENSBBC")
+parc_public_passoire[, geste_select := ""]
+for(gestetmp in listgeste){
+  
+  parc_public_passoire[get(paste("GAIN",gestetmp, sep="_")) >= gain_mini_chauff & geste_select=="",
+                       COUT_TOT_RENOV :=  get(paste("COUT",gestetmp, sep="_"))*SURFACES ]
+  parc_public_passoire[get(paste("GAIN",gestetmp, sep="_")) >= gain_mini_chauff& geste_select=="",
+                       GAIN_TOT_RENOV :=  get(paste("GAIN",gestetmp, sep="_"))*(CONSO_CHAUFF+BESOIN_AUXILIAIRES_CALC+
+                                                BESOIN_VENTILATION) ]
+    
+  parc_public_passoire[get(paste("GAIN",gestetmp, sep="_")) >= gain_mini_chauff & geste_select=="",
+                         geste_select := gestetmp ]
+  
+  if(gestetmp == "ENSBBC"){
+    
+  parc_public_passoire[geste_select=="",
+                       COUT_TOT_RENOV :=  get(paste("COUT",gestetmp, sep="_"))*SURFACES ]
+  parc_public_passoire[geste_select=="",
+                       GAIN_TOT_RENOV :=  get(paste("GAIN",gestetmp, sep="_"))*(CONSO_CHAUFF+BESOIN_AUXILIAIRES_CALC+
+                                                BESOIN_VENTILATION) ]
+    
+  parc_public_passoire[geste_select=="",
+                         geste_select := "FORCING_ENSBBC" ]
+    
+  }
+  
+  
+}
+
+
+summary(parc_public_passoire)
+summary(as.factor(parc_public_passoire$geste_select))
+
+##### calc coût et gains totaux
+
+gains_tot = parc_public_passoire[,list(COUT_TOT =  sum( COUT_TOT_RENOV)/10^9,
+                  GAIN_TOT = sum(GAIN_TOT_RENOV)/10^9, PART_CONSO_INI = sum(GAIN_TOT_RENOV)/sum(CONSOU_TOT*SURFACES))]
+
+
+gains_paroccupant = parc_public_passoire[,list(COUT_TOT =  sum( COUT_TOT_RENOV)/10^9,
+                  GAIN_TOT = sum(GAIN_TOT_RENOV)/10^9),
+                                       by="OCCUPANT"]
+
+
+
+gains_parbranche = parc_public_passoire[,list(COUT_TOT =  sum( COUT_TOT_RENOV)/10^9,
+                  GAIN_TOT = sum(GAIN_TOT_RENOV)/10^9),
+                                        by="BRANCHE"]
+
+
+
+#### calcul moyen 
+parc_public_passoire[,mean(COUT_ENSBBC, na.rm=T)]*parc_public_passoire[,sum(SURFACES)]/10^9
+parc_public_passoire[,mean(GAIN_ENSBBC)]*parc_public_passoire[, sum(CONSO_CHAUFF,BESOIN_AUXILIAIRES_CALC,
+                                                                 BESOIN_VENTILATION)]/10^9
+```
+
+
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = T,include = F}
+
+#### gains facture
+
+#### part du parc public par énergie
+part_ener = besoins_parc_init[COD_OCCUPANT%in% c("01","02","03","04","06"),sum(SURFACES), by="ENERGIE"]
+
+### prix ener en 2020 0.126832147	0.064132015	0.085555567	0.062280998	0.070402999
+### prix ener en 2030 0.13653712	0.088697931	0.140114	0.062906618	0.080109794
+
+prix_ener = data.table(ENERGIE = c("Electricité","Gaz","Fioul","Urbain","Autres"), 
+                       p_2030 = c(0.13653712,0.088697931,0.140114,0.062906618,0.080109794))
+
+parc_public_passoire = merge(parc_public_passoire,prix_ener, by="ENERGIE")
+
+
+parc_public_passoire[,list(GAIN_facture_an =  sum(GAIN_TOT_RENOV*p_2030)/10^9)]
+parc_public_passoire[,list(GAIN_facture_an =  sum(GAIN_TOT_RENOV*p_2030)/10^9), by="OCCUPANT"]
+parc_public_passoire[,list(GAIN_facture_an =  sum(GAIN_TOT_RENOV*p_2030)/10^9), by="BRANCHE"]
+
+
+#### gains CO2
+contenu_C02 = data.table(ENERGIE = c("Electricité","Gaz","Fioul","Urbain","Autres"), 
+                       contenu_C02 = c(180,205,271,195,115))
+
+### contenu moyen CO2
+
+
+CO2_moy = (part_ener[ENERGIE == "Electricité",V1]*180 +
+               part_ener[ENERGIE == "Gaz",V1]*205 +
+               part_ener[ENERGIE == "Fioul",V1]*271 +  part_ener[ENERGIE == "Urbain",V1]*195 +
+               part_ener[ENERGIE == "Autres",V1]*115)/sum(part_ener$V1)
+
+parc_public_passoire = merge(parc_public_passoire,contenu_C02, by="ENERGIE")
+
+parc_public_passoire[,list(GAIN_facture_an =  sum(GAIN_TOT_RENOV*p_2030)/10^9,
+                           GAIN_CO2_an = sum(GAIN_TOT_RENOV*contenu_C02)/10^12 )]
+
+
+parc_public_passoire[,list(GAIN_facture_an =  sum(GAIN_TOT_RENOV*p_2030)/10^9,
+                           GAIN_CO2_an = sum(GAIN_TOT_RENOV*contenu_C02)/10^12 ), by="OCCUPANT"]
+parc_public_passoire[,list(GAIN_facture_an =  sum(GAIN_TOT_RENOV*p_2030)/10^9,
+                           GAIN_CO2_an = sum(GAIN_TOT_RENOV*contenu_C02)/10^12 ), by="BRANCHE"]
+
+gains_tot$GAIN_TOT*10^9*CO2_moy/10^12
+
+
+tab_gain_cout_final = parc_public_passoire[, list(COUT_TOT =  sum( COUT_TOT_RENOV)/10^9,
+                                                GAIN_TOT = sum(GAIN_TOT_RENOV)/10^9,
+                                                PART_CONSO_INI = -100*sum(GAIN_TOT_RENOV)/sum(CONSOU_TOT*SURFACES),
+                                                GAIN_facture_an =  sum(GAIN_TOT_RENOV*p_2030)/10^9,
+                                                GAIN_CO2_an = sum(GAIN_TOT_RENOV*contenu_C02)/10^12 ), by="OCCUPANT"]
+
+tab_gain_cout_final_ensemble =parc_public_passoire[, list(OCCUPANT="Total Parc Public", COUT_TOT =  sum( COUT_TOT_RENOV)/10^9,
+                                                GAIN_TOT = sum(GAIN_TOT_RENOV)/10^9,
+                                                PART_CONSO_INI = -100*sum(GAIN_TOT_RENOV)/sum(CONSOU_TOT*SURFACES),
+                                                GAIN_facture_an =  sum(GAIN_TOT_RENOV*p_2030)/10^9,
+                                                GAIN_CO2_an = sum(GAIN_TOT_RENOV*contenu_C02)/10^12 )]
+
+tab_gain_cout_final = rbind(tab_gain_cout_final ,tab_gain_cout_final_ensemble)
+setnames(tab_gain_cout_final, c("Occupant","Coût de rénovation en Meuros","Gain en tWh","Baisse conso %","Gain sur la facture en Meuros","Gain en MtCO2eq"))
+
+```
+
+```{r, echo=F, warning=F, message=FALSE}
+pander(tab_gain_cout_final  ,
+       format = "pandoc", digits = 2, caption = "Coûts et gains en énergie, sur la facture et en émissions de GES suite à la rénovation du parc")
+```
+

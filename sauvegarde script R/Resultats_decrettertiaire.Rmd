@@ -1,0 +1,842 @@
+---
+output:
+  pdf_document: default
+  word_document:
+    fig_height: 6
+    fig_width: 8
+---
+
+```{r, echo=F, message=F, warning=F, cache=F, results=F}
+require(knitr)
+require(data.table)
+require(ggplot2)
+require(Hmisc)
+require(reshape2)
+require(plyr)
+require(ggthemes)
+require(texreg)
+if (Sys.getenv("JAVA_HOME")!="")
+  Sys.setenv(JAVA_HOME="")
+options(java.parameters = "-Xmx8192m")
+require(XLConnect)
+
+
+# set pander table-layout options
+library(pander)
+panderOptions('table.alignment.default', function(df)
+    ifelse(sapply(df, is.numeric), 'right', 'left'))
+panderOptions('table.split.table', Inf)
+panderOptions('big.mark', ",")
+panderOptions('keep.trailing.zeros', TRUE)
+
+
+```
+
+
+```{r, echo=F, message=F, warning=F, cache=T, results=F, comment = F, include = F, cache.rebuild = F}
+
+##### prix des energies ####
+prix_energie = fread("../_CGDD_Packaging_27.05.15/Tables_param/sauvegarde para/Parametres_tertiaire_Scenario_DGEC_2016/Prix_scenario_AME_BV.csv")
+
+
+prix_energie = melt(prix_energie,id.vars = "annee")
+
+prix_energie[variable == "prix_elec", energie := "Electricité"]
+prix_energie[variable == "prix_gaz", energie := "Gaz"]
+prix_energie[variable == "prix_fioul", energie := "Fioul"]
+prix_energie[variable == "prix_urbain", energie := "Urbain"]
+prix_energie[variable == "prix_autres", energie := "Autres"]
+prix_energie[variable == "CCE", energie := "CCE"]
+
+prix_energie =dcast.data.table(prix_energie, annee~energie)
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = F}
+source("analyse_param_utilisateurs.R",encoding = "ISO8859-1")
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = F,include = F}
+#### liste des fichiers à lire
+wbfiles =  
+"../_CGDD_Packaging_27.05.15/Result_Excel/resultats_sauvegarde/décret_tertiaire/table_resultat_sans_décret.xls"
+
+wbfiles[length(wbfiles) +1 ] =  
+  "../_CGDD_Packaging_27.05.15/Result_Excel/resultats_sauvegarde/décret_tertiaire/table_resultat_AME_décret_60p.xls"
+wbfiles[length(wbfiles) +1 ] =  
+  "../_CGDD_Packaging_27.05.15/Result_Excel/resultats_sauvegarde/décret_tertiaire/table_resultat_AME_décret_80p.xls"
+wbfiles[length(wbfiles) +1 ] =  
+  "../_CGDD_Packaging_27.05.15/Result_Excel/resultats_sauvegarde/décret_tertiaire/table_resultat_AME_décret_80p_400euros.xls"
+
+
+#### noms des scenarios ###
+wbname = c("S1 : AME sans décret","S2 : décret 60p", "S3 : décret 80p","S4 : décret 80p 400 euros"
+#          ,"S4 : AMS2 CCE forte + elast" 
+#         ,"S5 : AMS3 CCE tres forte"
+)
+           
+#### choix du scenario de référence 
+scenario_ref = ("S1 : AME sans décret")
+scenarioshortnames = substring(wbname,1,2)
+scenarios_taxeelec = ""
+
+source("read_resultats_xls.R")
+
+results = lecture_results_modele_tertiaire(wbfiles,wbname =  wbname)
+
+parc = rbindlist(results$parc)
+Conso = rbindlist(results$Conso)
+etiquette = rbindlist(results$etiquette)
+GES = rbindlist(results$GES)
+COUTS = rbindlist(results$COUTS)
+COUTS_AUTRES = rbindlist(results$COUTS_AUTRES)
+CCE =  rbindlist(results$CCE)
+#### fichier pour créer les graphiques ###
+
+source("graph_resultats_modele_tertiaire.R",encoding = "ISO8859-1")
+```
+
+```{r,echo=F, warning=F,include = F}
+parc[periodeSimple %in% c("01","02","03"), Type_parc :="E"]
+parc[!(periodeSimple %in% c("01","02","03")), Type_parc :="N"]
+
+Conso2 = Conso 
+Conso2[periodeSimple %in% c("01","02","03"), Type_parc := "E"]
+Conso2[!(periodeSimple %in% c("01","02","03")), Type_parc :="N"]
+
+GES2 = GES 
+GES2[periodeSimple %in% c("01","02","03"), Type_parc := "E"]
+GES2[!(periodeSimple %in% c("01","02","03")), Type_parc :="N"]
+
+
+
+
+##### émissions de référence en MTCO2 
+Em_ref_2012_tous_usages = 33.5
+Em_ref_2012_chauffage = 23.6
+
+Em_ref_1990_tous_usages = 28.8
+Em_ref_1990_chauffage =  Em_ref_2012_chauffage/Em_ref_2012_tous_usages*Em_ref_1990_tous_usages 
+
+##### Conso de référence en tWh 
+Conso_ref_2012_chauffage = 9.27*11630/10^3
+Conso_ref_2012_tous_usages = 19.12*11630/10^3
+
+
+```
+
+# Fiche resultats AME AMS tertiaire 
+
+Situation du secteur en 2012 (source : CEREN, CGDD):
+
+* En 2012, le secteur tertiaire consomme 222 tWh par an 
+* L'électricité représente 45 % des consommations, le gaz 32 % le fioul 15 % et les autres combustibles 7 %
+* Le chauffage représente 48 % des consommations et 67 % des émissions du tertiaire
+* L’ECS, la cuisson et les autres usages thermiques représentent 23 % des consommations et les usages spécifiques de l’électricité 28.5%
+* L'électricité représente environ 100 tWh dont 17 pour le chauffage, 21 pour l’ECS, la cuisson et les autres usages thermiques, 5 pour la climatisation et 58 pour les autres usages spécifiques
+
+Scénarios testés (A COMPLETER):  
+
+
+```{r,echo=F, warning=F,include = F}
+
+### ajouts des émissions elec par usage 
+Conso_energie_usage = dcast.data.table(Conso2, scenario + annee +Type_parc+ nom_energie ~usage,fun.aggregate = function(x){sum(x, na.rm=T)/10^9}, value.var = "value")
+
+GES_par_energie = dcast.data.table(Conso2, scenario + annee +Type_parc+ nom_energie ~usage,fun.aggregate = function(x){sum(x, na.rm=T)/10^9}, value.var = "value")
+GES_par_energie  = melt(GES_par_energie ,id.vars = c("scenario","annee", "Type_parc","nom_energie"), variable.name = "usage", value.name = "conso_tWhEF")
+
+GES_par_energie[nom_energie == "Electricité" & usage == "Chauffage",GES_MtCO2eq := conso_tWhEF*180/10^3]
+GES_par_energie[nom_energie == "Electricité" & usage == "Chauffage",GES_MtCO2eq := conso_tWhEF*10^9*180/10^12]
+GES_par_energie[nom_energie == "Electricité" & usage == "Climatisation",GES_MtCO2eq := conso_tWhEF*10^9*37/10^12]
+GES_par_energie[nom_energie == "Electricité" & usage == "Eclairage",GES_MtCO2eq := conso_tWhEF*10^9*72/10^12]
+GES_par_energie[nom_energie == "Electricité" & usage == "ECS",GES_MtCO2eq:= conso_tWhEF*10^9*42/10^12]
+GES_par_energie[nom_energie == "Electricité" & usage == "Cuisson",GES_MtCO2eq:= conso_tWhEF*10^9*57/10^12]
+GES_par_energie[nom_energie == "Electricité" & !(usage %in% c("Chauffage","Climatisation","Eclairage","ECS","Cuisson")),GES_MtCO2eq := conso_tWhEF*10^9*34/10^12]
+
+GES_par_energie[nom_energie == "Gaz",GES_MtCO2eq := conso_tWhEF*205/10^3]
+GES_par_energie[nom_energie == "Fioul",GES_MtCO2eq := conso_tWhEF*271/10^3]
+GES_par_energie[nom_energie == "Autres",GES_MtCO2eq := conso_tWhEF*115/10^3]
+GES_par_energie[nom_energie == "Urbain" & annee %in% 2009:2014,GES_MtCO2eq := conso_tWhEF*195/10^3]
+GES_par_energie[nom_energie == "Urbain" & annee %in% 2015:2019,GES_MtCO2eq := conso_tWhEF*151/10^3]
+GES_par_energie[nom_energie == "Urbain" & annee %in% 2020:2029,GES_MtCO2eq := conso_tWhEF*133/10^3]
+GES_par_energie[nom_energie == "Urbain" & annee %in% 2030:2050,GES_MtCO2eq := conso_tWhEF*96/10^3]
+#GES_par_energie[nom_energie == "Urbain",GES_MtCO2eq := conso_tWhEF*256/10^3]
+
+
+GES_elec_usage = GES_par_energie[nom_energie =="Electricité"]
+
+GES_elec_usage[,nom_energie:=NULL]
+setnames(GES_elec_usage, "GES_MtCO2eq",  "GES_elec")
+setnames(GES_elec_usage, "conso_tWhEF",  "conso_tWhEF_elec")
+
+##### GES national par usage et type de parc et recettes CCE
+GES_nationale_usage_type_parc = dcast.data.table(GES2, 
+                                                 scenario + annee  +  Type_parc~usage,fun.aggregate = function(x){sum(x, na.rm=T)/10^12}, value.var = "value")
+
+GES_nationale_usage_type_parc = melt(GES_nationale_usage_type_parc, id.vars = c("scenario","annee", "Type_parc"), variable.name = "usage", value.name = "GES_MtCO2eq")
+
+GES_nationale_usage_type_parc  = merge(GES_nationale_usage_type_parc  ,prix_energie[,list(annee =factor(annee))], by="annee")
+GES_nationale_usage_type_parc = merge(GES_nationale_usage_type_parc, CCE[,list(annee =factor(annee), scenario, CCE)], by=c("scenario","annee"))
+
+GES_nationale_usage_type_parc[, Recettes_CCE := GES_MtCO2eq*CCE/10^3]
+
+GES_nationale_usage2 = merge(GES_nationale_usage_type_parc,GES_elec_usage, by=c("scenario","annee","usage","Type_parc"))
+GES_nationale_usage2[scenario %in% scenarios_taxeelec ==F,GES_MtCO2eq := GES_MtCO2eq + GES_elec]
+
+##### verif somme des GES par énergie et total
+GES_verif = GES_par_energie[,list(GES_MtCO2eq = sum(GES_MtCO2eq)),  by=c("scenario","annee","usage","Type_parc")]
+GES_verif  = merge(GES_verif ,GES_nationale_usage2, by=c("scenario","annee","usage","Type_parc"))
+GES_verif[GES_MtCO2eq.x - GES_MtCO2eq.y >1, GES_MtCO2eq.x - GES_MtCO2eq.y ]
+```` 
+
+```{r,echo=F, warning=F,include = F}
+##### tableau des consos
+conso_parusage = dcast.data.table(Conso_nationale_usage[annee %in% c("2012","2020","2030","2035","2050"),], scenario + annee ~ usage)
+
+conso_parusage = conso_parusage[,list(Chauffage,
+                                      Climatisation,
+                                      ECS_Cuisson_Autres = sum(ECS,Cuisson,Autre),
+                                      Elec_spe = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire), 
+ Total_RT=sum(Chauffage,Climatisation,ECS,Auxiliaires,Ventilation,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","annee")]
+
+conso_parusage = melt(conso_parusage,id.vars = c("scenario","annee"),variable.name ="usage" )
+
+conso_parusage[, conso_mtep := value/11630*10^3]
+conso_parusage[, conso := value/11630*10^3]
+
+
+conso_parusage_tWh = dcast.data.table(conso_parusage, scenario + usage ~ annee, value.var = "value")
+conso_parusage_tWh = conso_parusage_tWh[order(usage),]
+
+conso_parusage_mtep = dcast.data.table(conso_parusage, scenario + usage ~ annee, value.var = "conso_mtep")
+conso_parusage_mtep  = conso_parusage_mtep[order(usage),]
+
+evolconso = conso_parusage_tWh 
+evolconso = evolconso[,list(scenario, usage,
+                Evol_2020 = paste0(round((get("2020")/get("2012")-1)*100, digits=1), " %"),
+                Evol_2030 = paste0(round((get("2030")/get("2012")-1)*100, digits=1), " %"),
+                Evol_2035 = paste0(round((get("2035")/get("2012")-1)*100, digits=1), " %"),
+                Evol_2050 = paste0(round((get("2050")/get("2012")-1)*100, digits=1), " %"))]
+
+
+setnames(evolconso, c("scenario", "usage",paste0("2012-",c(20,30,35,50))))
+Consotab = merge(conso_parusage_mtep,evolconso,by=c("scenario","usage"))
+
+```` 
+
+
+```{r,echo=F, warning=F,include = F}
+##### tableau des émissions
+GES_parusage = dcast.data.table(GES_nationale_usage2[annee %in% c("2012","2020","2030","2035","2050"),], scenario + annee ~ usage, value.var = "GES_MtCO2eq", fun.aggregate = function(x){sum(x, na.rm = T)})
+
+GES_parusage = GES_parusage[,list(Chauffage,
+                                      Climatisation,
+                                      ECS_Cuisson_Autres = sum(ECS,Cuisson,Autre),
+                                      Elec_spe = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire), 
+ Total_RT=sum(Chauffage,Climatisation,ECS,Auxiliaires,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","annee")]
+
+GES_parusage = melt(GES_parusage,id.vars = c("scenario","annee"),variable.name ="usage" )
+
+GES_parusage = dcast.data.table(GES_parusage, scenario + usage ~ annee, value.var = "value")
+GES_parusage = GES_parusage[order(usage),]
+
+evolGES = GES_parusage 
+evolGES = evolGES[,list(scenario, usage,
+                Evol_2020 = paste0(round((get("2020")/(get("2012")/Em_ref_2012_tous_usages*Em_ref_1990_tous_usages)-1)*100, digits=1), " %"),
+                Evol_2030 = paste0(round((get("2030")/(get("2012")/Em_ref_2012_tous_usages*Em_ref_1990_tous_usages)-1)*100, digits=1), " %"),
+                Evol_2035 = paste0(round((get("2035")/(get("2012")/Em_ref_2012_tous_usages*Em_ref_1990_tous_usages)-1)*100, digits=1), " %"),
+                Evol_2050 = paste0(round((get("2050")/(get("2012")/Em_ref_2012_tous_usages*Em_ref_1990_tous_usages)-1)*100, digits=1), " %"))]
+
+
+setnames(evolGES,c("scenario", "usage",paste0("90-",c(2020,2030,2035,2050))))
+Emtab = merge(GES_parusage,evolGES,by=c("scenario","usage"))
+
+
+##### tableau des émissions, contenu électricité divisé par 2 en 2030
+Contenu_elec_trajectoire = data.table(annee = as.character(2009:2050), contenu_CO2 = c(seq(180/180, 90/180, by = -0.5/(2030-2009)), rep(0.5,2050-2030)))
+
+GES_nationale_usage2 = merge(GES_nationale_usage2, Contenu_elec_trajectoire, by="annee" )
+GES_nationale_usage2[,GES_MtCO2eq_contenuelec := GES_MtCO2eq - GES_elec + GES_elec*contenu_CO2]
+GES_parusage_contenuelec = dcast.data.table(GES_nationale_usage2[annee %in% c("2012","2020","2030","2035","2050"),], scenario + annee ~ usage, value.var = "GES_MtCO2eq_contenuelec", fun.aggregate = function(x){sum(x, na.rm = T)})
+
+GES_parusage_contenuelec  = GES_parusage_contenuelec [,list(Chauffage,
+                                      Climatisation,
+                                      ECS_Cuisson_Autres = sum(ECS,Cuisson,Autre),
+                                      Elec_spe = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire), 
+ Total_RT=sum(Chauffage,Climatisation,ECS,Auxiliaires,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","annee")]
+
+GES_parusage_contenuelec  = melt(GES_parusage_contenuelec ,id.vars = c("scenario","annee"),variable.name ="usage" )
+
+GES_parusage_contenuelec  = dcast.data.table(GES_parusage_contenuelec , scenario + usage ~ annee, value.var = "value")
+GES_parusage_contenuelec  = GES_parusage_contenuelec[order(usage),]
+
+evolGES_contenuelec  = GES_parusage_contenuelec  
+evolGES_contenuelec  = evolGES_contenuelec [,list(scenario, usage,
+                Evol_2020 = paste0(round((get("2020")/(get("2012")/Em_ref_2012_tous_usages*Em_ref_1990_tous_usages)-1)*100, digits=1), " %"),
+                Evol_2030 = paste0(round((get("2030")/(get("2012")/Em_ref_2012_tous_usages*Em_ref_1990_tous_usages)-1)*100, digits=1), " %"),
+                Evol_2035 = paste0(round((get("2035")/(get("2012")/Em_ref_2012_tous_usages*Em_ref_1990_tous_usages)-1)*100, digits=1), " %"),
+                Evol_2050 = paste0(round((get("2050")/(get("2012")/Em_ref_2012_tous_usages*Em_ref_1990_tous_usages)-1)*100, digits=1), " %"))]
+
+
+setnames(evolGES_contenuelec ,c("scenario", "usage",paste0("90-",c(2020,2030,2035,2050))))
+Emtab_contenuelec  = merge(GES_parusage_contenuelec ,evolGES_contenuelec,by=c("scenario","usage"))
+Emtab_contenuelec[, scenario_short := substring(scenario,1,2)]
+
+```` 
+
+
+```{r, echo=F, warning=F,}
+pander(Consotab[usage %in% c("Chauffage","Total")][order(usage)], digits = 2, caption = "Bilan des consommations de chauffage et pour tous les  usages en Mtep")
+````
+
+
+```{r, echo=F, warning=F,}
+pander(Emtab[usage %in% c("Chauffage","Total")][order(usage)], digits = 2, caption = "Bilan des émissions liées au chauffage et à l'ensemble des usages en MtCO2eq")
+````
+
+La part importante des usages autres que le chauffage dans les consommations (52 % en 2012) et les émissions totales (31 % en 2012) limite l'impact de la taxe sur les baisse de consommations et d'émissions. (NB: dans les scénarios S0 à S3, les usages autres que le chauffage, l'ECS et la cuisson ont une élasticité-prix des consommations nulle)
+
+Si on fait l'hypothèse d'une division par 2 progressive du contenu CO~2~ de l'électricité à horizon 2030, les réductions d'émissions pour l'ensemble des usages en 2050 sont de 
+`r Emtab_contenuelec[scenario_short == "S0" & usage == "Total", get("90-2050")]`, `r Emtab_contenuelec [scenario_short == "S1" & usage == "Total", get("90-2050")]`,  `r Emtab_contenuelec [scenario_short == "S2"  & usage == "Total", get("90-2050")]`, `r Emtab_contenuelec [scenario_short == "S3"  & usage == "Total", get("90-2050")]` et `r Emtab_contenuelec [scenario_short == "S4"  & usage == "Total", get("90-2050")]`  respectivement pour les scénarios S0 à S4. 
+
+```{r,  echo=F, warning=F,include = F}
+##### consommations nationales par énergie et type de parc 
+Conso_nationale_energie_type = dcast.data.table(Conso, scenario + annee + Type_parc ~nom_energie,fun.aggregate = function(x){sum(x, na.rm = T)/10^9}, value.var = "value")
+Conso_nationale_energie_type = melt(Conso_nationale_energie_type, id.vars = c("scenario","annee", "Type_parc"), variable.name = "energie", value.name = "conso_tWhEF")
+
+Conso_nationale_energie = Conso_nationale_energie_type[,list(conso_tWhEF = sum(conso_tWhEF)),  by=c("scenario","annee", "energie")]
+Conso_nationale_energie[, scenario_short := substring(scenario,1,2)]
+Conso_nationale_energie[, energie :=factor(energie, levels = c("Electricité","Gaz","Fioul", "Urbain","Autres"))]
+
+##### consommations nationales par énergie, usage et type de parc 
+Conso_nationale_energie_type_usage = dcast.data.table(Conso, scenario + annee + Type_parc + usage ~nom_energie,fun.aggregate = function(x){sum(x, na.rm = T)/10^9}, value.var = "value")
+Conso_nationale_energie_type_usage = melt(Conso_nationale_energie_type_usage, id.vars = c("scenario","annee", "Type_parc", "usage"), variable.name = "energie", value.name = "conso_tWhEF")
+
+Conso_nationale_energie_usage = Conso_nationale_energie_type_usage[,list(conso_tWhEF = sum(conso_tWhEF)),  by=c("scenario","annee", "energie","usage")]
+Conso_nationale_energie_usage[, scenario_short := substring(scenario,1,2)]
+Conso_nationale_energie_usage[, energie :=factor(energie, levels = c("Electricité","Gaz","Fioul", "Urbain","Autres"))]
+
+
+# ##### calcul conso unitaire ensemble des usages
+parc_melt = melt(parc,id.vars = c("scenario","branche","occupation","periodeSimple","Type_parc","energieChauffage"),variable.name = "annee",value.name = "surface")
+
+parc_melt = parc_melt[,list(surface = sum(surface)),  by=c("scenario","annee", "Type_parc")]
+
+Conso_nationale_energie_type[energie == "Electricité", conso_tWhEP := conso_tWhEF*2.58]
+Conso_nationale_energie_type[energie != "Electricité", conso_tWhEP := conso_tWhEF]
+
+conso_unitaire  = Conso_nationale_energie_type[,list(conso_tWhEF = sum(conso_tWhEF), 
+                                                     conso_tWhEP = sum(conso_tWhEP)), 
+                                               by=c("scenario","annee", "Type_parc")]
+
+conso_unitaire = merge(conso_unitaire , parc_melt, by=c("scenario","annee", "Type_parc"))
+
+conso_unitaire[,conso_u := conso_tWhEP*10^9/surface]
+conso_unitaire_ensemble = conso_unitaire[,list(conso_u = sum(conso_tWhEP*10^9)/sum(surface)), by=c("scenario","annee")]
+
+# ##### calcul conso unitaire par usage
+
+Conso_nationale_energie_type_usage[energie == "Electricité", conso_tWhEP := conso_tWhEF*2.58]
+Conso_nationale_energie_type_usage[energie != "Electricité", conso_tWhEP := conso_tWhEF]
+
+conso_unitaire_usage  = Conso_nationale_energie_type_usage[,list(conso_tWhEF = sum(conso_tWhEF), 
+                                                     conso_tWhEP = sum(conso_tWhEP)), 
+                                               by=c("scenario","annee", "Type_parc", "usage")]
+
+conso_unitaire_usage = merge(conso_unitaire_usage , parc_melt, by=c("scenario","annee", "Type_parc"))
+
+conso_unitaire_usage[,conso_u := conso_tWhEP*10^9/surface]
+conso_unitaire_ensemble_usage_EP = conso_unitaire_usage[,list(conso_u = sum(conso_tWhEP*10^9)/sum(surface)), by=c("scenario","annee", "usage")]
+conso_unitaire_ensemble_usage_EF = conso_unitaire_usage[,list(conso_u = sum(conso_tWhEF*10^9)/sum(surface)), by=c("scenario","annee", "usage")]
+
+#### consos 5 usages RT
+conso_unitaire_usagesRT = conso_unitaire_usage[usage %in% c("Chauffage","Climatisation","ECS","Auxiliaires","Ventilation","Eclairage") , list(conso_tWhEP = sum(conso_tWhEP),conso_tWhEF = sum(conso_tWhEF)), by=c("scenario","annee", "Type_parc")]
+conso_unitaire_usagesRT = merge(conso_unitaire_usagesRT , parc_melt, by=c("scenario","annee", "Type_parc"))
+
+conso_unitaire_usagesRT_EP = conso_unitaire_usagesRT[,list(conso_u = sum(conso_tWhEP*10^9)/sum(surface)), by=c("scenario","annee")]
+conso_unitaire_usagesRT_EF  = conso_unitaire_usagesRT[,list(conso_u = sum(conso_tWhEF*10^9)/sum(surface)), by=c("scenario","annee")]
+
+pander(dcast.data.table(conso_unitaire_usagesRT_EP[annee %in% c("2015","2020","2030","2035","2050")], scenario  ~ annee, value.var = "conso_u"), digits = 0)
+pander(dcast.data.table(conso_unitaire_usagesRT_EF[annee %in% c("2015","2020","2030","2035","2050")], scenario  ~ annee, value.var = "conso_u"), digits = 0)
+````
+
+
+```{r, fig.width=20, fig.height=10, echo=F, warning=F, fig.show='hold'}
+###### graph conso par énergie ######
+
+ggplot(Conso_nationale_energie[annee %in% c("2015","2020","2030","2035","2050")]) + 
+           geom_bar(aes(scenario_short,conso_tWhEF/11630*10^3 , fill = energie, color = energie), stat="identity") + 
+           facet_wrap(~annee, nrow = 1) + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1), title  = element_text(size = 20)) + ggtitle("Consommations pour tous les usages et l'ensemble du parc par énergie (mtep, énergie finale)") + ylab("mtep")+
+  mytheme_facet_plot
+````
+
+NB: La surface totale du parc progresse de 40% sur la période 2012-2050. Les consommations unitaires permettent donc de mieux appréhender l'évolution de la performance du parc: 
+
+```{r, echo=F, warning=F,}
+pander(dcast.data.table(conso_unitaire_ensemble[annee %in% c("2015","2020","2030","2035","2050")], scenario  ~ annee, value.var = "conso_u"), digits = 0, caption = "Consommations unitaires en kWh par m² d'énergie primaire pour l'ensemble du parc et l'ensemble des usages")
+````
+
+```{r, echo=F, warning=F,}
+pander(dcast.data.table(conso_unitaire_ensemble_usage_EP[annee %in% c("2015","2020","2030","2035","2050") & usage == "Chauffage"], scenario  ~ annee, value.var = "conso_u"), digits = 0, caption = "Consommations unitaires en kWh par m² d'énergie primaire pour l'ensemble du parc et pour le chauffage uniquement")
+````
+
+```{r, echo=F, warning=F,}
+pander(dcast.data.table(conso_unitaire_ensemble_usage_EF[annee %in% c("2015","2020","2030","2035","2050") & usage == "Chauffage"], scenario  ~ annee, value.var = "conso_u"), digits = 0, caption = "Consommations unitaires en kWh par m² d'énergie finale pour l'ensemble du parc et pour le chauffage uniquement")
+````
+
+Les scénarios les plus ambitieux permettent de diviser par 2 les consommations unitaires de chauffage en énergie finale.
+La part de l'électricité dans les consommations dépasse les 70 % en 2050 pour le scénario AME. L'électricité n'étant pas taxée dans les scénarios S0 à S3, une hausse de la taxe a peu d'effet sur les consommations unitaires en énergie primaire de l'ensemble du secteur, compte tenu du coefficient de 2.58 qui est appliqué aux consommations finales d'électricité.
+
+Pour les usages réglementés (chauffage, refroidissement, ventilation, ECS, éclairage), les consommations unitaires sont aujourd'hui de 284  kWh EP par m² et seraient  autour de 209 kWh EP par m² en 2050 dans le cas d'une CCE forte (S3) et de 167 kWh EP par m² si l'électricité est taxée.
+Ce niveau est loin de correspondre au seuil défini par le label BBC rénovation (80  kWh EP par m² pour le résidentiel).
+
+<!-- ce qui est très loin des normes BBC rénovation pour les bâtiments autres que les logements (-40% par rapport à la consommation de référence de la réglementation thermique globale) -->
+
+```{r,  echo=F, warning=F,include = F}
+#### Emissions par m²
+GES_nationale_usage2
+
+GES_nationale_usage2[scenario == "S1 : AME" & annee == "2012",]
+
+Em_unitaire = GES_nationale_usage2[, list(GES_MtCO2eq = sum( GES_MtCO2eq)),by=c("scenario","annee", "Type_parc")]
+Em_unitaire = merge(Em_unitaire, parc_melt, by=c("scenario","annee", "Type_parc"))
+
+Em_unitaire[,Em_u := GES_MtCO2eq*10^9/surface]
+Em_unitaire_ensemble = Em_unitaire[,list(Em_u = sum( GES_MtCO2eq*10^9)/sum(surface)), by=c("scenario","annee")]
+
+Em_unitaire_usage = merge(GES_nationale_usage2, parc_melt, by=c("scenario","annee", "Type_parc"))
+Em_unitaire_usage = Em_unitaire_usage[,list(Em_u = sum( GES_MtCO2eq*10^9)/sum(surface)), by=c("scenario","annee","usage")]
+
+Em_unitaire_usagesRT = GES_nationale_usage2[usage %in% c("Chauffage","Climatisation","ECS","Auxiliaires","Ventilation","Eclairage"), list(GES_MtCO2eq = sum( GES_MtCO2eq)),by=c("scenario","annee", "Type_parc")]
+Em_unitaire_usagesRT =  merge(Em_unitaire_usagesRT , parc_melt, by=c("scenario","annee", "Type_parc"))
+
+Em_unitaire_usagesRT = Em_unitaire_usagesRT[,list(Em_u = sum( GES_MtCO2eq*10^9)/sum(surface)), by=c("scenario","annee")]
+
+pander(dcast.data.table(Em_unitaire_usagesRT [annee %in% c("2015","2020","2030","2035","2050")], scenario  ~ annee, value.var = "Em_u"), digits = 1)
+
+```
+
+```{r, echo=F, warning=F,}
+pander(dcast.data.table(Em_unitaire_ensemble[annee %in% c("2015","2020","2030","2035","2050")], scenario  ~ annee, value.var = "Em_u"), digits = 0, caption = "Emissions unitaires en kgCO~2~ par m² pour l'ensemble du parc et l'ensemble des usages")
+````
+
+```{r, echo=F, warning=F}
+pander(dcast.data.table(Em_unitaire_usage[annee %in% c("2015","2020","2030","2035","2050") & usage == "Chauffage"], scenario  ~ annee, value.var = "Em_u"), digits = 0, caption = "Emissions unitaires en kgCO~2~ par m² pour l'ensemble du parc et pour le chauffage uniquement")
+````
+
+Les émissions unitaires du parc sont aujourd'hui de 33 kgCO~2~ par m² et seraient de 17 kgCO~2~ par m² en 2050 pour le scénario AME et de 13 kgCO~2~ par m² si l'electricité est taxée. Les émissions unitaires liées au chauffage sont divisées par un peu plus de 2  entre 2015 et 2050 dans le scénario AME et par 3 dans le cas où l'electricité est taxée.
+
+Les émissions totales tiennent compte de la hausse des surfaces du parc : 
+
+
+
+```{r,  echo=F, warning=F,include = F}
+datatmp = GES_par_energie[,list(energie = nom_energie, GES_MtCO2eq = sum(GES_MtCO2eq)), by=c("scenario", "annee", "nom_energie")]
+
+GES_par_energie_chauffage = GES_par_energie[usage == "Chauffage",list(energie = nom_energie, GES_MtCO2eq = sum(GES_MtCO2eq)), by=c("scenario", "annee", "nom_energie")]
+
+datatmp2 = dcast.data.table(GES_nationale_usage2, scenario + annee ~ usage, value.var = "GES_MtCO2eq", 
+                            fun.aggregate = function(x){sum(x, na.rm = T)})
+
+datatmp2  = datatmp2[,list(Chauffage, ECS,
+                                      Cuisson_Autres = sum(Cuisson,Autre),
+                                      Elec_spe = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire,Climatisation), 
+ Total_RT=sum(Chauffage,Climatisation,ECS,Ventilation,Auxiliaires,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","annee")]
+
+
+toto = GES_par_energie[scenario == "S1 : AME" & annee == 2012, ]
+toto[,sum(GES_MtCO2eq)]
+
+````
+
+
+
+
+
+
+```{r, fig.width=20, fig.height=9, echo=F, warning=F, fig.show='hold'}
+
+ggplot(datatmp) + 
+           geom_line(aes(annee,GES_MtCO2eq , group = scenario, color = scenario)) + 
+           facet_wrap(~energie, nrow = 1) + 
+   geom_point(data = datatmp[scenario == scenario_ref][annee %in% c("2015","2020","2030","2035","2050")], 
+              aes(annee, GES_MtCO2eq , color = scenario) ) +
+  geom_text(data = datatmp[scenario == scenario_ref][annee %in% c("2015","2020","2030","2035","2050")], 
+              aes(annee, GES_MtCO2eq , color = scenario,label= as.character(round(GES_MtCO2eq , digits = 1))),vjust = -1, size = 8, hjust = 1 ) +
+  theme(axis.text.x = element_text(size = 12, hjust = 1), title  = element_text(size = 20)) + ggtitle("Emissions de GES par énergie") +
+  scale_x_discrete(breaks = c("2009","2015","2020","2030","2035","2050")) + scale_y_continuous(limits = c(0,20))+
+  mytheme_facet_plot
+
+datatmp2 = melt(datatmp2, 
+               id.vars = c("scenario","annee"), 
+               variable.name = "usage",value.name = "GES_MtCO2eq")
+datatmp2 = datatmp2[!(usage %in% c("Total","Total_RT"))]
+
+ggplot(datatmp2[]) + 
+           geom_line(aes(annee,GES_MtCO2eq, group = scenario, color = scenario)) + 
+           facet_wrap(~usage, nrow = 1) + 
+    geom_point(data = datatmp2[scenario == scenario_ref][annee %in% c("2015","2020","2030","2035","2050")], 
+              aes(annee, GES_MtCO2eq , color = scenario) ) +
+  geom_text(data = datatmp2[scenario == scenario_ref][annee %in% c("2015","2020","2030","2035","2050")], 
+              aes(annee, GES_MtCO2eq, color = scenario,label= as.character(round(GES_MtCO2eq, digits = 1))),vjust = -1, size = 8, hjust = 1 ) +
+   theme(axis.text.x = element_text(size = 12, hjust = 1), title  = element_text(size = 20)) + ggtitle("Emissions de GES par usage") +
+  scale_x_discrete(breaks = c("2009","2015","2020","2030","2035","2050")) + scale_y_continuous(limits = c(0,30))+
+  mytheme_facet_plot
+
+
+ggplot(GES_par_energie_chauffage ) + 
+           geom_line(aes(annee,GES_MtCO2eq, group = scenario, color = scenario)) + 
+           facet_wrap(~energie, nrow = 1) + 
+    geom_point(data = GES_par_energie_chauffage[scenario == scenario_ref][annee %in% c("2015","2020","2030","2035","2050")], 
+              aes(annee, GES_MtCO2eq , color = scenario) ) +
+  geom_text(data = GES_par_energie_chauffage[scenario == scenario_ref][annee %in% c("2015","2020","2030","2035","2050")], 
+              aes(annee, GES_MtCO2eq, color = scenario,label= as.character(round(GES_MtCO2eq, digits = 1))),vjust = -1, size = 8, hjust = 1 ) +
+   theme(axis.text.x = element_text(size = 12, hjust = 1), title  = element_text(size = 20)) + ggtitle("Emissions de GES par énergie pour le chauffage") +
+  scale_x_discrete(breaks = c("2009","2015","2020","2030","2035","2050")) + scale_y_continuous(limits = c(0,30))+
+  mytheme_facet_plot
+````
+
+L'ensemble des scénarios aboutissent à une forte diminution des émissions de GES liées au gaz et au fioul. Une forte CCE sans taxation de l'électricité aboutit à une conversion presque totale des systèmes de chauffage dans des systèmes électriques. Dans le cas où l'électricité est taxée, le chauffage urbain se développe plus significativement. 
+
+Les émissions liées à l'électricité spécifique stagnent du fait de la baisse des émissions liées à l'éclairage et aux auxiliaires de chauffage qui compense la hausse des émissons liées à la bureautique et à la climatisation. 
+
+
+```{r,  echo=F, warning=F,include = F}
+Conso_nationale_usage
+GES_nationale_usage
+INV_AUTRES_renov
+INV_SYST_CHAUD
+INV_GESTE
+
+### calc dépenses d'énergie par type de parc
+
+depenses_energie = Conso_nationale_energie_type
+
+prix_energie_melt = melt(prix_energie,id.vars = "annee",value.name = "prix", variable.name = "energie")
+prix_energie_melt[,annee:=as.factor(as.character(annee))]
+
+depenses_energie = merge(depenses_energie, prix_energie_melt , by= c("annee","energie"), all.x = T)
+
+depenses_energie[,CENERGIE:=conso_tWhEF*prix]
+depenses_energie = depenses_energie[,list(cout_energie = sum(CENERGIE), 
+                                          conso_tWhEF = sum(conso_tWhEF)), by=c("annee","scenario",  "Type_parc") ]
+
+
+#### verif calcul recettes CCE
+
+GES_nationale_usage2[Recettes_CCE>0,niv_CCE := Recettes_CCE*10^3/(GES_MtCO2eq-GES_elec)]
+GES_nationale_usage2[Recettes_CCE==0,niv_CCE := 0]
+GES_nationale_usage2[usage == "Chauffage" & scenario == "S3 : AMS2 CCE forte"]
+GES_nationale_usage2[usage == "Chauffage" & scenario == "S2 : AMS1 Quinet"]
+GES_nationale_usage2[usage == "Chauffage" & scenario == "S1 : AME"]
+GES_nationale_usage2[usage == "Chauffage" & scenario == "S0 : AME sans taxe"]
+
+#### ajoute Emissions et investissements ###
+
+GES_tot = GES_nationale_usage2[, list(GES_MtCO2eq = sum(GES_MtCO2eq),
+                                      Recettes_CCE = sum(Recettes_CCE),
+                                     conso_tWhEF_elec=sum(conso_tWhEF_elec),
+                                     GES_elec = sum(GES_elec)), by=c("scenario","annee", "Type_parc")]
+
+INV_AUTRES_TOT = INV_AUTRES_renov[,list(INV = sum(value)), by=c("scenario","annee")]
+INV_GESTE_TOT = INV_GESTE[,list(INV = sum(value)), by=c("scenario","annee")]
+INV_SYST_CHAUD_TOT = INV_SYST_CHAUD[,list(INV = sum(value)), by=c("scenario","annee")]
+
+##### bilan socio-eco
+bilan_socio_eco = merge(depenses_energie,GES_tot[,list(annee,scenario,Type_parc,GES_MtCO2eq, Recettes_CCE,conso_tWhEF_elec)],
+                        by=c("annee","scenario","Type_parc"), all.x = T)
+
+bilan_socio_eco = merge(bilan_socio_eco, INV_GESTE_TOT[,list(annee = as.factor(annee),scenario,INV_GESTE = INV/10^3,Type_parc ="E")] , by=c("annee","scenario","Type_parc"), all.x = T)
+bilan_socio_eco = merge(bilan_socio_eco, INV_SYST_CHAUD_TOT[,list(annee = as.factor(annee),scenario,INV_SYST = INV/10^3, Type_parc ="E")] , by=c("annee","scenario","Type_parc"), all.x = T)
+bilan_socio_eco = merge(bilan_socio_eco, INV_AUTRES_TOT[,list(annee = as.factor(annee),scenario,INV_AUTRE = INV/10^3, Type_parc ="E")] , by=c("annee","scenario","Type_parc"), all.x = T)
+
+##### calcul coûts, émissions et investissements actualisés 
+
+#### coûts énergétiques avec 10 ans en plus sur la dernière année 
+bilan_socio_eco[, cout_energie_actu  := cout_energie*(1/(1+as.numeric(as.character(annee))-2009)^0.04),
+        by=c("scenario","annee","Type_parc")]
+bilan_socio_eco[annee == "2050" ,cout_energie_actu  := cout_energie*(1/(1+as.numeric(as.character(annee))-2009)^0.04) * 10,
+        by=c("scenario","annee","Type_parc")]
+
+#### coûts investissements actualisés
+
+bilan_socio_eco[, cout_INV_GESTE_actu  := INV_GESTE*(1/(1+as.numeric(as.character(annee))-2009)^0.04),
+        by=c("scenario","annee","Type_parc")]
+bilan_socio_eco[, cout_INV_SYST_actu  := INV_SYST*(1/(1+as.numeric(as.character(annee))-2009)^0.04),
+        by=c("scenario","annee","Type_parc")]
+bilan_socio_eco[, cout_INV_AUTRE_actu  := INV_AUTRE*(1/(1+as.numeric(as.character(annee))-2009)^0.04),
+        by=c("scenario","annee","Type_parc")]
+
+## Recettes annuelles de la CCE actualisées avec 10 ans en plus pour la dernière année pour tenir compte de la valeur résiduelle des recettes
+
+bilan_socio_eco[,cout_CCE_actu  := Recettes_CCE*(1/(1+as.numeric(as.character(annee))-2009)^0.04),by=c("annee","scenario","Type_parc")]
+bilan_socio_eco[annee == "2050",cout_CCE_actu  := Recettes_CCE*(1/(1+as.numeric(as.character(annee))-2009)^0.04)*10,by=c("annee","scenario","Type_parc")]
+
+##### Emissions et consommations actualisées avec 10 ans en plus pour tenir  compte de la valeur résiduelle des investissements
+
+bilan_socio_eco[,Emissions_actu := GES_MtCO2eq*(1/(1+as.numeric(as.character(annee))-2009)^0.04),by=c("annee","scenario","Type_parc")]
+bilan_socio_eco[annee == "2050",Emissions_actu := GES_MtCO2eq*(1/(1+as.numeric(as.character(annee))-2009)^0.04)*10,by=c("annee","scenario","Type_parc")]
+
+bilan_socio_eco[,Conso_actu :=  conso_tWhEF*(1/(1+as.numeric(as.character(annee))-2009)^0.04),by=c("annee","scenario","Type_parc")]
+bilan_socio_eco[annee == "2050",Conso_actu :=  conso_tWhEF*(1/(1+as.numeric(as.character(annee))-2009)^0.04)*10,by=c("annee","scenario","Type_parc")]
+
+bilan_socio_eco[, cout_socioeco_actu :=
+                  sum(cout_energie_actu,cout_INV_GESTE_actu,
+                      cout_INV_SYST_actu,
+                      cout_INV_AUTRE_actu),by=c("annee","scenario","Type_parc")]
+bilan_socio_eco[, cout_usager_actu  :=  cout_socioeco_actu + cout_CCE_actu
+                 ,by=c("annee","scenario","Type_parc")]
+
+bilan_socio_eco[, INV_tot := sum(cout_INV_SYST_actu, cout_INV_GESTE_actu, cout_INV_AUTRE_actu), by=c("annee","scenario","Type_parc")]
+
+bilan_socio_eco_cumul = melt(bilan_socio_eco,id.vars = c("scenario","annee","Type_parc"))
+
+bilan_socio_eco_cumul = dcast.data.table(bilan_socio_eco_cumul,scenario+ Type_parc ~ variable, value.var = "value",fun.aggregate = function(x){sum(x, na.rm = T)})
+
+bilan_socio_eco_cumul = bilan_socio_eco_cumul[,list(scenario,Type_parc,cout_INV_SYST_actu,
+                                                  cout_INV_GESTE_actu,cout_INV_AUTRE_actu, 
+                                                  cout_energie_actu,
+                                                  cout_CCE_actu,Emissions_actu,Conso_actu,
+                                                 cout_socioeco_actu,cout_usager_actu, 
+                                                 INV_tot
+                                                 
+                                                 )]
+
+setnames(bilan_socio_eco_cumul ,c("scenario","TypeParc","INV_Syst","INV_Geste","INV_Autres","C_Ener","CCE","EmissMt","ConsoTWh",
+                                  "cout_socioeco","cout_usager","INV_tot"))
+
+
+
+bilan_socio_eco_cumul_ref = bilan_socio_eco_cumul
+bilan_socio_eco_cumul_ref = dcast.data.table(melt(bilan_socio_eco_cumul, id.vars = c("scenario","TypeParc")), 
+                                             formula = TypeParc + variable ~ scenario)
+
+bilan_socio_eco_cumul_ref = bilan_socio_eco_cumul_ref[,lapply(.SD,FUN = function(x){x-get(scenario_ref)}), .SDcols = wbname[wbname!=scenario_ref], by= c("TypeParc", "variable")]
+
+bilan_socio_eco_cumul_ref = dcast.data.table(melt(bilan_socio_eco_cumul_ref, id.vars = c("TypeParc", "variable"),variable.name = "scenario"), formula = TypeParc + scenario ~ variable) 
+  
+bilan_socio_eco_cumul_ref[,Coutsocio_tonne := (cout_socioeco*10^3)/- EmissMt]
+bilan_socio_eco_cumul_ref[,Coutusager_tonne := (cout_usager*10^3)/- EmissMt]
+bilan_socio_eco_cumul_ref[,Coutsocio_MWh := (cout_socioeco*10^3)/- ConsoTWh]
+bilan_socio_eco_cumul_ref[,Coutusager_MWh := (cout_usager*10^3)/- ConsoTWh]
+
+```` 
+
+
+```{r,  echo=F, warning=F,include = F}
+dataCCE = bilan_socio_eco[,list(scenario, Type_parc,annee, Recettes_CCE)]
+dataCCE = dataCCE[annee %in% c(2020,2030,2035,2050)]
+dataCCE = dcast.data.table(dataCCE, scenario~annee, value.var = "Recettes_CCE", fun.aggregate = sum)
+```` 
+
+```{r,  echo=F, warning=F}
+pander(dataCCE, digits = 1, caption = "Recettes de la CCE (Mds euros)")
+```` 
+
+
+```{r,  echo=F, warning=F}
+pander(bilan_socio_eco_cumul_ref[TypeParc == "E", c("scenario","INV_tot","C_Ener","ConsoTWh","EmissMt","Coutsocio_tonne","Coutsocio_MWh"), with=F], digits = 1, caption = "Ecarts de coûts (Mds euros), Emissions évitées (MtCO2), et coûts de la tonne et du kWh évité (euro par tonne ou par kWh) par rapport au scénario AME pour le parc existant")
+```` 
+
+```{r,  echo=F, warning=F,include = F}
+unique(COUTS$typeRenovationSysteme)
+unique(COUTS$SYSTEME_CHAUD)
+
+COUTS[,list(surface = sum(surface)), by=c("scenario","annee")]
+
+COUTS[,list(surface = sum(surface),investissement = sum(investissement)), by=c("scenario","annee","typeRenovationBatiment")]
+COUTS[,list(surface = sum(surface)/10^6,investissement = sum(investissement)/10^9), by=c("scenario","typeRenovationBatiment")]
+COUTS[,list(surface = sum(surface)/10^6,investissement = sum(investissement)/10^9), by=c("scenario","SYSTEME_CHAUD")]
+
+INV_GESTE_TOT[,list(INV = sum(INV)/10^3), by=c("scenario")]
+INV_SYST_CHAUD_TOT[,list(INV = sum(INV)/10^3), by=c("scenario")]
+
+INV_SYST_tab = INV_SYST_CHAUD[,list(INV = sum(value, na.rm=T)/10^3), by=c("scenario", "SYSTEME_CHAUD")]
+INV_SYST_tab =INV_SYST_tab[INV >0.01]
+INV_SYST_tab[,Systeme := factor(SYSTEME_CHAUD, levels = c("Chaudière gaz","Chaudière condensation gaz",
+                                                           "Chaudière fioul","Chaudière condensation fioul",
+                                                           "Electrique direct","Electrique direct performant",
+                                                           "PAC","PAC performant",
+                                                           "Rooftop", "Rooftop performant",
+                                                           "Tube radiant", "Tube radiant performant" ,
+                                                           "Cassette rayonnante","Cassette rayonnante performant",
+                                                           "DRV", "DRV performant",
+                                                           "Autre système centralisé",  "Autre système centralisé performant",
+                                                           "nr"))]
+
+INV_GESTE_tab = INV_GESTE[,list(INV = sum(value, na.rm=T)/10^3), by=c("scenario","variable")]
+setnames(INV_GESTE_tab,"variable","Geste")
+INV_GESTE_tab = INV_GESTE_tab[,Geste := factor(Geste, levels = c("GTB","FENMOD","FEN_MURMOD","ENSMOD","FENBBC","FEN_MURBBC","ENSBBC"))]
+
+
+```` 
+
+```{r, fig.width=20, fig.height=9, echo=F, warning=F, fig.show='hold'}
+ggplot(INV_SYST_tab ) + 
+  geom_bar(aes(substring(scenario,1,2),INV, color =Systeme,fill =Systeme), stat = "identity") + 
+  theme(axis.text.x = element_text(size = 12), title  = element_text(size = 20)) +
+  ylab("Mds euros") + ggtitle("Investissements cumulées dans les systèmes de chauffage") + xlab("scenario") +  
+  mytheme_facet_plot +  scale_x_discrete(breaks = c("2008", seq(2010,2050,10))) + 
+  scale_y_continuous(limits  = c(0,70))
+
+ggplot(INV_GESTE_tab ) + 
+  geom_bar(aes(substring(scenario,1,2),INV, color =Geste,fill =Geste), stat = "identity") + 
+  theme(axis.text.x = element_text(size = 12), title  = element_text(size = 20)) +
+  ylab("Mds euros") + ggtitle("Investissements cumulées dans les rénovations") + xlab("scenario") +  
+  mytheme_facet_plot +  scale_x_discrete(breaks = c("2008", seq(2010,2050,10))) + 
+  scale_y_continuous(limits  = c(0,70))
+
+````
+
+# Messages-clés : 
+
+* La CCE ne permet en aucun cas d'atteindre les objectifs de réductions des consommations et des émissions de la LTECV. Dans le cas du scénario "AMS1 Quinet", les consommations totales diminuent de 7% par rapport à 2012 et les émissions baissent de 20 % par rapport à 1990. En effet, la CCE agit principalement sur le chauffage (-31% de consommations et - 41% d'émissions en 2050) qui représente aujourd'hui seulement 47 % des consommations, ce qui limite les effets des politiques publiques.
+
+* Dans le cas d'une très forte contribution climat énergie (Quinet x4), on atteint en 2050 une baisse de 40 % des consommations et de 43 % des émissions liées au chauffage, seulement -12% et -22% pour l'ensemble des usages. 
+
+* L'électricité est surreprésentée dans les consommations du secteur (45 % des consommations en 2012) et non taxée. L'effet d'un réhaussement de la taxe sur les émissions est donc assez faible. Appliquer la taxe (Quinet x4) sur l'électricité permet de réduire les consommations totales de 5 % et les émissions totales de 14 % supplémentaires en 2050 (par rapport à 1990).
+
+* Une division par 2 du contenu en CO~2~ de l'électricité à horizon 2030 permettrait en plus de réduire les émissions du secteur tertiaire de 7 MtCO~2~eq supplémentaires en 2050 soit 25% des émissions du secteur en 1990.
+
+* Les consommations unitaires de chauffage passent de 109 kWh par m² à 57 kWh par m² dans le scénario "AMS1 Quinet" et à 44 kWh par m² dans le scénario avec une CCE forte y compris sur l'électricité.
+
+* Pour les usages réglementés (chauffage, refroidissement, ventilation, ECS, éclairage), les consommations unitaires sont aujourd'hui de 284  kWh EP par m² et seraient  autour de 209 kWh EP par m² en 2050 dans le cas d'une CCE forte (S3) et de 167 kWh EP par m² si l'électricité est taxée (S4). Ce niveau est loin de correspondre au seuil défini par le label BBC rénovation (80  kWh EP par m² pour le résidentiel).
+
+* Les consommations  unitaires des autres usages (bureautique, cuisson, process, autres) sont 117 kWh EP par m² en 2012 et 126 kWh EP par m² en  2050 dans le scénario "AMS1 Quinet". Taxer l'électricité permettrait de les faire baisser à 122 kWh EP par m² en 2050 si on prend l'hypothèse d'une élasticité-prix des consommations de ces usages de -0.1.
+
+* Les émissions unitaires passent de 33 kgCO~2~ par m² et seraient de 17 kgCO~2~ par m² en 2050 dans le  scénario "AMS1 Quinet"  et de 13 kgCO~2~ par m² si l'electricité est taxée. Les émissions unitaires liées au chauffage sont divisées par un peu plus de 2 dans le scénario "AMS1 Quinet" et par 3 dans le cas où l'electricité est taxée.
+
+* Les rénovations et les changements de système sont rentables et présentent des coûts d'abattement moyens négatifs. L'effort d'investissement se répartit à 50 % vers les rénovations et à 50 % vers les changements de systèmes de chauffage et atteignent environ 2 milliards d'euros par an dans le scénario "AMS1 Quinet",   
+
+* Les systèmes de chauffage basculent majoritairement vers l'électricité. Les investissements dans les systèmes électriques se font majoritairement vers les systèmes "électrique direct" dans le scénario "AMS1 Quinet". Les investissements cumulés dans les pompes à chaleur progressent dans le cas d'une CCE forte. Dans le cas où l'electricité est taxée, la part des investissements vers les systèmes "électrique direct" diminuent fortement au profit des PAC. 
+
+* Les consommations de chauffage urbain en 2050 et les investissements dans le chauffage urbain diminuent fortement dans le cas d'une CCE forte où l'electricité n'est pas taxée par rapport au scénario  "AME" et "AMS1 Quinet". Les consommations de chauffage urbain sont multipliées par 3 dans le cas où l'électricité rentre dans l'assiette de la taxe. 
+
+* Les investissements dans les rénovations se font majoritairement vers des gestes de niveau modéré. Les investissements cumulés dans les rénovations de niveau BBC progressent dans le cas où l'électricité est taxée. 
+
+* Les recettes de la taxe Quinet sont de 1.4 milliards d'euros par an en 2030 et de 2.3 milliards d'euros en 2050. Elles sont multipliées par 7 dans le cas d'une CCE forte y compris sur l'électricité
+
+* La CCE a un impact similaire en matière de réduction des consommations et des émissions liées au chauffage par rapport au secteur résidentiel. Du fait de la part bien plus importante des usages autres que le chauffage dans les consommations et les émissions, l'impact de la taxe sur les consommations et les émissions totales est beaucoup plus faible que dans le secteur résidentiel. La rentabilité des gisements d'émissions (rénovations et des changements de systèmes) est également plus faible dans le secteur tertiaire  
+
+\newpage 
+
+# Annexes/hypothèses 
+
+Champ du modèle :
+
+* Pour l'année de référence du parc tertiaire (2009), le parc est réparti entre 8 branches, 35 sous-branches à nouveau subdivisés en 96 types de bâtiment avec un profil de consommation type (équipement de chauffage, consommations unitaires)
+
+* Le modèle couvre les consommations d'électricité, de gaz, de fioul, de chaleur urbaine et des autres combustibles pour l'ensemble des usages : les usages réglementés (chauffage, ECS, ventilation, refroidissement, éclairage) et les autres usages (cuisson, bureautique, process, froid alimentaire...)
+
+
+Référence pour les émissions de CO~2~ en 1990 :
+
+* Le modèle comptabilise en 2012 35.1 MtCO2eq pour l'ensemble des usages (34.9 dans les inventaires du CITEPA) et 23.6  MtCO2eq pour le chauffage. La référence prise pour les émissions du secteur en 1990 pour l'ensemble des usages est celle des inventaires du CITEPA soit 28.8  MtCO2eq. La référence pour les émissions liées au chauffage en 1990 calculée en multipliant la part des émissions de chauffage en 2012 aux émissions de 1990 du tertiaire dans les inventaires. Em_ref_chauffage = 23.6/35.1*28.8 = 19.4 MtCO2eq en 1990. NB : les inventaires ne répertorient pas les émissions liées à la consommations d'électricité tandis que le modèle oui. Le champ couvert est donc légérement différent.
+
+Contenu carbone des sources d'énergie (gCO2/kWh) :
+
+* Electricité : 180 pour le chauffage, 37 pour la climatisation, 72 pour l'éclairage, 42 pour l'ECS, 57 pour la cuisson, 34 pour les autres usages (base carbone de l'ADEME)
+* Gaz : 205
+* Fioul : 271
+* Urbain : 195 en 2010, 151 en 2015, 133 en 2020 et 96 en 2030. Les valeurs  pour 2010 et 2015 sont issues de l'enquête nationale sur les réseaux de chaleur (SOeS). Pour les années suivantes, on prolonge la tendance d'incorporation des EnR & R dans les réseaux de chaleur de 50 % en 2015 à 75 % en 2030, en lien avec les objectifs de hausse de la part de la chaleur urbaine fournie par des EnR de la LTECV. De 2015 à 2030, le contenu CO2 diminue au même rythme qu'entre 2010 et 2015 où la part des EnR est passée de 31 % à 50 % avec une baisse du contenu CO2 de 195 à 151, soit une baisse de 2.2 gCO2/kWh pour 1% d'EnR en plus. Le contenu est stable après 2030
+* Autres : 115
+
+```{r, echo=F, warning=F,include = F}
+trajectoire_CCE = GES_nationale_usage2[usage == "Chauffage" & Type_parc == "E",list(scenario,annee,niv_CCE)]
+
+```` 
+
+```{r, fig.width=20, fig.height=9, echo=F, warning=F, fig.show=T}
+ggplot(trajectoire_CCE ) + geom_line(aes(annee,niv_CCE, color =scenario,group = scenario), stat = "identity", size = 1)+ 
+  geom_point(data = trajectoire_CCE [annee %in% c("2015","2020","2030","2035","2050")], aes(annee,niv_CCE,color = scenario)) + 
+  geom_text(data = trajectoire_CCE [annee %in% c("2020","2030","2050")], 
+            aes(annee,niv_CCE, color =  scenario,
+                label= as.character(round(niv_CCE, digits = 0))),vjust = -1 , size = 8, hjust = 1) +
+   theme(axis.text.x = element_text(size = 12), title  = element_text(size = 20)) +
+  ylab("euros par tonne") + ggtitle("Trajectoire de la CCE ") +
+  mytheme_facet_plot +  scale_x_discrete(breaks = c("2008", seq(2010,2050,10))) + 
+  scale_y_continuous(limits = c(0,1200),breaks = c(seq(0,1400,200)))
+
+````  
+
+Evolutions de consommations des usages autres que le chauffage (pour tous les scénarios) : 
+
+* Climatisation : progression de 1% des surfaces climatisées jusque 2020, 0.5% entre 2020 et 2030, 0.2% après 2030
+* Ventilation : + 20 % de consommations lors du renouvellement des systèmes
+* Eclairage : - 10 % de consommations lors du renouvellment des systèmes
+* Bureautique : + 5% de consommations lors du renouvellment des systèmes
+* Froid alimentaire : -10 % de consommations lors du renouvellment des systèmes + obligation de fermeture progressive des meubles frigorifiques * ECS : Amélioration progressive des rendements des systèmes et obligation d'installer des systèmes performants en 2020
+
+Effet de sobriété (élasticité au prix de l'énergie) : -0.1 pour le chauffage et l'ECS, -0.01 pour la cuisson et 0 pour les autres usages
+
+Effet rebond : Hausse de 1% des consommations réelles après rénovations
+
+\newpage 
+
+# Résultats complémentaires 
+
+```{r, echo=F, warning=F,include = F}
+Emtab_contenuelec2 = Emtab_contenuelec
+Emtab_contenuelec2[, scenario_short :=NULL]
+
+```` 
+
+```{r, echo=F, warning=F,}
+
+pander(Emtab_contenuelec2[usage %in% c("Chauffage","Total")][order(usage)], digits = 2, caption = "Bilan des émissions liées au chauffage et à l'ensemble des usages en MtCO2eq avec un contenu CO2 de l'électricité divisé par 2 en 2030")
+````
+
+```{r, echo=F, warning=F,include = F}
+parc_energie_surface =  melt(parc,id.vars = c("scenario","branche","occupation","periodeSimple","Type_parc","energieChauffage"),variable.name = "annee",value.name = "surface")
+parc_energie_surface = merge(parc_energie_surface, COD_ENERGIE[, list(energieChauffage =  COD_ENERGIE, Energie = ENERGIE)], by="energieChauffage")
+parc_energie_surface = parc_energie_surface[,list(surface = sum(surface)), 
+                                            by=c("scenario","annee","Energie")]
+
+#### progression des surfaces totales 
+
+evol_surf_parc = parc_energie_surface[annee %in% c("2012","2015","2020","2030","2035","2050"),sum(surface),by=c("scenario", "annee")] 
+evol_surf_parc = dcast.data.table(evol_surf_parc, scenario ~ annee)
+evol_surf_parc[, Evol_2030 := get("2030")/get("2012") -1]
+evol_surf_parc[, Evol_2050 := get("2050")/get("2012") -1]
+
+```` 
+
+```{r, fig.width=20, fig.height=9, echo=F, warning=F, fig.show='hold'}
+ggplot(parc_energie_surface ) + 
+  geom_line(aes(annee,surface/10^6, color =scenario,group = scenario), stat = "identity")+ 
+  facet_wrap(~Energie, nrow = 1) +
+  geom_point(data =parc_energie_surface[annee %in% c("2015","2020","2030","2035","2050")], aes(annee,surface/10^6,color = scenario)) + 
+  theme(axis.text.x = element_text(size = 12), title  = element_text(size = 20)) +
+  ylab("Millions de m²") + ggtitle("Surfaces du parc par énergie de chauffage") + 
+  mytheme_facet_plot +  scale_x_discrete(breaks = c("2008", seq(2010,2050,10))) + 
+  scale_y_continuous(breaks = c(seq(0,2000,250)))
+
+ggplot(part_etiquette3[annee %in% c("2010","2020","2030","2050")]) + 
+  geom_bar(aes(scenario,y = surface/10^6, fill = etiquette), stat = "identity")+ 
+  facet_wrap(~annee) + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1), title  = element_text(size = 20)) + ggtitle("Part des étiquettes énergie dans le parc")  +
+  ylab("Millions de m²") +
+  mytheme_facet_plot 
+````
+
+Il existe 4 types de DPE selon le type de bâtiment tertiaire. Contrairement au secteur résidentiel, les DPE pour les bâtiments tertiaire recensent l'ensemble des consommations du bâtiment et pas seulement les 3 usages du dpe logement (chauffage, refroidissement, ECS). Les étiquettes énergie sont attribuées sur cette base.  De ce fait, la taxe Quine a peu d'impact sur la répartition du parc entre étiquette car elle n'affecte pas les consommations d'électricité et n'agit principalement que sur le chauffage.
+
+```{r,  echo=F, warning=F,include = F}
+Part_Elec_GES = GES_nationale_usage2
+Part_Elec_GES = Part_Elec_GES[,list(Part_Elec_GES = sum(GES_elec)/sum(GES_MtCO2eq)), by=c("scenario","annee")] 
+Part_Elec_GES = Part_Elec_GES[annee %in% c(2020,2030,2035,2050)]
+Part_Elec_GES = dcast.data.table(Part_Elec_GES, scenario~annee, value.var = "Part_Elec_GES", fun.aggregate = sum)
+
+```` 
+
+
+```{r,  echo=F, warning=F}
+pander(Part_Elec_GES, digits = 2, caption = "part de l'électricité dans les émissions")
+```` 
+
+```{r,  echo=F, warning=F}
+pander(bilan_socio_eco_cumul_ref[TypeParc == "E",c("scenario","CCE","Coutusager_tonne","Coutusager_MWh"), with=F], digits = 1, caption = "Ecarts de coûts fiscaux (Mds euros) et coûts pour l'usager de la tonne et du kWh évité   par rapport au scénario AME pour le parc existant")
+```` 
+
+

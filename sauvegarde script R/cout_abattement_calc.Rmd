@@ -1,0 +1,222 @@
+---
+title: "cout d'abattement tertiaire"
+author: "CGDD/SEEIDD/MA3"
+date: "20 décembre 2017"
+output: html_document
+---
+
+
+```{r, echo=F, message=F, warning=F, cache=F, results=F}
+require(knitr)
+require(data.table)
+require(ggplot2)
+require(Hmisc)
+require(reshape2)
+require(plyr)
+require(ggthemes)
+require(texreg)
+if (Sys.getenv("JAVA_HOME")!="")
+  Sys.setenv(JAVA_HOME="")
+options(java.parameters = "-Xmx8192m")
+require(XLConnect)
+require(RColorBrewer)
+# set pander table-layout options
+library(pander)
+panderOptions('table.alignment.default', function(df)
+    ifelse(sapply(df, is.numeric), 'right', 'left'))
+panderOptions('table.split.table', Inf)
+panderOptions('big.mark', ",")
+panderOptions('keep.trailing.zeros', TRUE)
+
+colorpalette = "Spectral"
+fillpalette = "Spectral"
+
+#colorpalette = "Set2"
+#fillpalette = "Set2"
+```
+
+
+```{r, echo=F, message=F, warning=F, cache=T, results=F, comment = F, include = F, cache.rebuild = F}
+
+##### prix des energies ####
+prix_energie = fread("../AME_AMS_dataDGEC/parametrage modele/Prix_scenario_AME_BV_12_2017.csv", dec = ".", sep=";")
+
+prix_energie = melt(prix_energie,id.vars = "annee")
+
+prix_energie[variable == "prix_elec", nom_energie := "Electricité"]
+prix_energie[variable == "prix_gaz", nom_energie := "Gaz"]
+prix_energie[variable == "prix_fioul", nom_energie := "Fioul"]
+prix_energie[variable == "prix_urbain", nom_energie := "Urbain"]
+prix_energie[variable == "prix_autres", nom_energie := "Autres"]
+prix_energie[variable == "CCE", nom_energie := "CCE"]
+prix_energie[, annee:= as.factor(annee)]
+#prix_energie =dcast.data.table(prix_energie, annee~energie)
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = F}
+source("analyse_param_utilisateurs.R",encoding = "ISO8859-1")
+
+colors_syst= 
+  data.table(SYSTEME_CHAUD =factor(unique(COD_SYSTEME_CHAUD$SYSTEME_CHAUD), 
+                                   levels = c("Chaudière gaz","Chaudière condensation gaz",
+                                                           "Tube radiant", "Tube radiant performant" ,
+                                                           "Chaudière fioul","Chaudière condensation fioul",
+                                                           "Electrique direct","Electrique direct performant",
+                                                           "Cassette rayonnante","Cassette rayonnante performant",
+                                                           "PAC","PAC performant",
+                                                           "Rooftop", "Rooftop performant",
+                                                            "DRV", "DRV performant",
+                                                           "Autre système centralisé",  "Autre système centralisé performant",
+                                                           "nr","NA"))
+                         )
+
+colors_syst = colors_syst[order(SYSTEME_CHAUD)]
+colors_syst[,color := c("dodgerblue1","dodgerblue4", "blue1","blue4","springgreen1","springgreen4",
+                "yellow1","yellow4","gold1","gold4","chocolate1","chocolate4","coral1","coral3",
+                "salmon1","salmon4","red1","red4","gray86","gray86")]
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = F,include = F}
+
+#### liste des fichiers à lire
+wbfiles =    "../tertiaire_to_export/resultats_AME_run2/2050_sanspol_sansCC_newcalib/Results_csv"
+wbfiles[2] = "../tertiaire_to_export/resultats_AME_run2/2050_allpol_sansCEE_CC_newcalib/Results_csv"
+wbfiles[3] = "../tertiaire_to_export/resultats_AME_run2/2050_allpol_CEE_CC_newcalib/Results_csv"
+
+#### noms des scenarios ###
+
+wbname = c( "S1 : AME 2017 run2 sans pol",
+            "S2 : AME 2017 run2 sans CEE",
+            "S3 : AME 2017 run2 CEE"
+)
+
+
+#### choix du scenario de référence 
+
+scenario_ref = c( "S1 : AME 2017 run2 sans pol")
+
+scenarioshortnames = substring(wbname,1,2)
+scenarios_taxeelec = ""
+##### émissions de référence en MTCO2 
+Em_ref_2012_tous_usages = 33.5
+Em_ref_2012_chauffage = 23.6
+
+Em_ref_1990_tous_usages = 28.8
+Em_ref_1990_chauffage =  Em_ref_2012_chauffage/Em_ref_2012_tous_usages*Em_ref_1990_tous_usages 
+
+
+##### lecture des resultats
+
+source("read_resultats_csv.R", encoding= "UTF-8")
+##### Conso de référence en tWh 
+Conso_ref_2012_chauffage = Conso[usage=="Chauffage" & annee == "2012" & scenario==scenario_ref, sum(value)/10^9]
+Conso_ref_2012_tous_usages = Conso[ annee == "2012" & scenario==scenario_ref, sum(value)/10^9]
+
+
+annee_ref_MEDPRO = "2015"
+annee_MEDPRO = c("2015","2020","2025","2030","2050")
+```
+
+
+```{r, echo=F, message=F, warning=F, cache=T, results=F, comment = F, include = F, cache.rebuild = F}
+Conso_ener = Conso[usage == "Chauffage",list(Conso_TWh=sum(value)/10^9),by=c("scenario","annee","nom_energie")]
+Conso_ener = merge(Conso_ener, prix_energie[variable != "CCE",list(annee, nom_energie, prix = value)], by=c("nom_energie","annee"), all.x = T)
+
+#### contenu CO2
+Conso_ener[nom_energie == "Autres", FEM := 115]
+Conso_ener[nom_energie == "Electricité", FEM := 180]
+Conso_ener[nom_energie == "Gaz", FEM := 205]
+Conso_ener[nom_energie == "Fioul", FEM := 271]
+Conso_ener[nom_energie == "Urbain" & annee %in% c(2009:2015), FEM := 174]
+Conso_ener[nom_energie == "Urbain" & annee %in% c(2016:2020), FEM := 138]
+Conso_ener[nom_energie == "Urbain" & annee %in% c(2021:2030), FEM := 112]
+Conso_ener[nom_energie == "Urbain" & annee %in% c(2031:2040), FEM := 96]
+Conso_ener[nom_energie == "Urbain" & annee %in% c(2041:2050), FEM := 96]
+
+
+
+# Gaz	Tous	205	205	205	205	205
+# Fioul	Tous	271	271	271	271	271
+# Autres	Tous	115	115	115	115	115
+# Urbain	Tous	173.8	138.2190476	112.6571429	96.2244898	96.2244898
+
+Conso_ener[, Depenses_enerHT_Md := Conso_TWh*prix]
+Conso_ener[, Emissions_MtCO2 := Conso_TWh*FEM*10^9*10^-12]
+
+calc_couts = Conso_ener[, list( Depenses_enerHT_Md = sum( Depenses_enerHT_Md), 
+                                Emissions_MtCO2 = sum(Emissions_MtCO2)),by=c("scenario","annee")]
+
+calc_couts = merge(calc_couts, COUTS[,list(INV_Md=sum(investissement)/10^9),by=c("scenario","annee")],by=c("scenario","annee"))
+
+calc_couts_ref = calc_couts[scenario == scenario_ref, list(annee, Depenses_enerHT_ref = Depenses_enerHT_Md ,
+                                                           Emissions_MtCO2_ref = Emissions_MtCO2, 
+                                                           INV_Md_ref = INV_Md)]
+calc_couts = calc_couts[scenario != scenario_ref]
+
+calc_couts_ref[,scenario := NULL]
+calc_couts = merge(calc_couts, calc_couts_ref, by="annee")
+
+
+calc_couts[,cout_tonne:=(INV_Md-INV_Md_ref)*10^9/-((Emissions_MtCO2-Emissions_MtCO2_ref)*10^6)]
+summary(calc_couts)
+
+
+calc_couts[, coefactu := 1/(1+0.04)^(as.numeric(as.character(annee))-2009)]
+
+calc_couts_2050 = calc_couts
+calc_couts_2030 = calc_couts[annee %in% c(2009:2030)]
+
+
+##### ajouts de 10 ans après 2050 et après 2030 pour les dépenses et les émissions
+
+calc_couts_2050[annee == "2050", Depenses_enerHT_Md := Depenses_enerHT_Md*11]
+calc_couts_2050[annee == "2050", Depenses_enerHT_ref := Depenses_enerHT_ref*11]
+calc_couts_2050[annee == "2050", Emissions_MtCO2 := Emissions_MtCO2*11]
+calc_couts_2050[annee == "2050", Emissions_MtCO2_ref := Emissions_MtCO2_ref*11]
+
+calc_couts_2030[annee == "2030", Depenses_enerHT_Md := Depenses_enerHT_Md*11]
+calc_couts_2030[annee == "2030", Depenses_enerHT_ref := Depenses_enerHT_ref*11]
+calc_couts_2030[annee == "2030", Emissions_MtCO2 := Emissions_MtCO2*11]
+calc_couts_2030[annee == "2030", Emissions_MtCO2_ref := Emissions_MtCO2_ref*11]
+
+##### acualisation des émissions, des dépenses et des investissements 
+calc_couts_2050 = merge(calc_couts_2050,
+                        calc_couts_2050[,list(annee, scenario,
+                                              Depenses_enerHT_Md_actu = Depenses_enerHT_Md*coefactu,
+                                              Depenses_enerHT_ref_actu = Depenses_enerHT_ref*coefactu,
+                                              Emissions_MtCO2_actu = Emissions_MtCO2*coefactu,
+                                              Emissions_MtCO2_ref_actu = Emissions_MtCO2_ref*coefactu, 
+                                              INV_Md_actu = INV_Md*coefactu, 
+                                              INV_Md_ref_actu = INV_Md_ref*coefactu)], 
+                        by = c("scenario","annee"))
+
+calc_couts_2030 = merge(calc_couts_2030,
+                        calc_couts_2030[,list(annee, scenario,
+                                              Depenses_enerHT_Md_actu = Depenses_enerHT_Md*coefactu,
+                                              Depenses_enerHT_ref_actu = Depenses_enerHT_ref*coefactu,
+                                              Emissions_MtCO2_actu = Emissions_MtCO2*coefactu,
+                                              Emissions_MtCO2_ref_actu = Emissions_MtCO2_ref*coefactu, 
+                                              INV_Md_actu = INV_Md*coefactu, 
+                                              INV_Md_ref_actu = INV_Md_ref*coefactu)], 
+                        by = c("scenario","annee"))
+
+
+##### calcul du coût moyen de la tonne évitée sur la période
+
+calc_couts_2050[,sum(INV_Md_actu - INV_Md_ref_actu + Depenses_enerHT_Md_actu - Depenses_enerHT_ref_actu)/-sum(Emissions_MtCO2_actu - Emissions_MtCO2_ref_actu) * 10^9*10^-6, by="scenario"]
+calc_couts_2050[,sum(INV_Md_actu - INV_Md_ref_actu + Depenses_enerHT_Md_actu - Depenses_enerHT_ref_actu)]
+calc_couts_2050[,sum(Emissions_MtCO2_actu - Emissions_MtCO2_ref_actu) ]
+
+calc_couts_2030[,sum(INV_Md_actu - INV_Md_ref_actu + Depenses_enerHT_Md_actu - Depenses_enerHT_ref_actu)/-sum(Emissions_MtCO2_actu - Emissions_MtCO2_ref_actu) * 10^9*10^-6, by="scenario"]
+calc_couts_2030[,sum(INV_Md_actu - INV_Md_ref_actu + Depenses_enerHT_Md_actu - Depenses_enerHT_ref_actu)]
+calc_couts_2030[,sum(Emissions_MtCO2_actu - Emissions_MtCO2_ref_actu) ]
+
+calc_couts_2050[annee == "2050", Emissions_MtCO2/11]/
+calc_couts_2050[annee == "2015", Emissions_MtCO2]-1
+
+
+
+calc_couts_2030
+
+
+```

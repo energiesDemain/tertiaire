@@ -1,0 +1,437 @@
+% Encoding: windows-1252
+
+@ARTICLE{Beaucire_etal04,
+  author = {BEAUCIRE, Francis and CHALONGE, Ludovic and CALZADA, Christian and
+	LE BLANC, Francis},
+  title = {Transition urbaine et zonages},
+  journal = {Notes de synth{\`e}se du SES},
+  year = {2004},
+  file = {Beaucire_etal04.pdf:lus\\Beaucire_etal04.pdf:PDF},
+  owner = {bruno.vermont},
+  timestamp = {2014.02.21}
+}
+
+@TECHREPORT{Bishop11,
+  author = {Bishop, Kelly C and Timmins, Christopher},
+  title = {Hedonic prices and implicit markets: Estimating marginal willingness
+	to pay for differentiated products without instrumental variables},
+  institution = {National Bureau of Economic Research},
+  year = {2011},
+  owner = {bruno.vermont},
+  timestamp = {2014.03.03}
+}
+
+@INPROCEEDINGS{Bonin09,
+  author = {Bonin, Olivier},
+  title = {Urban location and multi-level hedonic models for the Ile-de-France
+	region},
+  booktitle = {ISA international housing conference, Glasgow},
+  year = {2009},
+  pages = {1--4},
+  file = {Bonin09.pdf:Bonin09.pdf:PDF},
+  owner = {bruno.vermont},
+  timestamp = {2014.02.21}
+}
+
+@TECHREPORT{Bordo_etal13,
+  author = {Bordo, Michael D and Landon-Lane, John},
+  title = {What Explains House Price Booms?: History and Empirical Evidence.},
+  institution = {National Bureau of Economic Research},
+  year = {2013},
+  file = {Bordo_etal13.pdf:Bordo_etal13.pdf:PDF},
+  owner = {bruno.vermont},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{Cavailhes05,
+  author = {Cavailh{\`e}s, Jean},
+  title = {Le prix des attributs du logement},
+  journal = {{\'E}conomie et statistique},
+  year = {2005},
+  volume = {381},
+  pages = {91--123},
+  number = {1},
+  file = {Cavailhes05.pdf:Cavailhes05.pdf:PDF},
+  owner = {bruno.vermont},
+  publisher = {Institut national de la statistique et des {\'e}tudes {\'e}conomiques},
+  timestamp = {2014.02.21}
+}
+
+@TECHREPORT{ChauvinMuellbauer13,
+  author = {Chauvin, Val{\'e}rie and Muellbauer, John},
+  title = {Consumption, household portfolios and the housing market: a flow
+	of funds approach for France},
+  institution = {Banque de France},
+  year = {2013},
+  file = {ChauvinMuellbauer13.pdf:ChauvinMuellbauer13.pdf:PDF},
+  owner = {bruno.vermont},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{CheshireSheppard02,
+  author = {Cheshire, Paul and Sheppard, Stephen},
+  title = {The welfare economics of land use planning},
+  journal = {Journal of Urban economics},
+  year = {2002},
+  volume = {52},
+  pages = {242--269},
+  number = {2},
+  file = {CheshireSheppard02.pdf:CheshireSheppard02.pdf:PDF},
+  owner = {bruno.vermont},
+  publisher = {Elsevier},
+  timestamp = {2014.03.04}
+}
+
+@ARTICLE{Combes_etal12,
+  author = {Combes, Pierre-Philippe and Duranton, Gilles and Gobillon, Laurent},
+  title = {The costs of agglomeration: Land prices in French cities},
+  year = {2012},
+  file = {Combes_etal12.pdf:Combes_etal12.pdf:PDF},
+  owner = {bruno.vermont},
+  publisher = {CEPR Discussion Paper No. DP9240},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{Combes_etal11,
+  author = {Combes, Pierre-Philippe and Duranton, Gilles and Gobillon, Laurent
+	and others},
+  title = {Le prix des terrains en France: la localisation, encore la localisation,
+	toujours la localisation},
+  journal = {Le point sur},
+  year = {2011},
+  number = {74},
+  file = {Combes_etal11.pdf:lus\\Combes_etal11.pdf:PDF},
+  owner = {bruno.vermont},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{DeatonMuellbauer1980,
+  author = {Deaton, Angus and Muellbauer, John},
+  title = {An almost ideal demand system},
+  journal = {The American economic review},
+  year = {1980},
+  pages = {312--326},
+  file = {DeatonMuellbauer1980.pdf:DeatonMuellbauer1980.pdf:PDF},
+  owner = {bruno.vermont},
+  publisher = {JSTOR},
+  timestamp = {2014.02.25}
+}
+
+@ARTICLE{Diamond80,
+  author = {Diamond, Douglas B},
+  title = {Income and residential location: Muth revisited},
+  journal = {Urban Studies},
+  year = {1980},
+  volume = {17},
+  pages = {1--12},
+  number = {1},
+  file = {Diamond80.pdf:Diamond80.pdf:PDF},
+  owner = {bruno.vermont},
+  publisher = {SAGE Publications},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{Fauvet08,
+  author = {Fauvet, Laurent},
+  title = {Prix des logements anciens: les d{\'e}terminants li{\'e}s aux biens
+	et la n{\'e}gociation},
+  journal = {Notes de synth{\`e}se du SESP N},
+  year = {2008},
+  volume = {169},
+  file = {Fauvet08.pdf:lus\\Fauvet08.pdf:PDF},
+  owner = {bruno.vermont},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{FollainJimenez85,
+  author = {Follain, James R and Jimenez, Emmanuel},
+  title = {Estimating the demand for housing characteristics: a survey and critique},
+  journal = {Regional science and urban economics},
+  year = {1985},
+  volume = {15},
+  pages = {77--107},
+  number = {1},
+  file = {FollainJimenez85.pdf:FollainJimenez85.pdf:PDF},
+  owner = {bruno.vermont},
+  publisher = {Elsevier},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{GarciaRaya11,
+  author = {Garcia, Jaume and Raya, Josep Maria},
+  title = {Price and income elasticities of demand for housing characteristics
+	in the city of Barcelona},
+  journal = {Regional Studies},
+  year = {2011},
+  volume = {45},
+  pages = {597--608},
+  number = {5},
+  file = {GarciaRaya11.pdf:GarciaRaya11.pdf:PDF},
+  owner = {bruno.vermont},
+  publisher = {Taylor \& Francis},
+  timestamp = {2014.02.21}
+}
+
+@TECHREPORT{Geniaux_etal14,
+  author = {GENIAUX, Ghislain NAPOLEONE, Claude and LEROUX, Bertand},
+  title = {Les effets prix de l’offre fonci{\`e}re},
+  institution = {INRA},
+  year = {2014},
+  file = {Geniaux_etal14.pdf:Geniaux_etal14.pdf:PDF},
+  owner = {bruno.vermont},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{Goffette09,
+  author = {Goffette-Nagot, Florence},
+  title = {Prix fonciers et demande de sol {\`a} usage r{\'e}sidentiel en France
+	(1975-2000)},
+  journal = {Revue {\'e}conomique},
+  year = {2009},
+  volume = {60},
+  pages = {853--862},
+  number = {3},
+  file = {Goffette09.pdf:Goffette09.pdf:PDF},
+  owner = {bruno.vermont},
+  publisher = {Presses de Sciences Po},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{JuillardAlexandre12,
+  author = {Juillard, Claire and Alexandre, Herv{\'e}},
+  title = {La flamb{\'e}e immobili{\`e}re dans les villes fran{\c{c}}aises,
+	une question d'attractivit{\'e}?},
+  journal = {L'Observateur de l'immobilier du Cr{\'e}dit Foncier},
+  year = {2012},
+  volume = {84},
+  pages = {34-47},
+  file = {JuillardAlexandre12.pdf:JuillardAlexandre12.pdf:PDF},
+  owner = {bruno.vermont},
+  timestamp = {2014.07.17}
+}
+
+@ARTICLE{MagnanPlateau04,
+  author = {Magnan, Heidi and Plateau, Claire},
+  title = {Acheter ou louer son logement?},
+  journal = {Note de Synth{\`e}se du SES},
+  year = {2004},
+  number = {155},
+  file = {MagnanPlateau04.pdf:lus\\MagnanPlateau04.pdf:PDF},
+  owner = {bruno.vermont},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{Mayo81,
+  author = {Mayo, Stephen K},
+  title = {Theory and estimation in the economics of housing demand},
+  journal = {Journal of Urban Economics},
+  year = {1981},
+  volume = {10},
+  pages = {95--116},
+  number = {1},
+  file = {Mayo81.pdf:Mayo81.pdf:PDF},
+  owner = {bruno.vermont},
+  publisher = {Academic Press},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{Palmquist84,
+  author = {Palmquist, Raymond B},
+  title = {Estimating the Demand for the Characteristics of Housing},
+  journal = {Review of economics and statistics},
+  year = {1984},
+  volume = {66},
+  pages = {394--404},
+  number = {3},
+  file = {Palmquist84.pdf:Palmquist84.pdf:PDF},
+  owner = {bruno.vermont},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{PlateauRakoto05,
+  author = {Plateau, C and Rakotomalala, J},
+  title = {L’attrait des maisons individuelles en milieu rural mais proches
+	des villes},
+  journal = {SESP en bref},
+  year = {2005},
+  volume = {1},
+  number = {4},
+  file = {PlateauRakoto05.pdf:lus\\PlateauRakoto05.pdf:PDF},
+  owner = {bruno.vermont},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{Rosen74,
+  author = {Rosen, Sherwin},
+  title = {Hedonic prices and implicit markets: product differentiation in pure
+	competition},
+  journal = {The journal of political economy},
+  year = {1974},
+  pages = {34--55},
+  file = {Rosen74.pdf:lus\\Rosen74.pdf:PDF},
+  owner = {bruno.vermont},
+  publisher = {JSTOR},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{RouchaudSauvant04,
+  author = {Rouchaud, Didier and Sauvant, Alain},
+  title = {Prix des logements et co{\^u}ts de transports: un mod{\`e}le global
+	d’{\'e}quilibre en {\^I}le-de-France},
+  journal = {Notes de synth{\`e}ses du SES, DAEI, Minist{\`e}re de l’{\'e}quipement},
+  year = {2004},
+  file = {RouchaudSauvant04.pdf:RouchaudSauvant04.pdf:PDF},
+  owner = {bruno.vermont},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{Sheppard99,
+  author = {Sheppard, Stephen},
+  title = {Hedonic analysis of housing markets},
+  journal = {Handbook of regional and urban economics},
+  year = {1999},
+  volume = {3},
+  pages = {1595--1635},
+  file = {Sheppard99.pdf:Sheppard99.pdf:PDF},
+  owner = {bruno.vermont},
+  publisher = {Elsevier},
+  timestamp = {2014.02.21}
+}
+
+@INCOLLECTION{Taylor03,
+  author = {Taylor, Laura O},
+  title = {The hedonic method},
+  booktitle = {A primer on nonmarket valuation},
+  publisher = {Springer},
+  year = {2003},
+  pages = {331--393},
+  owner = {bruno.vermont},
+  timestamp = {2014.03.03}
+}
+
+@TECHREPORT{Terra05,
+  author = {Terra, S},
+  title = {Guide de bonnes pratiques pour la mise en oeuvre de la m{\'e}thode
+	des prix h{\'e}doniques},
+  year = {2005},
+  file = {Terra05.pdf:Terra05.pdf:PDF},
+  journal = {Rapport technique},
+  owner = {bruno.vermont},
+  pages = {05--M0},
+  timestamp = {2014.02.21}
+}
+
+@TECHREPORT{TrannoyWasmer13b,
+  author = {Trannoy, Alain and Wasmer, Etienne},
+  title = {La politique du logement locatif},
+  institution = {conseil d’analyse économique},
+  year = {2013},
+  file = {TrannoyWasmer13b.pdf:TrannoyWasmer13b.pdf:PDF},
+  owner = {bruno.vermont},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{Travers_etal13,
+  author = {Travers, Muriel and App{\'e}r{\'e}, Gildas and Larue, Sol{\`e}ne},
+  title = {{\'E}valuation des am{\'e}nit{\'e}s urbaines par la m{\'e}thode des
+	prix h{\'e}doniques: une application au cas de la ville d’Angers},
+  journal = {Economie et statistique},
+  year = {2013},
+  number = {460-61},
+  file = {Travers_etal13.pdf:Travers_etal13.pdf:PDF},
+  owner = {bruno.vermont},
+  publisher = {Institut national de la statistique et des {\'e}tudes {\'e}conomiques},
+  timestamp = {2014.02.21}
+}
+
+@TECHREPORT{Wasmer2013,
+  author = {Wasmer, Etienne and Trannoy, Alain},
+  title = {Comment mod{\'e}rer les prix de l’immobilier?},
+  institution = {Sciences Po},
+  year = {2013},
+  file = {TrannoyWasmer13b.pdf:TrannoyWasmer13b.pdf:PDF},
+  owner = {bruno.vermont},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{Wheaton77a,
+  author = {Wheaton, William C},
+  title = {Income and urban residence: An analysis of consumer demand for location},
+  journal = {The American Economic Review},
+  year = {1977},
+  pages = {620--631},
+  file = {Wheaton77a.pdf:Wheaton77a.pdf:PDF},
+  owner = {bruno.vermont},
+  publisher = {JSTOR},
+  timestamp = {2014.02.21}
+}
+
+@ARTICLE{Wheaton77b,
+  author = {Wheaton, William C},
+  title = {A bid rent approach to housing demand},
+  journal = {Journal of Urban Economics},
+  year = {1977},
+  volume = {4},
+  pages = {200--217},
+  number = {2},
+  file = {Wheaton77b.pdf:Wheaton77b.pdf:PDF},
+  owner = {bruno.vermont},
+  publisher = {Academic Press},
+  timestamp = {2014.02.21}
+}
+
+@MISC{Yinger05,
+  author = {Yinger, John and Choi, Seok Joon},
+  title = {Housing and Commuting: The Theory of Urban Residential Structure},
+  year = {2005},
+  file = {Yinger05.pdf:Yinger05.pdf:PDF;Yinger05.pdf:lus\\Yinger05.pdf:PDF},
+  owner = {bruno.vermont},
+  publisher = {E-book Version},
+  timestamp = {2014.02.21}
+}
+
+@Article{Geniaux_etal15,
+  author    = {Geniaux, Ghislain and Napol{\'e}one, Claude and Leroux, Bertrand},
+  title     = {Les effets prix de l'offre fonci{\`e}re},
+  journal   = {Revue d’{\'E}conomie R{\'e}gionale \& Urbaine},
+  year      = {2015},
+  number    = {1},
+  pages     = {273--320},
+  file      = {Geniaux_etal15.pdf:Geniaux_etal15.pdf:PDF},
+  publisher = {Armand Colin/Dunod},
+}
+
+@TechReport{Giraudet_etal2018,
+  author      = {Giraudet, Louis-Gaetan and Bourgeois, Cyril and Quirion, Philippe and Glotin, David},
+  title       = {Evaluation prospective des politiques de r{\'e}duction de la demande d\'{\'e}nergie pour le chauffage r{\'e}sidentiel},
+  institution = {CIRED UMR 8568},
+  year        = {2018},
+}
+
+@TechReport{CODA_2015,
+  author = {Strategies, CODA},
+  title  = {Les march{\'e}s de la r{\'e}novation {\'e}nerg{\'e}tique dans le secteur tertiaire},
+  year   = {2015},
+}
+
+@TechReport{CODA_2016,
+  title       = {Le march{\'e} des {\'e}quipements et syst{\`e}mes thermiques. R{\'e}sidentiel et tertiaire},
+  institution = {CODA Strategies},
+  year        = {2016},
+}
+
+@PhdThesis{Allibe2012,
+  author = {Allibe, Benoit},
+  title  = {Mod{\'e}lisation des consommations d\'{\'e}nergie du secteur r{\'e}sidentiel fran\c{c}ais {\`a} long terme - Am{\'e}lioration du r{\'e}alisme comportemental et sc{\'e}narios volontaristes},
+  school = {Ecole des Hautes Etudes en Sciences Sociales (EHESS)},
+  year   = {2012},
+}
+
+@TechReport{Quinet2013,
+  author      = {Quinet, Emile and others},
+  title       = {L\'{\'e}valuation socio-{\'e}conomique des investissements publics},
+  institution = {Commissariat G{\'e}n{\'e}ral {\`a} la Strat{\'e}gie et {\`a} la Prospective},
+  year        = {2013},
+}
+
+@Comment{jabref-meta: databaseType:bibtex;}

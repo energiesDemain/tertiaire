@@ -1,0 +1,44 @@
+#Emploi par secteur (prix chaînés, base 2000) en milliers ;;;
+Secteur;Code;2008,00;2030,00
+Agriculture, sylviculture, pêche;DA;829,71;394,27
+Industries de la viande et du lait;EB;190,10;112,61
+Autres industries agricoles et alimentaires;EB;358,74;292,68
+Habillement, cuir;EC;79,71;30,18
+Edition, imprimerie, reproduction;EC;183,59;106,10
+Pharmacie, parfumerie et entretien;EC;75,45;32,20
+Industries des équipements du foyer;EC;168,68;98,53
+Industrie automobile;ED;189,48;126,18
+Construction navale, aéronautique et ferroviaire;EE;117,32;66,10
+Industries des biens d'équipement mécaniques;EE;434,11;281,06
+Industries des équipements électriques et électroniques;EE;183,04;116,94
+Industries des produits minéraux;EF;153,12;71,75
+Industrie textile;EF;65,16;19,98
+Industries du bois et du papier;EF;149,88;68,87
+Chimie, caoutchouc, plastiques;EF;257,09;121,24
+Métallurgie et transformation des métaux;EF;422,38;310,92
+Industrie des composants électriques et électroniques;EF;140,14;62,15
+Production de combustibles et de carburants;EG;28,26;12,31
+Eau, gaz, électricité;EG;163,32;126,65
+Bâtiment;DH;1551,03;1545,96
+Travaux publics;DH;274,89;294,69
+Commerce et réparation automobile;DJ;512,41;536,45
+Commerce de gros, intermédiaires;DJ;1043,13;1018,64
+Commerce de détail et réparations;DJ;1882,71;2561,21
+Transports;DJ;1141,09;1126,01
+Intermédiation financière;DJ;460,03;418,49
+Assurances et auxiliaires financiers;DJ;340,42;395,74
+Promotion, gestion immobilière;DJ;218,38;214,15
+Location immobilière;DJ;75,34;67,07
+Postes et télécommunications;DJ;421,22;330,32
+Conseils et assistance;DJ;1510,94;2152,53
+Services opérationnels;DJ;2105,71;3163,19
+Recherche et développement;DJ;226,76;269,76
+Hôtels et restaurants;DJ;994,46;1201,53
+Activités récréatives, culturelles et sportives;DJ;690,72;947,66
+Services personnels et domestiques;DJ;704,23;1255,89
+Education;DQ;1882,22;1966,08
+Santé;DQ;1453,37;1651,85
+Action sociale;DQ;1712,12;2214,47
+Administration publique;DQ;2315,83;1999,66
+Activités associatives;DQ;134,82;124,71
+Ensemble;;25841,13;27906,79

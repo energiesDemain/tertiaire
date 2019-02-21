@@ -1,0 +1,1497 @@
+% A mettre pour faire fonctionner luatex dans les versions récentes...
+\RequirePackage{luatex85}
+\def\pgfsysdriver{pgfsys-pdftex.def}
+
+\documentclass[10.5pt,a4paper]{article}
+\usepackage{luatextra}
+
+%pour intégrer des pages pdf
+\usepackage{pdfpages}
+
+%pénalités veuves et orphelines
+\widowpenalty10000
+\clubpenalty10000
+
+% packages persos
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage[pdfborder={0 0 0}]{hyperref}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{lipsum}
+\usepackage{xunicode}
+\usepackage{anyfontsize}
+\usepackage{microtype}
+\usepackage{anyfontsize}
+% rotation tableau 
+\usepackage{pdflscape}
+% tableau plusieurs pages
+\usepackage{longtable}
+\def\euro{\mbox{\raisebox{.25ex}{{\it =}}\hspace{-.5em}{\sf C}}}
+\usepackage{natbib}
+\usepackage{tabularx}
+
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+%Declare le nom du dossier où sont stockées les images à insérer
+\graphicspath{{figures/}{Thema_PictosJPG/}}
+
+%%% polices
+\usepackage{fontspec}
+\defaultfontfeatures{Mapping=tex-text}
+% Helvética mais il faut l'installer /Arial en substitut
+%\setmainfont[]{Arial}
+\setmainfont{HelveticaLTStd-Roman.otf}[BoldFont       = HelveticaLTStd-Bold,  ItalicFont     = HelveticaLTStd-LightObl,BoldItalicFont =HelveticaLTStd-BoldObl]
+
+%Brandon grotesque /calibri en substitut
+\newfontfamily\calibri[Ligatures = TeX, Extension = .ttf,   BoldFont       = calibrib,   ItalicFont     = calibrii,   BoldItalicFont = calibriz]{calibri}
+
+\newfontfamily\helvetlight[Ligatures = TeX, Extension = .otf, ItalicFont     = HelveticaLTStd-LightObl]{HelveticaLTStd-Light}
+
+% couleurs
+\usepackage{color}
+\usepackage{pgf,tikz} 
+\usepackage{eso-pic}
+\definecolor{orange_housing}{rgb}{0.94,0.51,0}
+\definecolor{vert_DD}{rgb}{0.47,0.70,0.12}
+\definecolor{vert_n}{RGB}{119,184,42}
+\definecolor{light_vert_n}{RGB}{174,204,0}
+\definecolor{orange_analyse}{RGB}{240,130,0}
+\definecolor{rouge_defis}{RGB}{241,55,43}
+\definecolor{violet_bilan}{RGB}{83,66,152}
+\definecolor{light_orange}{RGB}{255,229,197}
+\definecolor{contour}{RGB}{255,255,0}
+
+% encadré vert dans le texte (zoom sur)
+\usepackage[framemethod=tikz,]{mdframed}
+\newmdenv[linecolor=vert_n, fontcolor = vert_n,
+innertopmargin=0.4cm, innerbottommargin=0.4cm, 
+innerleftmargin=0.4cm,innerrightmargin=0.4cm,
+linewidth =10pt, skipabove=8mm,skipbelow=8.5mm]{encadre}
+
+\newcommand\cadrevert[3]{
+\begin{encadre}
+
+\color{vert_n} \fontsize{14}{13}\selectfont Zoom sur : \color{black} \fontsize{14}{13}\selectfont #1
+\vspace{4mm}
+
+
+%\color{vert_n} 
+\fontsize{9}{10}\selectfont #2
+
+{\setlength{\parindent}{5mm}%
+%\color{vert_n} 
+\fontsize{9}{10}\selectfont #3
+}
+\end{encadre}
+}
+
+% encadré et page de partie
+
+\newmdenv[ 
+tikzsetting={draw = white},
+%settings={\tikzset{every picture/.style={opacity=0.6}}},
+linecolor=white, 
+userdefinedwidth = 16cm,
+backgroundcolor = none,
+innertopmargin=0mm, innerbottommargin=0mm, 
+innerleftmargin=15mm,innerrightmargin=48.5mm,
+linewidth = 10pt, skipabove=0mm,skipbelow=0mm]{encadre_partie}
+
+% Commande pour les pages intercalaires de partie
+\newcommand\cadreblanc[3]{
+\noindent
+\begin{tikzpicture}[overlay, remember picture]
+\shade[top color=vert_n,bottom color=light_vert_n] 
+(current page.south west) rectangle (current page.north east);
+%\draw [help lines] (0,0) grid (20,-29);
+\node[minimum width=4.50cm, minimum height = 4.50cm, draw=white, line width = 10pt] at (16.08,-24.48) {};
+\node[] at (16.08,-24.58) {\calibri \color{white} \bfseries \fontsize{96}{96}\selectfont >};
+\node[minimum width=15.65cm, minimum height = 15.65cm, draw=white, line width = 10pt] at (10.5,-10.2) {
+\begin{minipage}[t]{1.15cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{9.6cm}
+\vspace{12mm}
+\color{white} \fontsize{16}{7}\selectfont \textls[-5]{#1
+
+\rule{2cm}{5pt}
+} 
+\vspace{4mm}
+
+\color{white} \sloppy \raggedright \fontsize{35}{35}\selectfont \bfseries \textls[-10]{#2} 
+\vspace{20.5mm}
+
+\color{white} \fontsize{11}{12}\selectfont \textls[-10]{#3}
+\vspace{14mm}
+\end{minipage}\hfill
+\begin{minipage}[t]{4.50cm}
+\hfill
+\end{minipage}\hfill
+};
+\end{tikzpicture}
+}
+
+% Commande pour la page titre
+
+
+% Commande pour la page titre
+
+\newcommand\pagetitre[4]{
+\noindent
+\begin{tikzpicture}[overlay, remember picture]
+\node[minimum width=21cm, minimum height = 21cm] at (10.5,-10.2) {
+\includegraphics[trim = {1mm 1mm 1mm 1mm},width=21cm, height = 21cm]{fond_feuille}
+};
+%\shade[top color=vert_n,bottom color=light_vert_n] 
+%(current page.south west) rectangle (current page.north east);
+%\draw [help lines] (0,0) grid (20,-29);
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (4.87,-4.57) {\calibri\color{white}\fontsize{96pt}{12pt}\selectfont\bfseries T};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (10.47,-4.57) {\calibri\color{white}\fontsize{96pt}{12pt}\selectfont\bfseries H};
+% choix du pictogramme
+\node[minimum width=4.5cm, minimum height = 4.5cm] at (16.07,-4.57) {
+\includegraphics[width=4.85cm, height = 4.85cm]{A6_Picto_Economie}
+};
+% choix entre analyse défi et balises
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, fill = orange_analyse, line width = 10pt] at (4.87,-10.17) {
+};
+\node[] at (4.87,-9.92) {
+\color{white}\fontsize{24pt}{5pt}\selectfont Analyse
+};
+\node[] at (4.82,-10.52) {\color{white} \rule{3.1cm}{5pt}
+};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (10.47,-10.17) {};
+\node[] at (10.47,-9.87) {\calibri\color{white}\fontsize{96pt}{12pt}\selectfont \bfseries \'E};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (16.07,-10.17) {};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (4.87,-15.77) {};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (10.47,-15.77) {\calibri\color{white}\fontsize{96pt}{12pt}\selectfont\bfseries M};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (16.07,-15.77) {\calibri\color{white}\fontsize{96pt}{12pt}\selectfont\bfseries A};
+
+% titre et sous titre et mois année à remplir
+\node[minimum width=21cm, minimum height = 9cm, fill = white] at (10.5,-25.145) {
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{12.15cm}
+\raggedright
+\vspace{7.5mm}
+\fontsize{30pt}{30pt}\selectfont \mdseries \titreetude\\
+\helvetlight \fontsize{30pt}{30pt}\selectfont \soustitreetude \\
+\color{white} \fontsize{30pt}{30pt}\selectfont \mdseries \soustitreetude \\
+%\color{white} \fontsize{30pt}{30pt}\selectfont \mdseries \soustitreetude \\
+\vspace{6mm}
+\color{vert_n} \fontsize{10pt}{10pt}\selectfont  \bfseries \MakeUppercase{\mois~\annee} \\
+\end{minipage}\hfill
+\begin{minipage}[t]{6.45cm}
+\hfill
+\end{minipage}\hfill
+};
+
+\node[] at (10.5,-21.5) {
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{16.15cm}
+\hfill
+%{\calibri \fontsize{24pt}{12pt}\selectfont \bfseries \textls[-25]{commissariat général au développement durable}} \\
+%\vspace{0.1cm}
+%\hrule
+\end{minipage}\hfill
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+};
+
+\draw[color = black, line width = 1pt] (0,-20.65) -- (21,-20.65);
+\draw[color = black, line width = 0.5pt] (0,-22) -- (21,-22);
+\node[minimum width=2.95cm, minimum height = 3.8cm] at (17.10,-26) {
+\includegraphics[width=2.95cm, height = 3.8cm]{Bloc-marque_MEEM_RVB_HD}
+};
+\end{tikzpicture}\clearpage
+}
+
+% sommaire
+
+\newcommand\sommaire[2]{
+\noindent
+\begin{tikzpicture}[overlay, remember picture]
+%\shade[top color=vert_n,bottom color=light_vert_n] 
+%(current page.south west) rectangle (current page.north east);
+\node[minimum width=21cm, minimum height = 21cm] at (10.5,-10.2) {
+\includegraphics[trim = {1mm 1mm 1mm 1mm},width=21cm, height = 21cm]{fond_feuille}
+};
+\node[minimum width=15.65cm, minimum height = 11.15cm, draw=vert_n,fill = white, line width = 10pt] at (10.5,-12.45) {
+\begin{minipage}[t]{0.62cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{11.70cm}
+\begin{tabularx}{11cm}{clX}
+\fontsize{12pt}{14pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker1} &\color{black} - & \fontsize{12pt}{12pt}\selectfont \bfseries \nameref{sec:marker1} \\
+&&\\
+\fontsize{12pt}{6pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker2} & \color{black} - & \fontsize{12pt}{12pt}\selectfont \bfseries \nameref{sec:marker2} \\
+&&\fontsize{8pt}{9pt}\selectfont  A COMPLETER \\
+&&\\
+\fontsize{12pt}{12pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker3} & \color{black} - & \fontsize{12pt}{12pt}\selectfont \bfseries  \nameref{sec:marker3} \\
+& & \fontsize{8pt}{9pt}\selectfont A COMPLETER \\
+&&\\
+\fontsize{12pt}{6pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker4} & \color{black} - & \fontsize{12pt}{12pt}\selectfont \bfseries \nameref{sec:marker4}\\
+&&\fontsize{8pt}{9pt}\selectfont A COMPLETER \\
+&&\\
+\fontsize{12pt}{6pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker5} &  \color{black} - & \fontsize{12pt}{12pt}\selectfont \bfseries \nameref{sec:marker5}\\
+&&\fontsize{8pt}{9pt}\selectfont A COMPLETER \\
+&&\\
+\fontsize{12pt}{6pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker6} & \color{black} - & \fontsize{12pt}{12pt}\selectfont \bfseries  \nameref{sec:marker6}\\
+%&&\\
+%\fontsize{13pt}{13pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker7} & \normalfont \color{black} - & \nameref{sec:marker7}\\
+%&&\\
+%\fontsize{13pt}{13pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker8} & \normalfont \color{black} - & \nameref{sec:marker8}\\
+\end{tabularx}
+%\fontsize{7pt}{7pt}\selectfont
+%\tableofcontents
+\end{minipage}\hfill
+\begin{minipage}[t]{3cm}
+\hfill
+\end{minipage}\hfill
+};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=vert_n,fill = white, line width = 10pt] at (4.925,-4.625) {};
+\node[] at (4.92,-5.55) {\centering \fontsize{16pt}{16pt} \selectfont sommaire};
+\draw[line width = 5pt, color = black] (3.72,-6.0) -- (6.22,-6.0);
+\node[minimum width=11.15cm, minimum height = 4.5cm, draw=vert_n,fill = white, line width = 10pt] at (12.75,-4.625) {
+\begin{minipage}[t]{0.2cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{10.6cm}
+\vspace{3mm}
+\raggedright
+\fontsize{20pt}{20pt}\selectfont \mdseries \titreetude \\
+\helvetlight \fontsize{20pt}{20pt}\selectfont \soustitreetude \\
+\helvetlight \color{white} \fontsize{20pt}{20pt}\selectfont \soustitreetude \\
+\helvetlight \color{white} \fontsize{20pt}{20pt}\selectfont \soustitreetude \\
+\end{minipage}\hfill
+};
+\node[minimum width=21cm, minimum height = 6.2cm, fill = white] at (10.5,-23.8) {
+\begin{minipage}[t]{2.5cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{13cm}
+\raggedright
+\vspace{6mm}
+{\helvetlight \fontsize{12pt}{12pt}\selectfont \textls[-10]{Document édité par :}} \\
+\fontsize{12pt}{12pt}\selectfont \mdseries \textls[-10]{Le service de l'économie, de l'évaluation et} \\
+\fontsize{12pt}{12pt}\selectfont \mdseries \textls[-10]{de l'intégration du développement durable (SEEIDD)} \\
+%\fontsize{12pt}{12pt}\selectfont \bfseries \textls[-10]{} \\
+%\fontsize{12pt}{12pt}\selectfont \bfseries \textls[-10]{} \\
+%\fontsize{12pt}{12pt}\selectfont \bfseries \textls[-10]{} \\
+\vspace{10mm}
+\fontsize{8pt}{9pt}\selectfont \bfseries Remerciements. \fontsize{8pt}{9pt}\selectfont \normalfont  REMERCIEMENTS \\
+%\fontsize{8pt}{9pt}\selectfont \normalfont  Remerciements \\
+\vspace{15.5mm}
+\end{minipage}\hfill
+\begin{minipage}[t]{5.5cm}
+\hfill
+\end{minipage}\hfill
+};
+\node[minimum width=21cm, minimum height = 2.5cm, fill = white] at (10.5,-28.1) {
+};
+\node[] at (10.5,-27.35) {
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill
+\begin{minipage}[t]{16cm}
+\raggedright
+\textcolor{vert_n}{\rule{7pt}{7pt}} \fontsize{7}{5mm} \selectfont \thepage~ -
+\textbf{\titreetude} : \soustitreetude
+\end{minipage}\hfill
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill
+};
+\draw[color = black, line width = 0.5pt] (2.5,-26.9) -- (18.5,-26.9);
+\end{tikzpicture}\clearpage 
+}
+
+
+% Commande pour la page contributeurs
+
+\newcommand\contributeurs[3]{
+\noindent
+\begin{tikzpicture}[overlay, remember picture]
+%\shade[top color=vert_n,bottom color=light_vert_n] 
+%(current page.south west) rectangle (current page.north east);
+\node[] at (4.12,-9.8) {\raggedright \fontsize{16pt}{7pt}\selectfont contributeurs};
+\draw[line width = 5pt, color = black] (2.51,-10.21) -- (5.71,-10.21);
+
+%contributeur 1
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=vert_n,fill = white, line width = 10pt] at (10.5,-12.02) {
+\begin{minipage}[t]{0.2cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{3.6cm}
+%\vspace{2mm}
+\raggedleft {\helvetlight \fontsize{42pt}{8pt}\selectfont BV}\\
+\vspace{1.2cm}
+\raggedright \normalfont \fontsize{11pt}{11pt}\selectfont Bruno \bfseries Vermont \\
+\raggedright \fontsize{7pt}{8pt}\selectfont \bfseries Chargé d'études économiques \\
+\vspace{2mm}
+\raggedright \normalfont \fontsize{5pt}{6pt}\selectfont bruno.vermont@developpement-durable.gouv.fr \\
+\end{minipage}
+\begin{minipage}[t]{0.3cm}
+\hfill
+\end{minipage}\hfill
+};
+\node[minimum width=4.5cm, minimum height = 3.25cm] at (15,-13.64) {
+\begin{minipage}[t]{0.4cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{3.6cm}
+%\vspace{2mm}
+\raggedright \fontsize{8pt}{9pt}\selectfont Chargé d'études économiques sur l'efficacité énergétique dans le secteur du bâtiment
+\end{minipage}
+\begin{minipage}[t]{0.3cm}
+\hfill
+\end{minipage}\hfill
+};
+
+
+\textbf{AHOUTER SILVANO, DIMITRI?, ENERGIES DEMAIN?}
+
+%%contributeur 2
+%\node[minimum width=4.5cm, minimum height = 4.5cm, draw=vert_n,fill = white, line width = 10pt] at (10.5,-17.47) {
+%\begin{minipage}[t]{0.2cm}
+%\hfill
+%\end{minipage}\hfill
+%\begin{minipage}[t]{3.6cm}
+%%\vspace{2mm}
+%\raggedleft {\helvetlight \fontsize{42pt}{8pt}\selectfont BV}\\
+%\vspace{1.3cm}
+%\raggedright \fontsize{11pt}{11pt}\selectfont Bastien \bfseries Virely \\
+%\raggedright \fontsize{7pt}{8pt}\selectfont \bfseries Chargé d'études économiques \\
+%\vspace{2mm}
+%\raggedright \normalfont \fontsize{5pt}{6pt}\selectfont bastien.virely@developpement-durable.gouv.fr \\
+%\end{minipage}
+%\begin{minipage}[t]{0.3cm}
+%\hfill
+%\end{minipage}\hfill
+%};
+%\node[minimum width=4.5cm, minimum height = 3.25cm] at (15,-18.09) {
+%\begin{minipage}[t]{0.4cm}
+%\hfill
+%\end{minipage}\hfill
+%\begin{minipage}[t]{3.6cm}
+%%\vspace{2mm}
+%\raggedright \fontsize{8pt}{9pt}\selectfont \bfseries Tem nam et rerro expla intem  ne audi utate \fontsize{8pt}{9pt}\selectfont \normalfont ipsunt volest eum conectaturem dolumquasi odit ut mil iurehendi aut volorro ruptaeperum event aut accum que si ipitasperia dolorem porit, omnimeTem ipsunt volestibus am, qui di conecus cientiscit laborpor molorpo rerciatem ut
+%\end{minipage}
+%\begin{minipage}[t]{0.3cm}
+%\hfill
+%\end{minipage}\hfill
+%};
+%
+%
+%%contributeur 3
+%\node[minimum width=4.5cm, minimum height = 4.5cm, draw=vert_n,fill = white, line width = 10pt] at (10.5,-22.92) {
+%\begin{minipage}[t]{0.2cm}
+%\hfill
+%\end{minipage}\hfill
+%\begin{minipage}[t]{3.6cm}
+%%\vspace{2mm}
+%\raggedleft {\helvetlight \fontsize{42pt}{8pt}\selectfont MA}\\
+%\vspace{1.3cm}
+%\raggedright \fontsize{11pt}{11pt}\selectfont Mobilité \bfseries Aména \\
+%\raggedright \fontsize{7pt}{8pt}\selectfont \bfseries Bureau \\
+%\vspace{2mm}
+%\raggedright \normalfont \fontsize{5pt}{6pt}\selectfont ma@developpement-durable.gouv.fr \\
+%\end{minipage}
+%\begin{minipage}[t]{0.3cm}
+%\hfill
+%\end{minipage}\hfill
+%};
+%\node[minimum width=4.5cm, minimum height = 3.25cm] at (15,-23.54) {
+%\begin{minipage}[t]{0.4cm}
+%\hfill
+%\end{minipage}\hfill
+%\begin{minipage}[t]{3.6cm}
+%%\vspace{2mm}
+%\raggedright \fontsize{8pt}{9pt}\selectfont \bfseries Tem nam et rerro expla intem  ne audi utate \fontsize{8pt}{9pt}\selectfont \normalfont ipsunt volest eum conectaturem dolumquasi odit ut mil iurehendi aut volorro ruptaeperum event aut accum que si ipitasperia dolorem porit, omnimeTem ipsunt volestibus am, qui di conecus cientiscit laborpor molorpo rerciatem ut
+%\end{minipage}
+%\begin{minipage}[t]{0.3cm}
+%\hfill
+%\end{minipage}\hfill
+%};
+
+%pied de page
+\node[] at (10.5,-27.35) {
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill
+\begin{minipage}[t]{16cm}
+\raggedleft
+\fontsize{7}{5mm} \selectfont \textbf{\titreetude} : \soustitreetude - \thepage~  \textcolor{vert_n}{\rule{7pt}{7pt}} 
+\end{minipage}\hfill
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill};
+\draw[color = black, line width = 0.5pt] (2.5,-26.9) -- (18.5,-26.9);
+\end{tikzpicture}
+}
+
+
+% Commande pour la page avant-propos
+
+\newcommand\avantpropos[2]{
+\noindent
+\begin{tikzpicture}[overlay, remember picture]
+%\shade[top color=vert_n,bottom color=light_vert_n] 
+%(current page.south west) rectangle (current page.north east);
+\node[] at (4.12,-10) {\raggedright \fontsize{16pt}{7pt}\selectfont  \textls[-5]{avant-propos} };
+\draw[line width = 5pt, color = black] (2.51,-10.41) -- (5.75,-10.41);
+\node[minimum width=2.99cm, minimum height = 2.99cm, draw=vert_n,fill = white, line width = 6pt] at (4.1,-12.9) {
+\calibri\fontsize{65pt}{9pt}\selectfont \bfseries P
+};
+\node[minimum width=11.8cm, minimum height =  3.2cm] at (11.6,-12.9) {
+\begin{minipage}[t]{0.2cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{11.5cm}
+\helvetlight \fontsize{14pt}{17pt}\selectfont \raggedright Tem nam et rerro expla intem  ne audi utate \fontsize{8pt}{9pt}\selectfont \normalfont ipsunt volest eum conectaturem dolumquasi odit ut mil iurehendi aut volorro ruptaeperum event aut accum que si ipitasperia dolorem porit, omnimeTem ipsunt volestibus am, qui di conecus cientiscit laborpor molorpo rerciatem ut
+\end{minipage}\hfill
+\begin{minipage}[t]{0.1cm}
+\hfill
+\end{minipage}\hfill
+};
+\node[minimum width=16cm, minimum height = 11.2cm] at (10.5,-18) {
+\begin{minipage}[t]{15cm}
+\helvetlight \fontsize{14pt}{17pt}\selectfont \raggedright Tem nam et rerro expla intem  ne audi utate \fontsize{8pt}{9pt}\selectfont \normalfont ipsunt volest eum conectaturem dolumquasi odit ut mil iurehendi aut volorro ruptaeperum event aut accum que si ipitasperia dolorem porit, omnimeTem ipsunt volestibus am, qui di conecus cientiscit laborpor molorpo rerciatem ut
+\end{minipage}\hfill
+\begin{minipage}[t]{1cm}
+\hfill
+\end{minipage}\hfill
+};
+Tem nam et rerro expla intem  ne audi utate \fontsize{8pt}{9pt}\selectfont \normalfont ipsunt volest eum conectaturem dolumquasi odit ut mil iurehendi aut volorro ruptaeperum event aut accum que si ipitasperia dolorem porit, omnimeTem ipsunt volestibus am, qui di conecus cientiscit laborpor molorpo rerciatem ut
+
+\node[minimum width=21cm] at (10.5,-24.78) {
+\begin{minipage}[t]{2.5cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{12cm}
+\raggedright \fontsize{13pt}{20pt}\selectfont Laurence Monnoyer-Smith \\
+\helvetlight \fontsize{9pt}{9pt}\selectfont \textls[10]{COMMISSAIRE G\'{E}N\'{E}RALE AU D\'{E}VELOPPEMENT DURABLE} \hfill
+\end{minipage}
+\begin{minipage}[t]{4cm}
+\hfill
+%\includegraphics[width=5cm, height = 3cm]{signature}
+\end{minipage}\hfill
+\begin{minipage}[t]{2.5cm}
+\hfill
+\end{minipage}\hfill};
+
+%
+%\node[minimum width=12.5cm] at (14.75,-24.78) {
+%\begin{minipage}[t]{4cm}
+%\hfill
+%%SIGNATURE 
+%\end{minipage}\hfill
+%\begin{minipage}[t]{2.5cm}
+%\hfill
+%\end{minipage}\hfill};
+
+\node[] at (10.5,-27.35) {
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill
+\begin{minipage}[t]{16cm}
+\raggedright
+\textcolor{vert_n}{\rule{7pt}{7pt}} \fontsize{7}{5mm} \selectfont \thepage~ -
+\textbf{\titreetude} : \soustitreetude
+\end{minipage}\hfill
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill
+};
+\draw[color = black, line width = 0.5pt] (2.5,-26.9) -- (18.5,-26.9);
+\end{tikzpicture}
+}
+
+
+% Commande pour la troisième de couv
+
+\newcommand\troisieme[2]{
+\noindent
+\begin{tikzpicture}[overlay, remember picture]
+%\shade[top color=vert_n,bottom color=light_vert_n] 
+%(current page.south west) rectangle (current page.north east);
+\node[minimum width=21cm, minimum height = 21cm] at (10.5,-10.2) {
+\includegraphics[trim = {1mm 1mm 1mm 1mm},width=21cm, height = 21cm]{fond_feuille2}
+};
+\node[minimum width=21cm, minimum height = 9cm, fill = white] at (10.5,-25.145) {};
+
+\node[minimum width=21cm, minimum height = 4.5cm] at (10.5,-22.4) {
+\begin{minipage}[t]{2.5cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{11.9cm}
+\fontsize{8pt}{7.8pt}\selectfont \bfseries
+Conditions générales d’utilisation\\
+\fontsize{6.5pt}{7.8pt}\selectfont \normalfont 
+\raggedright
+Toute reproduction ou représentation intégrale ou partielle, par quelque procédé que ce soit, des pages publiées
+dans le présent ouvrage, faite sans l’autorisation de l’éditeur ou du Centre français d’exploitation du droit de copie
+(3, rue Hautefeuille — 75006 Paris), est illicite et constitue une contrefaçon. Seules sont autorisées, d’une part,
+les reproductions strictement réservées à l’usage privé du copiste et non destinées à une utilisation collective, et,
+d’autre part, les analyses et courtes citations justifiées par le caractère scientifque ou d’information de l’oeuvre
+dans laquelle elles sont incorporées (loi du 1er juillet 1992 — art. L.122-4 et L.122-5 et Code pénal art. 425).
+\end{minipage}\hfill
+\begin{minipage}[t]{6.5cm}
+\hfill
+\end{minipage}\hfill
+};
+
+\node[minimum width=21cm, minimum height = 4.5cm] at (10.5,-25) {
+\begin{minipage}[t]{2.5cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{3.5cm}
+\fontsize{8pt}{9.6pt}\selectfont \bfseries \raggedright
+\bfseries  Dépôt légal : \normalfont Octobre 2016 \\
+\bfseries  ISSN : \normalfont En cours \\
+%\bfseries  ISBN : \normalfont XXX-X-XX-XXXXXX-X
+\end{minipage}\hfill
+\begin{minipage}[t]{0.8cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{7.5cm}
+\fontsize{8pt}{9.6pt}\selectfont \color{white} \raggedright
+Achevé d'imprimer en mois XXXX.\\
+\bfseries Impression : \normalfont Lieu, utilisant du papier\\
+issu de forêts durablement gérées.\\
+\end{minipage}\hfill
+\begin{minipage}[t]{6.5cm}
+\hfill
+\end{minipage}\hfill
+};
+
+%pied de page
+\node[] at (10.5,-27.35) {
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill
+\begin{minipage}[t]{16cm}
+\raggedleft
+\fontsize{7}{5mm} \selectfont \textbf{\titreetude} : \soustitreetude - \thepage~  \textcolor{vert_n}{\rule{7pt}{7pt}} 
+\end{minipage}\hfill
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill};
+\draw[color = black, line width = 0.5pt] (2.5,-26.9) -- (18.5,-26.9);
+
+
+\end{tikzpicture}
+}
+
+%Commande pour la quatrième de couv
+\newcommand\quatrieme[1]{
+\noindent
+\begin{tikzpicture}[overlay, remember picture]
+%\shade[top color=vert_n,bottom color=light_vert_n] 
+%(current page.south west) rectangle (current page.north east);
+\node[minimum width=21cm, minimum height = 21cm] at (10.5,-10.2) {
+\includegraphics[trim = {1mm 1mm 1mm 1mm},width=21cm, height = 21cm]{fond_feuille2}
+};
+
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (4.87,-4.57) {};
+
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (4.87,-10.17) {
+};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white,fill = white,, line width = 10pt] at (4.87,-15.77) {\begin{minipage}{0.3cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}{3.6cm}
+\raggedright
+\mdseries \color{vert_n}\fontsize{16pt}{16pt}\selectfont \titreetude  \\
+\helvetlight \color{vert_n}\fontsize{16pt}{16pt}\selectfont \soustitreetude
+\vspace{2cm}
+\end{minipage}\hfill
+\begin{minipage}{0.3cm}
+\hfill
+\end{minipage}\hfill};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (10.47,-15.77) {
+};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (16.07,-15.77) {};
+
+\node[minimum width=10.1cm, minimum height = 10.1cm, draw=white, fill = white, line width = 10pt] at (13.27,-7.37) {
+\begin{minipage}[t]{0.2cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{9.25cm}
+\vspace{2mm}
+{\helvetlight \fontsize{10pt}{11pt}\selectfont #1 \hfill}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.2cm}
+\hfill
+\end{minipage}\hfill
+};
+
+
+\node[minimum width=21cm, minimum height = 9cm, fill = white] at (10.5,-25.145) {
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{16.15cm}
+\raggedright
+\vspace{5mm}
+\helvetlight \fontsize{12pt}{13pt} \selectfont Service de l'économie, de l'évaluation et de l'intégration du développement durable \\
+Sous-direction mobilité et aménagement \\
+Tour Sequoia \\
+92055 La Défense cedex \\
+courriel : ma.seei.cgdd@developpement-durable.gouv.fr
+\vspace{3.5cm}
+\end{minipage}\hfill
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+}
+;
+
+
+\node[] at (10.5,-21.5) {
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{16.15cm}
+{\calibri \fontsize{24pt}{12pt}\selectfont \bfseries \textls[-25]{commissariat général au développement durable}} \\
+%\vspace{0.1cm}
+%\hrule
+\end{minipage}\hfill
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+};
+\draw[color = black, line width = 1.5pt] (0,-20.6) -- (21,-20.6);
+\draw[color = black, line width = 0.5pt] (0,-22) -- (21,-22);
+\node[minimum width=2.95cm, minimum height = 3.8cm] at (17.10,-26) {
+\includegraphics[width=2.95cm, height = 3.8cm]{Bloc-marque_MEEM_RVB_HD}
+};
+
+\node[minimum width=21cm, minimum height = 2cm] at (10.5,-27.7) {
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{16.15cm}
+ \fontsize{10pt}{10pt}\selectfont \bfseries www.developpement-durable.gouv.fr
+\end{minipage}\hfill
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+};
+\end{tikzpicture}
+}
+% couleurs et polices des sections
+\usepackage{sectsty}
+\usepackage[noindentafter]{titlesec}
+\renewcommand\thesection{\arabic{section}}
+\titleformat{\section}{\raggedright \sloppy}{}{0em}{\fontsize{35}{36}\selectfont}
+\titlespacing*{\section}{0mm}{0mm}{9mm}
+
+
+% titre de section invisible
+\makeatletter
+\newcommand\invisiblesection[1]{%
+  \refstepcounter{section}%
+  \def\@currentlabelname{#1}
+  \addcontentsline{toc}{section}{\protect\numberline{\thesection}#1}%
+  \sectionmark{#1}}
+\makeatother
+
+
+% version officielle
+%\titleformat{\subsection}{\raggedright \sloppy}{}{0em}{\fontsize{35}{36}\selectfont}
+%\titlespacing*{\subsection}{0mm}{0mm}{12mm}
+%\titleformat{\subsubsection}{\color{vert_n}\bfseries}{}{0em}{\fontsize{10.5}{12}\selectfont \scshape \uppercase}
+%\titleformat{\subsubsubsection}{\bfseries\fontsize{10.5}{12}\selectfont}{\thesubsubsection}{1em}{}
+%\titlespacing*{\subsubsubsection}{ 0mm }{7.5mm}{ 0mm }
+
+% version décalée d'un niveau
+%\titleformat{\subsection}{\raggedright \sloppy}{}{0em}{\fontsize{35}{36}\selectfont}
+%\titlespacing*{\subsection}{0mm}{0mm}{12mm}
+\titleformat{\subsection}{\color{vert_n}\bfseries}{}{0em}{\fontsize{10.5}{12}\selectfont \scshape \uppercase}
+\titleformat{\subsubsection}{\bfseries\fontsize{10.5}{12}\selectfont}{\thesubsubsection}{1em}{}
+\titlespacing*{\subsubsection}{0mm}{0mm}{ 0mm }
+
+
+% marges
+\usepackage[%
+      headheight=2.85cm,
+			headsep = 1.85cm,
+      includeheadfoot,
+      margin=2.5cm,
+			marginparsep = 0cm, 
+      textheight=19.25cm, 
+		%	showframe, 
+			footskip = 17mm,
+			includehead, includefoot,
+			left=2.5cm,right=2.5cm,
+			top=2.5cm,bottom=2.5cm,
+			asymmetric,
+]{geometry}
+
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+
+
+%\setlength{\voffset}{-0.04cm}
+%\setlength{\hoffset}{0cm}
+%\setlength{\footskip}{17mm}
+
+% en tête et pied de page
+\usepackage{fancyhdr}
+% nouvelle commande hrule avec un paramètre pour définir l'écart avant ou après
+\newcommand{\HRule}[1][\medskipamount]{\par
+  \vspace*{\dimexpr-\parskip-\baselineskip+#1}
+  \noindent\rule{\linewidth}{10pt}\par
+  \vspace*{\dimexpr-\parskip-.5\baselineskip+#1}}
+	
+
+\fancyhead{}
+\renewcommand{\headrulewidth}{0.5pt}
+\fancyhead{} 
+\fancyhead[L]{
+\textcolor{vert_n}{\HRule[0pt]}
+\vspace{0.2cm}
+\setlength{\fboxsep}{0mm}
+\fcolorbox{white}{white}{\parbox[t][2.3cm]{7.8cm}{\fontsize{10pt}{10pt} \selectfont \textls[-10]{\nouppercase{\leftmark}}}}
+}
+
+\fancyfoot{}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyfoot[LE]{ \textcolor{vert_n}{\rule{7pt}{7pt}} \fontsize{7}{5mm} \selectfont \thepage~ -
+\textbf{\titreetude} - \soustitreetude}
+ \fancyfoot[RO]{\fontsize{7pt}{5mm} \selectfont \textbf{\titreetude} - \soustitreetude - \thepage~  \textcolor{vert_n}{\rule{7pt}{7pt}}}
+
+
+% page style première page partie
+\fancypagestyle{partie}{%
+\newgeometry{headheight=0cm,
+			headsep = 0cm,
+      margin=0cm,
+			marginparsep = 0cm, 
+      textheight=0cm, 
+	%		showframe, 
+			footskip = 0mm,
+			includehead, includefoot,
+			left=0cm,right=0cm,
+			top=0cm,bottom=0cm,asymmetric}
+\fancyhf{} % clear all header and footer fields
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+}
+
+%##################################################################
+%######## Langue et sommaire
+%##################################################################
+
+\usepackage[frenchb]{babel}
+\usepackage{enumitem}
+
+%indentation des paragraphes (garder l'odre !!)
+\setlength{\parindent}{5mm}
+\frenchbsetup{IndentFirst=false}
+%\frenchbsetup{StandardLists=true}
+\selectlanguage{frenchb} 
+% espaces entre les paragraphes 
+\setlength{\parskip}{3mm}
+
+\usepackage{caption}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{1}
+%couleurs et polices des titres de figures 
+\captionsetup[figure]{labelfont={bf},textfont={small,bf}}
+\captionsetup[table]{labelfont={bf},textfont={small,bf}, name = Tableau}
+
+\addtocontents{toc}{\protect\thispagestyle{fancy}}
+
+%change le nom de la table des matières+couleurs
+\addto\captionsfrench{% Replace "english" with the language you use
+ \renewcommand{\contentsname}%
+ {}%
+}
+
+%change le nom de la table des matières+couleurs
+\addto\captionsfrench{% Replace "english" with the language you use
+ \renewcommand{\contentsname}%
+ {}%
+}
+
+%Définit le titre et le sous-titre
+\newcommand\titreetude{Efficacité énergétique des bâtiments tertiaire}
+\newcommand\soustitreetude{Quelles solutions pour quels coûts à l'horizon 2050 ?}
+\newcommand\annee{2016}
+\newcommand\mois{Octobre}
+
+\AtBeginDocument{\addtocontents{toc}{\protect\thispagestyle{partie}}} 
+\begin{document}
+
+\pagestyle{fancy}
+
+%\end{titlepage}
+
+\thispagestyle{partie}
+\pagetitre{}{}{}{}
+
+\newpage 
+
+\thispagestyle{partie}
+\sommaire{}{}
+
+\newpage 
+
+\thispagestyle{partie}
+\contributeurs{}{}
+
+\newpage 
+
+\thispagestyle{partie}
+\avantpropos{}{}
+
+\cleardoublepage
+%\thispagestyle{partie}
+%\cadreblanc{}{Introduction}
+
+\newpage
+\pagestyle{fancy}
+
+{\fontsize{10.5pt}{12pt}\selectfont 
+
+%\invisiblesection{Introduction}\label{sec:marker1}
+\section{Introduction}\label{sec:marker1}
+
+\markboth{Introduction}{}
+
+%\begin{itemize}
+
+\subsection{La part du secteur tertiaire dans les consommations et les émissions de GES en France}
+
+\subsection{les objectifs des politiques publiques impactant le tertiaire}
+
+\subsection{Littérature sur le sujet de la rénovation dans le tertiaire??}
+
+\subsection{Apports et structure de l'étude}
+
+
+
+
+\cleardoublepage
+
+\thispagestyle{partie}
+\cadreblanc{Partie 1}{Le modèle tertiaire THERMOS }{Résumé Partie}
+
+\newpage
+\pagestyle{fancy}
+
+\invisiblesection{Le modèle tertiaire THERMOS }\label{sec:marker2}
+\markboth{Partie 1 : Le modèle tertiaire THERMOS }{}
+
+\subsection{État initial du parc tertiaire}
+
+Le point de départ de la construction d'un modèle dynamique d'évolution du parc tertiaire est la définition d’un état initial détaillé qui sert de base à la mise en dynamique du parc de l’année de référence 2009 à l’horizon 2050. L’état des lieux a été déterminé avec le modèle ENERTER Tertiaire, développé par Energies Demain.
+
+\subsubsection{Reconstitution statistique des surfaces du parc tertiaire}
+
+Energies Demain et le Centre Energétique et Procédés (CEP) de l’Ecole des Mines de Paris ont conjointement travaillé au développement d’une méthodologie de reconstitution du parc tertiaire dans le cadre de l'élaboration du modèle ENERTER Tertiaire qui se décline en deux étapes : 
+
+\begin{itemize}
+	\item La description du parc qui consiste en une caractérisation aussi bien quantitative que qualitative du parc bâti tertiaire
+	\item L’évaluation des consommations d’énergie du parc tertiaire à l’aide d’un moteur de calcul dynamique
+\end{itemize}
+
+Les surfaces chauffées ont été reconstituées pour les huit branches d’activité tertiaire selon la définition du Centre d’Études et de Recherches Économiques sur l’Énergie (CEREN) : Bureaux Administration, Café Hôtel Restaurant, Commerce, Enseignement Recherche, Habitat Communautaire, Santé Action Sociale, Sport Loisir Culture et Équipements Collectifs Divers, Transport. 
+
+La quantification des surfaces est effectuée à partir de données sur l’emploi actuel ainsi que l’activité, le nombre et la taille des établissements implantés dans chacune des communes françaises. Les données utilisées sont celles du dénombrement des établissements de l’INSEE, l’historique des recensements généraux de la population, les données de l’emploi des bases SIRENE et UNISTATIS, ainsi que des bases de données spécifiques à la branche étudiée. 
+
+A titre illustratif, dans le cas de la branche « Habitat Communautaire », comprenant notamment les maisons de retraite, la Base Permanente des Équipements de l’INSEE, les données du Fichier National des Etablissements Sanitaires et Sociaux (FINESS) ainsi que celles des Statistiques Annuelles des Établissements de Santé (SAE) sont venues compléter l’approche statistique basée sur l’emploi salarié par des données territorialisées renseignant le nombre de lits, de pensionnaires ainsi que d’établissements selon la nature de l’activité exercée et la période de construction.
+
+Ceci permet d’obtenir une répartition des surfaces chauffées, des salariés et des unités d’occupant (élèves, chambres, lits…) à l’échelle de l’établissement selon les discriminants suivants :
+\begin{itemize}
+\item	Activité détaillée (selon le code NAF rev.1 2003 ou rev.2 2008)
+\item	Secteur (Public/Privé/Parapublic)
+\item	Statut juridique (Etablissement public administratif, Association loi 1901, SARL, Fondation…)
+\item	Occupant (Etat, Régions, Départements, Bloc communal, Parapublic, Privé)
+\end{itemize}
+
+
+\cadrevert{Les sources de données utilisées}{
+\vspace{0.2cm}
+{\centering\fontsize{7}{8}\selectfont
+\begin{tabular}{l|l}
+\textbf{Branche d'activité}	&	\textbf{Source de données}
+\\	\hline	\\	
+						&	Emploi départemental base UNISTATIS  \\
+						&	Recensements de la population version longue (INSEE) \\
+Bureaux Administration	& 	Dénombrement des établissements 2008 (INSEE) \\
+						&	Base permanente des équipements 2008 (INSEE) \\
+						&	Bureaux, ADEME AICVF \\
+						&	Rapport du projet Optisol, ADEME/ARMINES, 2009\\
+\\	\hline	\\				
+						&	Dénombrement des établissements 2008 (INSEE) \\
+						&	Base permanente des équipements 2008 (INSEE) \\
+Café Hôtel Restaurant	& 	Capacité des communes en hébergement touristique (INSEE), 2010 \\
+						&	Hôtels Restaurants, ADEME AICVF \\
+						&	Rapport du projet Optisol, ADEME/ARMINES, 2009 \\
+\\	\hline	\\
+						&	Dénombrement des établissements 2008 (INSEE) \\
+						&	Base permanente des équipements 2008 (INSEE) \\
+Commerce				& 	Atlas de la distribution, LSA, 2011 \\
+						&	Les points de vente en 2004, INSEE \\
+						&	Rapport du projet Optisol, ADEME/ARMINES, 2009 \\
+\\	\hline	\\					
+						&	Dénombrement des établissements 2008 (INSEE) \\
+						&	Base permanente des équipements 2008 (INSEE) \\
+Enseignement Recherche	& 	Repères et références statistiques 2009 (MEN) \\
+						&	Atlas régional de l’enseignement supérieur 2008 (MESR) \\
+						&	Rapport du projet Optisol, ADEME/ARMINES, 2009 \\
+\\	\hline	\\
+						&	Dénombrement des établissements 2008 (INSEE) \\
+						&	Base permanente des équipements 2008 (INSEE) \\
+Habitat Communautaire	& 	Fichier National des Etablissements Sanitaires et Sociaux (FINESS) \\
+						&	Rapport du projet Optisol, ADEME/ARMINES, 2009 \\
+\\	\hline	\\
+						&	Dénombrement des établissements 2008 (INSEE) \\
+						&	Base permanente des équipements 2008 (INSEE) \\
+Santé Action Sociale	& 	Fichier National des Etablissements Sanitaires et Sociaux (FINESS) \\
+						&	Base de Statistique Annuelle des Etablissements de santé (SAE) \\
+						&	Rapport du projet Optisol, ADEME/ARMINES, 2009 \\
+\\	\hline	\\
+						&	Dénombrement des établissements 2008 (INSEE) \\
+Sport Loisir Culture	&	Base permanente des équipements 2008 (INSEE), théâtres et cinémas \\
+et équipements collectifs 	& 	Recensement des équipements sportifs \\
+divers					&	Sports, ADEME AICVF \\
+						&	Rapport du projet Optisol, ADEME/ARMINES, 2009 \\
+\\	\hline	\\
+Transport				&	Dénombrement des établissements 2008 (INSEE)
+\end{tabular}
+}
+}
+
+Les surfaces obtenues sont calées sur la base de données de cadrage disponibles aux échelles régionale et nationale. Les surfaces par branche d'activité sont notamment calées pour correspondre aux surfaces des données de parc du CEREN à l'échelle nationale (figure~\ref{CompParcCEREN2010}). La surface totale de parc est de 922 Mm2 à l’état initial dans le modèle (en 2010), la répartition du parc tertiaire par branche d’activité est diversifié. Elle est dominé par les activités de bureaux, de commerce, et d’enseignement/recherche, qui constituent à eux trois presque les deux tiers du parc.
+
+\begin{figure}[ht]
+\centering
+\caption{Comparaison du parc initial du modèle par branche avec les données de parc du CEREN (2010)}\label{CompParcCEREN2010}
+\includegraphics[width = 0.8\textwidth]{CompParcCEREN2010}
+\end{figure}
+
+Le parc peut également être catégorisé par période de construction. Les bâtiments tertiaires ont été majoritairement construits avant 1980 (56~\%),  26~\% ont été construits entre 1980 et 1998, et 18~\% des bâtiments ont moins de 20 ans. Cette distribution par période de construction est relativement similaire si on l'observe par branche d'activité avec néanmoins quelques particularités pour les branches \og Café Hôtel Restaurant \fg~et  \og Transport \fg~dont les bâtiments sont plus anciens (figure \ref{ParcPeriode2010}). 
+
+\begin{figure}[ht]
+\centering
+\caption{Période de construction des bâtiments par branche d'activité en 2010}\label{ParcPeriode2010}
+\includegraphics[width = 0.8\textwidth]{ParcPeriodeBranche2010}
+\end{figure}
+
+\subsubsection{Parts de marchés des énergies}
+
+Les parts de marché des énergies selon leur usage sont déterminées en fonction des statistiques énergétiques existantes à l’échelle régionale, ainsi que selon la disponibilité des énergies à l’échelle communale (ex : présence ou non d’un réseau de chaleur ou du gaz en réseau). Les surfaces par énergie de chauffage à l'échelle nationale sont calées pour correspondre aux surfaces totales par énergie du CEREN en 2010 (figure \ref{CompParcEnergieCEREN2010}). 
+
+Cinq énergies de chauffage sont retenues dans le cadre du modèle : Electricité, Gaz de réseau, Fioul, Réseau de chauffage urbain, Autres. L’énergie « Autres » est constituée du GPL, de la biomasse, de l’énergie solaire et du charbon, dans des proportions non connues faute de données précises disponibles. En 2010, le parc tertiaire est majoritairement chauffé au gaz (46~\%). Il existe des disparités dans les parts de marché des énergie entre les branches d'activité : les branches \og Bureaux Administration \fg~, \og Café Hôtel Restaurant \fg~ et \og Commerce \fg~ présentent par exemple une part de l'électricité plus importante que la moyenne (figure \ref{ParcEnergieBranche2010}). 
+
+
+\begin{figure}[ht]
+\centering
+\caption{Comparaison du parc initial du modèle par énergie avec les données de parc du CEREN (2010)}\label{CompParcEnergieCEREN2010}
+\includegraphics[width = 0.7\textwidth]{CompParcEnergieCEREN2010}
+\end{figure}
+
+
+\begin{figure}[ht]
+\centering
+\caption{Parts de marchés surfaciques des énergies par branche d'activité en 2010  }\label{ParcEnergieBranche2010}
+\includegraphics[width = 0.7\textwidth]{ParcEnergieBranche2010}
+\end{figure}
+
+\subsubsection{Subdivision du parc en \og bâtiment types \fg}
+
+Pour caractériser plus finement le parc tertiaire et étudier les consommations d'énergie et les gisements d'économie d'énergie, un travail de définition de « bâtiments types » représentatifs pour chacune des activités tertiaires a été mené sur la base de travaux bibliographiques. 
+Ces bâtiments types ont été construits selon l’activité exercée, la période de construction et la taille des établissements. La description de ces bâtiments comprend un plan masse, un découpage fonctionnel de l’espace interne (pièce par pièce), une description des matériaux de construction ainsi qu’une description des paramètres d’occupation par pièce (plages horaires d’occupation des pièces, besoins en ventilation, besoins en éclairage, apports internes liés aux équipements de bureautique et d’éclairage, apports internes liés aux occupants…). Les modes constructifs, les plans masse et les paramètres d’occupation sont le fruit d’un travail spécifique mené conjointement par le bureau d’études Tribu Energie, le CEP de l’Ecole des Mines de Paris et Energies Demain sur la base d’expertises internes et de recherches bibliographiques.
+
+A titre d’exemple, la branche d’activité tertiaire « Habitat Communautaire» comprend cinq bâtiments types (maison de retraite médicalisée, maison de retraite non médicalisée, foyer, résidence universitaire et établissement de service à la personne) déclinés selon cinq périodes de construction (avant 1974, 1975-1982, 1983-1988, 1989-2000, après 2000) déterminant les matériaux constitutifs du bâti. Un exemple de plan masse est représenté sur la figure \ref{Plan_masse}
+
+\begin{figure}[ht]
+\centering
+\caption{
+Plan masse et description par pièce d’un niveau du bâtiment type \og Maison de retraite médicalisée\fg}\label{Plan_masse}
+\includegraphics[width = 0.8\textwidth]{plan_masse}
+\end{figure}
+
+96 « bâtiments types » sont présents dans le modèle. Les surfaces tertiaires reconstituées précédemment sont ensuite subdivisées en « bâtiments types » directement par activité ou par implantation géographique (bâtiments de grande hauteur uniquement dans des zones densément peuplées, etc.).
+\textbf{TODO Mettre la liste des bâtiments en annexe} 
+
+\subsubsection{Calcul des besoins et des consommations unitaires des bâtiments}
+
+Energies Demain et le CEP de l’Ecole des Mines de Paris ont développé une méthode de simulation et de reconstitution des consommations des bâtiments . Cette méthode de calcul est dite «~modulaire~» dans la mesure où elle se base sur une description physique du parc de bâtiments à l’échelle de la pièce (appelée aussi module), dans le but final de simuler pour chacune de celles-ci les besoins énergétiques et les puissances des systèmes requises par usage.
+
+La première étape consiste à calculer les besoins unitaires par bâtiment. À partir de la description physique du parc en bâtiments types, les besoins en énergie par pièce et la puissance requise des systèmes de production par usage proviennent de simulations dynamiques (au pas de temps horaire) réalisées pour chacune des zones climatiques (8 zones climatiques d’hiver et 4 d’été). Les besoins par pièce, bâtiment type et zone climatique sont obtenus pour les usages suivants :
+
+\begin{itemize}
+	\item Chauffage
+	\item Climatisation
+	\item Auxiliaires de chauffage et climatisation
+	\item Ventilation
+	\item Éclairage
+\end{itemize}
+
+Les besoins et les puissances des systèmes calculés par pièce sont ensuite agrégés à l’échelle  du bâtiment type. À titre illustratif, cette méthode peut être comparée à l’assemblage d’un bâtiment en « empilant » les briques élémentaires que constituent chacune des pièces auxquelles sont associés les besoins et les puissances des systèmes calculés précédemment.
+
+La seconde étape consiste à calculer les consommations unitaires en affectant des systèmes et des rendements associés aux bâtiments-types dont les besoins ont été simulés. 
+On affecte à chacun des usages de l’énergie cités précédemment un système de production dont le dimensionnement et la performance sont issus de formules propres à chacun des systèmes. Il est à noter que ces formules sont paramétrables de manière à pouvoir moduler les performances des systèmes afin de les adapter au contexte territorial.
+La répartition des systèmes de production est calée sur les données de cadrage disponibles~\footnote{Rapport du projet Optisol, ADEME/ARMINES, 2009. Rapport parlementaire sur la production de gaz à effet de serre des systèmes de climatisation et leur impact sur l’écosystème et l’environnement, Energies Demain et Armines, 2011}.
+
+Enfin, les consommations unitaires des usages non simulés (cuisson, eau chaude sanitaire, bureautique et process) sont estimées sur la base de travaux nationaux et d’expertises internes \footnote{modèle CHARTER, \url{http://www.energies-demain.com/reseau/}. Maîtrise de la demande d’électricité et contrôle des courbes de charges, Energies Demain. Expertise complémentaire sur une meilleure identification des politiques énergétiques alternatives au projet Penly 3, Energies Demain. Étude des consommations énergétiques des bâtiments d’enseignement franciliens, Energies Demain}. L’ensemble des résultats de cet important travail a permis de constituer une bibliothèque de consommations unitaires, dépendantes du bâtiment type, de l’usage, de l’énergie, de la zone climatique ainsi que des différents types d’équipements (systèmes de chauffage, de climatisation, de ventilation, d’éclairage, ou de production d’Eau Chaude Sanitaire…). Les usages de l’énergie retenus sont :
+
+\begin{itemize}
+	
+	\item Usages simulés (Simulations thermiques dynamiques) : 
+	\begin{itemize}
+		\item Chauffage
+		\item Climatisation
+		\item Auxiliaires de chauffage et de climatisation
+		\item Ventilation
+		\item Éclairage
+  \end{itemize}
+	\item Usages estimés sur travaux d'expertise : 
+		\begin{itemize}
+		\item Eau chaude sanitaire
+		\item Cuisson
+		\item Bureautique
+		\item Froid alimentaire
+		\item Process
+		\item Autres
+	\end{itemize}
+\end{itemize}
+
+
+Le schéma suivant illustre le cheminement correspondant. La première étape décrite ci-dessus est contenue dans l’encadrement pointillé « Simulation des besoins et des puissances de systèmes par pièce » (couleur violette).
+
+\begin{figure}[ht]
+\centering
+\caption{ENERTER Tertiaire - Détermination des consommations unitaires}\label{Schema_calcul_conso}
+\includegraphics[width = 0.8\textwidth]{Schema_calcul_conso}
+\end{figure}
+
+\newpage
+\clearpage
+
+
+\subsubsection{Rendements des systèmes et consommations unitaires à l'état initial}
+
+Pour chaque type de système de chauffage, deux types de performances existent dans le modèle. Les systèmes performants présentent un meilleur rendement que leur version classique (table \ref{Rdtsyst}). Les rendements varient d'un bâtiment-type à l'autre selon sa taille et la puissance demandée. 
+ 
+La répartition des systèmes de chauffage issue de la reconstitution du parc est présentée sur la figure \ref{PMsyst2010}.  A l’état initial, on observe que les systèmes performants représentent une part très faible des systèmes installés. La majeure partie du parc est chauffée par des chaudières gaz et fioul traditionnelles. Les systèmes électriques (électrique joule, PAC, DRV, Rooftop...) répresentent seulement 23~\% des systèmes. Le rendement moyen des systèmes de chauffage sur le parc en 2010 est de 0,8 ce qui est proche de celui des chaudières gaz classiques. 
+ 
+\begin{table}[ht]
+\caption{Rendements moyens des systèmes de chauffage dans le modèle}
+\label{Rdtsyst}
+\begin{center}
+\begin{tabular}{l|c}
+
+\textbf{Système}	&	\textbf{Rendement moyen}
+\\	\hline	\\	
+Chaudière gaz	& 0,81 \\	
+Chaudière condensation gaz	& 0,95 \\	
+Chaudière fioul & 0,64 \\	
+Chaudière condensation fioul	& 0,75 \\	
+Electrique direct	& 0,92 \\	
+Electrique direct performant	& 1,00 \\	
+PAC	& 2,50 \\	
+PAC performant	& 3,00 \\	
+Rooftop	& 2,50 \\	
+Rooftop performant	& 3,00 \\	
+Tube radiant	& 0,84 \\	
+Tube radiant performant	& 1,00 \\	
+Cassette rayonnante	& 0,84 \\	
+Cassette rayonnante performant	& 1,00 \\	
+DRV	& 2,06 \\	
+DRV performant	& 2,84 \\	
+Autre système centralisé (Bois)	& 1,20 \\	
+Autre système centralisé (Urbain) & 1,02 \\	
+Autre système centralisé performant	(Bois) & 1,34 \\	
+Autre système centralisé performant	(Urbain)& 1,37\\	
+\hline	
+\end{tabular}
+\end{center}
+
+\textbf{\footnotesize{NB : les valeurs de rendement indiquées ici sont des valeurs moyennes sur l'ensemble du parc. Les rendements peuvent différer fortement selon le type de bâtiment dans le modèle en fonction de la puissance demandée et de la taille du bâtiment. La catégorie~\og~Autre système centralisé~\fg~correspond aux systèmes fonctionnant au bois, au GPL ou au chauffage urbain. }}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\caption{Parts de marché des systèmes de chauffage dans le modèle en 2010}\label{PMsyst2010}
+\includegraphics[width = 0.7\textwidth]{PMsyst2010} 
+\end{figure}
+
+Pour l'eau chaude sanitaire, les rendements ne dépendent pas du type de bâtiment mais de l'énergie utilisée et du type de système (classique ou performant, cf table \ref{RdtsystECS}) \footnote{Les besoins en eau chaude dépendent eux du bâtiment}. A l'état initial, le rendement moyen des systèmes d'ECS est de 0,7 du fait de la distribution des énergies dans le parc. Les systèmes performants représentent une part très faible des systèmes. 
+
+\begin{table}[ht]
+\caption{Rendements moyens des systèmes d'ECS dans le modèle}
+\label{RdtsystECS}
+\begin{center}
+\begin{tabular}{l|l|c}
+\textbf{Énergie}	& \textbf{Système}	&	\textbf{Rendement moyen}
+\\	\hline	\\	
+Électricité	 & Ballon &  0,9\\	
+Gaz	& Chaudière ou ballon & 0,7\\	
+Fioul	& Chaudière & 0,5\\	
+Urbain	& Système performant &  0,55\\	
+Autres	& Chaudière & 0,55 \\	
+Électricité	 & Ballon thermodynamique	& 2.5 \\	
+Gaz	& Chaudière ou ballon condensation	& 0.9 \\	
+Fioul	& Chaudière condensation	& 0.8 \\	
+Urbain	& Système performant	& 0.8 \\	
+Autres	& Chaudière condensation	& 0.8 \\	
+\hline	
+\end{tabular}
+\end{center}
+\end{table}
+
+Pour la climatisation, le rendement pour un type de bâtiment dépend du type de système installé (DRV, Rooftop, PAC ou groupe ancien). La part des systèmes variant selon la branche d'activité, les rendements peuvent aussi varier d'une branche à l'autre. A l'état initial, le rendement moyen des systèmes de climatisation est de 3,05. Pour tous les autres usages (essentiellement électriques sauf la cuisson), les besoins unitaires sont égaux aux consommations en énergie finale. 
+
+En appliquant ces rendements au besoins unitaires par usages imputées aux différents bâtiments-types, on obtient les consommations unitaires en énergie finale par usage présentées dans le tableau \ref{ConsoU_usage}. Les consommations unitaires moyennes du parc sont de 247 kWhEF/m² en 2009. Les usages couverts par la réglementation thermique (usages réglementés) représentent plus de 80~\% des consommations unitaire du parc (200 kWhEF/m² environ). Le chauffage représente le plus gros poste de consommation. L'éclairage et l'ECS représentent 1/5 des consommations unitaires. 
+
+\begin{table}[h!]
+\caption{Consommations unitaires moyennes (kWhEF/m²) par usage en 2009 dans le modèle }
+\label{ConsoU_usage}
+\begin{center}
+\begin{tabular}{l|c}
+\textbf{Usage}	& \textbf{Consommation unitaire}	
+\\	\hline	\\	
+Usages réglementés : &  
+\\	 \hline	
+Chauffage         &    122,4 \\
+ECS                &    23,8 \\
+Climatisation     &      6,0 \\
+Ventilation      &       7,2 \\
+Auxiliaires     &        5,4 \\
+Éclairage          &    27,0 \\
+Bureautique      &      10,0 \\
+\hline	\\	
+Usages non réglementés : & 
+\\	\hline	
+Cuisson            &    15,1 \\
+Froid alimentaire  &     8,6 \\
+Process            &     4,5 \\
+Autre           &       16,8 \\
+\hline	
+\end{tabular}
+\end{center}
+\end{table}
+
+Les consommations unitaires varient d'une branche d'activité à l'autre (figure \ref{Conso_u_Branche}). En effet, si le chauffage reste le poste de consommation le plus important dans toutes les branches, certaines branches présentent des spécificités comme l'hôtellerie avec de fortes consommations de cuisson et d'ECS, les commerces et les transports avec de fortes consommations d'éclairage ou les bureaux avec leur forte consommations d'électricité pour la bureautique.
+
+\begin{figure}[ht]
+\centering
+\caption{Consommations unitaires par usage et par branche d'activité en 2009}\label{Conso_u_Branche}
+\includegraphics[width = 0.7\textwidth]{Conso_u_Branche} 
+\end{figure}
+
+\subsubsection{Performance énergétique du parc à l'état initial}
+
+Pour les bâtiments du secteur tertiaire, il existe plusieurs types de DPE (Diagnostic de performance énergétique) en fonction de l’activité : un pour les centres commerciaux, un pour les bureaux et l'enseignement, un pour les bâtiments à usage continue comme les hôpitaux et un pour les autres activités. L'échelle des étiquettes énergie (bornes des étiquettes en kWhEP par m²) est différente en fonction du type de bâtiment. Pour attribuer une étiquette énergie aux bâtiments représentées dans le modèle, on calcule les consommations en kWhEP par m² pour les usages réglementés pour chaque type de bâtiment et on les compare à l'échelle DPE correspondante. A l'état initial, un même type de bâtiment peut avoir plusieurs étiquettes selon sa période de construction, les systèmes installés et l'énergie utilisée.  
+
+la figure \ref{Parcetiqbranche} présente la performance énergétique du parc par branche d'activité en 2009. La distribution des étiquettes énergie révèle des disparités entre secteurs. En effet, les branches d’activité Enseignement/Recherche, Habitat communautaire et Santé/Action sociale sont  plus performantes.
+
+\begin{figure}[ht]
+\centering
+\caption{Performance énergétique du parc par branche d'activité en 2009}\label{Parcetiqbranche}
+\includegraphics[width = 0.7\textwidth]{Parcetiqbranche} 
+\end{figure}
+
+\newpage
+\clearpage
+
+\subsubsection{Aggrégation des consommations à l'échelle du parc tertiaire}
+
+La reconstitution des consommations du parc à l'échelle nationale est le fruit de l’affectation des consommations unitaires à chaque établissement du parc bâti tertiaire décrit précédemment. Cette affectation se fait selon la nature de l’activité tertiaire exercée, la période de construction et les caractéristiques des systèmes de production (type de chauffage, de climatiseur, de ventilation, d’éclairage…). Les consommations obtenues font ensuite l’objet d’un calage à l’échelle nationale et régionale sur la base de données de cadrage disponibles (CEREN, données issues de travaux d'expertise précédents d'Energies Demain...). 
+
+A l'échelle nationale, les consommations totales par vecteur énergétique dans le modèle correspondent bien à celles des données du CEREN en 2010 (figure \ref{CompConsoTot2010}).  Les consommations totales du parc sont de 225 TWh en 2010. L'électricité représente 45~\% des consommations, le gaz 32~\%, le fioul 16 ~\% et les autres combustibles (chaleur, biomasse et solaire). 
+ 
+\begin{figure}[ht]
+\centering
+\caption{Comparaison des consommations totales du parc dans le modèle avec les données de consommations du CEREN (2010) }\label{CompConsoTot2010}
+\includegraphics[width = 0.6\textwidth]{CompConsoTot2010}
+\end{figure}
+
+La répartition des consommations par usage et par vecteur énergétique diffère légèrement entre les données d'entrée du modèle et celles du CEREN. La répartition des consommations d'électricité entre les usages spécifiques et les autres usages est notamment sensiblement différente (figure \ref{CompConsousage2010}). Ceci provient notamment de différences méthodologiques dans la répartition des consommations d'électricité entre les usages. 
+
+\begin{figure}[h!]
+\centering
+\caption{Comparaison des consommations par usage et par énergie du parc dans le modèle avec les données de consommations du CEREN (2010) }\label{CompConsousage2010}
+\includegraphics[width = 0.6\textwidth]{CompConsousage2010}
+\end{figure}
+
+La moitié des bâtiments tertiaires est chauffée au gaz en 2010 (figure \ref{CompConsousage2010}). L'électricité représente une part assez faible des consommations de chauffage (16~\% ). 
+La majeure partie des consommations d'électricité du parc tertiaire provient des usages spécifiques de l'électricité (bureautique, éclairage, ventilation, auxiliaires, froid alimentaire et process) et de la climatisation. Sur 100 TWh d'électricité, ces usages représentent 45 TWh, le chauffage électrique 18 TWh et l'ECS 6 TWh.
+
+Le chauffage représente 49~\% des consommations du parc tertiaire (figure \ref{ConsoBrancheusage2010}). L'ECS, la cuisson et les autres usages thermiques de l'énergie représentent 23~\% des consommations, les usages spécifiques de l'électricité et la climatisation 28~\%. Les deux branches du parc les plus énergivores sont les bureaux et les commerces. 
+
+\begin{figure}[h!]
+\centering
+\caption{Distribution des consommations par branche et par usage dans le modèle en 2010}\label{ConsoBrancheusage2010}
+\begin{tabular}{cc}
+\includegraphics[width = 0.35\textwidth]{Consobranche2010}  & \includegraphics[width = 0.35\textwidth]{ConsoUsage2010} 
+\end{tabular}
+\end{figure}
+
+Transition : cet état donne déjà un aperçu des gisements d'économies d'énergie...
+
+
+\newpage 
+\clearpage
+
+\subsection{Evaluation des potentiels d'économie d'énergie et coûts de mise en oeuvre}
+
+La caractérisation physique du parc par branche d’activité et bâtiment type rend possible l’étude fine de gisements d’économies d’énergie, en simulant pour chacun des bâtiments types l’application de gestes de rénovation thermique. Pour le chauffage, deux principales sources d'économie d'énergie sont modélisés : un changement de système de chauffage ou un geste de rénovation sur le bâti. 
+
+Les coûts moyens des systèmes de chauffage (Sources : Bâtiprix, UFE, CGDD) sont présentés ci-dessous. Pour un bâtiment type de besoin unitaire $B_u$, les gains en énergie  $G_e$ liés à un changement de système de chauffage sont calculés en utilisant les rendements de la table \ref{Rdtsyst}. 
+
+\begin{eqnarray}
+ G_e &= &B_u * ( \frac{1}{R_i} -  \frac{1}{R_f}) \\
+ F_e &= &B_u * ( \frac{1}{R_i} * p_i -  \frac{1}{R_f}* p_f) 
+\end{eqnarray}
+
+où $R_i$ est le rendement du système initial et $R_f$ celui du système final
+
+\begin{table}[ht]
+\caption{Coûts moyens des systèmes de chauffage dans le modèle}
+\label{Coutsyst}
+\begin{center}
+\begin{tabular}{l|c|c}
+\textbf{Système}	&	\textbf{Investissement } & \textbf{Maintenance } \\
+									& \textbf{(euros par m²)} & \textbf{(\% du coût d'investissement)} \\
+\\	\hline	\\	
+Chaudière gaz	& 14 & 3,5\%\\	
+Chaudière condensation gaz	& 25  & 3,5\%\\	
+Chaudière fioul & 16  & 2\%\\	
+Chaudière condensation fioul	& 32  & 2\%\\	
+Electrique direct	& 5  & 0,1\%\\	
+Electrique direct performant	& 6 & 0,1\% \\	
+PAC	& 50 & 1,5\% \\	
+PAC performant	&  80 & 1,5\%  \\	
+Rooftop	& 35  &  1,5\% \\	
+Rooftop performant	& 80 &  1,5\%  \\	
+Tube radiant	& 5 & 0,1\%\\	
+Tube radiant performant	& 12 & 0,1\%\\	
+Cassette rayonnante	& 5& 0,1\% \\	
+Cassette rayonnante performant	& 6 & 0,1\% \\	
+DRV	& 35 &  1,5\% \\	
+DRV performant	& 80 &  1,5\% \\	
+Autre système centralisé (Bois)	& 40 & 2\% \\	
+Autre système centralisé (Urbain) & 40  & 2\%\\	
+Autre système centralisé performant (Bois)	& 80  & 2\%\\	
+Autre système centralisé performant (Urbain)	& 80  & 2\%\\	
+\hline	
+\end{tabular}
+\end{center}
+\footnotesize{\textbf{ Les coûts affichés ici sont des coûts moyens qui peuvent varier sensiblement d'un bâtiment type à l'autre selon la puissance demandée et la taille du bâtiment. Sources : Bâtiprix, UFE, CGDD}}
+\end{table}
+
+
+\subsubsection{Gestes de rénovations}
+
+Les gestes de travaux sont caractérisés par un ou plusieurs postes de l’enveloppe bâtie ciblés par la rénovation (toiture, parois opaques, vitrage ou plancher bas). Trois types de gestes sont modélisés : un geste sur les parois vitrées (geste FEN), un geste sur les parois vitrées et opaques  (geste FENMUR) et un geste sur l'ensemble de l'enveloppe bâtie (geste ENS). Pour chacun de ces types de gestes, deux niveaux d'exigence sont modélisés : un niveau modéré (MOD) correspondant aux exigences de la Réglementation thermique élément par élément et un geste performant (BBC) correspondant à un niveau d'exigence proche du label BBC rénovation. 
+Le modèle intègre aussi un geste « Gestion Technique du Bâtiment » qui correspond à une meilleure gestion du confort intérieur et des systèmes. 
+Les gestes de travaux portant sur l’enveloppe bâtie sont donc au nombre de sept. 
+
+Les hypothèses sur les types de gestes considérés, leurs coûts et les gains moyens sur les consommations de chauffage sont décrites dans le tableau ci-dessous. Ces chiffres correspondent à des valeurs moyennes sur l’ensemble du parc et peuvent être très variables selon le segment du parc considéré.
+
+ 
+
+\begin{table}[ht]
+\caption{Coûts et gains moyens des gestes de rénovation dans le modèle}
+\label{Coutsyst}
+\begin{center}
+\begin{tabular}{l|c|c}
+\textbf{Geste}	&	\textbf{Investissement } & \textbf{Gain } \\
+									& \textbf{(euros par m²)} & \textbf{(\% du besoin unitaire )} \\
+\\	\hline	\\	
+GTB & & \\	
+FENMOD & & \\	
+FENMUR_MOD  & & \\	
+ENSMOD & & \\	
+FENBBC & & \\	
+FENMUR_BBC & & \\	
+ENS_BBC & & \\	
+\hline	
+\end{tabular}
+\end{center}
+\footnotesize{\textbf{ Les coûts et les gains affichés ici sont des coûts moyens qui peuvent varier sensiblement d'un bâtiment type à l'autre selon la puissance demandée et la taille du bâtiment}
+\end{table}
+
+PB VALEURS MOYENNES DES COUTS 
+
+Les amplitudes observées sur les gains et coûts sont le fait des bâtiments très différents composant le parc tertiaire, tant en terme de morphologie (petit restaurant rapide/hôpital) qu’en terme de paramètres d’occupation (foyer/gymnase). Ainsi ces différences entraînent des impacts de mise en œuvre des gestes sur le bâti très variables d’un bâtiment à un autre.
+A titre d’exemple, les gestes Fenêtres BBC coûtent entre 3 et 673 €/m² et permettent une économie comprise entre 3 % et 52 %.
+
+\subsection{Autres usages}
+
+ECS  : changement de système  à al fin de la durée de vie
+certains 
+
+\subsection{Dynamique du parc}
+
+La dynamique du modèle se base à la fois sur une évolution mécanique du parc et une dynamique interne de rénovation du bâti et des systèmes de production. Ainsi, chaque année, le parc de bâtiments tertiaires évolue quantitativement et qualitativement.
+
+
+\begin{figure}[h!]
+\centering
+\caption{Dynamique du parc dans le modèle (A REFAIRE EVENTUELLEMENT)}\label{DynaParc}
+
+\includegraphics[width = 0.7\textwidth]{Dynamique}  
+
+\end{figure}
+
+Chaque année des bâtiments « entrent » (construction neuve, changement d’usage) et « sortent » (démolition, changement d’usage) du parc tertiaire. Ces rythmes conditionnent l’évolution du parc tertiaire d’une année sur l’autre.
+\begin{itemize}
+
+\item Sorties : Les surfaces sortantes sont issues du produit des taux de sortie du parc avec les surfaces existantes à l’année n-1. 
+\item Entrées : Les surfaces entrantes dans le parc sont issues du produit des taux d’entrée dans le parc avec les surfaces existantes à l’année n-1 (hors surfaces sortantes). 
+\end{itemize}
+
+
+Les taux annuels surfaciques d’entrée et de sortie du parc par branche d'activité sont paramétrables de manière exogène selon les scénarios d'évolution du parc envisagés. 
+
+Les performances thermiques des bâtiments entrants sont aussi paramétrées de manière exogène par bâtiment-type et usage. On Définit par usage les besoins unitaires en kwh par m² pour chaque de bâtiment. Il est possible de faire évoluer les performance du bâti neuf dans le temps de manière à simuler dés évolutions de réglementations thermiques.
+
+Les parts de marché des énergies des bâtiments neufs pour les usages de cuisson, ECS et autres sont paramétrés de manière exogène. En l'absence de données plus documentées, elles ont été considérées égales à celles du parc de l’état initial. 
+ 
+Les parts de marché des énergies pour le chauffage des bâtiments sont déterminées de manière endogène dans le modèle chaque année. Elle résulte d’un calcul de rentabilité des systèmes en fonction des prix des énergies, du coût d’investissement et du coût de maintenance du système installé, des besoins unitaires du segment de parc entrant considéré et du rendement du système installé. 
+
+METTRE EQUATION ICI OU REFERENCE A PLUS BAS 
+
+\subsection{Rénovation du parc existant}
+
+Il est considéré dans le modèle de simulation que les rénovations thermiques des bâtiments n’ont d’incidence que sur les consommations de chauffage, d’auxiliaires et de ventilation. Seules les rénovations thermiques d’exigence BBC  touchant l’ensemble du bâtiment ont une incidence sur les consommations d’eau chaude sanitaire et d’éclairage.
+
+Ainsi, deux mécaniques d’évolution des consommations énergétiques et des émissions de GES ont été mises en œuvre selon l’usage considéré :
+•	Evolution des consommations conditionnée par une fonction de passage à l’acte de rénovation et par les rythmes de vie des matériaux de construction des enveloppes bâties (usages concernés : chauffage, ventilation, auxiliaires, et dans le cas d’une rénovation de l’ensemble du bâti par un geste d’exigence BBC : éclairage et ECS).
+
+•	Evolution des consommations conditionnée par les rythmes de vie des systèmes ainsi que par les paramètres utilisateurs (usages concernés : cuisson, bureautique, process, climatisation, froid alimentaire, usage autres et éclairage et ECS dans le cas où aucune rénovation BBC sur l’ensemble du bâti n’est menée).
+
+La fonction de passage à l’acte est donc centrale dans le modèle de simulation. Elle a pour but de déterminer chaque année pour tous les segments de parc, les parts de marché de chacun des gestes de travaux pouvant être menés. Il est à noter qu’un geste de travaux est constitué d’une action sur l’enveloppe du bâti et sur les systèmes, ne réaliser aucune rénovation ou changement de système étant comptabilisé comme une action (la gestion technique du bâtiment est prise en compte comme une action sur les systèmes).
+
+Enfin, il est important de noter qu’un changement de système n’est envisagé que lorsque le système déjà en place arrive au terme de sa durée de vie.
+Afin de décrire les modes de financement envisageables, plusieurs indicateurs seront calculés lors de cette étape par geste de travaux :
+•	Coût d’investissement actualisé sur la durée de vie des technologies/matériaux nécessaires à la mise en œuvre du geste
+•	Temps de retour sur investissement actualisé
+•	Coûts intangibles associés aux gestes de travaux
+
+Pour envisager une rénovation, le modèle raisonne segment de parc par segment de parc. Un segment se caractérise par :
+•	une branche d’activité
+•	une sous-branche d’activité
+•	un bâtiment-type
+•	un type d’occupant
+•	une période de construction
+•	un système de chauffage
+•	un système de froid
+•	une énergie de chauffage
+
+
+\subsection{Simulation économiques des gestes de rénovation }
+
+A l’année n, le modèle évalue les possibilités de gestes de travaux qu’il est envisageable de mener sur chacun des segments constituant le parc tertiaire.  Il est important de noter que ne réaliser aucune action de rénovation constitue un geste de travaux (ou une possibilité pour le segment de parc lors du passage de l’année n à l’année n+1).
+
+
+
+
+\subsection{Calibration initiale du modèle}
+
+\subsubsection{Parts de marché des énergies de chauffage dans les bâtiments entrants}
+
+Les parts de marché des systèmes de chauffage des bâtiments entrants sont calibrées pour l’année initiale de manière à reproduire les parts estimées suivantes (CEREN 2008) : 
+ 
+Système de chauffage/Energie	Part dans les bâtiments neufs en 2008 	
+Electrique direct (joule)	33%
+Electrique récupération chaleur (PAC, DRV, Rooftop…)	22%
+Gaz	36%
+Fioul	2%
+Chauffage urbain + autres énergies	7%
+
+Les systèmes installés pour l’année initiale du modèle sont supposés être majoritairement des systèmes performants. L’évolution des parts de marché dans le temps est endogène dans le modèle et résulte d’un calcul de rentabilité des systèmes en fonction des prix des énergies, du coût d’investissement et du coût de maintenance du système installé, des besoins unitaires du segment de parc entrant considéré et du rendement du système installé. 
+
+POUR SCENARIO Les coûts des systèmes performants et des systèmes électriques à récupération de chaleur sont supposés baisser de 30 % à l’horizon 2050. 
+
+
+\subsection{Test de sensibilité}
+
+
+\cleardoublepage
+
+\thispagestyle{partie}
+\cadreblanc{Partie 2}{Scénarios}{Résumé Partie}
+
+
+\newpage
+\pagestyle{fancy}
+
+\invisiblesection{Scénarios}\label{sec:marker3}
+
+\markboth{Partie 2 : Scénarios}{}
+
+\subsection{Description des scénarios}
+
+\subsection{Evolution du parc et Construction neuve}
+
+Les destructions annuelles sont estimées à 2.5 millions de m² par an par GRDF sur la base des données historiques du CEREN relatives aux flux de surfaces tertiaires détruites annuellement. Les taux de destructions par branche dans le modèle sont donc définis de manière à obtenir 2.5 millions de m² détruits en 2015. La répartition par branche se fait en proportion des surfaces existantes en 2009. Les taux annuels de destructions sont maintenus constants de 2015 à 2050. 
+
+
+
+\cleardoublepage
+
+\thispagestyle{partie}
+\cadreblanc{Partie 3}{Indicateurs}{Résumé Partie}
+
+\newpage
+\pagestyle{fancy}
+\invisiblesection{Indicateurs}\label{sec:marker4}
+\markboth{Partie 3 : Indicateurs}{}
+
+
+\cleardoublepage
+
+%\thispagestyle{partie}
+%\cadreblanc{Partie 6}{Conclusion}
+
+%\newpage
+%\pagestyle{fancy}
+%\invisiblesection{Conclusion}\label{sec:marker6}
+\section{Conclusion}\label{sec:marker6}
+
+\markboth{Conclusion}{}
+
+\cleardoublepage
+
+\thispagestyle{partie}
+\cadreblanc{Partie 5}{Annexes}{}
+
+\newpage
+\pagestyle{fancy}
+\invisiblesection{Annexes}\label{sec:marker7}
+\markboth{Annexes}{}
+
+
+\cleardoublepage
+
+%\thispagestyle{partie}
+%\cadreblanc{Partie 7}{R\'ef\'erences}{}
+
+%\newpage
+\pagestyle{fancy}
+\invisiblesection{R\'ef\'erences}\label{sec:marker8}
+%\section{R\'ef\'erences}\label{sec:marker8}
+\markboth{R\'ef\'erences}{}
+
+\bibliographystyle{apalike-fr}
+\bibliography{H:/biblio_logement/Biblio_logement_classement/biblio_logement,H:/biblio_these/Biblio_theseBV}
+
+%\addcontentsline{toc}{section}{R\'ef\'erences}
+
+%Pour s'assurer que le doc termine sur une page paire
+\cleardoublepage
+
+\thispagestyle{partie}
+\troisieme{}{}
+
+\newpage 
+
+\thispagestyle{partie}
+\quatrieme{A COMPLETER}
+\end{document}
+}

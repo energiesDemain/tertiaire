@@ -1,0 +1,2827 @@
+---
+output:
+  pdf_document: 
+    fig_caption: yes
+    keep_tex: yes
+  word_document:
+    fig_height: 6
+    fig_width: 8
+---
+
+```{r, echo=F, message=F, warning=F, cache=F, results=F}
+require(knitr)
+require(data.table)
+require(ggplot2)
+require(Hmisc)
+require(reshape2)
+require(plyr)
+require(ggthemes)
+require(texreg)
+if (Sys.getenv("JAVA_HOME")!="")
+  Sys.setenv(JAVA_HOME="")
+options(java.parameters = "-Xmx8192m")
+require(XLConnect)
+require(RColorBrewer)
+# set pander table-layout options
+library(pander)
+panderOptions('table.alignment.default', function(df)
+    ifelse(sapply(df, is.numeric), 'right', 'left'))
+panderOptions('table.split.table', Inf)
+panderOptions('big.mark', ",")
+panderOptions('keep.trailing.zeros', TRUE)
+
+colorpalette = "Spectral"
+fillpalette = "Spectral"
+
+#colorpalette = "Set2"
+#fillpalette = "Set2"
+```
+
+
+```{r, echo=F, message=F, warning=F, cache=T, results=F, comment = F, include = F, cache.rebuild = F}
+
+##### prix des energies ####
+prix_energie = fread("../AME_AMS_dataDGEC/parametrage modele/Prix_scenario_AME_BV_01_2017.csv", dec = ",")
+
+prix_energie = melt(prix_energie,id.vars = "annee")
+
+prix_energie[variable == "prix_elec", energie := "Electricité"]
+prix_energie[variable == "prix_gaz", energie := "Gaz"]
+prix_energie[variable == "prix_fioul", energie := "Fioul"]
+prix_energie[variable == "prix_urbain", energie := "Urbain"]
+prix_energie[variable == "prix_autres", energie := "Autres"]
+prix_energie[variable == "CCE", energie := "CCE"]
+
+prix_energie =dcast.data.table(prix_energie, annee~energie)
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = F}
+source("analyse_param_utilisateurs.R",encoding = "ISO8859-1")
+
+colors_syst= 
+  data.table(SYSTEME_CHAUD =factor(unique(COD_SYSTEME_CHAUD$SYSTEME_CHAUD), 
+                                   levels = c("Chaudière gaz","Chaudière condensation gaz",
+                                                           "Tube radiant", "Tube radiant performant" ,
+                                                           "Chaudière fioul","Chaudière condensation fioul",
+                                                           "Electrique direct","Electrique direct performant",
+                                                           "Cassette rayonnante","Cassette rayonnante performant",
+                                                           "PAC","PAC performant",
+                                                           "Rooftop", "Rooftop performant",
+                                                            "DRV", "DRV performant",
+                                                           "Autre système centralisé",  "Autre système centralisé performant",
+                                                           "nr","NA"))
+                         )
+
+colors_syst = colors_syst[order(SYSTEME_CHAUD)]
+colors_syst[,color := c("dodgerblue1","dodgerblue4", "blue1","blue4","springgreen1","springgreen4",
+                "yellow1","yellow4","gold1","gold4","chocolate1","chocolate4","coral1","coral3",
+                "salmon1","salmon4","red1","red4","gray86","gray86")]
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = T,include = F}
+
+#### liste des fichiers à lire
+wbfiles  = "../tertiaire_to_export/resultats_AME_run3/2050_allpol/Result_csv"
+wbfiles[2] ="../tertiaire_to_export/resultats_AME_run3/2050_sanspol/Result_csv"
+#wbfiles[3] = "../tertiaire/model/Result_csv/calage_cout_geste/test_AME_new"
+
+  
+
+####### noms des scenarios ########
+
+wbname = c( paste0("S",1:length(wbfiles))
+  
+  #"S1 : AME run 3",  
+#            "S0 : NRF 0",  
+#            "S2 : NRF lambda", 
+#            "S3 : NRF lambda no cint syst", 
+            # "S1 : NRF lambda 100p",
+            # "S2 : NRF lambda par branche",
+            # "S3 : NRF lambda par branche allpol sauf trav",
+            # "S4 : NRF lambda par branche allpol 2020",
+            # "S5 : NRF lambda par branche allpol",
+            # "S6 : test DV 50",
+            # "S7 : test DV 30",
+            # "S8 : test DV 30 lambda 1",
+            # "S9 : test DV 30 renouv pareil ou mieux"
+            # 
+
+#            "S5 : NRF 90p"
+            )
+
+
+### choix du scenario de référence 
+scenario_ref =c(  "S8 : test DV 30 lambda 1")
+scenario_toexport = c("S8 : test DV 30 lambda 1")
+scenario_sansCEE = c( "S7 : test DV 30")
+scenario_ref =c(  "S1")
+scenario_toexport = c("S1")
+scenario_sansCEE = c( "S1")
+
+wbdir_scenario_toexport = c("sorties_AME/")
+write_excel = F
+
+scenarioshortnames = substring(wbname,1,2)
+scenarios_taxeelec = ""
+##### émissions de référence en MTCO2 
+Em_ref_2012_tous_usages = 33.5
+Em_ref_2012_chauffage = 23.6
+
+Em_ref_1990_tous_usages = 28.8
+Em_ref_1990_chauffage =  Em_ref_2012_chauffage/Em_ref_2012_tous_usages*Em_ref_1990_tous_usages 
+
+
+##### lecture des resultats
+
+source("read_resultats_csv.R", encoding= "UTF-8")
+##### Conso de référence en tWh 
+Conso_ref_2012_chauffage = Conso[usage=="Chauffage" & annee == "2012" & scenario==scenario_ref, sum(value)/10^9]
+Conso_ref_2012_tous_usages = Conso[ annee == "2012" & scenario==scenario_ref, sum(value)/10^9]
+
+
+annee_ref_MEDPRO = "2015"
+annee_MEDPRO = c("2015","2020","2025","2030","2050")
+```
+
+
+# FICHE RESULTATS AME 2017 run2
+
+Principaux changements avec la version précédente du modèle :
+
+* Recalage de la construction neuve à partir des surfaces envoyées par Enerdata
+
+* Recalage du parc initial par branche sur le parc du CEREN en 2010. Recalage des besoins totaux par énergie pour le chauffage en conservant les mêmes besoins unitaires.
+
+* Recalibration des parts de marché des énergies dans le neuf (calage initial données CEREN 2008) pour obtenir plus de PAC et de systèmes performants (condensation) et ajout d'un surcout pour l'électrique joule pour tenir compte de la RT 2012. Plus grande réactivité aux variations de prix de l'énergie. Calage pour reproduire les parts de marché observées de l'électricité en 2001 et en 2015.
+
+* Recalibration des parts de marché des énergies lors de changement de système dans l'existant (calage sur les parts de marché initiale dans l'existant avec un taux de pénétration des systèmes performants de 20 % et un taux de pénétration des PAC de 20 % des systèmes électriques installés) pour observer une plus grande pénétration des PAC dans le parc. Plus grande réactivité aux variations de prix de l'énergie.
+
+* Ajout de coûts de maintenance des systèmes et de surcoûts lors du passage d'un système cenralisé à non centralisé et inversement.
+
+* Modification des coûts des gestes à partir des données brutes sur les coûts issues de simulation du modèle ENERTER Tertiaire. 
+
+* Recalibration des taux de rénovation par geste initiaux (Parts de marchés des gestes en 2009). Suppression du taux de rénovation tendanciel (les taux de passage à l'acte sont suffisants en année initiale, plus nécessaire de les forcer)
+
+* Baisse des coûts intangibles pour les PAC et les systèmes performants (-30 % en 2050)
+
+* Recalcul des forfaits CEE à partir des données sur les fiches (anciennes fiches)
+
+* Hausse de la conso unitaire en électricité spécifique hors clim pour retrouver la conso CEREN en 2015
+
+Principales hypothèses de modélisation des mesures AME:
+
+* Ajout d'une baisse des besoins unitaires des bâtiments entrants de l'Etat et des collectivités pour tenir compte des bâtiments exemplaires (calage sur données étude d'impact DHUP)
+
+* Ajout d'une baisse des besoins unitaires de chauffage après 2017 pour tenir compte de l'individualisation des frais de chauffage (calage sur données études d'impact DHUP)
+
+* Ajout d'une hausse des gains des gestes respectant la RT élément par élément (+6% de gains +9% de coûts, données DHUP) et des rendements des systèmes de chauffage classiques (+10% de rdt +15% de coûts, hypothèses CGDD à défaut de meilleures hypothèses sur les systèmes) pour tenir compte de la RT existant 2018 
+
+* Hausse de 1.1% du taux de rénovation tendanciel après 2017 pour simuler les travaux embarqués (calage sur les économies d'énergie de l'étude d'impact DHUP)
+
+* Obligation de rénovation de 3% du parc de l'ETat après 2014 au niveau ensemble BBC
+
+* Effet rebond de 10 % lors de gains en consommations d'énergie suite à un geste de rénovation
+
+* Ajouts des CEE par un signal prix et calage sur le prix de la pénalité en 4ème période (1.5ceuros/kwhcumac). Arrêt du signal prix en 2021. 
+
+* AJouts d'une baisse du besoin de chauffage et d'une hausse du besoin de climatisation du fait du changement climatique
+
+
+\clearpage
+\newpage 
+
+Scénarios comparés :
+
+* s0 AME run précédent avec toutes les politiqueS
+
+* s1 AME run 3 avec toutes les politiques
+
+* s2 AME run 3 avec toutes les politiques sauf les CEE
+
+* S3 AME run3 sans politiques (pas de taxe carbone non plus)
+
+* S4 AME run3 + CCE 1000 euros en 2050
+
+\section{1) Evolution du parc (Surfaces)}
+
+```{r,echo=F, warning=F,include = F}
+
+datatmp = parc_melted[,list(value = sum(Surface)), by=c("scenario","annee", "Type_parc")]
+datatmp [,Type_parc  := factor(Type_parc, levels = c("N","E"))]
+datatmp = datatmp[, list(cumsurf = cumsum(value),Type_parc), by=c("annee","scenario") ]
+
+``` 
+
+## Ensemble du Parc
+
+```{r Evol_parc , fig.width=25, fig.height=9, echo=F, warning=F,fig.cap='Evolution du parc', dev=c('png', 'pdf')}
+
+ggplot(datatmp) + 
+  geom_ribbon(aes(ymin = 0, annee, ymax = cumsurf/10^6, group = Type_parc, fill = Type_parc)) + 
+    ylab("Millions de m²") + facet_wrap(~scenario)  + xlab("")+
+  mytheme_facet_plot +
+  scale_x_discrete(breaks = seq(2010,2050,10), labels =
+                    seq(2010,2050,10)) +
+  scale_fill_manual("",values = c("N"="darkorange", "E"="deepskyblue2"), breaks = c("N","E"), 
+                    labels = c("Parc neuf (>2009)","Parc existant (<2009)"))
+```
+
+```{r,echo=F, warning=F,include = F}
+
+datatmp = parc_melted[,list(value = sum(Surface)), by=c("scenario","annee", "Type_parc","branche")]
+datatmp [,Type_parc  := factor(Type_parc, levels = c("N","E"))]
+datatmp = datatmp[, list(cumsurf = cumsum(value),surface = value,Type_parc), by=c("annee","scenario","branche") ]
+#datatmp [,scenario  := factor(scenario, levels = rev(levels(scenario) ))]
+#datatmp [,Type_parc  := factor(Type_parc, levels = c("E","N"))]
+
+parc_par_branche = merge(datatmp, COD_BRANCHE[, list(branche = COD_BRANCHE, BRANCHE)],by="branche")
+
+
+datatmp = parc_melted[,list(value = sum(Surface)), by=c("scenario","annee", "energieChauffage")]
+datatmp = datatmp[, list(cumsurf = cumsum(value),surface = value), by=c("annee","scenario","energieChauffage") ]
+#datatmp [,scenario  := factor(scenario, levels = rev(levels(scenario) ))]
+#datatmp [,Type_parc  := factor(Type_parc, levels = c("E","N"))]
+
+parc_par_ener = merge(datatmp, COD_ENERGIE[, list(energieChauffage = COD_ENERGIE, ENERGIE)],by="energieChauffage")
+
+``` 
+```{r,echo=F, warning=F,include = F}
+# tableau evolution parc avant 2010 et après 2010 et total 
+anneeDGEC = seq(2010,2050,5)
+parc_melted[Type_parc == "E", periodeconsDGEC := "Parc < 2009"]
+parc_melted[Type_parc == "N", periodeconsDGEC := "Parc > 2009"]
+
+TabparcDGEC = parc_melted[,list(value = sum(Surface)/10^6), by=c("scenario", "periodeconsDGEC","annee")]
+
+TabparcDGEC = rbind(TabparcDGEC,parc_melted[,list(periodeconsDGEC = "Total" ,value = sum(Surface)/10^6), by=c("scenario","annee")])
+
+parc_toutesannees = TabparcDGEC 
+
+TabparcDGEC = TabparcDGEC[annee %in% anneeDGEC,]
+TabparcDGEC = dcast.data.table(TabparcDGEC,scenario+periodeconsDGEC ~annee)
+TabparcDGEC[,scenario := substring(scenario, 1,2)]
+``` 
+
+
+```{r, echo=F, warning=F,}
+pander(TabparcDGEC  , digits = 2, caption = "Evolution du parc (surfaces en millions de m²)")
+```
+
+\pagebreak 
+
+## Parc par branche
+
+```{r Evol_parc_branche, fig.width=25, fig.height=24, echo=F, warning=F,fig.cap='Evolution du parc par branche', dev=c('png', 'pdf')}
+
+ggplot(parc_par_branche ) + 
+  geom_ribbon(aes(ymin = 0, annee, ymax = cumsurf/10^6, group =Type_parc, fill = Type_parc)) + 
+    ylab("Millions de m²") +
+  mytheme_facet_plot + scale_fill_brewer(palette = fillpalette) +  
+   scale_x_discrete(breaks = seq(2010,2050,10), labels =
+                    seq(2010,2050,10))  + facet_wrap(~ BRANCHE+scenario, nrow = 8) 
+  
+```
+
+\pagebreak
+
+## Comparaison avec le parc du CEREN
+
+```{r,echo=F, warning=F,include = F}
+#### vérification calage parc avec CEREN
+wbCEREN <- loadWorkbook("../AME_AMS_dataDGEC/parametrage modele/Publication_donnees_CEREN_2015.xlsx", create = F)
+
+parc_CEREN =data.table(readWorksheet(wbCEREN, sheet = "Tab_TERTIAIRE",startRow = 3,endRow = 12,header = T))
+
+annee_CEREN = c("2010","2012","2013")
+comp_parc_par_branche = dcast.data.table(parc_par_branche[annee %in% annee_CEREN  ],scenario + branche ~ annee, value.var = "surface",fun.aggregate = function(x){sum(x)/10^6})
+comp_parc_par_branche = merge(comp_parc_par_branche,COD_BRANCHE[, list(branche = COD_BRANCHE, BRANCHE)],by="branche")
+
+comp_parc_par_branche =melt(comp_parc_par_branche,id.vars = c("branche","scenario","BRANCHE"), variable.name = "an",
+                            value.name = "Surf")
+
+setnames(parc_CEREN,c("BRANCHE","1990","2000","2005","2010","2012","2013"))
+parc_CEREN[,branche :=c("01","02","03","04","05","06","07","08","Total")]
+
+parc_CEREN[, scenario:= "CEREN"]
+
+parc_CEREN = melt(parc_CEREN, id.vars = c("BRANCHE","branche","scenario"), variable.name = "an", value.name = "Surf")
+
+comp_parc_par_branche = rbind(comp_parc_par_branche,parc_CEREN)
+
+# ## calage parc CEREN 2010 par branche
+# calage_parc_2010 = comp_parc_par_branche[an == "2010"]
+# calage_parc_2010 =dcast.data.table(calage_parc_2010,an+ branche~scenario)
+# 
+# calage_parc_2010[, calage := calage_parc_2010[,3]/calage_parc_2010[,5]]
+# calage_parc_2010[, calage2 := calage_parc_2010[,3]/calage_parc_2010[,6]]
+# #calage_parc_2010[, calage3 := calage_parc_2010[,3]/calage_parc_2010[,6]]
+
+
+#### vérification calage parc avec CEREN par ener
+
+wbCEREN <- loadWorkbook("../AME_AMS_dataDGEC/parametrage modele/Publication_donnees_CEREN_2015.xlsx", create = F)
+
+parc_CEREN_ener =data.table(readWorksheet(wbCEREN, sheet = "Tab_TERTIAIRE",startRow = 16,endRow = 21,header = T))
+parc_CEREN_ener=parc_CEREN_ener[,1:7]
+setnames(parc_CEREN_ener, c("ENERGIE","1990","2000","2005","2010","2012","2013"))
+parc_CEREN_ener[,ENERGIE :=c("Gaz","Fioul","Urbain+Autres","Electricité","Total")]
+    
+
+comp_parc_par_ener = dcast.data.table(parc_par_ener[annee %in% annee_CEREN  ],scenario + ENERGIE ~ annee, value.var = "surface",fun.aggregate = function(x){sum(x)/10^6})
+
+comp_parc_par_ener=melt(comp_parc_par_ener,id.vars = c("scenario","ENERGIE"), variable.name = "an",
+                            value.name = "Surf")
+comp_parc_par_ener= rbind(comp_parc_par_ener,
+cbind(comp_parc_par_ener[ENERGIE=="Autres",list(scenario,an)],ENERGIE ="Urbain+Autres" ,Surf=comp_parc_par_ener[ENERGIE=="Autres",Surf] + comp_parc_par_ener[ENERGIE=="Urbain",Surf])
+)
+
+
+
+parc_CEREN_ener[, scenario:= "CEREN"]
+
+parc_CEREN_ener = melt(parc_CEREN_ener, id.vars = c("ENERGIE","scenario"), variable.name = "an", value.name = "Surf")
+
+comp_parc_par_ener = rbind(comp_parc_par_ener,parc_CEREN_ener)
+comp_parc_par_ener[,ENERGIE :=factor(ENERGIE,levels = c("Electricité","Gaz","Fioul","Urbain","Autres","Urbain+Autres","Total"))]
+#     
+# ## calage parc CEREN 2010 par ener
+# calage_parc_ener_2010 = comp_parc_par_ener[ an == "2010"]
+# calage_parc_ener_2010  =dcast.data.table(calage_parc_ener_2010 ,an+ ENERGIE~scenario)
+# 
+# calage_parc_ener_2010 [, calage :=calage_parc_ener_2010 [,3]/calage_parc_ener_2010 [,6]]
+# 
+# calage_parc_ener_2010 [, calage2 :=calage_parc_ener_2010 [,3]/calage_parc_ener_2010 [,7]]
+# #calage_parc_ener_2010 [, calage3 :=calage_parc_ener_2010 [,3]/calage_parc_ener_2010 [,8]]
+# 
+# calage_parc_ener_2013 = comp_parc_par_ener[ an == "2013"]
+# calage_parc_ener_2013  =dcast.data.table(calage_parc_ener_2013 ,an+ ENERGIE~scenario)
+# 
+# calage_parc_ener_2013 [, calage :=calage_parc_ener_2013 [,3]/calage_parc_ener_2013 [,6]]
+# calage_parc_ener_2013 [, calage2 :=calage_parc_ener_2013 [,3]/calage_parc_ener_2013 [,7]]
+# #calage_parc_ener_2013 [, calage3 :=calage_parc_ener_2013 [,3]/calage_parc_ener_2013 [,8]]
+
+comp_parc_par_branche = merge(comp_parc_par_branche, COD_BRANCHE[,list(branche = COD_BRANCHE, branchenom =  BRANCHE )], by="branche")
+```
+
+
+```{r comp_parc_CEREN, fig.width=10, fig.height=9, echo=F, warning=F,fig.cap='Comparaison avec le parc CEREN par branche', dev=c('png', 'pdf'),  fig.show='hold'}
+
+ggplot(comp_parc_par_branche[an %in% annee_CEREN & BRANCHE != "Total général"]) + 
+           geom_bar(aes(scenario,Surf, fill = branchenom), stat="identity") + 
+           facet_wrap(~an, nrow = 1) + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1,angle =45), title  = element_text(size = 20)) + 
+  ylab("Mm²")+ xlab("")+
+  mytheme_facet_plot + scale_fill_discrete("") 
+
+```
+
+```{r comp_parc_CEREN_2010, fig.width=10, fig.height=9, echo=F, warning=F,fig.cap='Comparaison avec le parc CEREN par branche', dev=c('png', 'pdf'),  fig.show='hold'}
+
+ggplot(comp_parc_par_branche[an %in% annee_CEREN & BRANCHE != "Total général" & an == "2010"]) + 
+           geom_bar(aes(scenario,Surf, fill = branchenom), stat="identity") + 
+           facet_wrap(~an, nrow = 1) + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1,angle =45), title  = element_text(size = 20)) + 
+  ylab("Mm²")+ xlab("")+
+  mytheme_facet_plot + scale_fill_discrete("") 
+
+```
+
+```{r comp_parc_CEREN_ener, fig.width=10, fig.height=9, echo=F, warning=F,fig.cap='Comparaison avec le parc CEREN par énergie de chauffage', dev=c('png', 'pdf')}
+
+ggplot(comp_parc_par_ener [an %in% annee_CEREN & ENERGIE != "Autres" & ENERGIE != "Urbain" & ENERGIE != "Total"]) + 
+           geom_bar(aes(scenario,Surf, fill = ENERGIE), stat="identity") + 
+           facet_wrap(~an, nrow = 1) + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1,angle =45), title  = element_text(size = 20)) + 
+  ylab("Mm²")+xlab("")+
+  mytheme_facet_plot + scale_fill_discrete("") 
+
+```
+
+```{r comp_parc_CEREN_ener_2010, fig.width=10, fig.height=9, echo=F, warning=F,fig.cap='Comparaison avec le parc CEREN par énergie de chauffage', dev=c('png', 'pdf')}
+
+ggplot(comp_parc_par_ener [an %in% annee_CEREN & ENERGIE != "Autres" & ENERGIE != "Urbain" & ENERGIE != "Total" & an =="2010"]) + 
+           geom_bar(aes(scenario,Surf, fill = ENERGIE), stat="identity") + 
+           facet_wrap(~an, nrow = 1) + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1,angle =45), title  = element_text(size = 20)) + 
+  ylab("Mm²")+xlab("")+
+  mytheme_facet_plot + scale_fill_discrete("") 
+
+```
+
+\pagebreak
+
+## Construction neuve
+
+```{r,echo=F, warning=F,include = F}
+### % d'évolution et construction neuve par branche et période 
+
+Construction_periode = parc_melted[Type_parc ==  "N" & annee == max(as.character(annee)),list(value = sum(Surface)), by=c("scenario", "Type_parc","branche","periodeSimple")]
+Construction_periode = merge(Construction_periode, COD_PERIODE_SIMPLE[,list( periodeSimple = COD_PERIODE_SIMPLE,PERIODE_SIMPLE)], by="periodeSimple")
+
+Construction_periode = merge(Construction_periode,COD_BRANCHE[, list(branche = COD_BRANCHE, BRANCHE)],by="branche")
+
+construction_tot=Construction_periode[, list(BRANCHE = "Total",
+                                             value = sum(value)),by=c("scenario","Type_parc","PERIODE_SIMPLE")]
+
+Construction_periode = dcast.data.table(Construction_periode, scenario + Type_parc + BRANCHE~PERIODE_SIMPLE, 
+                             fun.aggregate = function(x){sum(x, na.rm = T)/10^6})
+construction_tot= dcast.data.table(construction_tot, scenario + Type_parc + BRANCHE~PERIODE_SIMPLE,
+                        fun.aggregate = function(x){sum(x, na.rm = T)/10^6})
+
+Construction_periode = rbind(Construction_periode, construction_tot)
+
+
+surface_n = parc_melted[,list(value = sum(Surface)), 
+                        by=c("scenario","annee","branche")]
+surface_n[,annee_n_plus1 := as.character(as.numeric(as.character(annee)) + 1)]
+surface_n = merge(surface_n,
+                  surface_n[annee %in% c(2010:2050), list(scenario,annee,branche,surf_n_plus1 =value)],
+                  by.x = c("scenario","branche","annee_n_plus1"),
+                  by.y = c("scenario","branche","annee"))
+surface_n[,Evol_surf := surf_n_plus1/value]
+surface_n[,neuf_surf := surf_n_plus1-value]
+
+surface_n = merge(surface_n,COD_BRANCHE[, list(branche = COD_BRANCHE, BRANCHE)],by="branche")
+#surface_n = dcast(surface_n, scenario+ BRANCHE~annee,value.var = "Evol_surf")
+surface_n[annee == "2009"]
+
+#### construction neuve par occupant 
+
+
+surface_n_occ = parc_melted[,list(value = sum(Surface)), 
+                        by=c("scenario","annee","branche","occupation")]
+surface_n_occ[,annee_n_plus1 := as.character(as.numeric(as.character(annee)) + 1)]
+surface_n_occ = merge(surface_n_occ,
+                  surface_n_occ [annee %in% c(2010:2050), list(scenario,annee,branche,occupation,surf_n_plus1 =value)],
+                  by.x = c("scenario","branche","annee_n_plus1","occupation"),
+                  by.y = c("scenario","branche","annee","occupation"))
+surface_n_occ[,Evol_surf := surf_n_plus1/value]
+surface_n_occ[,neuf_surf := surf_n_plus1-value]
+
+surface_n_occ = merge(surface_n_occ,COD_BRANCHE[, list(branche = COD_BRANCHE, BRANCHE)],by="branche")
+
+
+surface_n_occ = surface_n_occ[, list(surf_neuf = sum(neuf_surf), surf_parc = sum( value)), by=c("scenario","annee","occupation")]
+surface_n_occ[, PM_neuf_occ := surf_neuf/sum(surf_neuf),by=c("scenario","annee")]
+surface_n_occ[, PM_tot_occ := surf_parc/sum(surf_parc),by=c("scenario","annee")]
+
+PM_neuf_occ = dcast.data.table(surface_n_occ,scenario+occupation~annee,value.var = "PM_neuf_occ")
+PM_tot_occ = dcast.data.table(surface_n_occ,scenario+occupation~annee,value.var = "PM_tot_occ")
+```
+
+
+
+```{r, echo=F, warning=F,}
+pander(construction_tot, digits = 2, caption = "Construction neuve par période en Mm² (pour DGEC)")
+```
+
+
+```{r Evol_parc_partannuelle, fig.width=25, fig.height=9, echo=F, warning=F,fig.cap='Evolution du parc (en % du parc de l\'année n-1) par branche', dev=c('png', 'pdf')}
+
+ggplot(surface_n) + 
+  geom_line(aes(annee,(Evol_surf-1)*100, group = BRANCHE, color = BRANCHE), size = 2) + 
+    ylab("% parc année n-1") + facet_wrap(~scenario) +
+  mytheme_facet_plot + scale_fill_brewer(palette = fillpalette) +  
+   scale_x_discrete(breaks = seq(2010,2050,10), labels =
+                    seq(2010,2050,10))
+  
+```
+
+\clearpage
+\newpage 
+
+
+
+
+\section{2) Evolution des consommmations}
+
+## Ensemble du parc
+
+```{r,echo=F, warning=F,include = F}
+##### tableau des consos DGEC
+
+Conso_nationale_usage = dcast.data.table(Conso, scenario + annee ~usage,fun.aggregate = function(x){sum(x)/10^9}, value.var = "value")
+
+Conso_nationale_usage = melt(Conso_nationale_usage, id.vars = c("scenario","annee"), variable.name = "usage", value.name = "conso_tWhEF")
+
+
+conso_parusage = dcast.data.table(Conso_nationale_usage[annee %in% c("2010","2013","2015","2020","2025","2030","2035","2050"),],
+                                  scenario + annee ~ usage)
+
+conso_parusage = conso_parusage[,list(Chauffage,
+                                      AU_ther = sum(ECS,Cuisson,Autre),
+                                      Elec_spe = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire),
+                                      Clim = Climatisation,
+ Total_RT=sum(Chauffage,Climatisation,ECS,Auxiliaires,Ventilation,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","annee")]
+
+conso_parusage = melt(conso_parusage,id.vars = c("scenario","annee"),variable.name ="usage" )
+
+conso_parusage[, conso_mtep := value/11630*10^3]
+conso_parusage[, conso := value]
+
+
+conso_parusage_tWh = dcast.data.table(conso_parusage, scenario + usage ~ annee, value.var = "value")
+conso_parusage_tWh = conso_parusage_tWh[order(usage),]
+conso_parusage_tWh[, scenario := substring(scenario,1,2)]
+
+
+conso_parusage_mtep = dcast.data.table(conso_parusage, scenario + usage ~ annee, value.var = "conso_mtep")
+conso_parusage_mtep  = conso_parusage_mtep[order(usage),]
+conso_parusage_mtep[, scenario := substring(scenario,1,2)]
+annee_ref = "2010"
+
+evolconso = conso_parusage_tWh 
+
+evolconso = evolconso[,list(scenario, usage,
+                Evol_2015 = paste0(round((get("2015")/get(annee_ref)-1)*100, digits=1), " %"),
+                Evol_2020 = paste0(round((get("2020")/get(annee_ref)-1)*100, digits=1), " %"),
+                Evol_2020 = paste0(round((get("2025")/get(annee_ref)-1)*100, digits=1), " %"),
+                Evol_2030 = paste0(round((get("2030")/get(annee_ref)-1)*100, digits=1), " %"),
+                Evol_2035 = paste0(round((get("2035")/get(annee_ref)-1)*100, digits=1), " %"),
+                Evol_2050 = paste0(round((get("2050")/get(annee_ref)-1)*100, digits=1), " %"))]
+
+evolconso[, scenario := substring(scenario,1,2)]
+
+setnames(evolconso, c("scenario", "usage",paste(annee_ref,c(15,20,25,30,35,50), sep="-")))
+#♦Consotab = merge(conso_parusage_mtep,evolconso,by=c("scenario","usage"))
+###
+conso_parusage_ini = dcast.data.table(Conso_nationale_usage[annee %in% c("2010","2013","2015","2016","2017","2018","2019","2020","2025","2030","2035","2050"),],
+                                  scenario + annee ~ usage)
+
+
+conso_parusage_ini = conso_parusage_ini[,list(Chauffage,
+                                      AU_ther = sum(ECS,Cuisson,Autre),
+                                      Elec_spe = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire),
+                                      Clim = Climatisation,
+ Total_RT=sum(Chauffage,Climatisation,ECS,Auxiliaires,Ventilation,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","annee")]
+
+conso_parusage_ini = melt(conso_parusage_ini,id.vars = c("scenario","annee"),variable.name ="usage" )
+
+conso_parusage_ini[, conso_mtep := value/11630*10^3]
+conso_parusage_ini[, conso := value]
+
+
+conso_parusage_ini_tWh = dcast.data.table(conso_parusage_ini, scenario + usage ~ annee, value.var = "value")
+conso_parusage_ini_tWh = conso_parusage_ini_tWh[order(usage),]
+conso_parusage_ini_tWh[, scenario := substring(scenario,1,2)]
+
+
+##### Différence de conso totales par usage par rapport à un scénario de ref
+
+comp_conso_ref = dcast.data.table(Conso_nationale_usage[annee %in% c(2010:2021,
+                                                                     "2025","2030","2035","2040","2045","2050"),],
+                                  scenario + annee ~ usage)
+
+comp_conso_ref=comp_conso_ref[,list(Chauffage,
+                                      AU_ther = sum(ECS,Cuisson,Autre),
+                                      Elec_spe = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire),
+                                      Clim = Climatisation,
+ Total_RT=sum(Chauffage,Climatisation,ECS,Auxiliaires,Ventilation,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","annee")]
+
+comp_conso_ref = melt(comp_conso_ref,id.vars = c("scenario","annee"),variable.name ="usage" )
+
+comp_conso_ref[, conso_mtep := value/11630*10^3]
+comp_conso_ref[, conso := value]
+
+conso_parusage_refsansCEE = comp_conso_ref[scenario ==scenario_sansCEE] 
+comp_conso_refsansCEE = comp_conso_ref[scenario !=scenario_sansCEE]
+comp_conso_refsansCEE= merge(comp_conso_refsansCEE,conso_parusage_refsansCEE[,list(conso_ref = conso,conso_mtep_ref=conso_mtep,annee,usage )], by=c("annee","usage"))
+comp_conso_refsansCEE[, diffconso := (conso-conso_ref)]
+
+conso_parusage_ref = comp_conso_ref[scenario ==scenario_ref] 
+comp_conso_ref = comp_conso_ref[scenario !=scenario_ref]
+comp_conso_ref = merge(comp_conso_ref,conso_parusage_ref[,list(conso_ref = conso,conso_mtep_ref=conso_mtep,annee,usage )], by=c("annee","usage"))
+comp_conso_ref[, diffconso := (conso-conso_ref)]
+
+
+
+tab_diffconso_2010_2020 = comp_conso_refsansCEE[annee%in% 2014:2021]
+#tab_diffconso_2010_2020 = dcast.data.table(tab_diffconso_2010_2020,usage+scenario~annee, value.var = "diffconso")
+ 
+tab_diffconso_2010_2020 
+
+##### Evolution des consos CEE
+# Evol_consoChauff_CEE = Conso_nationale_usage[substring(scenario,1,2) %in% c("S2","S3") & usage %in% c("Chauffage"),sum(conso_tWhEF),by=c("annee","scenario", "usage") ]
+# Evol_consotot_CEE = Conso_nationale_usage[substring(scenario,1,2) %in% c("S2","S3") ,sum(conso_tWhEF),by=c("annee","scenario", "usage") ]
+
+``` 
+
+
+```{r, echo=F, warning=F}
+pander(conso_parusage_tWh[order(usage)], digits = 2, caption = "Bilan des consommations en tWh EF")
+```
+
+```{r Evol_Conso_tot, fig.width=25, fig.height=9, echo=F, warning=F,fig.cap='Evolution des consommations totales', dev=c('png', 'pdf')}
+### consommations totales, comparaison entre scénarios 
+
+ggplot(Conso_nationale_usage[,list(conso_tWhEF = sum(conso_tWhEF)),by=c("scenario","annee")]) + geom_line(aes(annee, conso_tWhEF, group=scenario,color= scenario), size = 2) + 
+     mytheme_facet_plot  + ylab("Consommmation totale en Twh") + 
+    scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5))  + 
+  scale_y_continuous(limits = c(0,250),breaks = seq(0,250,50))
+
+
+```
+
+\pagebreak 
+
+```{r, echo=F, warning=F}
+pander(evolconso[order(usage)], digits = 2, caption = "Evolution des consommations")
+```
+
+\pagebreak
+
+## Consommations par usage et énergie
+
+```{r,  echo=F, warning=F,include = F}
+##### consommations nationales par énergie et type de parc 
+Conso_nationale_energie_type = dcast.data.table(Conso, scenario + annee + Type_parc ~nom_energie,fun.aggregate = function(x){sum(x, na.rm = T)/10^9}, value.var = "value")
+Conso_nationale_energie_type = melt(Conso_nationale_energie_type, id.vars = c("scenario","annee", "Type_parc"), variable.name = "energie", value.name = "conso_tWhEF")
+
+Conso_nationale_energie = Conso_nationale_energie_type[,list(conso_tWhEF = sum(conso_tWhEF)),  by=c("scenario","annee", "energie")]
+Conso_nationale_energie[, scenario_short := substring(scenario,1,2)]
+Conso_nationale_energie[, energie :=factor(energie, levels = c("Electricité","Gaz","Fioul", "Urbain","Autres"))]
+
+
+conso_parenergie_tWh = dcast.data.table(Conso_nationale_energie[annee %in% c("2010","2013","2015","2020","2025","2030","2035","2040","2045","2050")], scenario + energie ~ annee, value.var = "conso_tWhEF")
+
+conso_parenergie_tWh = conso_parenergie_tWh[order(energie),]
+
+conso_parenergie_mtep = dcast.data.table(Conso_nationale_energie[annee %in% c("2010","2013","2015","2020","2025","2030","2035","2040","2045","2050")], scenario + energie ~ annee, value.var = "conso_tWhEF", fun.aggregate = function(x){sum(x)/11630*10^3})
+
+conso_parenergie_mtep = conso_parenergie_mtep[order(energie),]
+
+##### consommations nationales usage et type de parc 
+
+Conso_nationale_usage_type = dcast.data.table(Conso, scenario + annee + Type_parc ~usage,fun.aggregate = function(x){sum(x, na.rm = T)/10^9}, value.var = "value")
+
+Conso_nationale_usage_type = melt(Conso_nationale_usage_type , id.vars = c("scenario","annee", "Type_parc"), variable.name = "usage", value.name = "conso_tWhEF")
+
+Conso_nationale_usage_type  = Conso_nationale_usage_type [,list(conso_tWhEF = sum(conso_tWhEF)),  
+                                                          by=c("scenario","annee", "Type_parc", "usage")]
+
+Conso_nationale_usage_type_all = Conso_nationale_usage_type
+Conso_nationale_usage_type = dcast.data.table(Conso_nationale_usage_type[annee %in% c("2010","2015","2020","2025","2030","2035","2040","2045","2050"),],
+                                  scenario +Type_parc +  annee ~ usage)
+
+Conso_nationale_usage_type = Conso_nationale_usage_type[,list(Chauffage,
+                                      AU_usages_ther = sum(ECS,Cuisson,Autre),
+                                      Elec_spe = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire),
+                                      Climatisation,
+ Total_RT=sum(Chauffage,Climatisation,ECS,Auxiliaires,Ventilation,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","Type_parc","annee")]
+
+Conso_nationale_usage_type = melt(Conso_nationale_usage_type,id.vars = c("scenario","Type_parc","annee"),variable.name ="usage" )
+
+Conso_nationale_usage_type  =dcast(Conso_nationale_usage_type,scenario +Type_parc +usage  ~ annee  )
+
+annee_ref = "2010"
+
+evolconso_usage_type = data.table(Conso_nationale_usage_type)
+evolconso_usage_type = evolconso_usage_type[,list(scenario, usage,Type_parc,
+                Evol_2020 = paste0(round((get("2020")/get(annee_ref)-1)*100, digits=1), " %"),
+                Evol_2030 = paste0(round((get("2030")/get(annee_ref)-1)*100, digits=1), " %"),
+                Evol_2040 = paste0(round((get("2040")/get(annee_ref)-1)*100, digits=1), " %"),
+                Evol_2050 = paste0(round((get("2050")/get(annee_ref)-1)*100, digits=1), " %"))]
+
+
+setnames(evolconso_usage_type, c("scenario", "usage","Type_parc",paste(annee_ref,c(20,30,40,50), sep="-")))
+
+### Evol consou totale parc neuf et ancien
+
+surface_parc = parc_melted[,list(Surface = sum(Surface)),by=c("scenario","annee","Type_parc")]
+
+evolconsou_usage_type = data.table(Conso_nationale_usage_type)
+evolconsou_usage_type  = melt(evolconsou_usage_type ,id.vars = c("scenario","Type_parc","usage"),variable.name ="annee" )
+
+evolconsou_usage_type = merge(evolconsou_usage_type, surface_parc,by=c("scenario","annee","Type_parc"),all.x=T)
+
+evolconsou_usage_type[, Conso_u :=value*10^9/Surface]
+evolconsou_usage_type = dcast.data.table(evolconsou_usage_type, scenario + usage + Type_parc ~ annee,value.var = "Conso_u")
+
+evolconsou_usage_type = evolconsou_usage_type[,list(scenario, usage,Type_parc,
+                                                    Evol_2010 = round((get("2010")/get(annee_ref)), digits=1),
+                Evol_2020 = round((get("2020")/get(annee_ref)), digits=2),
+                Evol_2030 = round((get("2030")/get(annee_ref)), digits=2),
+                Evol_2040 = round((get("2040")/get(annee_ref)), digits=2),
+                Evol_2050 = round((get("2050")/get(annee_ref)), digits=2))]
+
+setnames(evolconsou_usage_type, c("scenario", "usage","Type_parc","2010","2020","2030","2040","2050"))
+
+##### consommations nationales par énergie, usage et type de parc 
+Conso_nationale_energie_type_usage = dcast.data.table(Conso, scenario + annee + Type_parc + usage ~nom_energie,fun.aggregate = function(x){sum(x, na.rm = T)/10^9}, value.var = "value")
+
+Conso_nationale_energie_type_usage = melt(Conso_nationale_energie_type_usage, id.vars = c("scenario","annee", "Type_parc", "usage"), variable.name = "energie", value.name = "conso_tWhEF")
+
+Conso_nationale_energie_usage = Conso_nationale_energie_type_usage[,list(conso_tWhEF = sum(conso_tWhEF)),  by=c("scenario","annee", "energie","usage")]
+Conso_nationale_energie_usage[, scenario_short := substring(scenario,1,2)]
+Conso_nationale_energie_usage[, energie :=factor(energie, levels = c("Electricité","Gaz","Fioul", "Urbain","Autres"))]
+
+
+##### consommations nationales par branche MEDPRO, énergie et usage
+
+Conso_nationale_energie_branche = dcast.data.table(Conso, scenario + annee +branche+ nom_branche +Branche_MEDPRO+  usage  ~nom_energie,fun.aggregate = function(x){sum(x, na.rm = T)/10^9}, value.var = "value")
+
+Conso_nationale_energie_branche = melt(Conso_nationale_energie_branche, id.vars = c("scenario","annee","branche","nom_branche","Branche_MEDPRO","usage"), variable.name = "energie", value.name = "conso_tWhEF")
+
+Conso_nationale_energie_branche[, energie :=factor(energie, levels = c("Electricité","Gaz","Fioul", "Urbain","Autres"))]
+
+##### consommations nationales par branche, période de construction et type de parc 
+Conso_nationale_energie_branche_type = dcast.data.table(Conso, scenario + annee + Type_parc +branche+ nom_branche + periodeSimple+ usage  ~nom_energie,fun.aggregate = function(x){sum(x, na.rm = T)/10^9}, value.var = "value")
+Conso_nationale_energie_branche_type = melt(Conso_nationale_energie_branche_type, id.vars = c("scenario","annee","branche","nom_branche","periodeSimple", "Type_parc","usage"), variable.name = "energie", value.name = "conso_tWhEF")
+
+Conso_nationale_energie_branche_type[, scenario_short := substring(scenario,1,2)]
+Conso_nationale_energie_branche_type[, energie :=factor(energie, levels = c("Electricité","Gaz","Fioul", "Urbain","Autres"))]
+
+
+#### vérification calage conso avec CEREN
+wbCEREN <- loadWorkbook("../AME_AMS_dataDGEC/parametrage modele/Publication_donnees_CEREN_2015.xlsx", create = F)
+
+consotot_CEREN =data.table(readWorksheet(wbCEREN, sheet = "Tab_TERTIAIRE",startRow = 51,endRow = 56,header = T))
+consotot_CEREN = consotot_CEREN[,1:8]
+comp_consoCEREN = Conso_nationale_energie[annee%in%c(annee_CEREN,"2015")]
+comp_consoCEREN[, scenario_short := NULL]
+setnames(consotot_CEREN, c("energie","1990","2000","2005","2010","2012","2013","2015"))
+
+comp_consoCEREN = rbind(comp_consoCEREN,
+cbind(comp_consoCEREN[energie=="Autres",list(scenario,annee)],energie ="Urbain+Autres" ,conso_tWhEF=comp_consoCEREN[energie=="Autres",conso_tWhEF] + comp_consoCEREN[energie=="Urbain",conso_tWhEF])
+)
+
+consotot_CEREN[,energie :=c("Gaz","Fioul", "Urbain+Autres","Electricité", "Total")]
+
+consotot_CEREN = melt(consotot_CEREN,id.vars = "energie",variable.name = "annee",value.name = "conso_tWhEF")
+consotot_CEREN[,scenario :="CEREN"]
+comp_consoCEREN =rbind(comp_consoCEREN ,consotot_CEREN[energie!="Total" & annee %in% c(annee_CEREN,"2015")])
+
+comp_consoCEREN[,energie :=factor(energie,levels = c("Gaz","Fioul", "Electricité","Urbain", "Autres", "Urbain+Autres"))]
+
+# ## calage conso CEREN 2010 par ener
+# calage_conso_ener_2010 = comp_consoCEREN[ annee == "2010"]
+# calage_conso_ener_2013 = comp_consoCEREN[ annee == "2013"]
+# calage_conso_ener_2010 =dcast.data.table(calage_conso_ener_2010 ,annee+ energie~scenario)
+# calage_conso_ener_2013 =dcast.data.table(calage_conso_ener_2013 ,annee+ energie~scenario)
+# 
+# 
+# calage_conso_ener_2010[, calage :=calage_conso_ener_2010[,3]/calage_conso_ener_2010[,5]]
+# calage_conso_ener_2010[, calage2 :=calage_conso_ener_2010[,3]/calage_conso_ener_2010[,6]]
+#  calage_conso_ener_2010[, calage3 :=calage_conso_ener_2010[,3]/calage_conso_ener_2010[,7]]
+# # calage_conso_ener_2010[, calage4 :=calage_conso_ener_2010[,3]/calage_conso_ener_2010[,10]]
+# # calage_conso_ener_2010[, calage5 :=calage_conso_ener_2010[,3]/calage_conso_ener_2010[,11]]
+# 
+# calage_conso_ener_2013[, calage :=calage_conso_ener_2013[,3]/calage_conso_ener_2013[,5]]
+# calage_conso_ener_2013[, calage2 :=calage_conso_ener_2013[,3]/calage_conso_ener_2013[,6]]
+#  calage_conso_ener_2013[, calage3 :=calage_conso_ener_2013[,3]/calage_conso_ener_2013[,7]]
+# # calage_conso_ener_2013[, calage4 :=calage_conso_ener_2013[,3]/calage_conso_ener_2013[,10]]
+# # calage_conso_ener_2013[, calage5 :=calage_conso_ener_2013[,3]/calage_conso_ener_2013[,11]]
+# 
+# calage_conso_ener_2010
+# calage_conso_ener_2013
+# 
+# sum(calage_conso_ener_2010[c(1:3,6),3])
+# #sum(calage_conso_ener_2010[c(1:3,6),12])
+# sum(calage_conso_ener_2013[c(1:3,6),3])
+# #sum(calage_conso_ener_2013[c(1:3,6),12])
+# 
+
+### verif conso chauffage
+consochauff_CEREN =data.table(readWorksheet(wbCEREN, sheet = "Tab_TERTIAIRE",startRow = 60,endRow = 65,header = T))
+consochauff_CEREN = consochauff_CEREN[,1:8]
+comp_consoChauffCEREN = Conso_nationale_energie_usage[annee%in%c(annee_CEREN,"2015") & usage == "Chauffage"]
+comp_consoChauffCEREN[, scenario_short := NULL]
+comp_consoChauffCEREN[, usage := NULL]
+comp_consoChauffCEREN = rbind(comp_consoChauffCEREN,
+cbind(comp_consoChauffCEREN[energie=="Autres",list(scenario,annee)],energie ="Urbain+Autres" ,conso_tWhEF=comp_consoChauffCEREN[energie=="Autres",conso_tWhEF] + comp_consoChauffCEREN[energie=="Urbain",conso_tWhEF])
+)
+
+
+
+setnames(consochauff_CEREN, c("energie","1990","2000","2005","2010","2012","2013","2015"))
+
+consochauff_CEREN[,energie :=c("Gaz","Fioul", "Urbain+Autres","Electricité", "Total")]
+consochauff_CEREN[,energie :=factor(energie,levels = c("Gaz","Fioul", "Electricité","Urbain", "Autres", "Urbain+Autres"))]
+
+consochauff_CEREN = melt(consochauff_CEREN,id.vars = "energie",variable.name = "annee",value.name = "conso_tWhEF")
+consochauff_CEREN[,scenario :="CEREN"]
+
+comp_consoChauffCEREN  =rbind(comp_consoChauffCEREN ,consochauff_CEREN[energie!="Total" & annee %in% c(annee_CEREN,"2015")])
+
+comp_consoChauffCEREN [,energie :=factor(energie,levels = c("Gaz","Fioul", "Electricité","Urbain", "Autres", "Urbain+Autres"))]
+
+# ## calage conso chauff  CEREN 2010 par ener
+# calage_consoChauff_ener_2010 = comp_consoChauffCEREN[ annee == "2010"]
+# calage_consoChauff_ener_2013 = comp_consoChauffCEREN[ annee == "2013"]
+# calage_consoChauff_ener_2010 =dcast.data.table(calage_consoChauff_ener_2010 ,annee+ energie~scenario)
+# calage_consoChauff_ener_2013 =dcast.data.table(calage_consoChauff_ener_2013 ,annee+ energie~scenario)
+# 
+# calage_consoChauff_ener_2010[, calage :=calage_consoChauff_ener_2010[,3]/calage_consoChauff_ener_2010[,5]]
+# calage_consoChauff_ener_2010[, calage2 :=calage_consoChauff_ener_2010[,3]/calage_consoChauff_ener_2010[,6]]
+#  calage_consoChauff_ener_2010[, calage3 :=calage_consoChauff_ener_2010[,3]/calage_consoChauff_ener_2010[,7]]
+# # calage_consoChauff_ener_2010[, calage4 :=calage_consoChauff_ener_2010[,3]/calage_consoChauff_ener_2010[,10]]
+# # calage_consoChauff_ener_2010[, calage5 :=calage_consoChauff_ener_2010[,3]/calage_consoChauff_ener_2010[,11]]
+# 
+# 
+# 
+# calage_consoChauff_ener_2013[, calage :=calage_consoChauff_ener_2013[,3]/calage_consoChauff_ener_2013[,5]]
+# calage_consoChauff_ener_2013[, calage2 :=calage_consoChauff_ener_2013[,3]/calage_consoChauff_ener_2013[,6]]
+#  calage_consoChauff_ener_2013[, calage3 :=calage_consoChauff_ener_2013[,3]/calage_consoChauff_ener_2013[,7]]
+# # calage_consoChauff_ener_2013[, calage4 :=calage_consoChauff_ener_2013[,3]/calage_consoChauff_ener_2013[,10]]
+# # calage_consoChauff_ener_2013[, calage5 :=calage_consoChauff_ener_2013[,3]/calage_consoChauff_ener_2013[,11]]
+# 
+# calage_consoChauff_ener_2010
+# 
+# calage_consoChauff_ener_2013
+
+# sum(calage_consoChauff_ener_2010[c(1:3,6),3])
+# #sum(calage_consoChauff_ener_2010[c(1:3,6),12])
+# sum(calage_consoChauff_ener_2013[c(1:3,6),3])
+# #sum(calage_consoChauff_ener_2013[c(1:3,6),12])
+
+### verif conso unitaire chauffage
+# calage_consoChauff_ener_2010
+# calage_parc_ener_2010
+
+# calage_consouChauff_2010 = merge(melt(calage_consoChauff_ener_2010, id.vars = c("annee","energie"), 
+#      variable.name = "scenario",value.name = "ConsoTwhEF"), 
+#      melt(calage_parc_ener_2010, id.vars = c("an","ENERGIE"), 
+#      variable.name = "scenario",value.name = "SurfaceMm2"),  
+#      by.x = c("annee","energie", "scenario"), by.y = c("an","ENERGIE", "scenario"))
+#     
+# calage_consouChauff_2010[, ConsoU := ConsoTwhEF*10^3/SurfaceMm2]
+# 
+# calage_consouChauff_2010 = data.table(dcast(calage_consouChauff_2010, annee + energie ~ scenario, value.var = "ConsoU" ))
+
+# calage_consouChauff_2010
+# calage_consouChauff_2010[, calage :=calage_consouChauff_2010[,3]/calage_consouChauff_2010[,5]]
+# calage_consouChauff_2010[, calage2 :=calage_consouChauff_2010[,3]/calage_consouChauff_2010[,6]]
+# # calage_consouChauff_2010[, calage3 :=calage_consouChauff_2010[,3]/calage_consouChauff_2010[,9]]
+# # calage_consouChauff_2010[, calage4 :=calage_consouChauff_2010[,3]/calage_consouChauff_2010[,10]]
+# 
+# calage_consouChauff_2013 = merge(melt(calage_consoChauff_ener_2013, id.vars = c("annee","energie"), 
+#      variable.name = "scenario",value.name = "ConsoTwhEF"), 
+#      melt(calage_parc_ener_2013, id.vars = c("an","ENERGIE"), 
+#      variable.name = "scenario",value.name = "SurfaceMm2"),  
+#      by.x = c("annee","energie", "scenario"), by.y = c("an","ENERGIE", "scenario"))
+#     
+# calage_consouChauff_2013[, ConsoU := ConsoTwhEF*10^3/SurfaceMm2]
+# 
+# calage_consouChauff_2013 = data.table(dcast(calage_consouChauff_2013, annee + energie ~ scenario, value.var = "ConsoU" ))
+
+# calage_consouChauff_2013
+# calage_consouChauff_2013[, calage :=calage_consouChauff_2013[,3]/calage_consouChauff_2013[,5]]
+# calage_consouChauff_2013[, calage2 :=calage_consouChauff_2013[,3]/calage_consouChauff_2013[,6]]
+# calage_consouChauff_2013[, calage3 :=calage_consouChauff_2013[,3]/calage_consouChauff_2013[,9]]
+# calage_consouChauff_2013[, calage4 :=calage_consouChauff_2013[,3]/calage_consouChauff_2013[,10]]
+
+consou_ener = merge(Conso_nationale_energie_branche_type[usage == "Chauffage",sum(conso_tWhEF), by=c("energie","annee","Type_parc")], 
+      merge(parc_melted, COD_ENERGIE, by.x = c("energieChauffage"), by.y=c("COD_ENERGIE"))[,sum(Surface), by=c("ENERGIE","annee","Type_parc")]
+      ,
+      by.x=c("energie","annee","Type_parc"), by.y=c("ENERGIE","annee","Type_parc"))
+consou_ener[,Consou :=  V1.x*10^9/ V1.y]
+tmp = dcast(consou_ener,Type_parc + energie ~ annee,value.var = "Consou")
+tmp[,9]/tmp[,4]
+
+# ### verif conso autres usages 
+# calage_consoAutres_ener_2010 = cbind(calage_conso_ener_2010[,1:2],calage_conso_ener_2010[,c("CEREN",wbname),with=F] - calage_consoChauff_ener_2010[,c("CEREN",wbname), with=F])
+# calage_consoAutres_ener_2013 = cbind(calage_conso_ener_2013[,1:2],calage_conso_ener_2013[,c("CEREN",wbname),with=F] - calage_consoChauff_ener_2013[,c("CEREN",wbname), with=F])
+# 
+# 
+# calage_consoAutres_ener_2010[, calage :=calage_consoAutres_ener_2010[,3]/calage_consoAutres_ener_2010[,5]]
+# calage_consoAutres_ener_2010[, calage2 :=calage_consoAutres_ener_2010[,3]/calage_consoAutres_ener_2010[,6]]
+# calage_consoAutres_ener_2010[, calage3 :=calage_consoAutres_ener_2010[,3]/calage_consoAutres_ener_2010[,7]]
+# calage_consoAutres_ener_2010[, calage4 :=calage_consoAutres_ener_2010[,3]/calage_consoAutres_ener_2010[,10]]
+# calage_consoAutres_ener_2010[, calage5 :=calage_consoAutres_ener_2010[,3]/calage_consoAutres_ener_2010[,11]]
+
+
+consochauff_CEREN[,energie :=factor(energie,levels = c("Gaz","Fioul", "Electricité","Urbain", "Autres", "Urbain+Autres"))]
+Conso_nationale_energie[annee %in% c("2010","2013","2015","2020","2030")]
+
+comp_AMS = fread("../AME_AMS_dataDGEC/AMS 2018/cibleAMS.csv", dec = ",")
+setnames(comp_AMS,"TWh","usage")
+comp_AMS = melt(comp_AMS, id.vars = "usage", variable.name = "energie")
+comp_AMS_energie = comp_AMS[, list(Conso = sum(value)),by="energie"]
+comp_AMS_energie[,scenario := "cible AMS"]
+
+comp_AMS_energie = rbind(comp_AMS_energie,
+Conso_nationale_energie[annee=="2050" & scenario == "S1", list(energie,Conso = conso_tWhEF, scenario = "AME"),]
+)
+
+
+comp_AMS_usage = comp_AMS[, list(Conso = sum(value)),by="usage"]
+comp_AMS_usage[,scenario := "cible AMS"]
+
+
+Conso_AME_usage = Conso_nationale_usage[annee=="2050" & scenario == "S1", list(usage,Conso = conso_tWhEF, scenario = "AME"),]
+Conso_AME_usage[usage %in% c("Chauffage","ECS","Cuisson") == F, usage:="Autres usages"]
+Conso_AME_usage =Conso_AME_usage[ , list(Conso = sum(Conso), scenario = "AME"),by="usage"]
+  
+comp_AMS_usage = rbind(comp_AMS_usage,Conso_AME_usage)
+comp_AMS_usage = comp_AMS_usage[order(usage)]
+comp_AMS_usage[,Conso_cum := cumsum(Conso), by="scenario"]
+comp_AMS_usage[,usage:=factor(usage,levels = c("Autres usages","Cuisson","ECS","Chauffage"))]
+comp_AMS_usage = comp_AMS_usage[order(usage)]
+
+```
+
+
+
+```{r Evol_conso_energie, fig.width=20, fig.height=10, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+###### graph conso par énergie ######
+
+ggplot(Conso_nationale_energie[annee %in% c("2010",annee_MEDPRO)]) + 
+           geom_bar(aes(scenario_short,conso_tWhEF, fill = energie, color = energie), stat="identity") + 
+           facet_wrap(~annee, nrow = 1) + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1), title  = element_text(size = 20)) + 
+  ggtitle("Consommations pour tous les usages et l'ensemble du parc par énergie (tWh, énergie finale)") + ylab("tWh")+
+  mytheme_facet_plot
+
+```
+
+```{r comp_cible_AMS_energie, fig.width=10, fig.height=10, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+
+
+ggplot(comp_AMS_energie) + 
+           geom_bar(aes(scenario,Conso, fill = energie, color = energie), stat="identity")  + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1), title  = element_text(size = 20)) + 
+  ggtitle("") + ylab("TWh")+
+  mytheme_facet_plot
+
+```
+
+```{r Evol_conso_usage, fig.width=20, fig.height=10, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+###### graph conso par usage ######
+
+ggplot(Conso_nationale_energie_usage[annee %in% c("2010",annee_MEDPRO)]) + 
+           geom_bar(aes(scenario_short,conso_tWhEF, fill = usage, color = usage), stat="identity") + 
+           facet_wrap(~annee, nrow = 1) + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1), title  = element_text(size = 20)) + 
+  ggtitle("Consommations pour tous les usages et l'ensemble du parc par usage (tWh, énergie finale)") + ylab("tWh")+
+  mytheme_facet_plot + theme(legend.position="top")
+
+```
+
+```{r comp_cible_AMS_usage, fig.width=10, fig.height=10, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+
+
+ggplot(comp_AMS_usage) + 
+           geom_bar(aes(scenario,Conso, fill = usage, color = usage), stat="identity")  + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1), title  = element_text(size = 20)) + 
+  ggtitle("") + ylab("TWh")+ geom_text(aes(scenario,Conso_cum,label=round(Conso, digits= 1)), vjust = +1.5, color = "white")+
+  mytheme_facet_plot
+
+```
+
+```{r Evol_conso_chauffage, fig.width=20, fig.height=10, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+###### graph conso par chauffage par type de parc ######
+
+ggplot(Conso_nationale_usage_type_all[usage == "Chauffage"]) + 
+           geom_line(aes(annee,conso_tWhEF, color =Type_parc,group = Type_parc)) + 
+           facet_wrap(~scenario, nrow = 1) + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1), title  = element_text(size = 20)) + 
+    scale_x_discrete(breaks = c("2010","2015","2020","2025","2030","2035","2040","2045","2050"))+
+  ggtitle("Consommations de chauffage par type de parc (tWh, énergie finale)") + ylab("tWh")+
+  mytheme_facet_plot
+
+```
+
+```{r Evol_conso_energie_usageRT, fig.width=20, fig.height=10, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+###### graph conso par énergie ######
+
+ggplot(Conso_nationale_energie_usage[annee %in% c("2010",annee_MEDPRO) & usage %in% c("Chauffage","ECS","Auxiliaires","Ventilation","Eclairage"), list(conso_tWhEF = sum(conso_tWhEF)), by=c("scenario_short","annee","energie")]) + 
+           geom_bar(aes(scenario_short,conso_tWhEF, fill = energie, color = energie), stat="identity") + 
+           facet_wrap(~annee , nrow = 1) + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1), title  = element_text(size = 20)) + 
+
+  ggtitle("Consommations pour les usages RT et l'ensemble du parc par énergie (tWh, énergie finale)") + ylab("tWh")+
+  mytheme_facet_plot
+
+```
+
+```{r,  echo=F, warning=F,include = F}
+dcast.data.table(Conso_nationale_energie_branche_type[Type_parc == "E" & usage == "Chauffage"], scenario + nom_branche  ~ annee,fun.aggregate = sum, value.var = "conso_tWhEF")
+
+
+```
+
+```{r Evol_conso_branche, fig.width=20, fig.height=10, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+###### graph conso par branche pour le chauffage ######
+
+ggplot(Conso_nationale_energie_branche_type[Type_parc == "E" & usage == "Chauffage", list(conso_tWhEF=sum(conso_tWhEF)), by=c("scenario","nom_branche","annee")]) + 
+           geom_line(aes(annee,conso_tWhEF, color = scenario, group = scenario)) + facet_wrap(~nom_branche)+
+  theme(axis.text.x = element_text(size = 12, hjust = 1), title  = element_text(size = 20)) + 
+  ggtitle("Consommations pour le chauffage pour le parc existant par branche)") + ylab("tWh")+
+  mytheme_facet_plot
+
+```
+\pagebreak
+
+## Comparaison avec le CEREN 2010-2015
+
+```{r comp_conso_CEREN, fig.width=20, fig.height=9, echo=F, warning=F,fig.cap='Comparaison avec les consommations totales du CEREN', dev=c('png', 'pdf')}
+
+ggplot(comp_consoCEREN[energie != "Autres" & energie != "Urbain" & annee != "2012"] ) + 
+           geom_bar(aes(scenario,conso_tWhEF, fill = energie, color =  energie), stat="identity") + 
+           facet_wrap(~annee, nrow = 1) +
+  
+  theme(axis.text.x = element_text(size = 12, hjust = 1,angle =45))+ ylab("tWh")+
+  mytheme_facet_plot + xlab("")
+
+```
+
+```{r comp_consochauff_CEREN, fig.width=20, fig.height=9, echo=F, warning=F,fig.cap='Comparaison avec les consommations de chauffage du CEREN', dev=c('png', 'pdf')}
+
+ggplot(comp_consoChauffCEREN[energie != "Autres" & energie != "Urbain" & annee != "2012"]) + 
+           geom_bar(aes(scenario,conso_tWhEF, fill = energie, color =  energie), stat="identity") + 
+           facet_wrap(~annee, nrow = 1) + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1,angle =45))+ ylab("tWh")+
+  mytheme_facet_plot + xlab("")
+
+```
+
+
+\clearpage
+\pagebreak
+
+\section{3) Parts de marchés des systèmes et des énergies de chauffage (Surfaces)}
+
+
+### PM des énergies dans le neuf
+
+```{r,echo=F, warning=F,include = F}
+### PM des énergies dans le neuf
+
+
+PM_energie_neuf = PM[Type_parc ==  "N", list(Surf_neuf_n = sum(surface)),by=c("scenario", "Type_parc","energieChauffage","periodeSimple","annee")] 
+
+PM_energie_neuf[, annee_n1 := as.factor(as.numeric(as.character(annee)) -1)]
+
+PM_energie_neuf = merge(PM_energie_neuf,
+                        PM_energie_neuf[,list(scenario,Type_parc,annee,energieChauffage,periodeSimple,Surf_neuf_n1 = Surf_neuf_n )], 
+                        by.x=c("scenario", "Type_parc","energieChauffage","periodeSimple","annee_n1"), 
+                        by.y=c("scenario", "Type_parc","energieChauffage","periodeSimple","annee"),all.x=T)
+
+PM_energie_neuf[(annee %in% 2010& periodeSimple=="04")|(annee %in% 2016 & periodeSimple=="05")|(annee %in% 2021 & periodeSimple=="06")|(annee %in% 2031 & periodeSimple=="07")|(annee %in% 2041 & periodeSimple=="08"), Surf_neuf_n1:=0] 
+
+
+
+PM_energie_neuf[,surf_cons_n := Surf_neuf_n - Surf_neuf_n1]
+PM_energie_neuf[, PM_ener_neuf := surf_cons_n/sum(surf_cons_n),by=c("scenario", "Type_parc","periodeSimple","annee")]
+
+PM_energie_neuf = PM_energie_neuf[(annee %in% 2010:2015 & periodeSimple=="04")|(annee %in% 2016:2020 & periodeSimple=="05")|
+                                    (annee %in% 2021:2030 & periodeSimple=="06")|(annee %in% 2031:2040 & periodeSimple=="07")|(annee %in% 2041:2050 & periodeSimple=="08")] 
+PM_energie_neuf[,sum(PM_ener_neuf), by="annee"]
+
+PM_energie_neuf = merge(PM_energie_neuf,COD_ENERGIE[, list(energieChauffage =  COD_ENERGIE, Energie = ENERGIE)], by="energieChauffage")
+
+
+### PM energie anciennes sorties
+
+PM_energie_neuf2 = parc_melted[Type_parc ==  "N" & (scenario %in% unique(PM_energie_neuf$scenario) == F), list(Surf_neuf_n = sum(Surface)),by=c("scenario", "Type_parc","energieChauffage","periodeSimple","annee")] 
+
+PM_energie_neuf2[, annee_n1 := as.factor(as.numeric(as.character(annee)) -1)]
+
+PM_energie_neuf2= merge(PM_energie_neuf2,
+                       PM_energie_neuf2[,list(scenario,Type_parc,annee,energieChauffage,periodeSimple,Surf_neuf_n1 = Surf_neuf_n )], 
+                        by.x=c("scenario", "Type_parc","energieChauffage","periodeSimple","annee_n1"), 
+                        by.y=c("scenario", "Type_parc","energieChauffage","periodeSimple","annee"),all.x=T)
+
+PM_energie_neuf2[(annee %in% 2010& periodeSimple=="04")|(annee %in% 2016 & periodeSimple=="05")|(annee %in% 2021 & periodeSimple=="06")|(annee %in% 2031 & periodeSimple=="07")|(annee %in% 2041 & periodeSimple=="08"), Surf_neuf_n1:=0] 
+
+
+
+PM_energie_neuf2[,surf_cons_n := Surf_neuf_n - Surf_neuf_n1]
+PM_energie_neuf2[, PM_ener_neuf := surf_cons_n/sum(surf_cons_n),by=c("scenario", "Type_parc","periodeSimple","annee")]
+
+PM_energie_neuf2 = PM_energie_neuf2[(annee %in% 2010:2015 & periodeSimple=="04")|(annee %in% 2016:2020 & periodeSimple=="05")|
+                                    (annee %in% 2021:2030 & periodeSimple=="06")|(annee %in% 2031:2040 & periodeSimple=="07")|(annee %in% 2041:2050 & periodeSimple=="08")] 
+PM_energie_neuf2[,sum(PM_ener_neuf), by="annee"]
+
+PM_energie_neuf2 = merge(PM_energie_neuf2,COD_ENERGIE[, list(energieChauffage =  COD_ENERGIE, Energie = ENERGIE)], by="energieChauffage")
+
+PM_energie_neuf2[,annee :=as.character(annee)]
+
+PM_energie_neuf = rbind(PM_energie_neuf,PM_energie_neuf2)
+
+### PM dans le parc construit après 2010
+PM_energie_neuf_DGEC =parc_melted[Type_parc ==  "N", list(Surf_neuf_n = sum(Surface)),by=c("scenario", "Type_parc","energieChauffage","annee")] 
+PM_energie_neuf_DGEC[, PM_ener_neuf := Surf_neuf_n/sum(Surf_neuf_n ),by=c("scenario", "Type_parc","annee")]
+PM_energie_neuf_DGEC = merge(PM_energie_neuf_DGEC,COD_ENERGIE[, list(energieChauffage =  COD_ENERGIE, Energie = ENERGIE)], by="energieChauffage")
+
+## PM systeme neuf 
+
+PM_syst_neuf = PM[Type_parc ==  "N", list(Surf_neuf_n = sum(surface)),by=c("scenario", "Type_parc","systeme_chauff","periodeSimple","annee")] 
+
+PM_syst_neuf [, annee_n1 := as.factor(as.numeric(as.character(annee)) -1)]
+PM_syst_neuf [, periodeSimple_n1 := periodeSimple]
+# PM_syst_neuf [annee %in% c("2016","2021","2031","2041"), periodeSimple_n1 := paste0("0",as.numeric(substring(periodeSimple,2,2)) -1)]
+
+PM_syst_neuf = merge(PM_syst_neuf ,
+                        PM_syst_neuf [,list(scenario,Type_parc,annee,systeme_chauff,periodeSimple,
+                                            Surf_neuf_n1 = Surf_neuf_n )], 
+                        by.x=c("scenario", "Type_parc","systeme_chauff","periodeSimple","annee_n1"), 
+                        by.y=c("scenario", "Type_parc","systeme_chauff","periodeSimple","annee"),all.x=T)
+
+PM_syst_neuf[(annee %in% 2010& periodeSimple=="04")|(annee %in% 2016 & periodeSimple=="05")|(annee %in% 2021 & periodeSimple=="06")|(annee %in% 2031 & periodeSimple=="07")|(annee %in% 2041 & periodeSimple=="08"), Surf_neuf_n1:=0] 
+
+
+
+PM_syst_neuf[,surf_cons_n := Surf_neuf_n - Surf_neuf_n1]
+
+PM_syst_neuf[, PM_syst_neuf := surf_cons_n/sum(surf_cons_n),by=c("scenario", "Type_parc","periodeSimple","annee")]
+
+PM_syst_neuf[, PM_syst_neuf := surf_cons_n/sum(surf_cons_n),by=c("scenario", "Type_parc","periodeSimple","annee")]
+
+
+PM_syst_neuf = PM_syst_neuf[(annee %in% 2010:2015 & periodeSimple=="04")|(annee %in% 2016:2020 & periodeSimple=="05")|(annee %in% 2021:2030 & periodeSimple=="06")|(annee %in% 2031:2040 & periodeSimple=="07")|(annee%in% 2041:2050 & periodeSimple=="08")] 
+PM_syst_neuf[,sum(PM_syst_neuf), by="annee"]
+
+PM_syst_neuf[annee == "2016"]
+
+PM_syst_neuf = merge(PM_syst_neuf,COD_SYSTEME_CHAUD[, list(systeme_chauff =  COD_SYSTEME_CHAUD, SYSTEME_CHAUD= SYSTEME_CHAUD)], by="systeme_chauff")
+
+PM_syst_neuf[,SYSTEME_CHAUD := factor(SYSTEME_CHAUD, levels = c("Chaudière gaz","Chaudière condensation gaz",
+                                                           "Tube radiant", "Tube radiant performant" ,
+                                                           "Chaudière fioul","Chaudière condensation fioul",
+                                                           "Electrique direct","Electrique direct performant",
+                                                           "Cassette rayonnante","Cassette rayonnante performant",
+                                                           "PAC","PAC performant",
+                                                           "Rooftop", "Rooftop performant",
+                                                            "DRV", "DRV performant",
+                                                           "Autre système centralisé",  
+                                                           "Autre système centralisé performant",
+                                                           "nr"))]
+unique(PM_syst_neuf$SYSTEME_CHAUD)
+
+PM_syst_neuf= merge(PM_syst_neuf,colors_syst, by="SYSTEME_CHAUD")
+
+
+```
+
+
+```{r Evol_PM_energie_neuf, fig.width=25, fig.height=9, echo=F, warning=F,fig.cap='Part des surfaces neuves construites par énergie (input DGEC)', dev=c('png', 'pdf')}
+
+ggplot(PM_energie_neuf) +
+           geom_bar(aes(annee,PM_ener_neuf , fill = Energie, color = Energie), stat="identity") +
+           facet_wrap(~scenario, nrow = 1) +
+           mytheme_facet_plot  +
+    scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5)) + ylab("Part") + xlab("")
+```
+
+```{r Evol_PM_syst_neuf, fig.width=25, fig.height=13, echo=F, warning=F,fig.cap='Part des surfaces neuves construites par système', dev=c('png', 'pdf')}
+
+ggplot(PM_syst_neuf) +
+           geom_bar(aes(annee,PM_syst_neuf , fill = SYSTEME_CHAUD), stat="identity") +
+           facet_wrap(~scenario, nrow = 1) +
+           mytheme_facet_plot  +
+    scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5))  +
+     theme(legend.position = "top") +
+  scale_fill_manual("",values=unique(PM_syst_neuf$color),
+                    guide = guide_legend(nrow = 4)) + ylab("Part")+ xlab("")
+```
+
+\newpage
+
+## Changements de système dans l'existant
+
+```{r,echo=F, warning=F,include = F}
+
+
+PM_syst_br = COUTS[!is.na(COD_SYSTEME_CHAUD), list(surface = sum(surface)), by=c("scenario","annee","SYSTEME_CHAUD","COD_SYSTEME_CHAUD", "branche")]
+PM_syst_br [,PM_syst := surface/sum(surface) , by=c("scenario","annee", "branche")]
+PM_syst_br = merge(PM_syst_br ,COD_BRANCHE[,list(branche=COD_BRANCHE,BRANCHE)],by="branche")
+
+PM_syst_Etat = COUTS[!is.na(COD_SYSTEME_CHAUD) & occupant=="03", list(surface = sum(surface)), by=c("scenario","annee","SYSTEME_CHAUD","COD_SYSTEME_CHAUD")]
+COUTS[COD_SYSTEME_CHAUD %in% c("05","06","09","10","11","25","26","29","30","31") & annee == "2010", sum(surface)]
+
+COUTS[COD_SYSTEME_CHAUD %in% c("05"), typeRenovationSysteme]
+
+PM_syst = COUTS[!is.na(COD_SYSTEME_CHAUD), list(surface = sum(surface)), by=c("scenario","annee","SYSTEME_CHAUD","COD_SYSTEME_CHAUD")]
+
+
+PM_syst[,PM_syst := surface/sum(surface) , by=c("scenario","annee")]
+PM_syst[, sum(surface),by="annee"]
+PM_syst[COD_SYSTEME_CHAUD == "24"]
+
+PM_syst[,SYSTEME_CHAUD := factor(SYSTEME_CHAUD, levels = c("Chaudière gaz","Chaudière condensation gaz",
+                                                           "Tube radiant", "Tube radiant performant" ,
+                                                           "Chaudière fioul","Chaudière condensation fioul",
+                                                           "Electrique direct","Electrique direct performant",
+                                                           "Cassette rayonnante","Cassette rayonnante performant",
+                                                           "PAC","PAC performant",
+                                                           "Rooftop", "Rooftop performant",
+                                                            "DRV", "DRV performant",
+                                                           "Autre système centralisé",  
+                                                           "Autre système centralisé performant",
+                                                           "nr"))]
+unique(PM_syst$SYSTEME_CHAUD)
+
+PM_syst= merge(PM_syst,colors_syst, by="SYSTEME_CHAUD")
+
+
+
+
+PM_syst_br[,SYSTEME_CHAUD := factor(SYSTEME_CHAUD, levels = c("Chaudière gaz","Chaudière condensation gaz",
+                                                           "Tube radiant", "Tube radiant performant" ,
+                                                           "Chaudière fioul","Chaudière condensation fioul",
+                                                           "Electrique direct","Electrique direct performant",
+                                                           "Cassette rayonnante","Cassette rayonnante performant",
+                                                           "PAC","PAC performant",
+                                                           "Rooftop", "Rooftop performant",
+                                                            "DRV", "DRV performant",
+                                                           "Autre système centralisé",  
+                                                           "Autre système centralisé performant",
+                                                           "nr"))]
+unique(PM_syst_br$SYSTEME_CHAUD)
+
+PM_syst_br= merge(PM_syst_br,colors_syst, by="SYSTEME_CHAUD")
+
+PM_syst_Etat [,PM_syst := surface/sum(surface) , by=c("scenario","annee")]
+PM_syst_Etat [, sum(surface),by="annee"]
+PM_syst_Etat [COD_SYSTEME_CHAUD == "24"]
+
+PM_syst_Etat[PM_syst <0]
+
+
+levels(PM_syst$SYSTEME_CHAUD)
+
+
+```
+
+```{r Evol_PM_syst, fig.width=25, fig.height=13, echo=F, warning=F,fig.cap='Part des changements de système existant par système installé', dev=c('png', 'pdf')}
+
+ggplot(PM_syst) +
+           geom_bar(aes(annee,PM_syst , fill = SYSTEME_CHAUD), stat="identity") +
+           facet_wrap(~scenario, nrow = 1) +
+           mytheme_facet_plot+ theme(legend.position = "top")+
+  scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5))  +
+  scale_fill_manual(values=unique(PM_syst$color),
+                    guide = guide_legend(nrow = 4)) 
+
+
+
+```
+
+```{r Evol_PM_syst_ref, fig.width=25, fig.height=10, echo=F, warning=F,fig.cap='Part des changements de système existant par système installé', dev=c('png', 'pdf')}
+
+ggplot(PM_syst[scenario == scenario_toexport]) +
+           geom_bar(aes(annee,PM_syst , fill = SYSTEME_CHAUD), stat="identity") +
+           facet_wrap(~scenario, nrow = 1) +
+           mytheme_facet_plot+ theme(legend.position = "top")+
+  
+  scale_fill_manual(values=unique(PM_syst[scenario == scenario_ref]$color),
+                    guide = guide_legend(nrow = 4)) 
+
+```
+
+
+```{r,echo=F, warning=F,include = F}
+### PM des systèmes dans sur l'ensemble du parc
+
+PM_syst_exi = etiquette[, list(Surf_exi_n = sum(surface)),by=c("scenario","annee","systeme_chauff")] 
+PM_syst_exi2 = PM[, list(Surf_exi_n = sum(surface)),by=c("scenario","annee","systeme_chauff")] 
+
+PM_syst_exi[,PM_syst_exi := Surf_exi_n /sum(Surf_exi_n ),by=c("scenario","annee")]
+PM_syst_exi2[,PM_syst_exi := Surf_exi_n /sum(Surf_exi_n ),by=c("scenario","annee")]
+
+PM_syst_exi[,sum(PM_syst_exi), by=c("scenario","annee")]
+PM_syst_exi2[,sum(PM_syst_exi), by=c("scenario","annee")]
+
+PM_syst_exi = merge(PM_syst_exi,COD_SYSTEME_CHAUD[, list(systeme_chauff =  COD_SYSTEME_CHAUD, SYSTEME_CHAUD)], by="systeme_chauff")
+PM_syst_exi2 = merge(PM_syst_exi2,COD_SYSTEME_CHAUD[, list(systeme_chauff =  COD_SYSTEME_CHAUD, SYSTEME_CHAUD)], by="systeme_chauff")
+
+PM_syst_exi = rbind(PM_syst_exi,PM_syst_exi2 )
+PM_syst_exi[,SYSTEME_CHAUD := factor(SYSTEME_CHAUD, levels = c("Chaudière gaz","Chaudière condensation gaz",
+                                                           "Tube radiant", "Tube radiant performant" ,
+                                                           "Chaudière fioul","Chaudière condensation fioul",
+                                                           "Electrique direct","Electrique direct performant",
+                                                           "Cassette rayonnante","Cassette rayonnante performant",
+                                                           "PAC","PAC performant",
+                                                           "Rooftop", "Rooftop performant",
+                                                            "DRV", "DRV performant",
+                                                           "Autre système centralisé",  
+                                                           "Autre système centralisé performant",
+                                                           "nr"))]
+
+
+PM_syst_exi = dcast.data.table(PM_syst_exi[annee %in% seq(2010,2050,5)],scenario +SYSTEME_CHAUD~annee,value.var ="PM_syst_exi")
+
+PM_syst_exi = merge(PM_syst_exi,colors_syst, by="SYSTEME_CHAUD")
+
+
+PM_syst_exi = PM_syst_exi[!is.na(scenario)]
+```
+
+<!-- ```{r, echo=F, warning=F} -->
+<!-- pander(PM_syst_exi, digits = 2, caption = "Part des surfaces chauffées de l'ensemble du parc  par système (input DGEC)") -->
+<!-- ``` -->
+\clearpage
+\newpage
+
+
+
+## PM dans le stock
+
+
+```{r,echo=F, warning=F,include = F}
+### PM des énergies dans l'existant
+PM_energie_exi = parc_melted[Type_parc ==  "E", list(Surf_exi_n = sum(Surface)),by=c("scenario", "Type_parc","energieChauffage","annee")] 
+PM_energie_exi[, PM_ener_exi := Surf_exi_n /sum(Surf_exi_n ),by=c("scenario", "Type_parc","annee")]
+
+PM_energie_exi[,sum(PM_ener_exi), by="annee"]
+
+PM_energie_exi[PM_ener_exi<0]
+
+PM_energie_exi = merge(PM_energie_exi,COD_ENERGIE[, list(energieChauffage =  COD_ENERGIE, Energie = ENERGIE)], by="energieChauffage")
+PM_energie_exi = dcast.data.table(PM_energie_exi[annee %in% seq(2010,2050,5)],scenario + Energie~annee,value.var ="PM_ener_exi")
+```
+
+```{r Evol_PM_syst_all, fig.width=25, fig.height=13, echo=F, warning=F,fig.cap='Part des systèmes sur l\'ensemble du parc', dev=c('png', 'pdf')}
+
+ggplot(melt(PM_syst_exi,id.vars = c("scenario","SYSTEME_CHAUD","color"),variable.name = "annee",value.name = "PM_syst")) +
+           geom_bar(aes(annee,PM_syst , fill = SYSTEME_CHAUD, color = SYSTEME_CHAUD), stat="identity") +
+           facet_wrap(~scenario, nrow = 1) + xlab("")+ylab("Part dans le parc total")+
+           mytheme_facet_plot + theme(legend.position = "top")+
+  
+  scale_fill_manual(values=unique(PM_syst_exi$color),
+                    guide = guide_legend(nrow = 4)) 
+
+```
+
+\clearpage
+\newpage 
+
+\clearpage
+\pagebreak
+
+\section{4) Evolution des parts de marché des énergies dans les besoins et les consommations}
+
+```{r,  echo=F, warning=F,include = F}
+##### besoins totaux par branche MEDPRO, énergie et usage
+
+Besoin_national_energie_branche = 
+  dcast.data.table(Besoin_branche_usage_energie,
+                   scenario + annee +Branche_MEDPRO + usage  ~ ENERGIE,
+                   fun.aggregate = function(x){sum(x, na.rm = T)/10^9}, value.var = "BESOIN_TOT")
+
+
+ dcast.data.table(Besoin_branche_usage_energie,
+                   scenario  +Branche_MEDPRO ~  annee,
+                   fun.aggregate = function(x){sum(x, na.rm = T)/10^9}, value.var = "BESOIN_TOT")
+
+
+#### table des PM par énergie pour MEDPRO
+
+tab_PM_energie_branche = dcast.data.table(
+  Besoin_branche_usage_energie[annee %in% annee_MEDPRO ,],
+  scenario +Branche_MEDPRO+ ENERGIE + annee ~ Usage_MEDPRO2, fun.aggregate = function(x){sum(x, na.rm = T)/10^9}, value.var = "BESOIN_TOT")
+
+
+tab_PM_energie_branche = 
+  tab_PM_energie_branche[,
+                         list(ENERGIE, 
+                              PM_Chauffage = Chauffage/sum(Chauffage),
+                              PM_Usages_thermiques =(get("Autres usages thermiques") + get("Chauffage"))/sum(get("Autres usages thermiques") + get("Chauffage")),
+                              
+                              PM_Elec_spe_hors_clim =get("Electricité spécifique")/sum(get("Electricité spécifique")),
+                              PM_ECS_Cuisson_Autres =get("Autres usages thermiques")/
+                                sum(get("Autres usages thermiques")),                                 PM_Total=(get("Autres usages thermiques") + get("Chauffage") + get("Electricité spécifique") + get("Climatisation"))/sum(get("Autres usages thermiques") + get("Chauffage") + get("Electricité spécifique") + get("Climatisation"))), by=c("scenario","Branche_MEDPRO","annee")]
+
+tab_PM_energie_branche = melt(tab_PM_energie_branche,
+                              id.vars = c("scenario","Branche_MEDPRO","annee","ENERGIE"),variable.name ="PM_usage" )
+
+tab_PM_energie_branche =dcast.data.table(tab_PM_energie_branche,scenario  +PM_usage +Branche_MEDPRO+ENERGIE ~ annee  )
+
+tab_PM_energie_branche[PM_usage == "PM_Usages_thermiques"][order(ENERGIE)]
+
+##### besoin nationales par branche MEDPRO et usage 
+
+Besoin_national_branche_usage = dcast.data.table(Besoin_branche_usage_energie, scenario + annee  + Branche_MEDPRO ~ Usage_MEDPRO2,fun.aggregate = function(x){sum(x, na.rm = T)/10^9}, value.var = "BESOIN_TOT") 
+
+Besoin_national_branche_usage  = melt(Besoin_national_branche_usage , id.vars = c("scenario","annee","Branche_MEDPRO"), variable.name = "usage", value.name = "BESOIN_TOT")
+
+
+surface_branche = parc_melted[,list(Surface = sum(Surface)), by=c("scenario","annee","Branche_MEDPRO")]
+surface_branche[, annee:=as.factor(annee)]
+
+Besoin_national_branche_usage = merge(
+Besoin_national_branche_usage, surface_branche, by=c("scenario","annee","Branche_MEDPRO"))
+
+Besoin_national_branche_usage[, BESOIN_U := BESOIN_TOT*10^9/Surface]
+
+evolbesoinu_branche_usage = data.table(Besoin_national_branche_usage)
+
+evolbesoinu_branche_usage = dcast.data.table(evolbesoinu_branche_usage, scenario + usage + Branche_MEDPRO ~ annee,value.var = "BESOIN_U")
+
+evolbesoinu_branche_usage  = evolbesoinu_branche_usage[,list(scenario, usage,Branche_MEDPRO,
+                                                    Evol_2010 = round((get("2015")/get(annee_ref_MEDPRO)), digits=1),
+                Evol_2020 = round((get("2020")/get(annee_ref_MEDPRO)), digits=2),
+                Evol_2030 = round((get("2025")/get(annee_ref_MEDPRO)), digits=2),
+                Evol_2040 = round((get("2030")/get(annee_ref_MEDPRO)), digits=2),
+                Evol_2050 = round((get("2050")/get(annee_ref_MEDPRO)), digits=2))]
+
+setnames(evolbesoinu_branche_usage, c("scenario", "usage","Branche","2015","2020","2025","2030","2050"))
+
+evolbesoin_branche_usage = data.table(Besoin_national_branche_usage)
+
+evolbesoin_branche_usage = dcast.data.table(evolbesoin_branche_usage, scenario + usage + Branche_MEDPRO ~ annee,value.var = "BESOIN_TOT")
+
+evolbesoin_branche_usage  = evolbesoin_branche_usage [,list(scenario, usage,Branche_MEDPRO,
+                                                    Evol_2010 = round((get("2015")/get(annee_ref_MEDPRO)), digits=1),
+                Evol_2020 = round((get("2020")/get(annee_ref_MEDPRO)), digits=2),
+                Evol_2030 = round((get("2025")/get(annee_ref_MEDPRO)), digits=2),
+                Evol_2040 = round((get("2030")/get(annee_ref_MEDPRO)), digits=2),
+                Evol_2050 = round((get("2050")/get(annee_ref_MEDPRO)), digits=2))]
+
+setnames(evolbesoin_branche_usage, c("scenario", "usage","Branche","2010","2020","2030","2040","2050"))
+
+
+### Evol besoinu  parc neuf et ancien
+
+surface_parc_MEDPRO = parc_melted[,list(Surface = sum(Surface)),by=c("scenario","annee","Type_parc_MEDPRO")]
+
+evolbesoinu_usage_type = dcast.data.table(Besoin_branche_usage_energie_periode, scenario + Usage_MEDPRO2 + Type_parc_MEDPRO ~ annee, function(x){sum(x, na.rm = T)/10^9}, value.var = "BESOIN_TOT")
+                               
+evolbesoinu_usage_type = melt(evolbesoinu_usage_type ,id.vars = c("scenario","Type_parc_MEDPRO","Usage_MEDPRO2"),variable.name ="annee" )
+
+evolbesoinu_usage_type= merge(evolbesoinu_usage_type, surface_parc_MEDPRO,by=c("scenario","annee","Type_parc_MEDPRO"),all.x=T)
+
+evolbesoinu_usage_type[, BESOIN_U :=value*10^9/Surface]
+evolbesoinu_usage_type = dcast.data.table(evolbesoinu_usage_type, scenario + Usage_MEDPRO2 + Type_parc_MEDPRO ~ annee,value.var = "BESOIN_U")
+evolbesoinu_usage_type[Type_parc_MEDPRO=="N", "2015"] <- evolbesoinu_usage_type[Type_parc_MEDPRO=="N", get("2016")]
+
+evolbesoinu_usage_type = 
+  evolbesoinu_usage_type[,list(scenario, Usage_MEDPRO2,Type_parc_MEDPRO,
+                               
+                               Evol_2015 = round((get("2015")/get(annee_ref_MEDPRO)), digits=1),
+                               Evol_2020 = round((get("2020")/get(annee_ref_MEDPRO)), digits=2),
+                               Evol_2030 = round((get("2025")/get(annee_ref_MEDPRO)), digits=2),
+                               Evol_2040 = round((get("2030")/get(annee_ref_MEDPRO)), digits=2),
+                               Evol_2050 = round((get("2050")/get(annee_ref_MEDPRO)), digits=2))]
+
+setnames(evolbesoinu_usage_type, c("scenario", "usage","Type_parc",annee_MEDPRO))
+
+
+#### besoins d'électricité hors usages thermiques et clim
+conso_elec_DGEC = Conso_nationale_energie_type_usage[usage %in% c("Auxiliaires","Ventilation","Process","Bureautique","Eclairage","Froid_alimentaire"), 
+                                   list(conso_tWhEF = sum(conso_tWhEF),conso_tWhEP = sum(conso_tWhEF)),by=c("scenario","annee")] 
+conso_elec_DGEC =dcast.data.table(conso_elec_DGEC ,scenario~annee,value.var = "conso_tWhEF")
+
+
+#### besoins d'électricité pour la climatisation par branche 
+
+besoin_elec_clim_medpro =Besoin_national_branche_usage[usage =="Climatisation" ,
+                                                      list( BESOIN_TOT = sum( BESOIN_TOT),
+                                                           BESOIN_U = sum(BESOIN_U*Surface)/sum(Surface),
+                                                           Surface = sum(Surface))
+                                                           ,by=c("scenario","annee","Branche_MEDPRO")]
+  
+besoin_elec_clim_medpro   = dcast.data.table(besoin_elec_clim_medpro,scenario+Branche_MEDPRO~annee,value.var = "BESOIN_TOT")
+
+##### Evolution des besoins unitaires de clim sur l'ensemble du parc
+
+
+evolbesoin_clim_medpro = Besoin_national_branche_usage[usage =="Climatisation",
+                                                      list(BESOIN_TOT = sum( BESOIN_TOT),
+                                                           BESOIN_U = sum(BESOIN_U*Surface)/sum(Surface),
+                                                           BESOIN_U2 = sum(BESOIN_TOT)*10^9/sum(Surface),
+                                                           Surface = sum(Surface))
+                                                           ,by=c("scenario","annee")] 
+
+evolbesoin_clim_medpro   = dcast.data.table(evolbesoin_clim_medpro ,scenario~annee,value.var = "BESOIN_U")
+
+evolbesoin_clim_medpro = evolbesoin_clim_medpro[,list(scenario,"2015"=1,
+                "2020" = round((get("2020")/get(annee_ref_MEDPRO)), digits=2),
+                "2025" = round((get("2025")/get(annee_ref)), digits=2),
+                "2030" = round((get("2030")/get(annee_ref)), digits=2),
+                "2050" = round((get("2050")/get(annee_ref)), digits=2))]
+
+
+```
+
+```{r,  echo=F, warning=F,include = F}
+##### besoins totaux par branche MEDPRO, énergie et usage
+
+Besoin_national_branche_usage2 = dcast.data.table(Besoin_branche_usage_energie, scenario + annee  + COD_BRANCHE ~ usage,fun.aggregate = function(x){sum(x, na.rm = T)/10^9}, value.var = "BESOIN_TOT") 
+
+Besoin_national_branche_usage2  = melt(Besoin_national_branche_usage2 , id.vars = c("scenario","annee","COD_BRANCHE"), variable.name = "usage", value.name = "BESOIN_TOT")
+
+
+surface_branche = parc_melted[,list(Surface = sum(Surface), COD_BRANCHE = branche) , 
+                   by=c("scenario","annee","branche")]
+
+Besoin_national_branche_usage2 = merge(
+Besoin_national_branche_usage2, surface_branche, by=c("scenario","annee","COD_BRANCHE"))
+
+Besoin_national_branche_usage2[, BESOIN_U := BESOIN_TOT*10^9/Surface]
+
+evolbesoinu_branche_usage2 = data.table(Besoin_national_branche_usage2)
+
+evolbesoinu_branche_usage2 = dcast.data.table(evolbesoinu_branche_usage2, 
+                                              scenario + usage + COD_BRANCHE ~ annee,value.var ="BESOIN_U")
+
+evolbesoinu_branche_usage2 = merge(evolbesoinu_branche_usage2,COD_BRANCHE, by="COD_BRANCHE")
+
+evolbesoinu_branche_usage3  = evolbesoinu_branche_usage2[,list(scenario, BRANCHE,usage,
+                                                    Evol_2010 = round((get("2015")/get(annee_ref_MEDPRO)), digits=1),
+                Evol_2020 = round((get("2020")/get(annee_ref_MEDPRO)), digits=2),
+                Evol_2030 = round((get("2025")/get(annee_ref_MEDPRO)), digits=2),
+                Evol_2040 = round((get("2030")/get(annee_ref_MEDPRO)), digits=2),
+                Evol_2050 = round((get("2050")/get(annee_ref_MEDPRO)), digits=2))]
+
+
+
+setnames(evolbesoinu_branche_usage3, c("scenario", "usage","Branche","2015","2020","2025","2030","2050"))
+
+evolbesoinu_branche_usage2 = evolbesoinu_branche_usage2[,c("scenario", "BRANCHE", "usage", annee_MEDPRO), with=F]
+
+write.table(
+evolbesoinu_branche_usage2[scenario == scenario_toexport], 
+paste(wbdir_scenario_toexport,"evolbesoinu_branche_usage2.csv"), sep=";",dec=".",quote = T,row.names = F)
+
+### Evol besoinu  parc neuf et ancien, desagregations
+
+surface_parc2 = parc_melted[,list(Surface = sum(Surface)),
+                           by=c("scenario","annee","Type_parc_MEDPRO")]
+
+evolbesoinu_usage_type2 = dcast.data.table(Besoin_branche_usage_energie_periode, scenario + usage + Type_parc_MEDPRO ~ annee, function(x){sum(x, na.rm = T)/10^9}, value.var = "BESOIN_TOT")
+                               
+evolbesoinu_usage_type2= melt(evolbesoinu_usage_type2 ,id.vars = c("scenario","Type_parc_MEDPRO","usage"),variable.name ="annee" )
+
+evolbesoinu_usage_type2= merge(evolbesoinu_usage_type2, surface_parc2,by=c("scenario","annee","Type_parc_MEDPRO"),all.x=T)
+
+evolbesoinu_usage_type2[, BESOIN_U :=value*10^9/Surface]
+evolbesoinu_usage_type2 = dcast.data.table(evolbesoinu_usage_type2, scenario + usage + Type_parc_MEDPRO ~ annee,value.var = "BESOIN_U")
+evolbesoinu_usage_type2[Type_parc_MEDPRO=="N", "2015"] <- evolbesoinu_usage_type2[Type_parc_MEDPRO=="N", get("2016")]
+
+evolbesoinu_usage_typeCC = 
+  evolbesoinu_usage_type2[substring(scenario,1,2) %in% c("S3","S5") & usage %in% c("Chauffage","Climatisation"),list(scenario,usage,Type_parc_MEDPRO,
+                               
+                               Evol_2015 = round((get("2015")/get(annee_ref_MEDPRO)), digits=4),
+                               Evol_2020 = round((get("2020")/get(annee_ref_MEDPRO)), digits=4),
+                               Evol_2030 = round((get("2025")/get(annee_ref_MEDPRO)), digits=4),
+                               Evol_2040 = round((get("2030")/get(annee_ref_MEDPRO)), digits=4),
+                               Evol_2050 = round((get("2050")/get(annee_ref_MEDPRO)), digits=4))]
+
+evolbesoinu_usage_type2 = 
+  evolbesoinu_usage_type2[,list(scenario,usage,Type_parc_MEDPRO,
+                               
+                               Evol_2015 = round((get("2015")/get(annee_ref_MEDPRO)), digits=1),
+                               Evol_2020 = round((get("2020")/get(annee_ref_MEDPRO)), digits=2),
+                               Evol_2030 = round((get("2025")/get(annee_ref_MEDPRO)), digits=2),
+                               Evol_2040 = round((get("2030")/get(annee_ref_MEDPRO)), digits=2),
+                               Evol_2050 = round((get("2050")/get(annee_ref_MEDPRO)), digits=2))]
+
+setnames(evolbesoinu_usage_type2, c("scenario", "usage","Type_parc",annee_MEDPRO))
+
+# ##### test adaptation CC
+# Evol_besoin_CC = Besoin_branche_usage_energie_periode[substring(scenario,1,2) %in% c("S3","S5") & Usage_MEDPRO2 %in% c("Chauffage","Climatisation"),sum(BESOIN_TOT),by=c("annee","scenario", "Usage_MEDPRO2", "Type_parc_MEDPRO") ]
+# diff_besoin_CC = dcast.data.table(Evol_besoin_CC,  Usage_MEDPRO2 + annee ~ scenario, fun.aggregate = sum)
+# 
+# diff_besoin_CC [,diff_besoin := diff_besoin_CC[,3]/diff_besoin_CC[,4]]
+# 
+# evolbesoinu_usage_typeCC 
+```
+
+## Ensemble du parc (pour DGEC)
+
+```{r,  echo=F, warning=F,include = F}
+#### calcul PM des énergies par usage sur l'ensemble du parc 
+tab_PM_energie = dcast.data.table(Conso_nationale_energie_branche[annee %in% c("2010","2015","2020","2025","2030","2035","2040","2045","2050"),],scenario + energie + annee ~ usage, fun.aggregate = sum)
+
+
+
+tab_PM_energie = tab_PM_energie[,list(Chauffage,
+                                      Usages_thermiques = sum(Chauffage,ECS,Cuisson,Autre),
+                                      Elec_spe_hors_clim = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire),
+                                      Climatisation,
+                                      ECS_Cuisson_Autres = sum(ECS,Cuisson,Autre), 
+ Total_RT=sum(Chauffage,Climatisation,ECS,Auxiliaires,Ventilation,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","energie","annee")]
+
+tab_PM_energie = tab_PM_energie[,
+                                                list(energie, 
+                                                     PM_Chauffage = Chauffage/sum(Chauffage),
+                                                     PM_Usages_thermiques =Usages_thermiques/sum(Usages_thermiques),
+                                                     PM_Elec_spe_hors_clim =Elec_spe_hors_clim/sum(Elec_spe_hors_clim),
+                                                     PM_ECS_Cuisson_Autres =ECS_Cuisson_Autres/sum(ECS_Cuisson_Autres),                                 PM_Total=Total/sum(Total)), by=c("scenario","annee")]
+
+tab_PM_energie = melt(tab_PM_energie,id.vars = c("scenario","annee","energie"),variable.name ="PM_usage" )
+
+tab_PM_energie =dcast.data.table(tab_PM_energie,scenario  +PM_usage +energie ~ annee  )
+
+tab_PM_energie_graph = tab_PM_energie
+tab_PM_energie_graph[,energie := factor(as.character(energie))]
+
+```
+
+<!-- ```{r, echo=F, warning=F} -->
+<!-- pander(tab_PM_energie[PM_usage == "PM_Usages_thermiques", -->
+<!--                                c("scenario","energie","2010","2015","2020","2025","2030","2035","2040","2045","2050"), with=F],  -->
+<!--        digits = 2, caption = "Part de marché des énergies dans les consommations des usages thermiques") -->
+<!-- ``` -->
+
+```{r Evol_PM_ener_thermiques, fig.width=25, fig.height=13, echo=F, warning=F,fig.cap='Part de marché des énergies dans les consommations des usages thermiques (ensemble du parc)', dev=c('png', 'pdf')}
+
+ggplot(melt(tab_PM_energie_graph[PM_usage == "PM_Usages_thermiques"],id.vars = c("scenario","energie","PM_usage"),variable.name = "annee",value.name = "PM_ener")) +
+           geom_bar(aes(annee,PM_ener , fill = energie, color =  energie), stat="identity") +
+           facet_wrap(~scenario, nrow = 1) + xlab("") + ylab("Part dans les consommations")+
+           mytheme_facet_plot
+```
+
+
+\pagebreak 
+
+## Parc neuf / existant (pour DGEC)
+```{r,  echo=F, warning=F,include = F}
+#### calcul PM des énergies par usage du parc neuf et ancien 
+tab_PM_energie_type = dcast.data.table(Conso_nationale_energie_type_usage[annee %in% c("2010","2015","2020","2025","2030","2035","2040","2045","2050"),],scenario + energie + annee + Type_parc ~ usage, fun.aggregate = sum, value.var = "conso_tWhEF")
+
+
+tab_PM_energie_type= tab_PM_energie_type[,list(Chauffage,
+                                      Usages_thermiques = sum(Chauffage,ECS,Cuisson,Autre),
+                                      Elec_spe_hors_clim = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire),
+                                      Climatisation,
+                                      ECS_Cuisson_Autres = sum(ECS,Cuisson,Autre), 
+ Total_RT=sum(Chauffage,Climatisation,ECS,Auxiliaires,Ventilation,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","energie","annee","Type_parc")]
+
+tab_PM_energie_type = tab_PM_energie_type[,
+                                                list(energie, 
+                                                     PM_Chauffage = Chauffage/sum(Chauffage),
+                                                     PM_Usages_thermiques =Usages_thermiques/sum(Usages_thermiques),
+                                                     PM_Elec_spe_hors_clim =Elec_spe_hors_clim/sum(Elec_spe_hors_clim),
+                                                     PM_ECS_Cuisson_Autres =ECS_Cuisson_Autres/sum(ECS_Cuisson_Autres),                                 PM_Total=Total/sum(Total)), by=c("scenario","annee","Type_parc")]
+
+tab_PM_energie_type = melt(tab_PM_energie_type,id.vars = c("scenario","annee","energie","Type_parc"),variable.name ="PM_usage" )
+
+tab_PM_energie_type =dcast.data.table(tab_PM_energie_type,scenario  +PM_usage +Type_parc +energie  ~ annee  )
+
+tab_PM_energie_type[PM_usage == "PM_Usages_thermiques"][order(energie)]
+
+```
+
+
+```{r Evol_PM_ener_cahuffage_neuf, fig.width=25, fig.height=10, echo=F, warning=F,fig.cap='Parts de marché des énergies dans les consommations de chauffage du parc neuf (pour DGEC)', dev=c('png', 'pdf')}
+
+ggplot(melt(tab_PM_energie_type[PM_usage == "PM_Chauffage" & Type_parc == "N"][order(energie)],id.vars = c("scenario","energie","PM_usage","Type_parc"),variable.name = "annee",value.name = "PM_ener")) +
+           geom_bar(aes(annee,PM_ener , fill = energie), stat="identity") +
+           facet_wrap(~scenario, nrow = 1) + xlab("") + ylab("Part dans les consommations")+
+           mytheme_facet_plot+ scale_fill_discrete("")
+```
+
+```{r Evol_PM_ener_cahuffage_exi, fig.width=25, fig.height=10, echo=F, warning=F,fig.cap='Parts de marché des énergies dans les consommations de chauffage du parc existant (pour DGEC)', dev=c('png', 'pdf')}
+
+ggplot(melt(tab_PM_energie_type[PM_usage == "PM_Chauffage" & Type_parc == "E"],id.vars = c("scenario","energie","PM_usage","Type_parc"),variable.name = "annee",value.name = "PM_ener")) +
+           geom_bar(aes(annee,PM_ener , fill = energie), stat="identity") +
+           facet_wrap(~scenario, nrow = 1) + xlab("") + ylab("Part dans les consommations")+
+           mytheme_facet_plot+ scale_fill_discrete("")
+```
+
+
+\clearpage
+\pagebreak
+
+## Part des surfaces climatisées
+
+```{r,  echo=F, warning=F,include = F}
+
+#### calcul Part du parc climatisé par branche
+unique(etiquette$systeme_froid)
+
+etiquette[systeme_froid == "01", Isclim := "Climatisé"]
+etiquette[systeme_froid == "02", Isclim := "non climatisé"]
+
+PM_clim_branche = etiquette[, list(Surface = sum(surface)),by=c("scenario","annee","Branche_MEDPRO","Isclim")]
+
+PM_clim_branche = PM_clim_branche[, list(Surface = sum(Surface),Isclim, PM_clim = Surface/sum(Surface)),by=c("scenario","annee","Branche_MEDPRO")]
+
+PM_clim_branche = dcast.data.table(PM_clim_branche, scenario + Isclim +Branche_MEDPRO ~ annee, value.var = "PM_clim")
+
+PM_clim_type_branche = etiquette[, list(Surface = sum(surface)),by=c("scenario","annee","Type_parc","Branche_MEDPRO","Isclim")]
+
+PM_clim_type_branche = PM_clim_type_branche [, list(Surface = sum(Surface),Isclim, PM_clim = Surface/sum(Surface)),by=c("scenario","annee","Branche_MEDPRO","Type_parc")]
+
+PM_clim_type_branche  = dcast.data.table(PM_clim_type_branche  , scenario + Isclim +Type_parc+Branche_MEDPRO ~ annee, value.var = "PM_clim")
+
+SURFACE_CLIM[COD_SYSTEME_FROID == "01", Isclim := "Climatisé"]
+SURFACE_CLIM[COD_SYSTEME_FROID  == "02", Isclim := "non climatisé"]
+
+PM_clim_branche = SURFACE_CLIM[, list(Surface = sum(SURFACES_TOT)),by=c("scenario","annee","Branche_MEDPRO","Isclim")]
+
+PM_clim_branche = PM_clim_branche[, list(Surface = sum(Surface),Isclim, PM_clim = Surface/sum(Surface)),by=c("scenario","annee","Branche_MEDPRO")]
+
+PM_clim_branche = dcast.data.table(PM_clim_branche, scenario + Isclim +Branche_MEDPRO ~ annee, value.var = "PM_clim")
+
+PM_clim_type_branche = SURFACE_CLIM[, list(Surface = sum(SURFACES_TOT)),by=c("scenario","annee","Type_parc","Branche_MEDPRO","Isclim")]
+
+PM_clim_type_branche = PM_clim_type_branche [, list(Surface = sum(Surface),Isclim, PM_clim = Surface/sum(Surface)),by=c("scenario","annee","Branche_MEDPRO","Type_parc")]
+PM_clim_type_branche  = dcast.data.table(PM_clim_type_branche  , scenario + Isclim +Type_parc+Branche_MEDPRO ~ annee, value.var = "PM_clim")
+
+```
+
+```{r, echo=F, warning=F,}
+pander(PM_clim_branche[Isclim ==  "Climatisé" ,
+                               colnames(PM_clim_branche)[colnames(PM_clim_branche) %in% c("scenario","Branche_MEDPRO",annee_MEDPRO)], with=F], 
+       digits = 2, caption = "Part des surfaces climatisées par branche (input MEDPRO)")
+```
+
+```{r, echo=F, warning=F,}
+pander(PM_clim_type_branche[Isclim ==  "Climatisé" & Type_parc =="N" ,
+                                colnames(PM_clim_type_branche)[colnames(PM_clim_type_branche) %in% c("scenario","Branche_MEDPRO",annee_MEDPRO)], with=F], 
+       digits = 2, caption = "Part des surfaces climatisées par branche pour le parc neuf (input DGEC)")
+```
+
+```{r, echo=F, warning=F,}
+pander(PM_clim_type_branche[Isclim ==  "Climatisé" & Type_parc =="E" ,
+                                colnames(PM_clim_type_branche)[colnames(PM_clim_type_branche) %in% c("scenario","Branche_MEDPRO",annee_MEDPRO)], with=F], 
+       digits = 2, caption = "Part des surfaces climatisées par branche pour le parc existant (input DGEC)")
+
+```
+
+<!-- ```{r Evol_CC, fig.width=25, fig.height=9, echo=F, warning=F,fig.cap='Effet du CC sur les besoins', dev=c('png', 'pdf'), fig.show='hold'} -->
+
+<!-- ggplot(Evol_besoin_CC[Usage_MEDPRO2 == "Chauffage"]) + geom_line(aes(annee, V1/10^9, group=scenario,color= scenario), size = 2) +  -->
+<!--      mytheme_facet_plot  + ylab("besoin total en chauffage en Twh") +  -->
+<!--     scale_x_discrete(breaks = seq(2010,2050,5), labels = -->
+<!--                     seq(2010,2050,5))  +  -->
+<!--   scale_y_continuous(limits = c(0,100),breaks = seq(0,100,25)) + facet_wrap(~Type_parc_MEDPRO) -->
+
+<!-- ggplot(Evol_besoin_CC[Usage_MEDPRO2 == "Climatisation"]) + geom_line(aes(annee, V1/10^9, group=scenario,color= scenario), size = 2) +  -->
+<!--      mytheme_facet_plot  + ylab("besoin total en climatisation en Twh") +  -->
+<!--     scale_x_discrete(breaks = seq(2010,2050,5), labels = -->
+<!--                     seq(2010,2050,5))  +  -->
+<!--   scale_y_continuous(limits = c(0,30),breaks = seq(0,30,5)) + facet_wrap(~Type_parc_MEDPRO) -->
+
+
+<!-- ``` -->
+
+
+\pagebreak
+\newpage 
+
+# 4) Consommations/besoins unitaires et efficacité 
+
+## Parc neuf/ancien
+
+```{r, echo=F, warning=F}
+pander(evolbesoinu_usage_type[usage == "Chauffage"], digits = 2, caption = "Evolution des besoins unitaires de chauffage du parc existant et du parc neuf (input MEDPRO)")
+```
+
+
+```{r Evol_consou_chauff, fig.width=20, fig.height=10, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+###### graph conso u du neuf par branche et période de construction par énergie ######
+
+ggplot(conso_entrants_branche[usage == "Chauffage"]) + 
+  geom_bar(aes(période,kwhEFm2_moy, fill=BRANCHE), stat="identity",position = "dodge") + 
+  mytheme_facet_plot + scale_y_continuous(breaks = seq(0,100,10)) +
+  ylab("KwhEF par m²") +
+  scale_fill_brewer(palette = fillpalette) + 
+  ggtitle("Besoins unitaires pour le chauffage par période de construction") 
+  
+```
+
+
+```{r Evol_consou_RT, fig.width=20, fig.height=10, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+###### graph conso u du neuf par branche et période de construction par énergie ######
+ggplot(conso_entrants_branche[usage == "conso_RT"]) + 
+  geom_bar(aes(période,kwhEFm2_moy, fill=BRANCHE), stat="identity",position = "dodge") + 
+  mytheme_facet_plot + scale_y_continuous(breaks = seq(0,500,20))+
+  ylab("KwhEF par m²") +
+  scale_fill_brewer(palette = fillpalette) + 
+  ggtitle("Besoins unitaires pour les usages RT par période de construction") 
+
+```
+
+\pagebreak
+
+## par branche (inputs MEDPRO)
+
+```{r test, echo=F, warning=F,}
+pander(evolbesoinu_branche_usage[usage == "Autres usages thermiques" ,
+                               c("scenario","Branche",annee_MEDPRO), with=F], 
+       digits = 2, caption = "Evolution des besoins unitaires pour l'ensemble du parc pour les autres usages thermiques (input MEDPRO) ")
+```
+
+```{r, echo=F, warning=F,}
+pander(evolbesoinu_branche_usage[usage == "Electricité spécifique" ,
+                               c("scenario","Branche",annee_MEDPRO), with=F], 
+       digits = 2, caption = "Evolution des besoins unitaires pour l'ensemble du parc pour les usages spécifiques de l'électricité (hors climatisation) (input MEDPRO)")
+```
+
+```{r, echo=F, warning=F,}
+pander(evolbesoinu_branche_usage[usage == "Climatisation" ,
+                               c("scenario","Branche",annee_MEDPRO), with=F], 
+       digits = 2, caption = "Evolution des besoins unitaires pour l'ensemble du parc pour la climatisation")
+```
+
+
+```{r,  echo=F, warning=F,include = F}
+###### calcul conso unitaire nationale ensemble des usages
+parc_melt = melt(parc,id.vars = c("scenario","branche","occupation","periodeSimple","Type_parc","Type_parc_MEDPRO","energieChauffage"),variable.name = "annee",value.name = "surface")
+
+parc_melt = parc_melt[,list(surface = sum(surface)),  by=c("scenario","annee", "Type_parc")]
+
+Conso_nationale_energie_type[energie == "Electricité", conso_tWhEP := conso_tWhEF*2.58]
+Conso_nationale_energie_type[energie != "Electricité", conso_tWhEP := conso_tWhEF]
+
+conso_unitaire  = Conso_nationale_energie_type[,list(conso_tWhEF = sum(conso_tWhEF), 
+                                                     conso_tWhEP = sum(conso_tWhEP)), 
+                                               by=c("scenario","annee", "Type_parc")]
+
+conso_unitaire = merge(conso_unitaire , parc_melt, by=c("scenario","annee", "Type_parc"))
+
+conso_unitaire[,conso_u := conso_tWhEP*10^9/surface]
+conso_unitaire_ensemble = conso_unitaire[,list(conso_u = sum(conso_tWhEP*10^9)/sum(surface)), by=c("scenario","annee")]
+
+# ##### calcul conso unitaire par usage
+
+Conso_nationale_energie_type_usage[energie == "Electricité", conso_tWhEP := conso_tWhEF*2.58]
+Conso_nationale_energie_type_usage[energie != "Electricité", conso_tWhEP := conso_tWhEF]
+
+conso_unitaire_usage  = Conso_nationale_energie_type_usage[,list(conso_tWhEF = sum(conso_tWhEF), 
+                                                     conso_tWhEP = sum(conso_tWhEP)), 
+                                               by=c("scenario","annee", "Type_parc", "usage")]
+
+conso_unitaire_usage = merge(conso_unitaire_usage , parc_melt, by=c("scenario","annee", "Type_parc"))
+
+conso_unitaire_usage[,conso_u := conso_tWhEP*10^9/surface]
+conso_unitaire_ensemble_usage_EP = conso_unitaire_usage[,list(conso_u = sum(conso_tWhEP*10^9)/sum(surface)), by=c("scenario","annee", "usage")]
+conso_unitaire_ensemble_usage_EF = conso_unitaire_usage[,list(conso_u = sum(conso_tWhEF*10^9)/sum(surface)), by=c("scenario","annee", "usage")]
+
+#### consos 5 usages RT
+conso_unitaire_usagesRT = conso_unitaire_usage[usage %in% c("Chauffage","Climatisation","ECS","Auxiliaires","Ventilation","Eclairage") , list(conso_tWhEP = sum(conso_tWhEP),conso_tWhEF = sum(conso_tWhEF)), by=c("scenario","annee", "Type_parc")]
+conso_unitaire_usagesRT = merge(conso_unitaire_usagesRT , parc_melt, by=c("scenario","annee", "Type_parc"))
+
+conso_unitaire_usagesRT_EP = conso_unitaire_usagesRT[,list(conso_u = sum(conso_tWhEP*10^9)/sum(surface)), by=c("scenario","annee")]
+conso_unitaire_usagesRT_EF  = conso_unitaire_usagesRT[,list(conso_u = sum(conso_tWhEF*10^9)/sum(surface)), by=c("scenario","annee")]
+
+pander(dcast.data.table(conso_unitaire_usagesRT_EP[annee %in% c("2015","2020","2030","2035","2050")], scenario  ~ annee, value.var = "conso_u"), digits = 0)
+pander(dcast.data.table(conso_unitaire_usagesRT_EF[annee %in% c("2015","2020","2030","2035","2050")], scenario  ~ annee, value.var = "conso_u"), digits = 0)
+
+#### conso unitaire par branche 
+parc_melt = melt(parc,id.vars = c("scenario","branche","occupation","periodeSimple","Type_parc","Type_parc_MEDPRO","energieChauffage"),variable.name = "annee",value.name = "surface")
+
+parc_melt = parc_melt[,list(surface = sum(surface)),  by=c("scenario","annee","branche", "Type_parc")]
+
+Conso_nationale_energie_branche_type[energie == "Electricité", conso_tWhEP := conso_tWhEF*2.58]
+Conso_nationale_energie_branche_type[energie != "Electricité", conso_tWhEP := conso_tWhEF]
+
+conso_unitaire_branche_type  = Conso_nationale_energie_branche_type[,list(conso_tWhEF = sum(conso_tWhEF), 
+                                                     conso_tWhEP = sum(conso_tWhEP)), 
+                                               by=c("scenario","annee","nom_branche","branche","Type_parc","usage")]
+
+conso_unitaire_branche_type = merge(conso_unitaire_branche_type , parc_melt,
+                                    by=c("scenario","annee","branche", "Type_parc"),all.x=T)
+
+conso_unitaire_branche_type [,conso_u := conso_tWhEP*10^9/surface]
+
+conso_unitaire_branche_ensemble = 
+  conso_unitaire_branche_type[,list(conso_u = sum(conso_u)), by=c("scenario","nom_branche","Type_parc","annee")]
+
+conso_unitaire_branche_RT = 
+  conso_unitaire_branche_type[usage %in% c("Chauffage","Climatisation","ECS","Auxiliaires","Ventilation","Eclairage") ,list(conso_u = sum(conso_u)), by=c("scenario","nom_branche","Type_parc","annee")]
+
+```
+
+\pagebreak
+
+## Consommations unitaires pour le chauffage
+
+```{r, echo=F, warning=F,}
+pander(dcast.data.table(conso_unitaire_ensemble_usage_EP[annee %in% c("2015","2020","2030","2035","2050") & usage == "Chauffage"], scenario  ~ annee, value.var = "conso_u"), digits = 0, caption = "Consommations unitaires en kWh par m² d'énergie primaire pour l'ensemble du parc et pour le chauffage uniquement")
+```
+
+```{r, echo=F, warning=F,}
+pander(dcast.data.table(conso_unitaire_ensemble_usage_EF[annee %in% c("2015","2020","2030","2035","2050") & usage == "Chauffage"], scenario  ~ annee, value.var = "conso_u"), digits = 0, caption = "Consommations unitaires en kWh par m² d'énergie finale pour l'ensemble du parc et pour le chauffage uniquement")
+```
+
+## Consommations unitaires pour tous les usages
+
+```{r, echo=F, warning=F,}
+pander(dcast.data.table(conso_unitaire_ensemble[annee %in% c("2015","2020","2030","2035","2050")], scenario  ~ annee, value.var = "conso_u"), digits = 0, caption = "Consommations unitaires en kWh par m² d'énergie primaire pour l'ensemble du parc et l'ensemble des usages")
+```
+
+
+```{r, echo=F, warning=F,}
+pander(dcast.data.table(conso_unitaire_branche_ensemble[annee %in% c(as.character(2010:2017),"2020","2030","2050") & Type_parc=="E"], scenario + nom_branche ~ annee, value.var = "conso_u"), digits = 0, caption = "Consommations unitaires en kWh par m² d'énergie primaire pour le parc existant par branche et pour l'ensemble des usages")
+
+
+```
+```{r, echo=F, warning=F,}
+pander(dcast.data.table(conso_unitaire_branche_ensemble[annee %in% c(as.character(2010:2017),"2020","2030","2050") & Type_parc=="N"], scenario + nom_branche ~ annee, value.var = "conso_u"), digits = 0, caption = "Consommations unitaires en kWh par m² d'énergie primaire pour le parc neuf par branche et pour l'ensemble des usages")
+
+
+
+```
+
+\clearpage
+\newpage 
+
+
+\section{5) Nombre de Rénovations et Investissements }
+
+## Part du parc rénové
+```{r,  echo=F, warning=F,include = F}
+
+cout_geste = fread("table_param_origine/Bibli_geste_bati.csv", 
+                   colClasses = list("character" = c("ID_AGREG","EXIGENCE","GESTE")))
+
+cout_geste[, COD_BRANCHE:=substring(ID_AGREG, 1,2)]
+cout_geste[, COD_SS_BRANCHE:=substring(ID_AGREG, 3,4)]
+cout_geste[, COD_BAT_TYPE:=substring(ID_AGREG, 5,6)]
+cout_geste[, COD_PERIODE_DETAIL :=substring(ID_AGREG, 7,8)]
+cout_geste[, COD_PERIODE_SIMPLE:=substring(ID_AGREG, 9,10)]
+
+cout_geste = merge(cout_geste, COD_BRANCHE, by="COD_BRANCHE") 
+cout_geste = merge(cout_geste, COD_SS_BRANCHE, by="COD_SS_BRANCHE") 
+cout_geste = merge(cout_geste, COD_BAT_TYPE, by="COD_BAT_TYPE") 
+cout_geste = merge(cout_geste, COD_PERIODE_DETAIL, by="COD_PERIODE_DETAIL", all.x = T) 
+cout_geste = merge(cout_geste, COD_PERIODE_SIMPLE, by="COD_PERIODE_SIMPLE") 
+
+setkeyv(cout_geste,c("BRANCHE","SS_BRANCHE", "BAT_TYPE"))
+ordre = unique(cout_geste$SS_BRANCHE)
+cout_geste[, SS_BRANCHE:=factor(SS_BRANCHE, levels = ordre )]
+cout_geste[, PERIODE_SIMPLE:=factor(PERIODE_SIMPLE)]
+cout_geste[, PERIODE_SIMPLE:=relevel(PERIODE_SIMPLE, ref = "Av 1980")]
+
+cout_geste[GAIN!=0,list(GAIN_moy = mean(GAIN,na.rm=T), COUT_moy = mean(COUT,na.rm=T)) , by="GESTE"]
+
+cout_geste[,quantile(GAIN), by="GESTE"]
+
+### 
+
+Corresp_geste = data.table(GESTE = unique(cout_geste$GESTE))
+Corresp_geste[GESTE %in% c("FENMOD","FENBBC","GTB"), GESTE_DGEC:="Rénovation faible"]
+Corresp_geste[GESTE %in% c("FEN_MURBBC","FEN_MURMOD","ENSMOD"), GESTE_DGEC:="Rénovation moyenne"]
+Corresp_geste[GESTE %in% c("ENSBBC"), GESTE_DGEC:="Rénovation importante"]
+
+
+cout_geste = merge(cout_geste,Corresp_geste, by="GESTE")
+cout_geste[,list(GAIN_moy = mean(GAIN,na.rm=T), COUT_moy = mean(COUT,na.rm=T)) , by="GESTE_DGEC"]
+
+
+### calcul surfaces parc rénovés 
+
+PM_geste_natio = COUTS[ typeRenovationBatiment !="Etat initial",]
+PM_geste_natio = merge(PM_geste_natio,Corresp_geste, by.x="typeRenovationBatiment",by.y="GESTE")
+PM_geste_natio[, annee := as.factor(annee)]
+PM_geste_natio[,  GESTE_DGEC := factor(GESTE_DGEC, levels = c("Parc non touché","Rénovation faible","Dont GTB","Rénovation moyenne","Rénovation importante"))]
+
+Surface_parc_Renov = PM_geste_natio[ typeRenovationBatiment !="Etat initial",list(Surface_Renov = sum(surface)),by=c("scenario","annee")]
+
+Surface_parc_exi = parc_melted[, list(Surface_parc_exi = sum(Surface)),by=c("scenario","annee")]
+Surface_parc_exi[, annee := as.factor(annee)]
+
+Surface_parc_Renov = merge(Surface_parc_Renov ,Surface_parc_exi,by=c("scenario","annee"))
+Surface_parc_Renov[, PM_Geste := 1-Surface_Renov/Surface_parc_exi,by=c("scenario","annee")]
+Surface_parc_Renov[, "GESTE_DGEC" := "Parc non touché",]
+
+Surface_parc_GTB = PM_geste_natio[ typeRenovationBatiment =="GTB",list(Surface_Renov = sum(surface)),by=c("scenario","annee")]
+Surface_parc_GTB = merge(Surface_parc_GTB ,Surface_parc_exi,by=c("scenario","annee"))
+Surface_parc_GTB[, PM_Geste := Surface_Renov/Surface_parc_exi,by=c("scenario","annee")]
+Surface_parc_GTB[, "GESTE_DGEC" := "Dont GTB",]
+
+
+PM_geste_natio = PM_geste_natio[ typeRenovationBatiment !="Etat initial", list(Surface_Renov = sum(surface)),by=c("scenario","annee","GESTE_DGEC")]
+
+PM_geste_natio[,Surface_tot_Renov := sum(Surface_Renov ),by=c("scenario","annee")]
+PM_geste_natio = merge(PM_geste_natio,Surface_parc_exi,by=c("scenario","annee")  )
+
+PM_geste_natio[,PM_Geste := Surface_Renov/Surface_parc_exi]
+
+tab_PM_geste = dcast.data.table(PM_geste_natio[annee %in% seq(2010,2050,5)], 
+                                scenario+GESTE_DGEC~annee,value.var = "PM_Geste")
+tab_PM_Non_Renov = dcast.data.table(Surface_parc_Renov[annee %in% seq(2010,2050,5)], scenario+GESTE_DGEC~annee,value.var = "PM_Geste")
+tab_PM_Non_GTB = dcast.data.table(Surface_parc_GTB[annee %in% seq(2010,2050,5)], scenario+GESTE_DGEC~annee,value.var = "PM_Geste")
+tab_PM_geste = rbindlist(list(tab_PM_Non_Renov,tab_PM_geste,tab_PM_Non_GTB) )
+tab_PM_geste = replace(tab_PM_geste,is.na(tab_PM_geste),0)
+
+tab_PM_geste[,  GESTE_DGEC := factor(GESTE_DGEC, levels = c("Parc non touché","Rénovation faible","Dont GTB","Rénovation moyenne","Rénovation importante"))]
+tab_PM_geste = tab_PM_geste[order(GESTE_DGEC)]
+
+## Cumul du parc rénové 
+PM_geste_natio = PM_geste_natio[order(annee)]
+PM_geste_natio_cum  = PM_geste_natio[, list(annee,Surface_tot_Renov,Surface_parc_exi,Surface_Renov_cum = cumsum(Surface_Renov)), by=c("scenario","GESTE_DGEC")]
+PM_geste_natio_cum[, PM_Geste := Surface_Renov_cum/Surface_parc_exi]
+
+tab_PM_geste_cum = dcast.data.table(PM_geste_natio_cum[annee %in% seq(2010,2050,5)], scenario+GESTE_DGEC~annee,value.var = "PM_Geste")
+
+## PArc de l'Etat rénové
+Surface_parc_Renov_Etat = COUTS[occupant == "03" & typeRenovationBatiment !="Etat initial",list(Surface_Renov = sum(surface)),by=c("scenario","annee")]
+
+Surface_parc_Renov_Etat_Regl = COUTS[occupant == "03" & typeRenovationBatiment !="Etat initial"& reglementation=="ObligationTravaux", list(Surface_Renov_Regl = sum(surface)),by=c("scenario","annee")]
+
+Surface_parc_Renov_Etat_perf =COUTS[occupant == "03" & typeRenovationBatiment !="Etat initial",list(Surface_Renov = sum(surface)),by=c("scenario","annee", "typeRenovationBatiment")]
+
+Surface_parc_Renov_Etat_perf_Regl  =COUTS[occupant == "03" & typeRenovationBatiment !="Etat initial" & reglementation=="ObligationTravaux",list(Surface_Renov = sum(surface)),by=c("scenario","annee", "typeRenovationBatiment")]
+
+
+if(nrow(Surface_parc_Renov_Etat_Regl)==0){
+  Surface_parc_Renov_Etat_Regl = Surface_parc_Renov_Etat
+  Surface_parc_Renov_Etat_Regl[,Surface_Renov_Regl:= 0]
+}
+
+Surface_parc_Etat_tot = 
+dcast.data.table(parc_melted[occupation=="03" & Type_parc=="E", sum(Surface),by=c("scenario","annee")],  scenario ~annee,value.var = "V1")
+Surface_parc_Etat_arenov = 
+dcast.data.table(parc_melted[occupation=="03" & Type_parc=="E", sum(Surface)*0.03,by=c("scenario","annee")],  scenario ~annee,value.var = "V1")
+
+#### verif part rénovée 
+part_Etat_Renov = merge(parc_melted[occupation=="03" & Type_parc=="E", sum(Surface),by=c("scenario","annee")], 
+                        Surface_parc_Renov_Etat , by=c("scenario","annee"))
+
+part_Etat_Renov[, Part:=Surface_Renov/V1]
+part_Etat_Renov = merge(part_Etat_Renov, 
+                        Surface_parc_Renov_Etat_Regl , by=c("scenario","annee"))
+
+part_Etat_Renov[, Part_Regl:=Surface_Renov_Regl/V1]
+
+part_Etat_Renov = merge(part_Etat_Renov, 
+                        Surface_parc_Renov_Etat_perf[typeRenovationBatiment=="ENSBBC", list(scenario,annee,Surface_Renov_ENSBBC = Surface_Renov)], by=c("scenario","annee"))
+
+part_Etat_Renov[, Part_ENSBBC:=Surface_Renov_ENSBBC/V1]
+
+
+#### tableau export
+Surface_parc_Renov_Etat = dcast.data.table(Surface_parc_Renov_Etat[annee %in% seq(2010,2050,5)], scenario~annee,value.var = "Surface_Renov")
+
+
+Surface_parc_Renov_Etat_Regl = dcast.data.table(Surface_parc_Renov_Etat_Regl[annee %in% seq(2010,2050,5)], scenario~annee,value.var = "Surface_Renov_Regl")
+
+Surface_parc_Renov_Etat_perf = dcast.data.table(Surface_parc_Renov_Etat_perf[annee %in% seq(2010,2050,5)], scenario + typeRenovationBatiment~annee,value.var = "Surface_Renov")
+
+Surface_parc_Renov_Etat_perf_Regl = dcast.data.table(Surface_parc_Renov_Etat_perf_Regl[annee %in% seq(2010,2050,5)], scenario + typeRenovationBatiment~annee,value.var = "Surface_Renov")
+
+
+
+tab_PM_geste[,scenario := substring(scenario,1,2)]
+tab_PM_geste_cum[,scenario := substring(scenario,1,2)]
+Surface_parc_Renov_Etat[,scenario := substring(scenario,1,2)]
+
+### calcul surfaces parc rénovés  par branche
+
+PM_bati_branche = COUTS[typeRenovationBatiment != "Etat initial", list(Surface_Renov = sum(surface)),by=c("scenario","annee","branche","typeRenovationBatiment")]
+
+Surface_parc_exi_branche = parc_melted[, list(Surface_parc_exi = sum(Surface)),by=c("scenario","annee","branche")]
+Surface_parc_exi_branche[, annee := as.factor(annee)]
+
+PM_bati_branche  = merge(PM_bati_branche  ,Surface_parc_exi_branche,by=c("scenario","annee","branche"))
+PM_bati_branche[, PM_Geste := Surface_Renov/Surface_parc_exi,by=c("scenario","annee","branche")]
+PM_bati_branche[ , sum(PM_Geste), by=c("scenario","annee","branche")]
+
+NRF_branche = COUTS[typeRenovationBatiment != "Etat initial", list(Surface_Renov = sum(surface)),by=c("scenario","annee","branche")]
+NRF_branche   = merge(NRF_branche   ,Surface_parc_exi_branche,by=c("scenario","annee","branche"))
+NRF_branche[, PM_Geste := 1- Surface_Renov/Surface_parc_exi,by=c("scenario","annee","branche")]
+NRF_branche[, typeRenovationBatiment := "NRF"]
+PM_bati_branche = rbind(PM_bati_branche,NRF_branche)
+
+PM_bati_branche[,sum(PM_Geste),by=c("scenario","annee","branche")][V1!=1]
+
+NRF_branche = dcast(NRF_branche,scenario + branche ~ annee, value.var = "PM_Geste")
+
+```
+
+
+```{r, echo=F, warning=F,}
+pander(tab_PM_geste, digits = 2, caption = "Part du parc rénové annuellement par niveau de rénovation")
+```
+
+
+
+```{r, echo=F, warning=F,}
+pander(tab_PM_geste_cum, digits = 2, caption = "Part du parc rénové (cumul)")
+```
+
+```{r, echo=F, warning=F,}
+pander(Surface_parc_Renov_Etat, digits = 4, caption = "Parc de l'Etat rénové annuellement")
+```
+
+```{r, echo=F, warning=F,}
+pander(Surface_parc_Renov_Etat_Regl, digits = 4, caption = "Parc de l'Etat rénové annuellement du fait de la directive patrimoine immobilier de l'Etat")
+```
+
+```{r, echo=F, warning=F,}
+pander(NRF_branche[,c("scenario","branche",as.character( 2010:2020))] , digits = 3, caption = "Part du geste ne rien faire par branche")
+```
+
+
+\clearpage
+\newpage
+
+## Surfaces rénovées 
+
+```{r,  echo=F, warning=F,include = F}
+
+Surfaces_renov_gestes = COUTS[typeRenovationBatiment !="Etat initial",list(surface = sum(surface)/10^6,investissement = sum(investissement)/10^6), by=c("scenario","annee","typeRenovationBatiment")]
+Surfaces_renov_gestes[,Geste := factor(typeRenovationBatiment, levels = c("GTB","FENMOD","FEN_MURMOD","ENSMOD","FENBBC","FEN_MURBBC","ENSBBC"))]
+Surfaces_renov_gestes = Surfaces_renov_gestes[order(Geste)]
+
+Surfaces_renov_gestes_cum = Surfaces_renov_gestes[,list(INV_cum_geste = cumsum(investissement),INV =investissement, 
+                                                        surface_cum_geste = cumsum(surface),surface=surface,
+                                                         Geste), by=c("scenario","annee")]
+
+
+Surfaces_renov_gestes_cum[,Geste := factor(Geste, levels = rev(c("GTB","FENMOD","FEN_MURMOD","ENSMOD","FENBBC","FEN_MURBBC","ENSBBC")))]
+
+Surfaces_renov_gestes_cum_sansGTB = Surfaces_renov_gestes[Geste!="GTB",list(INV_cum_geste = cumsum(investissement),INV =investissement, 
+                                                        surface_cum_geste = cumsum(surface),surface=surface,
+                                                         Geste), by=c("scenario","annee")]
+
+Surfaces_renov_gestes_cum_sansGTB[,Geste := factor(Geste, levels = rev(c("FENMOD","FEN_MURMOD","ENSMOD","FENBBC","FEN_MURBBC","ENSBBC")))]
+
+
+Surfaces_renov_syst = COUTS[typeRenovationSysteme != "Etat initial_NP",list(surface = sum(surface)/10^6,investissement = sum(investissement)/10^6), by=c("scenario","annee","typeRenovationSysteme","SYSTEME_CHAUD")]
+
+COUTS[typeRenovationSysteme != "Etat initial_NP", unique(typeRenovationBatiment)]
+
+Surfaces_renov_syst[,SYSTEME_CHAUD := factor(SYSTEME_CHAUD, levels = c("Chaudière gaz","Chaudière condensation gaz",
+                                                           "Chaudière fioul","Chaudière condensation fioul",
+                                                           "Electrique direct","Electrique direct performant",
+                                                           "PAC","PAC performant",
+                                                           "Rooftop", "Rooftop performant",
+                                                           "Tube radiant", "Tube radiant performant" ,
+                                                           "Cassette rayonnante","Cassette rayonnante performant",
+                                                           "DRV", "DRV performant",
+                                                           "Autre système centralisé",  "Autre système centralisé performant",
+                                                           "nr"))]
+Surfaces_renov_syst  = merge(Surfaces_renov_syst ,colors_syst, by="SYSTEME_CHAUD")
+Surfaces_renov_syst = Surfaces_renov_syst[order(SYSTEME_CHAUD)]
+
+
+Surfaces_renov_syst_cum =Surfaces_renov_syst[,list(INV_cum_syst = cumsum(investissement),INV =investissement, 
+                                                        surface_cum_syst = cumsum(surface),surface=surface,
+                                                         SYSTEME_CHAUD, color), by=c("scenario","annee")]
+
+
+Surfaces_renov_syst_cum[,SYSTEME_CHAUD := factor(SYSTEME_CHAUD, levels = rev(levels(Surfaces_renov_syst$SYSTEME_CHAUD)))]
+
+
+Surfaces_renov_syst_cum = Surfaces_renov_syst_cum[order(SYSTEME_CHAUD)]
+
+
+
+```
+
+```{r Surfaces_Renov_geste, fig.width=20, fig.height=13, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf'), caption ='Surfaces rénovées par geste'}
+  
+ggplot(Surfaces_renov_gestes_cum) + 
+  geom_ribbon(aes(ymin = 0, annee, ymax =  surface_cum_geste, group =Geste, fill = Geste)) +  ylab("Millions de m²") + xlab("") +
+  mytheme_facet_plot + scale_color_brewer(palette = fillpalette) +
+  scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5)) +
+  scale_y_continuous() + facet_wrap(~scenario) + 
+  scale_fill_brewer(palette = fillpalette) 
+
+```
+
+<!-- ```{r Surfaces_Renov_gestesansGTB, fig.width=20, fig.height=13, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf'), caption ='Surfaces rénovées par geste hors GTB'} -->
+
+<!-- ggplot(Surfaces_renov_gestes_cum_sansGTB ) +  -->
+<!--   geom_ribbon(aes(ymin = 0, annee, ymax =  surface_cum_geste, group =Geste, fill = Geste)) +  ylab("Millions de m²") + xlab("") + -->
+<!--   mytheme_facet_plot + scale_color_brewer(palette = fillpalette) + -->
+<!--   scale_x_discrete(breaks = seq(2010,2050,5), labels = -->
+<!--                     seq(2010,2050,5)) + -->
+<!--   scale_y_continuous() + facet_wrap(~scenario) +  -->
+<!--   scale_fill_brewer(palette = fillpalette)  -->
+
+<!-- ``` -->
+
+```{r Surfaces_Renov_syst, fig.width=20, fig.height=13, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf'), caption ='Surfaces rénovées par geste'}
+  
+ggplot(Surfaces_renov_syst_cum) + 
+  geom_ribbon(aes(ymin = 0, annee, ymax =  surface_cum_syst , group =SYSTEME_CHAUD, fill = SYSTEME_CHAUD)) +  ylab("Millions de m²")  + xlab("") +
+  mytheme_facet_plot +
+  scale_y_continuous(limits  = c(0,100)) + facet_wrap(~scenario) +
+             theme(legend.position = "top") +
+  scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5)) +
+  scale_fill_manual(values=unique(Surfaces_renov_syst_cum$color),
+                    guide = guide_legend(nrow = 4)) 
+
+```
+
+\clearpage
+\newpage
+
+## Investissements 
+```{r,  echo=F, warning=F,include = F}
+#### verif inv
+
+COUTS[scenario == "S3 : AME 2017 run2 CEE final"  & typeRenovationBatiment == "ENSBBC" , sum(investissement)]/10^9
+COUTS[scenario == "S3 : AME 2017 run2 CEE final"  & typeRenovationBatiment == "ENSBBC", sum(surface)]/10^6
+
+COUTS[typeRenovationBatiment == "ENSBBC" & annee == "2018" ,list(sum(surface)/10^6, sum(investissement)/10^9, sum(investissement)/sum(surface)), by=c("scenario","branche")][order(branche)]
+
+COUTS[scenario == "S3 : AME 2017 run2 CEE final"  & typeRenovationBatiment == "FEN_MURBBC" & typeRenovationSysteme == "Etat initial_NP" ,list(sum(surface)/10^6, sum(investissement)/10^9, sum(investissement)/sum(surface)), by="branche"]
+COUTS[scenario == scenario_ref  & typeRenovationBatiment == "FEN_MURBBC" & typeRenovationSysteme == "Etat initial_NP" ,list(sum(surface)/10^6, sum(investissement)/10^9, sum(investissement)/sum(surface)), by="branche"]
+
+
+INV_GESTE[scenario == "S5 : AME 2017 run2 CEE final"]
+
+
+### calcul investissement annuel et cumulés
+
+
+INV_AUTRES_TOT = INV_AUTRES_renov[,list(INV = sum(value)), by=c("scenario","annee")]
+INV_GESTE_TOT = INV_GESTE[,list(INV = sum(value)), by=c("scenario","annee")]
+INV_SYST_CHAUD_TOT = INV_SYST_CHAUD[,list(INV = sum(value)), by=c("scenario","annee")]
+
+
+unique(COUTS$typeRenovationSysteme)
+unique(COUTS$SYSTEME_CHAUD)
+
+COUTS[,list(surface = sum(surface)), by=c("scenario","annee")]
+
+
+INV_GESTE_TOT[,list(INV = sum(INV)/10^3), by=c("scenario")]
+INV_SYST_CHAUD_TOT[,list(INV = sum(INV)/10^3), by=c("scenario")]
+
+INV_SYST_CHAUD[,SYSTEME_CHAUD := factor(SYSTEME_CHAUD, levels = c("Chaudière gaz","Chaudière condensation gaz",
+                                                           "Chaudière fioul","Chaudière condensation fioul",
+                                                           "Electrique direct","Electrique direct performant",
+                                                           "PAC","PAC performant",
+                                                           "Rooftop", "Rooftop performant",
+                                                           "Tube radiant", "Tube radiant performant" ,
+                                                           "Cassette rayonnante","Cassette rayonnante performant",
+                                                           "DRV", "DRV performant",
+                                                           "Autre système centralisé",  "Autre système centralisé performant",
+                                                           "nr"))]
+
+INV_SYST_CHAUD = merge(INV_SYST_CHAUD ,colors_syst, by="SYSTEME_CHAUD")
+INV_SYST_CHAUD = INV_SYST_CHAUD[order(SYSTEME_CHAUD)]
+
+INV_SYST_tab = INV_SYST_CHAUD[,list(INV = sum(value, na.rm=T)/10^3), by=c("scenario", "SYSTEME_CHAUD","color")]
+INV_SYST_tab =INV_SYST_tab[INV >0.01]
+INV_SYST_tab = INV_SYST_tab[order(SYSTEME_CHAUD)]
+
+
+INV_SYST_cum = INV_SYST_CHAUD [,list(INV_cum_syst = cumsum(value),INV =value, SYSTEME_CHAUD, color), by=c("scenario","annee")]
+
+INV_SYST_cum [,SYSTEME_CHAUD := factor(SYSTEME_CHAUD, levels = rev(levels(INV_SYST_CHAUD$SYSTEME_CHAUD)))]
+INV_SYST_cum  = INV_SYST_cum [order(SYSTEME_CHAUD)]
+
+
+
+INV_GESTE[,Geste := factor(variable, levels = c("GTB","FENMOD","FEN_MURMOD","ENSMOD","FENBBC","FEN_MURBBC","ENSBBC"))]
+
+INV_GESTE_tab = INV_GESTE[,list(INV = sum(value, na.rm=T)/10^3), by=c("scenario","Geste")]
+
+INV_GESTE_tab [,Geste := factor(Geste, levels = c("GTB","FENMOD","FEN_MURMOD","ENSMOD","FENBBC","FEN_MURBBC","ENSBBC"))]
+
+INV_GESTE_tab = INV_GESTE_tab[order(Geste)]
+
+INV_GESTE = INV_GESTE[order(Geste)]
+INV_GESTE_cum = INV_GESTE[,list(INV_cum_geste = cumsum(value),INV =value, Geste), by=c("scenario","annee")]
+
+INV_GESTE_cum[,Geste := factor(Geste, levels = rev(c("GTB","FENMOD","FEN_MURMOD","ENSMOD","FENBBC","FEN_MURBBC","ENSBBC")))]
+
+
+INV_AUTRES_renov[,Usages := factor(variable, levels = c("Climatisation","ECS","Eclairage"))]
+
+INV_AUTRES_renov = INV_AUTRES_renov[order(Usages)]
+INV_AUTRES_renov_cum = INV_AUTRES_renov[,list(INV_cum_autres = cumsum(value),INV =value, Usages), by=c("scenario","annee")]
+
+INV_AUTRES_renov_cum[,Usages := factor(Usages, levels = rev(c("Climatisation","ECS","Eclairage")))]
+
+
+INV_GESTE_branche[,Geste := factor(variable, levels = c("GTB","FENMOD","FEN_MURMOD","ENSMOD","FENBBC","FEN_MURBBC","ENSBBC"))]
+INV_GESTE_branche = INV_GESTE_branche[order(Geste)]
+
+INV_GESTE_cum_branche = INV_GESTE_branche[,list(INV_cum_geste = cumsum(value),INV =value, Geste), by=c("scenario","annee", "branche")]
+
+INV_GESTE_cum_branche[,Geste := factor(Geste, levels = rev(c("GTB","FENMOD","FEN_MURMOD","ENSMOD","FENBBC","FEN_MURBBC","ENSBBC")))]
+
+```
+
+
+```{r INV_syst, fig.width=20, fig.height=13, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+ggplot(INV_SYST_tab ) +
+  geom_bar(aes(substring(scenario,1,2),INV, color =SYSTEME_CHAUD,fill =SYSTEME_CHAUD), stat = "identity") +
+  ylab("Mds euros") + ggtitle("Investissements cumulées dans les systèmes de chauffage") + xlab("scenario") +
+  mytheme_facet_plot + 
+  scale_y_continuous(limits  = c(0,100)) +  theme(legend.position = "top") +
+  scale_fill_manual(values=unique(INV_SYST_tab$color),
+                    guide = guide_legend(nrow = 4)) 
+
+
+ggplot(INV_SYST_cum) + 
+  geom_ribbon(aes(ymin = 0, annee, ymax = INV_cum_syst, group =SYSTEME_CHAUD, fill = SYSTEME_CHAUD)) + 
+    ylab("Millions d'euros") + facet_wrap(~scenario) +  ggtitle("Investissements dans les systèmes de chauffage")+       xlab("annee") +   scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5)) +
+  mytheme_facet_plot +  theme(legend.position = "top") +
+  scale_fill_manual(values=unique(INV_SYST_cum$color),
+                    guide = guide_legend(nrow = 4)) 
+  
+```
+
+```{r INV_Gestes, fig.width=20, fig.height=13, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+  
+ggplot(INV_GESTE_tab ) +
+  geom_bar(aes(substring(scenario,1,2),INV, color =Geste,fill =Geste), stat = "identity") +
+  ylab("Mds euros") + ggtitle("Investissements cumulées dans les rénovations") + xlab("scenario") +
+  mytheme_facet_plot  +
+  scale_y_continuous(limits  = c(0,300)) + scale_fill_brewer(palette = fillpalette, direction = -1) 
+
+ggplot(INV_GESTE_cum) + 
+  geom_ribbon(aes(ymin = 0, annee, ymax = INV_cum_geste, group =Geste, fill = Geste)) + 
+    scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5)) +
+    ylab("Millions d'euros") + ggtitle("Investissements dans les rénovations") + facet_wrap(~scenario) +
+  mytheme_facet_plot + scale_fill_brewer(palette = fillpalette) 
+  
+```
+
+```{r INV_geste_branche, fig.width=20, fig.height=13, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+ggplot(INV_GESTE_cum_branche) + 
+  geom_ribbon(aes(ymin = 0, annee, ymax = INV_cum_geste, group =Geste, fill = Geste)) + 
+    scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5)) +
+    ylab("Millions d'euros") + ggtitle("Investissements dans les rénovations") + facet_wrap(~scenario + branche, ncol=8) +
+  mytheme_facet_plot + scale_fill_brewer(palette = fillpalette) 
+  
+  
+```
+
+```{r INV_Autres, fig.width=20, fig.height=9, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+  
+
+ggplot(INV_AUTRES_renov_cum) + 
+  geom_ribbon(aes(ymin = 0, annee, ymax =  INV_cum_autres, group =Usages, fill = Usages)) + 
+    ylab("Millions d'euros") + ggtitle("Investissements dans les autres usages RT") + facet_wrap(~scenario) +
+    scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5)) +
+  mytheme_facet_plot + scale_fill_brewer(palette = fillpalette) 
+
+
+```
+
+```{r,  echo=F, warning=F,include = F}
+
+##### investissments totaux 
+
+COUTS_all = rbind(COUTS[,list(INV_tot = sum(investissement),surface= sum(surface),aides = sum(aides),
+                              prets = sum(prets),pretsBonifies = sum(pretsBonifies)),
+                        by=c("scenario","annee","branche","occupant","reglementation")],
+                  COUTS_AUTRES[,list(INV_tot = sum(investissement),surface= sum(surface),aides = sum(aides),
+                                     prets = sum(prets),pretsBonifies = sum(pretsBonifies)),
+                               by=c("scenario","annee","branche","occupant","reglementation")])
+COUTS_all = rbind(COUTS[,list(INV_tot = sum(investissement),surface= sum(surface),aides = sum(aides),
+                              prets = sum(prets),pretsBonifies = sum(pretsBonifies)),
+                        by=c("scenario","annee","branche","occupant","reglementation")],
+                  COUTS_AUTRES[,list(INV_tot = sum(investissement),surface= sum(surface),aides = sum(aides),
+                                     prets = sum(prets),pretsBonifies = sum(pretsBonifies)),
+                               by=c("scenario","annee","branche","occupant","reglementation")])
+
+####### Investissements par politique/canal/aidés ou non
+
+INV_Reglementation = COUTS_all[,list(INV_tot = sum(INV_tot),surface= sum(surface),aides = sum(aides)), by=c("scenario","annee", "reglementation")]
+
+
+INV_Reglementation[,reglementation := factor(reglementation, levels = c("non","Décret", "ObligationTravaux"))]
+
+INV_Reglementation_cum = INV_Reglementation[order(reglementation)]
+
+INV_Reglementation_cum = INV_Reglementation[,list(INV_cum = cumsum(INV_tot),INV_tot, reglementation), by=c("scenario","annee")]
+INV_Reglementation_cum[,reglementation := factor(reglementation, levels = rev(c("non","Décret", "ObligationTravaux")))]
+
+INV_Reglementation[,sum(INV_tot),by="reglementation"]
+INV_Reglementation[,sum(surface),by="reglementation"]
+
+#### investissements au m²
+
+INV_Reglementation[,INV_m2 := INV_tot/surface]
+
+#### investissements aidés
+
+INV_aides = COUTS_all[,list(INV_tot = sum(INV_tot),surface= sum(surface),aides = sum(aides), prets = sum(prets),pretsBonifies = sum(pretsBonifies)), by=c("scenario","annee","branche","occupant","reglementation")]
+
+INV_aides = INV_aides[aides>0]
+
+INV_aides[,unique(annee)]
+
+INV_aides[,sum(aides)/10^6]
+
+
+INV_aides_cum = COUTS_all[,list(aides = sum(aides), prets = sum(prets),
+                                pretsBonifies = sum(pretsBonifies)), by=c("scenario","annee")]
+
+INV_aides_cum = melt(INV_aides_cum, id.vars = c("scenario","annee"))
+
+INV_aides_cum[,Type_Fin := factor(variable, levels = c("prets","aides","pretsBonifies"))]
+
+INV_aides_cum = INV_aides_cum[order(Type_Fin)]
+
+INV_aides_cum = INV_aides_cum[,list(INV_cum = cumsum(value),INV_tot = value, Type_Fin), by=c("scenario","annee")]
+INV_aides_cum[, Type_Fin := factor(Type_Fin, levels = rev(c("prets","aides","pretsBonifies")))]
+
+
+INV_aides_regl_cum = COUTS[,list(aides = sum(aides), prets = sum(prets),pretsBonifies = sum(pretsBonifies)), by=c("scenario","annee","reglementation")]
+
+INV_aides_regl_cum = melt(INV_aides_regl_cum, id.vars = c("scenario","annee","reglementation"))
+
+INV_aides_regl_cum[,Type_Fin := factor(variable, levels = c("prets","aides","pretsBonifies"))]
+
+INV_aides_regl_cum  = INV_aides_regl_cum [order(Type_Fin)]
+
+INV_aides_regl_cum = INV_aides_regl_cum[,list(INV_cum = cumsum(value),INV_tot = value, Type_Fin), by=c("scenario","annee","reglementation")]
+INV_aides_regl_cum[, Type_Fin := factor(Type_Fin, levels = rev(c("prets","aides","pretsBonifies")))]
+
+### investissements DGEC
+
+Tab_inv_DGEC = COUTS[,list(INV = sum(investissement), surface= sum(surface)) , by=c("scenario","annee","typeRenovationBatiment","typeRenovationSysteme")]
+
+Tab_inv_DGEC[typeRenovationBatiment =="Etat initial" & typeRenovationSysteme != "Etat initial_NP",Type_Inv :="Changement de système seul"]
+Tab_inv_DGEC[typeRenovationBatiment !="Etat initial" & typeRenovationSysteme == "Etat initial_NP",Type_Inv :="Geste sur le bâti"]
+Tab_inv_DGEC[typeRenovationBatiment !="Etat initial" & typeRenovationSysteme != "Etat initial_NP",Type_Inv :="Geste sur le bâti et Changement de système"]
+
+
+Tab_inv_DGEC = Tab_inv_DGEC[,list(INV_Md = sum(INV)/10^9, surface= sum(surface)) , by=c("scenario","annee","Type_Inv")]
+Tab_inv_DGEC_ini =  dcast.data.table(Tab_inv_DGEC[annee %in% seq(2010,2015)],scenario + Type_Inv~annee,value.var ="INV_Md")
+Tab_inv_DGEC[annee %in% seq(2010,2015)][,sum(INV_Md), by=c("annee", "scenario")] 
+
+Tab_inv_DGEC = dcast.data.table(Tab_inv_DGEC[annee %in% seq(2010,2050,5)],scenario + Type_Inv~annee,value.var ="INV_Md")
+
+```
+
+```{r INV_reglementation, fig.width=20, fig.height=9, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+
+ggplot(INV_Reglementation_cum) + 
+  geom_ribbon(aes(ymin = 0, annee, ymax = INV_cum/10^6, group =reglementation, fill = reglementation)) +
+  
+    ylab("Millions d'euros") + facet_wrap(~scenario) +  ggtitle("Investissements par réglementation")+    
+    scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5)) +
+  xlab("annee") +
+  mytheme_facet_plot
+
+```
+
+```{r INV_aides, fig.width=20, fig.height=9, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+
+ggplot(INV_aides_cum) + 
+  geom_ribbon(aes(ymin = 0, annee, ymax = INV_cum/10^6, group =Type_Fin, fill = Type_Fin)) + 
+  ylab("Millions d'euros") + facet_wrap(~scenario) + 
+    scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5)) +
+  ggtitle("Investissements et type de financement")+       xlab("annee") +
+  mytheme_facet_plot
+
+```
+
+```{r INV_aides_regl, fig.width=20, fig.height=9, echo=F, warning=F, fig.show='hold', dev=c('png', 'pdf')}
+
+ggplot(INV_aides_regl_cum) + 
+  geom_ribbon(aes(ymin = 0, annee, ymax = INV_cum/10^6, group =Type_Fin, fill = Type_Fin)) + 
+  ylab("Millions d'euros") + facet_wrap(~scenario + reglementation) + 
+    scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5)) +
+  ggtitle("Investissements et type de financement par réglementation")+       xlab("annee") +
+  mytheme_facet_plot
+
+```
+
+```{r, echo=F, warning=F,}
+pander(Tab_inv_DGEC[,c("scenario","Type_Inv","2010","2015","2020","2025","2030","2035","2040","2045","2050"), with=F] , digits = 2, caption = "Investissements")
+```
+
+\clearpage
+\newpage
+
+## Emissions
+
+```{r,  echo=F, warning=F,include = F}
+### Facteurs d'émissions
+FE = fread("../tertiaire/parametrage modèle/Facteuremissions.csv", sep = ";", header = T)
+FE = melt(FE,id.vars = c("energie","usage"),value.name = "FE",variable.name = "annee")
+FE[,annee:=as.character(annee)]
+
+Em_nationale_energie_type_usage = merge(Conso_nationale_energie_type_usage, FE,by=c("energie","usage","annee"))
+Em_nationale_energie_usage = merge(Conso_nationale_energie_usage, FE,by=c("energie","usage","annee"))
+Em_nationale_energie_type_usage[,EmMtCO2 := conso_tWhEF*FE*10^9*10^-12]
+Em_nationale_energie_usage[,EmMtCO2 := conso_tWhEF*FE*10^9*10^-12]
+
+Em_nationale_energie_type = Em_nationale_energie_type_usage[, list(EmMtCO2 = sum(EmMtCO2)), by=c("scenario","annee", "energie","Type_parc")]
+
+Em_nationale_energie = Em_nationale_energie_usage[, list(EmMtCO2 = sum(EmMtCO2)), by=c("scenario","annee", "energie")]
+
+Em_nationale_usage = Em_nationale_energie_usage[, list(EmMtCO2 = sum(EmMtCO2)), by=c("scenario","annee", "usage")]
+
+```
+
+
+```{r Evol_Em_energie, fig.width=25, fig.height=10, echo=F, warning=F,fig.cap='Evolution des émissions pour tous les usages par énergie', dev=c('png', 'pdf')}
+
+ggplot(Em_nationale_energie) +
+           geom_bar(aes(annee, EmMtCO2, fill = energie, color = energie), stat="identity") +
+           facet_wrap(~scenario, nrow = 1) +
+           mytheme_facet_plot+ theme(legend.position = "top") +
+  scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5)) 
+
+```
+
+```{r Evol_Em_energie_chauffage, fig.width=25, fig.height=10, echo=F, warning=F,fig.cap='Evolution des émissions pour le chauffage par énergie', dev=c('png', 'pdf')}
+
+ggplot(Em_nationale_energie_usage[usage == "Chauffage"]) +
+           geom_bar(aes(annee, EmMtCO2, fill = energie, color = energie), stat="identity") +
+           facet_wrap(~scenario, nrow = 1) +
+           mytheme_facet_plot+ theme(legend.position = "top") +
+  scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5)) 
+
+```
+
+```{r Evol_Em_usage, fig.width=25, fig.height=10, echo=F, warning=F,fig.cap='Evolution des émissions par usage', dev=c('png', 'pdf')}
+
+ggplot(Em_nationale_usage) +
+           geom_bar(aes(annee, EmMtCO2, fill = usage, color = usage), stat="identity") +
+           facet_wrap(~scenario, nrow = 1) +
+           mytheme_facet_plot+ theme(legend.position = "top") +
+  scale_x_discrete(breaks = seq(2010,2050,5), labels =
+                    seq(2010,2050,5)) 
+
+```
+
+
+
+
+## ECRITURE SORTIES MEDPRO
+
+
+```{r write-excel_DGEC, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = T,include = F}
+
+if(write_excel ==T){
+scenario_toexport_short = substring(scenario_toexport, 1,2)
+
+PM_ener_neuf = dcast.data.table(PM_energie_neuf_DGEC[annee %in% seq(2010,2050,5)],scenario + Energie~annee,value.var ="PM_ener_neuf")
+Surfaces_ener_neuf = dcast.data.table(PM_energie_neuf_DGEC[annee %in% seq(2010,2050,5)],scenario + Energie~annee,value.var ="Surf_neuf_n")
+
+#### tableau des parts des syst dans le neuf
+PM_syst_neuf_export = dcast.data.table(PM_syst_neuf[annee %in% seq(2010,2050,5) | annee_n1 == 2010],scenario + SYSTEME_CHAUD ~annee,value.var ="PM_syst_neuf")
+
+syst_neuf_NA = unique(colors_syst$SYSTEME_CHAUD)[ unique(colors_syst$SYSTEME_CHAUD)%in% PM_syst_neuf_export[scenario == scenario_toexport,SYSTEME_CHAUD ] == F]
+syst_neuf_NA = syst_neuf_NA[syst_neuf_NA!="Non chauffé" & !is.na(syst_neuf_NA)]
+
+syst_neuf_NA = data.table(SYSTEME_CHAUD = syst_neuf_NA)
+syst_neuf_NA[,scenario :=scenario_toexport]
+
+PM_syst_neuf_export =  PM_syst_neuf_export[scenario == scenario_toexport,]
+PM_syst_neuf_export = rbind(PM_syst_neuf_export,syst_neuf_NA, use.names=T, fill = T)
+PM_syst_neuf_export = PM_syst_neuf_export[order(SYSTEME_CHAUD)]
+
+
+Surfaces_syst_neuf  = dcast.data.table(PM_syst_neuf[annee %in% seq(2010,2050,5)],scenario +SYSTEME_CHAUD~annee,value.var ="surf_cons_n")
+
+Surfaces_syst_neuf_export= rbind(Surfaces_syst_neuf[scenario == scenario_toexport,],syst_neuf_NA, use.names=T, fill = T)
+Surfaces_syst_neuf_export=Surfaces_syst_neuf_export[order(SYSTEME_CHAUD)]
+
+
+wb <- loadWorkbook(paste0(wbdir_scenario_toexport,"Sorties_AME_2017.xlsx"), create = F)
+
+writeWorksheet(wb,TabparcDGEC[scenario == scenario_toexport_short,], sheet = "sorties_modele_sanstitre", startRow =4)
+writeWorksheet(wb,construction_tot[scenario == scenario_toexport], sheet = "sorties_modele_sanstitre", startRow =10)
+writeWorksheet(wb,PM_ener_neuf[scenario == scenario_toexport], sheet = "sorties_modele_sanstitre", startRow =14)
+writeWorksheet(wb,Surfaces_ener_neuf[scenario == scenario_toexport], sheet = "sorties_modele_sanstitre", startRow =22)
+writeWorksheet(wb,PM_syst_neuf_export[scenario == scenario_toexport] , sheet = "sorties_modele_sanstitre", startRow =30)
+writeWorksheet(wb,Surfaces_syst_neuf_export[scenario == scenario_toexport] , sheet = "sorties_modele_sanstitre", startRow =51)
+
+writeWorksheet(wb,PM_clim_type_branche[Isclim ==  "Climatisé" & Type_parc =="N" & scenario == scenario_toexport,
+                                colnames(PM_clim_type_branche)[colnames(PM_clim_type_branche) %in% c("scenario","Branche_MEDPRO",annee_MEDPRO)], with=F], sheet = "sorties_modele_sanstitre", startRow =81)
+
+writeWorksheet(wb,PM_clim_type_branche[Isclim ==  "Climatisé" & Type_parc =="E" & scenario == scenario_toexport ,
+                                colnames(PM_clim_type_branche)[colnames(PM_clim_type_branche) %in% c("scenario","Branche_MEDPRO",annee_MEDPRO)], with=F], sheet = "sorties_modele_sanstitre", startRow =88)
+
+writeWorksheet(wb,tab_PM_geste[scenario == scenario_toexport_short], sheet = "sorties_modele_sanstitre", startRow =95)
+writeWorksheet(wb,PM_energie_exi[scenario == scenario_toexport], sheet = "sorties_modele_sanstitre", startRow =103)
+
+writeWorksheet(wb,tab_PM_energie[PM_usage == "PM_Usages_thermiques" & scenario == scenario_toexport,
+                               c("scenario","energie","2010","2015","2020","2025","2030","2035","2040","2045","2050"),with=F],
+               sheet = "sorties_modele_sanstitre",startRow =111)
+writeWorksheet(wb,Surface_parc_Renov_Etat_Regl[scenario == scenario_toexport], sheet = "sorties_modele_sanstitre", startRow =119)
+
+writeWorksheet(wb,conso_elec_DGEC[scenario == scenario_toexport,c("scenario","2010","2015","2020","2025","2030","2035","2040","2045","2050"),with=F], sheet = "sorties_modele_sanstitre", startRow =123)
+
+
+saveWorkbook(wb)
+}
+```
+
+```{r write-excel_medpro, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild =T,include = F}
+
+if(write_excel ==T){
+wb <- loadWorkbook(paste0(wbdir_scenario_toexport,"Sorties_AME_2017.xlsx"), create = F)
+
+writeWorksheet(wb,tab_PM_energie_branche[PM_usage == "PM_Usages_thermiques" &  ENERGIE == "Gaz" & scenario == scenario_toexport,
+                               c("scenario","Branche_MEDPRO",annee_MEDPRO), with=F], sheet = "sorties_modele_sanstitre", startRow =127)
+
+writeWorksheet(wb,tab_PM_energie_branche[PM_usage == "PM_Usages_thermiques" &  ENERGIE == "Urbain" &scenario == scenario_toexport,
+                               c("scenario","Branche_MEDPRO",annee_MEDPRO), with=F], sheet = "sorties_modele_sanstitre", startRow =134)
+
+writeWorksheet(wb,tab_PM_energie_branche[PM_usage == "PM_Usages_thermiques" &  ENERGIE == "Electricité"&scenario == scenario_toexport,
+                               c("scenario","Branche_MEDPRO",annee_MEDPRO), with=F], sheet = "sorties_modele_sanstitre", startRow =141)
+
+writeWorksheet(wb,tab_PM_energie_branche[PM_usage == "PM_Usages_thermiques" &  ENERGIE == "Fioul" &scenario == scenario_toexport,
+                               c("scenario","Branche_MEDPRO",annee_MEDPRO), with=F], sheet = "sorties_modele_sanstitre", startRow =148)
+
+writeWorksheet(wb,tab_PM_energie_branche[PM_usage == "PM_Usages_thermiques" &  ENERGIE == "Autres" & scenario == scenario_toexport,
+                               c("scenario","Branche_MEDPRO",annee_MEDPRO), with=F], sheet = "sorties_modele_sanstitre", startRow =155)
+
+writeWorksheet(wb,evolbesoinu_usage_type[usage == "Chauffage" & scenario == scenario_toexport], sheet = "sorties_modele_sanstitre", startRow =162)
+
+writeWorksheet(wb,evolbesoinu_branche_usage[usage == "Autres usages thermiques" & scenario == scenario_toexport ,
+                               c("scenario","Branche",annee_MEDPRO), with=F], sheet = "sorties_modele_sanstitre", startRow =167)
+
+writeWorksheet(wb,evolbesoinu_branche_usage[usage == "Electricité spécifique" & scenario == scenario_toexport ,
+                               c("scenario","Branche",annee_MEDPRO), with=F], sheet = "sorties_modele_sanstitre", startRow =174)
+
+writeWorksheet(wb,evolbesoinu_branche_usage[usage == "Climatisation" & scenario == scenario_toexport ,
+                               c("scenario","Branche",annee_MEDPRO), with=F], sheet = "sorties_modele_sanstitre", startRow =181)
+
+writeWorksheet(wb,PM_clim_branche[Isclim ==  "Climatisé" & scenario == scenario_toexport,
+                               colnames(PM_clim_branche)[colnames(PM_clim_branche) %in% c("scenario","Branche_MEDPRO",annee_MEDPRO)], with=F], sheet = "sorties_modele_sanstitre", startRow =188)
+
+writeWorksheet(wb,besoin_elec_clim_medpro[scenario == scenario_toexport,colnames(besoin_elec_clim_medpro) %in% c("scenario","Branche_MEDPRO",annee_MEDPRO), with=F], sheet = "sorties_modele_sanstitre", startRow =195)
+
+writeWorksheet(wb,evolbesoin_clim_medpro[scenario == scenario_toexport], sheet = "sorties_modele_sanstitre", startRow =202)
+
+
+writeWorksheet(wb,conso_parenergie_mtep[scenario == scenario_toexport, c("scenario","energie","2010","2015","2020","2025","2030","2035","2050"), with=F], sheet = "sorties_modele_sanstitre", startRow =206)
+
+writeWorksheet(wb,conso_parusage_mtep[scenario == scenario_toexport_short ,c("scenario","usage","2010","2015","2020","2025","2030","2035","2050"), with=F], sheet = "sorties_modele_sanstitre", startRow =214)
+
+
+writeWorksheet(wb,Tab_inv_DGEC[scenario == scenario_toexport ,c("scenario","Type_Inv","2010","2015","2020","2025","2030","2035","2040","2045","2050"), with=F], sheet = "sorties_modele_sanstitre", startRow =224)
+
+### PM des systèmes dans le stock
+
+writeWorksheet(wb,PM_syst_exi[scenario == scenario_toexport,
+                               c("scenario","SYSTEME_CHAUD",annee_MEDPRO), with=F], sheet = "sorties_modele_sanstitre", startRow =230)
+
+saveWorkbook(wb)
+}
+```
+
+```{r write-excel_medpro_conso, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild =T,include = F}
+
+if(write_excel ==T){
+Conso_nationale_energie_usage_branche = dcast.data.table(Conso, scenario + annee+ branche+usage ~nom_energie,fun.aggregate = function(x){sum(x, na.rm = T)/10^9}, value.var = "value")
+
+Conso_nationale_energie_usage_branche = melt(Conso_nationale_energie_usage_branche , id.vars = c("scenario","annee", "branche", "usage"), variable.name = "energie", value.name = "conso_tWhEF")
+
+Conso_nationale_energie_usage_branche = merge(Conso_nationale_energie_usage_branche, COD_BRANCHE[, list(branche = COD_BRANCHE, BRANCHE)], by="branche")
+
+annee_selected = c("2009","2015","2020","2025","2030","2050")
+
+scenario_select = scenario_toexport
+
+
+Conso_nationale_energie
+
+tab_energie_MEDPRO =
+  dcast(Conso_nationale_energie[annee %in% annee_selected & scenario == scenario_select], scenario + energie ~ annee, value.var = "conso_tWhEF")
+
+tab_energie_usage_MEDPRO =
+  dcast(Conso_nationale_energie_usage[annee %in% annee_selected & scenario == scenario_select], scenario + usage + energie ~ annee, value.var = "conso_tWhEF")
+
+
+tab_energie_usage_branche_MEDPRO =
+    dcast(Conso_nationale_energie_usage_branche[annee %in% annee_selected & scenario == scenario_select], scenario + BRANCHE + usage + energie ~ annee, value.var = "conso_tWhEF")
+
+tab_usage_MEDPRO =
+  dcast.data.table(Conso_nationale_energie_usage[annee %in% annee_selected & scenario == scenario_select], scenario + usage  ~ annee, value.var = "conso_tWhEF", fun.aggregate = function(x){sum(x)*10^9/11630*10^-6})
+
+tab_usage_MEDPRO[usage %in% c("Auxiliaires","Bureautique","Eclairage","Froid_alimentaire","Process","Ventilation"), sum(get("2015"))]
+tab_usage_MEDPRO[usage %in% c("Autre","Cuisson","ECS"), sum(get("2015"))]
+tab_usage_MEDPRO[usage %in% c("Chauffage"), sum(get("2015"))]
+tab_usage_MEDPRO[usage %in% c("Climatisation"), sum(get("2015"))]
+tab_usage_MEDPRO[, sum(get("2015"))]
+
+
+tab_energie_MEDPRO =
+  dcast.data.table(Conso_nationale_energie_usage[annee %in% annee_selected & scenario == scenario_select], scenario + energie  ~ annee, value.var = "conso_tWhEF", fun.aggregate = function(x){sum(x)*10^9/11630*10^-6})
+
+
+Conso_nationale_energie_usage_branche[,BRANCHE_MEDPRO := NULL]
+
+Conso_nationale_energie_usage_branche[BRANCHE == "Bureaux Administration",BRANCHE_MEDPRO := "Bureaux"]
+Conso_nationale_energie_usage_branche[BRANCHE == "Commerce",BRANCHE_MEDPRO := "Commerces"]
+Conso_nationale_energie_usage_branche[BRANCHE == "Santé Action Sociale",BRANCHE_MEDPRO := "Santé"]
+Conso_nationale_energie_usage_branche[is.na(BRANCHE_MEDPRO),BRANCHE_MEDPRO := "Autres"]
+Conso_nationale_energie_usage_branche[,BRANCHE_MEDPRO := factor(BRANCHE_MEDPRO,levels = c("Bureaux","Commerces","Santé","Autres"))]
+
+Conso_nationale_energie_usage_branche[,usage_MEDPRO := NULL]
+Conso_nationale_energie_usage_branche[usage == "Chauffage",usage_MEDPRO := "Chauffage"]
+Conso_nationale_energie_usage_branche[usage %in% c("ECS","Cuisson","Autre"),usage_MEDPRO := "Autres usages thermiques"]
+Conso_nationale_energie_usage_branche[usage %in% c("Auxiliaires","Ventilation","Process","Bureautique","Eclairage","Froid_alimentaire"),usage_MEDPRO := "Elec spécifique"]
+Conso_nationale_energie_usage_branche[usage %in% c("Climatisation"),usage_MEDPRO := "Climatisation"]
+Conso_nationale_energie_usage_branche[,usage_MEDPRO := factor(usage_MEDPRO,levels = c("Chauffage", "Autres usages thermiques","Elec spécifique","Climatisation"))]
+
+summary(Conso_nationale_energie_usage_branche)
+
+tab_energie_usage_branche_MEDPRO2 =
+    dcast.data.table(Conso_nationale_energie_usage_branche[annee %in% "2015" & scenario == scenario_select], scenario + BRANCHE_MEDPRO + usage_MEDPRO  ~ annee + energie , value.var = "conso_tWhEF", fun.aggregate = sum)
+
+tab_energie_usage_branche_MEDPRO2 = tab_energie_usage_branche_MEDPRO2[order(BRANCHE_MEDPRO)]
+
+tab_energie_usage_branche_MEDPRO3 =
+    dcast.data.table(Conso_nationale_energie_usage_branche[annee %in% "2013" & scenario == scenario_select], scenario + BRANCHE_MEDPRO + usage_MEDPRO  ~ annee + energie , value.var = "conso_tWhEF", fun.aggregate = sum)
+
+tab_energie_usage_branche_MEDPRO3 = tab_energie_usage_branche_MEDPRO3[order(BRANCHE_MEDPRO)]
+
+
+wb <- loadWorkbook(paste0(wbdir_scenario_toexport,"Conso_tert_branche_energie_usage.xlsx"), create = F)
+
+writeWorksheet(wb,tab_energie_MEDPRO, sheet = "Conso_energie", startRow =1)
+writeWorksheet(wb,tab_energie_usage_MEDPRO, sheet = "Conso_energie_usage", startRow =1)
+writeWorksheet(wb,tab_energie_usage_branche_MEDPRO, sheet = "Conso_branche_energie_usage", startRow =1)
+writeWorksheet(wb,tab_energie_usage_branche_MEDPRO2, sheet = "Conso_branche_energie_usage", startRow =450)
+writeWorksheet(wb,tab_energie_usage_branche_MEDPRO3, sheet = "Conso_branche_energie_usage", startRow =470)
+
+
+saveWorkbook(wb)
+}
+```
+
+
+```{r write-excel_rdt_equip, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild =T,include = F}
+
+if(write_excel ==T){
+##### DONNEES Rendements et  couts systèmes de chauffage #####
+wb <- loadWorkbook("../tertiaire/model/Tables_init/Bibli_rdt_chauff.xlsx", create = F)
+
+
+cout_rdt_chauff =data.table(readWorksheet(wb,sheet = "RDT_CHAUFF"))
+cout_rdt_chauff[,BRANCHE:=NULL]
+cout_rdt_chauff[,SS_BRANCHE:=NULL]
+cout_rdt_chauff[,BAT_TYPE:=NULL]
+cout_rdt_chauff[,ENERGIE:=NULL]
+cout_rdt_chauff[,PRODUCTION_CHAUD:=NULL]
+
+
+cout_rdt_chauff[, COD_BRANCHE:=substring(ID_AGREG, 1,2)]
+cout_rdt_chauff[, COD_SS_BRANCHE:=substring(ID_AGREG, 3,4)]
+cout_rdt_chauff[, COD_BAT_TYPE:=substring(ID_AGREG, 5,6)]
+cout_rdt_chauff[, COD_SYSTEME_CHAUD:=substring(ID_AGREG, 7,8)]
+cout_rdt_chauff[, COD_ENERGIE :=substring(ID_AGREG, 9,10)]
+cout_rdt_chauff = merge(cout_rdt_chauff, COD_BRANCHE, by="COD_BRANCHE")
+cout_rdt_chauff = merge(cout_rdt_chauff, COD_SS_BRANCHE, by="COD_SS_BRANCHE")
+cout_rdt_chauff = merge(cout_rdt_chauff, COD_BAT_TYPE, by="COD_BAT_TYPE")
+cout_rdt_chauff = merge(cout_rdt_chauff, COD_SYSTEME_CHAUD, by="COD_SYSTEME_CHAUD")
+cout_rdt_chauff = merge(cout_rdt_chauff, COD_ENERGIE, by="COD_ENERGIE")
+
+cout_rdt_chauff[, SYSTEME_CHAUD :=
+                  factor(SYSTEME_CHAUD,
+                         levels =c("Chaudière gaz","Chaudière condensation gaz",
+                                   "Chaudière fioul","Chaudière condensation fioul",
+                                   "Electrique direct","Electrique direct performant",
+                                   "PAC","PAC performant",
+                                   "Rooftop", "Rooftop performant",
+                                   "Tube radiant", "Tube radiant performant" ,
+                                   "Cassette rayonnante","Cassette rayonnante performant",
+                                   "DRV", "DRV performant",
+                                   "Autre système centralisé",  "Autre système centralisé performant",
+                                   "nr"))]
+
+
+cout_rdt_chauff = merge(cout_rdt_chauff,parc_init[,list(SURFACES =sum(SURFACES)), by=c("COD_BRANCHE","COD_SS_BRANCHE","COD_BAT_TYPE","COD_SYSTEME_CHAUD","COD_ENERGIE")],
+by=c("COD_BRANCHE","COD_SS_BRANCHE","COD_BAT_TYPE","COD_SYSTEME_CHAUD","COD_ENERGIE"), all.x=T
+)
+cout_rdt_chauff[is.na(SURFACES),SURFACES:=1]
+
+cout_rdt_chauff_moy = cout_rdt_chauff[PERIODE == "1",list(rdt_moy = sum(RDT*SURFACES)/sum(SURFACES),
+                                                          cout_moy = sum(COUT*SURFACES)/sum(SURFACES) ), by=c("COD_SYSTEME_CHAUD","SYSTEME_CHAUD","ENERGIE","PERIODE")]
+cout_rdt_chauff_moy = cout_rdt_chauff_moy[order(SYSTEME_CHAUD)]
+
+
+##### DONNEES Rendements et couts climatisation #####
+wb <- loadWorkbook("../tertiaire/model/Tables_init/Bibli_rdt_clim.xlsx", create = F)
+
+cout_rdt_clim = data.table(readWorksheet(wb,sheet = "RDT_FROID"))
+cout_rdt_clim[,BRANCHE:=NULL]
+cout_rdt_clim[,SS_BRANCHE:=NULL]
+cout_rdt_clim[,BAT_TYPE:=NULL]
+cout_rdt_clim[,EQ_CLIM:=NULL]
+setnames( cout_rdt_clim, c("COD_BRANCHE","COD_SS_BRANCHE","COD_BAT_TYPE","COD_EQ_CLIM","ID_AGREG","PERIODE","RDT","COUT"))
+cout_rdt_clim = merge(cout_rdt_clim, COD_BRANCHE, by="COD_BRANCHE")
+cout_rdt_clim = merge(cout_rdt_clim, COD_SS_BRANCHE, by="COD_SS_BRANCHE")
+cout_rdt_clim = merge(cout_rdt_clim, COD_BAT_TYPE, by="COD_BAT_TYPE")
+
+cout_rdt_clim[, PERIODE_LONG := factor(PERIODE, levels = c("0","1","2","3","4","5"),
+                                       labels = c("2009","2010-2015", "2015-2020","2020-2030","2030-2040","2040-2050"))]
+
+cout_rdt_clim= merge(cout_rdt_clim,parc_init[,list(SURFACES =sum(SURFACES)), by=c("COD_BRANCHE","COD_SS_BRANCHE","COD_BAT_TYPE")],
+by=c("COD_BRANCHE","COD_SS_BRANCHE","COD_BAT_TYPE"), all.x=T
+)
+cout_rdt_clim[is.na(SURFACES),SURFACES:=1]
+
+cout_rdt_clim_moy = cout_rdt_clim[ COD_EQ_CLIM == "01",list(rdt_moy = sum(RDT*SURFACES)/sum(SURFACES)), by=c("BRANCHE","PERIODE_LONG")]
+cout_rdt_clim_moy =dcast.data.table(cout_rdt_clim_moy ,BRANCHE ~ PERIODE_LONG)
+
+wb <- loadWorkbook("sorties_AME/Donnees_equipements.xlsx", create = T)
+
+writeWorksheet(wb,cout_rdt_chauff_moy, sheet = "syst_chauffage", startRow =2)
+writeWorksheet(wb,cout_rdt_clim_moy, sheet = "syst_clim", startRow =2)
+
+saveWorkbook(wb)
+}
+
+```

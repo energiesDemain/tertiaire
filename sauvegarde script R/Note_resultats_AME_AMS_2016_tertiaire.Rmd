@@ -1,0 +1,610 @@
+---
+title: "Resultats_AME_AMS_2016_tertiaire"
+author: "CGDD/SEEIDD/MA3"
+date: "23 janvier 2017"
+output: pdf_document
+---
+
+Objectifs : 
+
+* Outil pour visualiser les résultats de simulation du modèle tertiaire sans ouvrir le .xls
+* Chroniques des résultats du modèle
+* Comparaisons de plusieurs simulations
+
+\tableofcontents 
+
+```{r, echo=F, message=F, warning=F, cache=F, results=F}
+require(knitr)
+require(data.table)
+require(ggplot2)
+require(Hmisc)
+require(reshape2)
+require(plyr)
+require(ggthemes)
+require(texreg)
+if (Sys.getenv("JAVA_HOME")!="")
+  Sys.setenv(JAVA_HOME="")
+options(java.parameters = "-Xmx4096m")
+require(XLConnect)
+
+```
+
+
+```{r, echo=F, message=F, warning=F, cache=T, results=F, comment = F, include = F, cache.rebuild = T}
+##### prix des energies ####
+prix_energie = fread("../_CGDD_Packaging_27.05.15/Tables_param/sauvegarde para/Parametres_tertiaire_Scenario_DGEC_2016/Prix_scenario_AME_BV.csv")
+
+
+prix_energie = melt(prix_energie,id.vars = "annee")
+
+prix_energie[variable == "prix_elec", energie := "Electricité"]
+prix_energie[variable == "prix_gaz", energie := "Gaz"]
+prix_energie[variable == "prix_fioul", energie := "Fioul"]
+prix_energie[variable == "prix_urbain", energie := "Urbain"]
+prix_energie[variable == "prix_autres", energie := "Autres"]
+prix_energie[variable == "CCE", energie := "CCE"]
+
+prix_energie =dcast.data.table(prix_energie, annee~energie)
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = T}
+source("analyse_param_utilisateurs.R",encoding = "ISO8859-1")
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = T}
+#### liste des fichiers à lire
+#wbfiles = paste0("table_resultat/publi_dimitri/",list.files(path = "table_resultat/publi_dimitri/"))
+#wbfiles = "table_resultat/publi_dimitri/Scénario AME new décret.xls"
+wbfiles =  "../_CGDD_Packaging_27.05.15/Result_Excel/resultats_sauvegarde/Sorties_tertiaire_AME_AMS_2016/table_resultat_AME_2016.xls"
+wbfiles[length(wbfiles) +1 ] =  
+  "../_CGDD_Packaging_27.05.15/Result_Excel/resultats_sauvegarde/Sorties_tertiaire_AME_AMS_2016/table_resultat_AMS_2016_décret.xls"
+wbfiles[length(wbfiles) +1 ] =  
+  "../_CGDD_Packaging_27.05.15/Result_Excel/resultats_sauvegarde/Sorties_tertiaire_AME_AMS_2016/table_resultat_AMS_Quinet.xls"
+wbfiles[length(wbfiles) +1 ] =  
+  "../_CGDD_Packaging_27.05.15/Result_Excel/resultats_sauvegarde/Sorties_tertiaire_AME_AMS_2016/table_resultat_AMS_CCEforte.xls"
+#wbfiles[length(wbfiles) +1 ] =  "../_CGDD_Packaging_27.05.15/Result_Excel/resultats_sauvegarde/Sorties_tertiaire_AME_AMS_2016/table_resultat_AME_Briand.xls"
+
+
+#### noms des scenarios ###
+wbname = c("AME","AMS1 décret", "AMS2 Quinet", "AMS3 CCE forte") 
+#           "AME Briand") 
+           
+          #"sans_mesures","ambitieux", "ambitieux 2", "ambitieux_DVENSbas_PMECSfixes")
+
+##wbname[length(wbname) +1] = "AME prix MA3"
+#wbname[length(wbname) +1] = "AME prix myope"
+#wbname[length(wbname) +1] = "AME prix MA3 valeur verte"
+#### fonction pour lire les fichiers ###
+#wbname[length(wbname) +1] = "AME maintenance 0"
+
+source("read_resultats_xls.R")
+
+results = lecture_results_modele_tertiaire(wbfiles,wbname =  wbname)
+
+parc = rbindlist(results$parc)
+Conso = rbindlist(results$Conso)
+etiquette = rbindlist(results$etiquette)
+GES = rbindlist(results$GES)
+COUTS = rbindlist(results$COUTS)
+COUTS_AUTRES = rbindlist(results$COUTS_AUTRES)
+
+#### fichierpour créer les graphiques ###
+
+source("graph_resultats_modele_tertiaire.R",encoding = "ISO8859-1")
+```
+
+
+\newpage
+
+
+# 1) Inputs 
+
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Prix des énergies (S0)'}
+datatmp = melt(prix_energie, id.vars = "annee")[variable != "CCE"]
+ggplot(datatmp) + geom_line(aes(annee,value, group = variable, color =variable)) + 
+  geom_point(data = datatmp[annee %in% c("2015","2020","2030","2035","2050")],
+             aes(annee,value, color =variable))+ theme(axis.text.x = element_text(size = 12))+
+  mytheme_facet_plot + geom_text(data = datatmp[annee %in% c("2015","2020","2030","2035","2050")], 
+                                 aes(annee,value, color =variable,label= as.character(round(value, digits = 2))),vjust = -1 ) + scale_x_discrete(breaks = c("2009", seq(2015,2050,5)))
+
+```` 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Evolution du parc'}
+
+ggplot(parc_melt) + 
+  geom_ribbon(aes(ymin = 0, annee, ymax = cumulsurface/10^9, group = periodeSimple, fill = periodeSimple)) + 
+  facet_wrap(~scenario, ncol = 1) +  mytheme_facet_plot + ylab("Millions de m²") + scale_x_discrete(breaks = c("2009", seq(2015,2050,5)))
+```` 
+
+
+\newpage
+
+# 2) Consommations en énergie finale totale
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Consommation nationale par scenario'}
+ggplot(Conso_nationale_tot) + geom_line(aes(annee,conso_tWhEF, group = scenario, color = scenario)) + 
+  geom_point(aes(annee,conso_tWhEF,color = scenario))+ theme(axis.text.x = element_text(size = 12))+
+  mytheme_facet_plot + geom_text(data = Conso_nationale_tot[annee %in% c("2009","2020","2030","2050")], aes(annee,conso_tWhEF, color = scenario,label= as.character(round(conso_tWhEF, digits = 0))),vjust = -1 ) + scale_x_discrete(breaks = c("2009", seq(2015,2050,5)))
+
+```` 
+
+
+\newpage
+
+# 3) Consommations par usage 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Consommation nationale de Chauffage'}
+comp_conso_nat_usage("Chauffage") 
+
+```` 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Consommation nationale d\'ECS'}
+comp_conso_nat_usage("ECS") 
+
+```` 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Consommation nationale pour la cuisson'}
+comp_conso_nat_usage("Cuisson") 
+
+```` 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Consommation nationale de climatisation'}
+comp_conso_nat_usage("Climatisation") 
+
+```` 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Consommation nationale pour la cuisson'}
+
+ggplot(Conso_nationale_usage[usage %in% c("Ventilation","Auxiliaires","Bureautique","Froid_alimentaire","Process","Autre")]) +
+  geom_line(aes(annee,conso_tWhEF, group = scenario, color = scenario)) + 
+  geom_point(data = Conso_nationale_usage[usage %in% c("Ventilation","Auxiliaires","Bureautique","Froid_alimentaire","Process","Autre") & 
+                                            annee %in%c("2015","2020","2030","2035","2050"),],
+                                          aes(annee,conso_tWhEF,color = scenario)) + 
+  geom_text(data = Conso_nationale_usage[usage %in% c("Ventilation","Auxiliaires","Bureautique","Froid_alimentaire","Process","Autre") & annee %in%
+                                           c("2015","2020","2030","2035","2050")], 
+            aes(annee, conso_tWhEF, color = scenario,label=
+                  as.character(round(conso_tWhEF, digits = 1))),vjust = -1 , size =8) +
+    scale_x_discrete(breaks = c("2009", seq(2015,2050,5))) +
+    facet_wrap(~usage) +   theme(axis.text.x= element_text(size = 12, hjust = 1)) +  
+    mytheme_facet_plot
+```` 
+
+
+\newpage
+
+```{r,echo=F, warning=F,include = F}
+conso_parusage = dcast.data.table(Conso_nationale_usage[annee %in% c("2010","2015","2020","2030","2035","2050"),], scenario + annee ~ usage)
+conso_parusage = conso_parusage[,list(Chauffage,
+                                      Climatisation,
+                                      ECS_Cuisson_Autres = sum(ECS,Cuisson,Autre),
+                                      Elec_spe = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire), 
+ Total_RT=sum(Chauffage,Climatisation,ECS,Auxiliaires,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","annee")]
+
+conso_parusage = melt(conso_parusage,id.vars = c("scenario","annee"),variable.name ="usage" )
+
+conso_parusage[, conso_mtep := value/11630*10^3]
+conso_parusage[, conso := value/11630*10^3]
+
+
+conso_parusage_tWh = dcast.data.table(conso_parusage, scenario + usage ~ annee, value.var = "value")
+conso_parusage_tWh = conso_parusage_tWh[order(usage),]
+
+conso_parusage_mtep = dcast.data.table(conso_parusage, scenario + usage ~ annee, value.var = "conso_mtep")
+conso_parusage_mtep  = conso_parusage_mtep[order(usage),]
+
+evolconso = conso_parusage_tWh 
+evolconso = evolconso[,list(scenario, usage,
+                Evol_2015 = get("2015")/get("2010")-1,
+                Evol_2020 = get("2020")/get("2010")-1,
+                Evol_2030 = get("2030")/get("2010")-1,
+                Evol_2035 = get("2035")/get("2010")-1,
+                Evol_2050 = get("2050")/get("2010")-1)]
+
+```` 
+
+```{r, echo=F, warning=F,}
+kable(conso_parusage_tWh, digits = 2, caption = "Bilan des consommations par usage en tWh EF")
+````
+
+```{r, echo=F, warning=F,}
+kable(conso_parusage_mtep, digits = 2, caption = "Bilan des consommations  par usage en Mtep")
+````
+
+```{r, echo=F, warning=F,}
+kable(evolconso, digits = 2, caption = "Baisse des consommations par rapport à 2010")
+````
+
+
+\newpage
+# 4) Consommations par énergie
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Consommation nationale d\'Electricité'}
+comp_conso_nat_energie("Electricité")
+
+```` 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Consommation nationale de Gaz'}
+comp_conso_nat_energie("Gaz")
+
+```` 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Consommation nationale de fioul'}
+comp_conso_nat_energie("Fioul")
+
+```` 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Consommation nationale de chauffage urbain'}
+comp_conso_nat_energie("Urbain")
+
+```` 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Consommation nationale pour les autres énergies'}
+comp_conso_nat_energie("Autres")
+
+```` 
+
+\newpage 
+
+# 5 ) performance énergétique des parcs existant et neuf
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Performance du parc existant avant 2009'}
+
+ggplot(part_etiquette[annee %in% c("2010","2020","2030","2050") & Type_parc == "E"]) + 
+  geom_bar(aes(scenario,y = surface/10^6, fill = etiquette), stat = "identity")+ 
+  facet_wrap(~annee, nrow = 1) + 
+  theme(axis.text.x = element_text(size = 12)) +
+  ylab("Millions de m²") +
+  mytheme_facet_plot 
+```` 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Performance du parc construit après 2009'}
+
+ggplot(part_etiquette[annee %in% c("2010","2020","2030","2050") & Type_parc == "N"]) + 
+  geom_bar(aes(scenario,y = surface/10^6, fill = etiquette), stat = "identity")+ 
+  facet_wrap(~annee, nrow = 1) + 
+  theme(axis.text.x = element_text(size = 12)) +
+  ylab("Millions de m²") +
+  mytheme_facet_plot 
+```` 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Performance du parc construit après 2015'}
+
+ggplot(part_etiquette2[annee %in% c("2010","2020","2030","2050") & periode_simple %in% c("05","06","07","08")]) + 
+  geom_bar(aes(scenario,y = surface/10^6, fill = etiquette), stat = "identity")+ 
+  facet_wrap(~annee, nrow = 1) + 
+  theme(axis.text.x = element_text(size = 12)) +
+  ylab("Millions de m²") +
+  mytheme_facet_plot 
+```` 
+
+\newpage
+# 6) Emissions de GES
+
+```{r,echo=F, warning=F,include = F}
+### ajouts des émissions elec 
+conso_elec = Conso_nationale_energie[energie =="Electricité"]
+conso_elec[,GES_elec := conso_tWhEF*10^9*180/10^12]
+conso_elec[,energie:=NULL]
+
+GES_nationale_tot2 = merge(GES_nationale_tot,conso_elec, by=c("annee","scenario"))
+GES_nationale_tot2[,GES_MtCO2eq := GES_MtCO2eq + GES_elec]
+
+```` 
+  
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Emissions de GES nationales par scenario'}
+
+ggplot(GES_nationale_tot2) + geom_line(aes(annee,GES_MtCO2eq, group = scenario, color = scenario)) + 
+  geom_point(aes(annee,GES_MtCO2eq,color = scenario))+ theme(axis.text.x = element_text(size = 12))+
+  mytheme_facet_plot + geom_text(data =GES_nationale_tot2[annee %in% c("2010","2015","2020","2030","2035","2050")], 
+                                 aes(annee,GES_MtCO2eq, color = scenario,label= as.character(round(GES_MtCO2eq, digits = 1))),vjust = -1 ) + scale_x_discrete(breaks = c("2009", seq(2015,2050,5)))
+
+```` 
+
+\newpage
+
+```{r,echo=F, warning=F,include = F}
+### ajouts des émissions elec par usage
+Conso_energie_usage = dcast.data.table(Conso, scenario + annee+ nom_energie ~usage,fun.aggregate = function(x){sum(x)/10^9}, value.var = "value")
+Conso_elec_usage = Conso_energie_usage[nom_energie =="Electricité"]
+Conso_elec_usage[,nom_energie:=NULL]
+Conso_elec_usage = melt(Conso_elec_usage,id.vars = c("scenario","annee"), variable.name = "usage", value.name = "conso_tWhEF")
+Conso_elec_usage[,GES_elec := conso_tWhEF*10^9*180/10^12]
+
+GES_nationale_usage2 = merge(GES_nationale_usage, Conso_elec_usage, by=c("scenario","annee","usage"))
+GES_nationale_usage2[,GES_MtCO2eq := GES_MtCO2eq + GES_elec]
+
+GES_nationale_usage = GES_nationale_usage2
+```` 
+
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Emissions de GES nationales dues au Chauffage'}
+comp_ges_nat_usage("Chauffage")
+
+````
+
+<!-- ```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Emissions de GES nationales dues à l\'ECS'} -->
+<!-- comp_ges_nat_usage("ECS") -->
+
+<!-- ```` -->
+
+<!-- ```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Emissions de GES nationales dues à la cuisson'} -->
+<!-- comp_ges_nat_usage("Cuisson") -->
+
+<!-- ```` -->
+
+<!-- ```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Emissions de GES nationales dues à la climatisation'} -->
+<!-- comp_ges_nat_usage("Climatisation") -->
+
+<!-- ```` -->
+
+<!-- ```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Emissions de GES nationales dues aux auxiliaires'} -->
+<!-- comp_ges_nat_usage("Auxiliaires") -->
+
+<!-- ```` -->
+
+<!-- ```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Emissions de GES nationales dues à la bureautique'} -->
+<!-- comp_ges_nat_usage("Bureautique") -->
+
+<!-- ```` -->
+
+<!-- ```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Emissions de GES nationales dues au froid'} -->
+
+<!-- comp_ges_nat_usage("Froid_alimentaire") -->
+
+<!-- ```` -->
+
+<!-- ```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Emissions de GES nationales dues aux process'} -->
+<!-- comp_ges_nat_usage("Process") -->
+
+<!-- ```` -->
+
+<!-- ```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Emissions de GES nationales dues aux autres usages'} -->
+<!-- comp_ges_nat_usage("Autre") -->
+
+<!-- ```` -->
+
+\newpage
+
+```{r,echo=F, warning=F,include = F}
+GES_parusage = dcast.data.table(GES_nationale_usage2[annee %in% c("2010","2015","2020","2030","2035","2050"),], scenario + annee ~ usage, value.var = "GES_MtCO2eq")
+GES_parusage = GES_parusage[,list(Chauffage,
+                                      Climatisation,
+                                      ECS_Cuisson_Autres = sum(ECS,Cuisson,Autre),
+                                      Elec_spe = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire), 
+ Total_RT=sum(Chauffage,Climatisation,ECS,Auxiliaires,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","annee")]
+
+GES_parusage = melt(GES_parusage,id.vars = c("scenario","annee"),variable.name ="usage" )
+
+
+
+GES_parusage = dcast.data.table(GES_parusage, scenario + usage ~ annee, value.var = "value")
+GES_parusage = GES_parusage[order(usage),]
+
+evolGES = GES_parusage 
+evolGES = evolGES[,list(scenario, usage,
+                Evol_2015 = get("2015")/get("2010")-1,
+                Evol_2020 = get("2020")/get("2010")-1,
+                Evol_2030 = get("2030")/get("2010")-1,
+                Evol_2035 = get("2035")/get("2010")-1,
+                Evol_2050 = get("2050")/get("2010")-1)]
+
+```` 
+
+```{r, echo=F, warning=F,}
+kable(GES_parusage, digits = 2, caption = "Bilan des émissions par usage en MtCO2eq")
+````
+
+
+```{r, echo=F, warning=F,}
+kable(evolGES, digits = 2, caption = "Baisse des émissions par rapport à 2010")
+````
+
+\newpage
+
+# 7) Chroniques d'investissements dans les systèmes de chauffage
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Investissement total dans les changements de systèmes de chauffage'}
+INV_SYST_CHAUD_TOT = INV_SYST_CHAUD[,list(INV = sum(value)), by=c("scenario","annee")]
+ggplot(INV_SYST_CHAUD_TOT) + geom_line(aes(annee, INV , group = scenario, color = scenario)) + 
+  geom_point(aes(annee, INV , color = scenario))+ theme(axis.text.x = element_text(angle = 45, size = 12, hjust = 1))+
+  ylab("Millions d'euros") + 
+  mytheme_facet_plot
+```` 
+
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Investissements par système de chauffage'}
+
+ggplot(INV_SYST_CHAUD) + geom_line(aes(annee, value, group = scenario, color = scenario)) + 
+  geom_point(aes(annee, value, color = scenario))+ theme(axis.text.x = element_text(angle = 45, size = 12, hjust = 1))+
+  facet_wrap(~SYSTEME_CHAUD) + ylab("Millions d'euros") + 
+  mytheme_facet_plot
+```` 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Investissement par système de chauffage, systèmes majoritaires'}
+
+ggplot(INV_SYST_CHAUD[COD_SYSTEME_CHAUD %in% enc2native(c("03","04","09","10","01"))]) + geom_line(aes(annee, value, group = scenario, color = scenario)) +
+  geom_point(aes(annee, value, color = scenario))+ theme(axis.text.x = element_text(angle = 45, size = 12, hjust = 1))+
+  facet_wrap(~SYSTEME_CHAUD) + ylab("Millions d'euros") +
+  mytheme_facet_plot
+````
+
+\newpage
+# 8) Chroniques d'investissements pour les gestes de rénovation
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Investissement total dans les gestes de rénovation'}
+INV_GESTE_TOT = INV_GESTE[,list(INV = sum(value)), by=c("scenario","annee")]
+ggplot(INV_GESTE_TOT) + geom_line(aes(annee, INV , group = scenario, color = scenario)) + 
+  geom_point(aes(annee, INV , color = scenario, shape= scenario))+ theme(axis.text.x = element_text(angle = 45, size = 12, hjust = 1))+
+  ylab("Millions d'euros") + 
+  mytheme_facet_plot
+```` 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Investissement par geste de rénovation'}
+
+ggplot(INV_GESTE) + geom_line(aes(annee, value, group = scenario, color = scenario)) + 
+  geom_point(aes(annee, value, color = scenario))+ theme(axis.text.x = element_text(angle = 45, size = 12, hjust = 1))+
+  facet_wrap(~variable) + ylab("Millions d'euros") + 
+  mytheme_facet_plot
+```` 
+
+\newpage
+# 9) Chroniques d'investissements pour les autres sytèmes
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Investissement pour les autres sytèmes'}
+
+ggplot(INV_AUTRES_renov) + geom_line(aes(annee, value, group = scenario, color = scenario)) + 
+  geom_point(aes(annee, value, color = scenario))+ theme(axis.text.x = element_text(angle = 45, size = 12, hjust = 1))+
+  facet_wrap(~variable) + ylab("Millions d'euros") + 
+  mytheme_facet_plot
+```` 
+\newpage
+
+# 10) Politiques 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Recettes de la CCE par scenario'}
+
+ggplot(GES_nationale_tot) + geom_line(aes(annee,Recettes_CCE, group = scenario, color = scenario)) + 
+  geom_point(aes(annee,Recettes_CCE,color = scenario))+ theme(axis.text.x = element_text(size = 12))+
+  mytheme_facet_plot + geom_text(data =GES_nationale_tot[annee %in% c("2009","2020","2030","2050")], aes(annee,Recettes_CCE, color = scenario,label= as.character(round(Recettes_CCE, digits = 1))),vjust = -1 ) + scale_x_discrete(breaks = c("2009", seq(2015,2050,5)))
+
+```` 
+\newpage
+
+# 11) Bilan économiques des scénarios 
+
+```{r,  echo=F, warning=F,include = F}
+Conso_nationale_usage
+GES_nationale_usage
+INV_AUTRES_renov
+INV_SYST_CHAUD
+INV_GESTE
+
+### calc dépenses d'énergie  
+depenses_energie = Conso_nationale_energie
+prix_energie_melt = melt(prix_energie,id.vars = "annee",value.name = "prix", variable.name = "energie")
+prix_energie_melt[,annee:=as.factor(as.character(annee))]
+
+depenses_energie = merge(depenses_energie, prix_energie_melt , by= c("annee","energie"), all.x = T)
+
+depenses_energie[,CENERGIE:=conso_tWhEF*prix]
+depenses_energie = depenses_energie[,list(CENERGIE = sum(CENERGIE)), by=c("annee","scenario") ]
+
+#### ajoute Emissions et investissements ###
+INV_AUTRES_TOT = INV_AUTRES_renov[,list(INV = sum(value)), by=c("scenario","annee")]
+
+bilan_socio_eco = merge(depenses_energie,GES_nationale_tot2[,list(annee,scenario,GES_MtCO2eq, Recettes_CCE)], by=c("annee","scenario"), 
+                        all.x = T)
+bilan_socio_eco = merge(bilan_socio_eco, INV_GESTE_TOT[,list(annee = as.factor(annee),scenario,INV_GESTE = INV/10^3)] , by=c("annee","scenario"))
+bilan_socio_eco = merge(bilan_socio_eco, INV_SYST_CHAUD_TOT[,list(annee = as.factor(annee),scenario,INV_SYST = INV/10^3)] , by=c("annee","scenario"))
+bilan_socio_eco = merge(bilan_socio_eco, INV_AUTRES_TOT[,list(annee = as.factor(annee),scenario,INV_AUTRE = INV/10^3)] , by=c("annee","scenario"))
+
+bilan_socio_eco[, cout_socio_eco := sum(CENERGIE,INV_GESTE,INV_SYST,INV_AUTRE),by=c("annee","scenario")]
+bilan_socio_eco[, cout_usager := sum(CENERGIE,INV_GESTE,INV_SYST,INV_AUTRE, Recettes_CCE),by=c("annee","scenario")]
+bilan_socio_eco[, cout_socio_eco_actu :=  cout_socio_eco*(1/(1+as.numeric(as.character(annee))-2010)^0.04),by=c("annee","scenario")]
+bilan_socio_eco[, cout_usager_actu := cout_usager*(1/(1+as.numeric(as.character(annee))-2010)^0.04),by=c("annee","scenario")]
+bilan_socio_eco[, Emactu := GES_MtCO2eq*(1/(1+as.numeric(as.character(annee))-2010)^0.04),by=c("annee","scenario")]
+
+bilan_socio_eco_cumul = melt(bilan_socio_eco,id.vars = c("scenario","annee"))
+
+bilan_socio_eco_cumul = dcast.data.table(bilan_socio_eco_cumul,scenario ~ variable, value.var = "value",fun.aggregate = function(x){sum(x)})
+
+
+setnames(bilan_socio_eco_cumul ,c("scenario","CEnergie","EmCum","CCE","Gestes","Chauff","AuRenov","cout_socio","cout_usager","cout_socioactu","cout_usageractu", "Emcumactu"))
+
+
+
+bilan_socio_eco_cumul[,DiffEmS0 := Emcumactu-bilan_socio_eco_cumul[scenario == "AME", Emcumactu]]
+bilan_socio_eco_cumul[,DiffCoutsocioS0 := cout_socioactu-bilan_socio_eco_cumul[scenario == "AME", cout_socioactu]]
+bilan_socio_eco_cumul[,DiffCoutusagerS0 := cout_usageractu-bilan_socio_eco_cumul[scenario == "AME", cout_usageractu]]
+
+bilan_socio_eco_cumul[,Coutsocio_tonne := (DiffCoutsocioS0*10^3)/-DiffEmS0]
+bilan_socio_eco_cumul[,Coutusager_tonne := (DiffCoutusagerS0*10^3)/-DiffEmS0]
+
+```` 
+
+
+```{r,  echo=F, warning=F}
+kable(bilan_socio_eco_cumul[,c("scenario","Emcumactu","Gestes","Chauff","AuRenov","CEnergie","CCE","cout_socioactu", "cout_usageractu"), with=F], digits = 0, caption = "Coûts et émissions cumulées par scenario pour le parc existant (Mds euros)")
+```` 
+
+```{r,  echo=F, warning=F}
+kable(bilan_socio_eco_cumul[,c("scenario","DiffEmS0","DiffCoutsocioS0","Coutsocio_tonne","DiffCoutusagerS0", "Coutusager_tonne"), with=F], digits = 0, caption = "Emissions évitées (MtCO2), écarts de coûts par rapport au scénario S0 (Mds euros) et coût de la tonne évitée (euro par tonne) par scénario pour le parc existant")
+```` 
+
+\newpage
+# Fiche resultats AME AMS tertiaire 
+
+* Simulation avec les mesures prises dans le scénario AME 2016 de la DGEC
+* Comparaison avec des scénarios plus volontaristes
+
+
+```{r, echo=F, warning=F,}
+kable(conso_parusage_mtep[usage %in% c("Chauffage","Total")], digits = 2, caption = "Bilan des consommations  par usage en Mtep")
+````
+
+```{r, echo=F, warning=F,}
+kable(evolconso[usage %in% c("Chauffage","Total")], digits = 2, caption = "Baisse des consommations par rapport à 2010")
+````
+
+```{r, echo=F, warning=F,}
+kable(GES_parusage[usage %in% c("Chauffage","Total")], digits = 2, caption = "Bilan des émissions par usage en MtCO2eq")
+````
+
+```{r, echo=F, warning=F,}
+kable(evolGES[usage %in% c("Chauffage","Total")], digits = 2, caption = "Baisse des émissions par rapport à 2010")
+````
+
+```{r,  echo=F, warning=F,include = F}
+datatmp = Conso_nationale_energie
+datatmp[energie == "Electricité",GESMtCO2 := conso_tWhEF*180/10^3]
+datatmp[energie == "Gaz",GESMtCO2 := conso_tWhEF*205/10^3]
+datatmp[energie == "Fioul",GESMtCO2 := conso_tWhEF*271/10^3]
+datatmp[energie == "Autres",GESMtCO2 := conso_tWhEF*115/10^3]
+datatmp[energie == "Urbain",GESMtCO2 := conso_tWhEF*256/10^3]
+````
+
+```{r, fig.width=20, fig.height=10, echo=F, warning=F,fig.cap='Emissions de GES par énergie'}
+  ggplot(datatmp[scenario %in% c("AME","AMS3 CCE forte")]) + 
+           geom_line(aes(annee,GESMtCO2 , group = scenario, color = scenario)) + 
+           facet_wrap(~energie, nrow = 1) + 
+   geom_point(data = datatmp[scenario == "AME"][annee %in% c("2015","2020","2030","2035","2050")], 
+              aes(annee, GESMtCO2 , color = scenario) ) +
+  geom_text(data = datatmp[scenario == "AME"][annee %in% c("2015","2020","2030","2035","2050")], 
+              aes(annee, GESMtCO2 , color = scenario,label= as.character(round(GESMtCO2 , digits = 1))),vjust = -1, size = 8, hjust = 1 ) +
+  theme(axis.text.x = element_text(size = 12, hjust = 1)) + 
+  scale_x_discrete(breaks = c("2009","2015","2020","2030","2035","2050")) + scale_y_continuous(limits = c(0,25))+
+  mytheme_facet_plot
+````
+
+```{r,  echo=F, warning=F,include = F}
+datatmp = dcast.data.table(GES_nationale_usage2, scenario + annee ~ usage, value.var = "GES_MtCO2eq")
+
+datatmp  = datatmp [,list(Chauffage,
+                                      Climatisation,
+                                      ECS_Cuisson_Autres = sum(ECS,Cuisson,Autre),
+                                      Elec_spe = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire), 
+ Total_RT=sum(Chauffage,Climatisation,ECS,Auxiliaires,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","annee")]
+
+````
+
+```{r, fig.width=20, fig.height=10, echo=F, warning=F,fig.cap='Emissions de GES par usage'}
+datatmp = melt(datatmp, 
+               id.vars = c("scenario","annee"), 
+               variable.name = "usage",value.name = "GESMtCO2")
+datatmp = datatmp[!(usage %in% c("Total","Total_RT"))]
+
+  ggplot(datatmp[scenario %in% c("AME","AMS3 CCE forte")]) + 
+           geom_line(aes(annee,GESMtCO2, group = scenario, color = scenario)) + 
+           facet_wrap(~usage, nrow = 1) + 
+    geom_point(data = datatmp[scenario == "AME"][annee %in% c("2015","2020","2030","2035","2050")], 
+              aes(annee, GESMtCO2 , color = scenario) ) +
+  geom_text(data = datatmp[scenario == "AME"][annee %in% c("2015","2020","2030","2035","2050")], 
+              aes(annee, GESMtCO2, color = scenario,label= as.character(round(GESMtCO2, digits = 1))),vjust = -1, size = 8, hjust = 1 ) +
+  theme(axis.text.x = element_text(size = 12, hjust = 1)) + 
+  scale_x_discrete(breaks = c("2009","2015","2020","2030","2035","2050")) + scale_y_continuous(limits = c(0,30))+
+  mytheme_facet_plot
+  
+````
+
+

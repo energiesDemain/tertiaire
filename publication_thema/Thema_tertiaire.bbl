@@ -1,0 +1,43 @@
+\begin{thebibliography}{}
+\expandafter\ifx\csname fonteauteurs\endcsname\relax
+\def\fonteauteurs{\scshape}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{{\tt #1}}%
+    \message{You should include the url package}\fi
+
+\bibitem[COD, 2015]{CODA_2015}
+ (2015).
+\newblock Les march{\'e}s de la r{\'e}novation {\'e}nerg{\'e}tique dans le
+  secteur tertiaire.
+\newblock Rapport technique, CODA Strategies.
+
+\bibitem[COD, 2016]{CODA_2016}
+ (2016).
+\newblock Le march{\'e} des {\'e}quipements et syst{\`e}mes thermiques.
+  r{\'e}sidentiel et tertiaire.
+\newblock Rapport technique, CODA Strategies.
+
+\bibitem[Allibe, 2012]{Allibe2012}
+\bgroup\fonteauteurs\bgroup Allibe\egroup\egroup{}, B. (2012).
+\newblock {\em Mod{\'e}lisation des consommations d\'{\'e}nergie du secteur
+  r{\'e}sidentiel fran\c{c}ais {\`a} long terme - Am{\'e}lioration du
+  r{\'e}alisme comportemental et sc{\'e}narios volontaristes}.
+\newblock Th\`ese de doctorat, Ecole des Hautes Etudes en Sciences Sociales
+  (EHESS).
+
+\bibitem[Giraudet \emph{et~al.}, 2018]{Giraudet_etal2018}
+\bgroup\fonteauteurs\bgroup Giraudet\egroup\egroup{}, L.-G.,
+  \bgroup\fonteauteurs\bgroup Bourgeois\egroup\egroup{}, C.,
+  \bgroup\fonteauteurs\bgroup Quirion\egroup\egroup{}, P. et
+  \bgroup\fonteauteurs\bgroup Glotin\egroup\egroup{}, D. (2018).
+\newblock Evaluation prospective des politiques de r{\'e}duction de la demande
+  d\'{\'e}nergie pour le chauffage r{\'e}sidentiel.
+\newblock Rapport technique, CIRED UMR 8568.
+
+\bibitem[Quinet \emph{et~al.}, 2013]{Quinet2013}
+\bgroup\fonteauteurs\bgroup Quinet\egroup\egroup{}, E. \emph{et~al.} (2013).
+\newblock L\'{\'e}valuation socio-{\'e}conomique des investissements publics.
+\newblock Rapport technique, Commissariat G{\'e}n{\'e}ral {\`a} la
+  Strat{\'e}gie et {\`a} la Prospective.
+
+\end{thebibliography}

@@ -1,0 +1,1713 @@
+% A mettre pour faire fonctionner luatex dans les versions récentes...
+\RequirePackage{luatex85}
+\def\pgfsysdriver{pgfsys-pdftex.def}
+
+\documentclass[10.5pt,a4paper]{article}
+\usepackage{luatextra}
+
+%pour intégrer des pages pdf
+\usepackage{pdfpages}
+
+%pénalités veuves et orphelines
+\widowpenalty10000
+\clubpenalty10000
+
+% packages persos
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage[pdfborder={0 0 0}]{hyperref}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{lipsum}
+\usepackage{xunicode}
+\usepackage{anyfontsize}
+\usepackage{microtype}
+\usepackage{anyfontsize}
+% rotation tableau 
+\usepackage{pdflscape}
+% tableau plusieurs pages
+\usepackage{longtable}
+\def\euro{\mbox{\raisebox{.25ex}{{\it =}}\hspace{-.5em}{\sf C}}}
+\usepackage{natbib}
+\usepackage{tabularx}
+
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+%Declare le nom du dossier où sont stockées les images à insérer
+\graphicspath{{figures/}{Thema_PictosJPG/}}
+
+%%% polices
+\usepackage{fontspec}
+\defaultfontfeatures{Mapping=tex-text}
+% Helvética mais il faut l'installer /Arial en substitut
+%\setmainfont[]{Arial}
+\setmainfont{HelveticaLTStd-Roman.otf}[BoldFont       = HelveticaLTStd-Bold,  ItalicFont     = HelveticaLTStd-LightObl,BoldItalicFont =HelveticaLTStd-BoldObl]
+
+%Brandon grotesque /calibri en substitut
+\newfontfamily\calibri[Ligatures = TeX, Extension = .ttf,   BoldFont       = calibrib,   ItalicFont     = calibrii,   BoldItalicFont = calibriz]{calibri}
+
+\newfontfamily\helvetlight[Ligatures = TeX, Extension = .otf, ItalicFont     = HelveticaLTStd-LightObl]{HelveticaLTStd-Light}
+
+% couleurs
+\usepackage{color}
+\usepackage{pgf,tikz} 
+\usepackage{eso-pic}
+\definecolor{orange_housing}{rgb}{0.94,0.51,0}
+\definecolor{vert_DD}{rgb}{0.47,0.70,0.12}
+\definecolor{vert_n}{RGB}{119,184,42}
+\definecolor{light_vert_n}{RGB}{174,204,0}
+\definecolor{orange_analyse}{RGB}{240,130,0}
+\definecolor{rouge_defis}{RGB}{241,55,43}
+\definecolor{violet_bilan}{RGB}{83,66,152}
+\definecolor{light_orange}{RGB}{255,229,197}
+\definecolor{contour}{RGB}{255,255,0}
+
+% encadré vert dans le texte (zoom sur)
+\usepackage[framemethod=tikz,]{mdframed}
+\newmdenv[linecolor=vert_n, fontcolor = vert_n,
+innertopmargin=0.4cm, innerbottommargin=0.4cm, 
+innerleftmargin=0.4cm,innerrightmargin=0.4cm,
+linewidth =10pt, skipabove=8mm,skipbelow=8.5mm]{encadre}
+
+\newcommand\cadrevert[3]{
+\begin{encadre}
+
+\color{vert_n} \fontsize{14}{13}\selectfont Zoom sur : \color{black} \fontsize{14}{13}\selectfont #1
+\vspace{4mm}
+
+
+\color{vert_n} \fontsize{9}{10}\selectfont #2
+
+{\setlength{\parindent}{5mm}%
+\color{vert_n} \fontsize{9}{10}\selectfont #3
+}
+\end{encadre}
+}
+
+% encadré et page de partie
+
+\newmdenv[ 
+tikzsetting={draw = white},
+%settings={\tikzset{every picture/.style={opacity=0.6}}},
+linecolor=white, 
+userdefinedwidth = 16cm,
+backgroundcolor = none,
+innertopmargin=0mm, innerbottommargin=0mm, 
+innerleftmargin=15mm,innerrightmargin=48.5mm,
+linewidth = 10pt, skipabove=0mm,skipbelow=0mm]{encadre_partie}
+
+% Commande pour les pages intercalaires de partie
+\newcommand\cadreblanc[3]{
+\noindent
+\begin{tikzpicture}[overlay, remember picture]
+\shade[top color=vert_n,bottom color=light_vert_n] 
+(current page.south west) rectangle (current page.north east);
+%\draw [help lines] (0,0) grid (20,-29);
+\node[minimum width=4.50cm, minimum height = 4.50cm, draw=white, line width = 10pt] at (16.08,-24.48) {};
+\node[] at (16.08,-24.58) {\calibri \color{white} \bfseries \fontsize{96}{96}\selectfont >};
+\node[minimum width=15.65cm, minimum height = 15.65cm, draw=white, line width = 10pt] at (10.5,-10.2) {
+\begin{minipage}[t]{1.15cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{9.6cm}
+\vspace{12mm}
+\color{white} \fontsize{16}{7}\selectfont \textls[-5]{#1
+
+\rule{2cm}{5pt}
+} 
+\vspace{4mm}
+
+\color{white} \sloppy \raggedright \fontsize{35}{35}\selectfont \bfseries \textls[-10]{#2} 
+\vspace{20.5mm}
+
+\color{white} \fontsize{11}{12}\selectfont \textls[-10]{#3}
+\vspace{14mm}
+\end{minipage}\hfill
+\begin{minipage}[t]{4.50cm}
+\hfill
+\end{minipage}\hfill
+};
+\end{tikzpicture}
+}
+
+% Commande pour la page titre
+
+
+% Commande pour la page titre
+
+\newcommand\pagetitre[4]{
+\noindent
+\begin{tikzpicture}[overlay, remember picture]
+\node[minimum width=21cm, minimum height = 21cm] at (10.5,-10.2) {
+\includegraphics[trim = {1mm 1mm 1mm 1mm},width=21cm, height = 21cm]{fond_feuille}
+};
+%\shade[top color=vert_n,bottom color=light_vert_n] 
+%(current page.south west) rectangle (current page.north east);
+%\draw [help lines] (0,0) grid (20,-29);
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (4.87,-4.57) {\calibri\color{white}\fontsize{96pt}{12pt}\selectfont\bfseries T};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (10.47,-4.57) {\calibri\color{white}\fontsize{96pt}{12pt}\selectfont\bfseries H};
+% choix du pictogramme
+\node[minimum width=4.5cm, minimum height = 4.5cm] at (16.07,-4.57) {
+\includegraphics[width=4.85cm, height = 4.85cm]{A6_Picto_Economie}
+};
+% choix entre analyse défi et balises
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, fill = orange_analyse, line width = 10pt] at (4.87,-10.17) {
+};
+\node[] at (4.87,-9.92) {
+\color{white}\fontsize{24pt}{5pt}\selectfont Analyse
+};
+\node[] at (4.82,-10.52) {\color{white} \rule{3.1cm}{5pt}
+};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (10.47,-10.17) {};
+\node[] at (10.47,-9.87) {\calibri\color{white}\fontsize{96pt}{12pt}\selectfont \bfseries \'E};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (16.07,-10.17) {};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (4.87,-15.77) {};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (10.47,-15.77) {\calibri\color{white}\fontsize{96pt}{12pt}\selectfont\bfseries M};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (16.07,-15.77) {\calibri\color{white}\fontsize{96pt}{12pt}\selectfont\bfseries A};
+
+% titre et sous titre et mois année à remplir
+\node[minimum width=21cm, minimum height = 9cm, fill = white] at (10.5,-25.145) {
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{12.15cm}
+\raggedright
+\vspace{7.5mm}
+\fontsize{30pt}{30pt}\selectfont \mdseries \titreetude\\
+\helvetlight \fontsize{30pt}{30pt}\selectfont \soustitreetude \\
+\color{white} \fontsize{30pt}{30pt}\selectfont \mdseries \soustitreetude \\
+%\color{white} \fontsize{30pt}{30pt}\selectfont \mdseries \soustitreetude \\
+\vspace{6mm}
+\color{vert_n} \fontsize{10pt}{10pt}\selectfont  \bfseries \MakeUppercase{\mois~\annee} \\
+\end{minipage}\hfill
+\begin{minipage}[t]{6.45cm}
+\hfill
+\end{minipage}\hfill
+};
+
+\node[] at (10.5,-21.5) {
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{16.15cm}
+\hfill
+%{\calibri \fontsize{24pt}{12pt}\selectfont \bfseries \textls[-25]{commissariat général au développement durable}} \\
+%\vspace{0.1cm}
+%\hrule
+\end{minipage}\hfill
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+};
+
+\draw[color = black, line width = 1pt] (0,-20.65) -- (21,-20.65);
+\draw[color = black, line width = 0.5pt] (0,-22) -- (21,-22);
+\node[minimum width=2.95cm, minimum height = 3.8cm] at (17.10,-26) {
+\includegraphics[width=2.95cm, height = 3.8cm]{Bloc-marque_MEEM_RVB_HD}
+};
+\end{tikzpicture}\clearpage
+}
+
+% sommaire
+
+\newcommand\sommaire[2]{
+\noindent
+\begin{tikzpicture}[overlay, remember picture]
+%\shade[top color=vert_n,bottom color=light_vert_n] 
+%(current page.south west) rectangle (current page.north east);
+\node[minimum width=21cm, minimum height = 21cm] at (10.5,-10.2) {
+\includegraphics[trim = {1mm 1mm 1mm 1mm},width=21cm, height = 21cm]{fond_feuille}
+};
+\node[minimum width=15.65cm, minimum height = 11.15cm, draw=vert_n,fill = white, line width = 10pt] at (10.5,-12.45) {
+\begin{minipage}[t]{0.62cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{11.70cm}
+\begin{tabularx}{11cm}{clX}
+\fontsize{12pt}{14pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker1} &\color{black} - & \fontsize{12pt}{12pt}\selectfont \bfseries \nameref{sec:marker1} \\
+&&\\
+\fontsize{12pt}{6pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker2} & \color{black} - & \fontsize{12pt}{12pt}\selectfont \bfseries \nameref{sec:marker2} \\
+&&\fontsize{8pt}{9pt}\selectfont Les prix des terrains à bâtir sont très variables d’une localisation à l’autre et mais leur distribution dans l’espace est fortement structurée.\\
+&&\\
+\fontsize{12pt}{12pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker3} & \color{black} - & \fontsize{12pt}{12pt}\selectfont \bfseries  \nameref{sec:marker3} \\
+& & \fontsize{8pt}{9pt}\selectfont Principalement par la taille de l’aire
+urbaine, son dynamisme démographique, son
+attractivité tourisitique, et sa connectivité du pôle aux
+autres marchés de l’emploi \\
+&&\\
+\fontsize{12pt}{6pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker4} & \color{black} - & \fontsize{12pt}{12pt}\selectfont \bfseries \nameref{sec:marker4}\\
+&&\fontsize{8pt}{9pt}\selectfont L'effet de l’accessibilité à l’emploi sur les prix
+est plus marqué dans l’espace périurbain. L’accès aux services et équipements
+est plus valorisé dans l’espace à dominante rurale.\\
+&&\\
+\fontsize{12pt}{6pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker5} &  \color{black} - & \fontsize{12pt}{12pt}\selectfont \bfseries \nameref{sec:marker5}\\
+&&\fontsize{8pt}{9pt}\selectfont La proximité des aires urbaines et l’accessibilité à l’emploi ont un effet significatif sur le prix terrains à bâtir et des terrains agricoles dans les communes rurales.\\
+&&\\
+\fontsize{12pt}{6pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker6} & \color{black} - & \fontsize{12pt}{12pt}\selectfont \bfseries  \nameref{sec:marker6}\\
+%&&\\
+%\fontsize{13pt}{13pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker7} & \normalfont \color{black} - & \nameref{sec:marker7}\\
+%&&\\
+%\fontsize{13pt}{13pt}\selectfont \bfseries \color{vert_n} \pageref{sec:marker8} & \normalfont \color{black} - & \nameref{sec:marker8}\\
+\end{tabularx}
+%\fontsize{7pt}{7pt}\selectfont
+%\tableofcontents
+\end{minipage}\hfill
+\begin{minipage}[t]{3cm}
+\hfill
+\end{minipage}\hfill
+};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=vert_n,fill = white, line width = 10pt] at (4.925,-4.625) {};
+\node[] at (4.92,-5.55) {\centering \fontsize{16pt}{16pt} \selectfont sommaire};
+\draw[line width = 5pt, color = black] (3.72,-6.0) -- (6.22,-6.0);
+\node[minimum width=11.15cm, minimum height = 4.5cm, draw=vert_n,fill = white, line width = 10pt] at (12.75,-4.625) {
+\begin{minipage}[t]{0.2cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{10.6cm}
+\vspace{3mm}
+\raggedright
+\fontsize{20pt}{20pt}\selectfont \mdseries \titreetude \\
+\helvetlight \fontsize{20pt}{20pt}\selectfont \soustitreetude \\
+\helvetlight \color{white} \fontsize{20pt}{20pt}\selectfont \soustitreetude \\
+\helvetlight \color{white} \fontsize{20pt}{20pt}\selectfont \soustitreetude \\
+\end{minipage}\hfill
+};
+\node[minimum width=21cm, minimum height = 6.2cm, fill = white] at (10.5,-23.8) {
+\begin{minipage}[t]{2.5cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{13cm}
+\raggedright
+\vspace{6mm}
+{\helvetlight \fontsize{12pt}{12pt}\selectfont \textls[-10]{Document édité par :}} \\
+\fontsize{12pt}{12pt}\selectfont \mdseries \textls[-10]{Le service de l'économie, de l'évaluation et} \\
+\fontsize{12pt}{12pt}\selectfont \mdseries \textls[-10]{de l'intégration du développement durable (SEEIDD)} \\
+%\fontsize{12pt}{12pt}\selectfont \bfseries \textls[-10]{} \\
+%\fontsize{12pt}{12pt}\selectfont \bfseries \textls[-10]{} \\
+%\fontsize{12pt}{12pt}\selectfont \bfseries \textls[-10]{} \\
+\vspace{10mm}
+\fontsize{8pt}{9pt}\selectfont \bfseries Remerciements. \fontsize{8pt}{9pt}\selectfont \normalfont  L'auteur tient à remercier Benjamin Vignolles, Bastien Virely, Nicolas Wagner et Amélie Mauroux, en poste au CGDD au moment de la réalisation de cette étude, pour les multiples discussions sur le foncier et les données utilisées dans cette étude qui ont permis de l'améliorer grandement. \\
+%\fontsize{8pt}{9pt}\selectfont \normalfont  Remerciements \\
+\vspace{15.5mm}
+\end{minipage}\hfill
+\begin{minipage}[t]{5.5cm}
+\hfill
+\end{minipage}\hfill
+};
+\node[minimum width=21cm, minimum height = 2.5cm, fill = white] at (10.5,-28.1) {
+};
+\node[] at (10.5,-27.35) {
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill
+\begin{minipage}[t]{16cm}
+\raggedright
+\textcolor{vert_n}{\rule{7pt}{7pt}} \fontsize{7}{5mm} \selectfont \thepage~ -
+\textbf{\titreetude} : \soustitreetude
+\end{minipage}\hfill
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill
+};
+\draw[color = black, line width = 0.5pt] (2.5,-26.9) -- (18.5,-26.9);
+\end{tikzpicture}\clearpage 
+}
+
+
+% Commande pour la page contributeurs
+
+\newcommand\contributeurs[3]{
+\noindent
+\begin{tikzpicture}[overlay, remember picture]
+%\shade[top color=vert_n,bottom color=light_vert_n] 
+%(current page.south west) rectangle (current page.north east);
+\node[] at (4.12,-9.8) {\raggedright \fontsize{16pt}{7pt}\selectfont contributeurs};
+\draw[line width = 5pt, color = black] (2.51,-10.21) -- (5.71,-10.21);
+
+%contributeur 1
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=vert_n,fill = white, line width = 10pt] at (10.5,-12.02) {
+\begin{minipage}[t]{0.2cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{3.6cm}
+%\vspace{2mm}
+\raggedleft {\helvetlight \fontsize{42pt}{8pt}\selectfont BV}\\
+\vspace{1.2cm}
+\raggedright \normalfont \fontsize{11pt}{11pt}\selectfont Bruno \bfseries Vermont \\
+\raggedright \fontsize{7pt}{8pt}\selectfont \bfseries Chargé d'études économiques \\
+\vspace{2mm}
+\raggedright \normalfont \fontsize{5pt}{6pt}\selectfont bruno.vermont@developpement-durable.gouv.fr \\
+\end{minipage}
+\begin{minipage}[t]{0.3cm}
+\hfill
+\end{minipage}\hfill
+};
+\node[minimum width=4.5cm, minimum height = 3.25cm] at (15,-13.64) {
+\begin{minipage}[t]{0.4cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{3.6cm}
+%\vspace{2mm}
+\raggedright \fontsize{8pt}{9pt}\selectfont Chargé d'études économiques dans les domaines du logement et du secteur immobilier 
+\end{minipage}
+\begin{minipage}[t]{0.3cm}
+\hfill
+\end{minipage}\hfill
+};
+
+%%contributeur 2
+%\node[minimum width=4.5cm, minimum height = 4.5cm, draw=vert_n,fill = white, line width = 10pt] at (10.5,-17.47) {
+%\begin{minipage}[t]{0.2cm}
+%\hfill
+%\end{minipage}\hfill
+%\begin{minipage}[t]{3.6cm}
+%%\vspace{2mm}
+%\raggedleft {\helvetlight \fontsize{42pt}{8pt}\selectfont BV}\\
+%\vspace{1.3cm}
+%\raggedright \fontsize{11pt}{11pt}\selectfont Bastien \bfseries Virely \\
+%\raggedright \fontsize{7pt}{8pt}\selectfont \bfseries Chargé d'études économiques \\
+%\vspace{2mm}
+%\raggedright \normalfont \fontsize{5pt}{6pt}\selectfont bastien.virely@developpement-durable.gouv.fr \\
+%\end{minipage}
+%\begin{minipage}[t]{0.3cm}
+%\hfill
+%\end{minipage}\hfill
+%};
+%\node[minimum width=4.5cm, minimum height = 3.25cm] at (15,-18.09) {
+%\begin{minipage}[t]{0.4cm}
+%\hfill
+%\end{minipage}\hfill
+%\begin{minipage}[t]{3.6cm}
+%%\vspace{2mm}
+%\raggedright \fontsize{8pt}{9pt}\selectfont \bfseries Tem nam et rerro expla intem  ne audi utate \fontsize{8pt}{9pt}\selectfont \normalfont ipsunt volest eum conectaturem dolumquasi odit ut mil iurehendi aut volorro ruptaeperum event aut accum que si ipitasperia dolorem porit, omnimeTem ipsunt volestibus am, qui di conecus cientiscit laborpor molorpo rerciatem ut
+%\end{minipage}
+%\begin{minipage}[t]{0.3cm}
+%\hfill
+%\end{minipage}\hfill
+%};
+%
+%%contributeur 3
+%\node[minimum width=4.5cm, minimum height = 4.5cm, draw=vert_n,fill = white, line width = 10pt] at (10.5,-22.92) {
+%\begin{minipage}[t]{0.2cm}
+%\hfill
+%\end{minipage}\hfill
+%\begin{minipage}[t]{3.6cm}
+%%\vspace{2mm}
+%\raggedleft {\helvetlight \fontsize{42pt}{8pt}\selectfont MA}\\
+%\vspace{1.3cm}
+%\raggedright \fontsize{11pt}{11pt}\selectfont Mobilité \bfseries Aména \\
+%\raggedright \fontsize{7pt}{8pt}\selectfont \bfseries Bureau \\
+%\vspace{2mm}
+%\raggedright \normalfont \fontsize{5pt}{6pt}\selectfont ma@developpement-durable.gouv.fr \\
+%\end{minipage}
+%\begin{minipage}[t]{0.3cm}
+%\hfill
+%\end{minipage}\hfill
+%};
+%\node[minimum width=4.5cm, minimum height = 3.25cm] at (15,-23.54) {
+%\begin{minipage}[t]{0.4cm}
+%\hfill
+%\end{minipage}\hfill
+%\begin{minipage}[t]{3.6cm}
+%%\vspace{2mm}
+%\raggedright \fontsize{8pt}{9pt}\selectfont \bfseries Tem nam et rerro expla intem  ne audi utate \fontsize{8pt}{9pt}\selectfont \normalfont ipsunt volest eum conectaturem dolumquasi odit ut mil iurehendi aut volorro ruptaeperum event aut accum que si ipitasperia dolorem porit, omnimeTem ipsunt volestibus am, qui di conecus cientiscit laborpor molorpo rerciatem ut
+%\end{minipage}
+%\begin{minipage}[t]{0.3cm}
+%\hfill
+%\end{minipage}\hfill
+%};
+
+%pied de page
+\node[] at (10.5,-27.35) {
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill
+\begin{minipage}[t]{16cm}
+\raggedleft
+\fontsize{7}{5mm} \selectfont \textbf{\titreetude} : \soustitreetude - \thepage~  \textcolor{vert_n}{\rule{7pt}{7pt}} 
+\end{minipage}\hfill
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill};
+\draw[color = black, line width = 0.5pt] (2.5,-26.9) -- (18.5,-26.9);
+\end{tikzpicture}
+}
+
+
+% Commande pour la page avant-propos
+
+\newcommand\avantpropos[2]{
+\noindent
+\begin{tikzpicture}[overlay, remember picture]
+%\shade[top color=vert_n,bottom color=light_vert_n] 
+%(current page.south west) rectangle (current page.north east);
+\node[] at (4.12,-10) {\raggedright \fontsize{16pt}{7pt}\selectfont  \textls[-5]{avant-propos} };
+\draw[line width = 5pt, color = black] (2.51,-10.41) -- (5.75,-10.41);
+\node[minimum width=2.99cm, minimum height = 2.99cm, draw=vert_n,fill = white, line width = 6pt] at (4.1,-12.9) {
+\calibri\fontsize{65pt}{9pt}\selectfont \bfseries P
+};
+\node[minimum width=11.8cm, minimum height =  3.2cm] at (11.6,-12.9) {
+\begin{minipage}[t]{0.2cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{11.5cm}
+\helvetlight \fontsize{14pt}{17pt}\selectfont \raggedright roduction de logements et développement d'activités économiques, espaces récréatifs et infrastructures, production alimentaire et énergétique, maintien de la biodiversité et stockage de carbone, tels sont les principaux services que doit aujourd'hui fournir la ressource foncière.
+\end{minipage}\hfill
+\begin{minipage}[t]{0.1cm}
+\hfill
+\end{minipage}\hfill
+};
+\node[minimum width=16cm, minimum height = 11.2cm] at (10.5,-18) {
+\begin{minipage}[t]{15cm}
+\helvetlight \fontsize{14pt}{17pt}\selectfont \raggedright Au regard de ces enjeux, trop peu d'études économiques sont actuellement consacrées au foncier. La forte hétérogénéité du foncier dans l'espace et la faible disponibilité de données foncières sur une échelle spatiale large expliquent sans doute en partie ce constat. La présente étude propose donc un exercice de modélisation économique des déterminants des prix du foncier à bâtir en France métropolitaine utilisant des données récentes. Elle se focalise sur les disparités spatiales du marché du foncier résidentiel et a pour vocation de contribuer à une meilleure compréhension de ces marchés dans le but d'évaluer plus clairement l'effet de futures politiques publiques sur le foncier.   
+\end{minipage}\hfill
+\begin{minipage}[t]{1cm}
+\hfill
+\end{minipage}\hfill
+};
+Production de logements et développement d'activités économiques, espaces récréatifs et infrastructures, production alimentaire et énergétique, maintien de la biodiversité et stockage de carbone, tels sont les principaux services que doit fournir la ressource foncière. Au regard de ces enjeux, trop peu d'études économiques sont actuellement consacrées au foncier, qui est pourtant une thématique d'étude fondatrice en science économique. La forte hétérogénéité du foncier dans l'espace et la faible disponibilité de données foncières sur une échelle spatiale large explique sans doute en partie ce constat. La présente étude propose donc un exercice de modélisation économique des déterminants des prix du foncier à bâtir en France métropolitaine utilisant des données récentes. Elle se focalise sur les disparités spatiales du marché du foncier résidentiel et a pour vocation de contribuer à une meilleure compréhension de ces marchés dans le but d'évaluer plus clairement l'effet de futures politiques publiques sur le foncier.
+
+\node[minimum width=21cm] at (10.5,-24.78) {
+\begin{minipage}[t]{2.5cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{12cm}
+\raggedright \fontsize{13pt}{20pt}\selectfont Laurence Monnoyer-Smith \\
+\helvetlight \fontsize{9pt}{9pt}\selectfont \textls[10]{COMMISSAIRE G\'{E}N\'{E}RALE AU D\'{E}VELOPPEMENT DURABLE} \hfill
+\end{minipage}
+\begin{minipage}[t]{4cm}
+\hfill
+%\includegraphics[width=5cm, height = 3cm]{signature}
+\end{minipage}\hfill
+\begin{minipage}[t]{2.5cm}
+\hfill
+\end{minipage}\hfill};
+
+%
+%\node[minimum width=12.5cm] at (14.75,-24.78) {
+%\begin{minipage}[t]{4cm}
+%\hfill
+%%SIGNATURE 
+%\end{minipage}\hfill
+%\begin{minipage}[t]{2.5cm}
+%\hfill
+%\end{minipage}\hfill};
+
+\node[] at (10.5,-27.35) {
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill
+\begin{minipage}[t]{16cm}
+\raggedright
+\textcolor{vert_n}{\rule{7pt}{7pt}} \fontsize{7}{5mm} \selectfont \thepage~ -
+\textbf{\titreetude} : \soustitreetude
+\end{minipage}\hfill
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill
+};
+\draw[color = black, line width = 0.5pt] (2.5,-26.9) -- (18.5,-26.9);
+\end{tikzpicture}
+}
+
+
+% Commande pour la troisième de couv
+
+\newcommand\troisieme[2]{
+\noindent
+\begin{tikzpicture}[overlay, remember picture]
+%\shade[top color=vert_n,bottom color=light_vert_n] 
+%(current page.south west) rectangle (current page.north east);
+\node[minimum width=21cm, minimum height = 21cm] at (10.5,-10.2) {
+\includegraphics[trim = {1mm 1mm 1mm 1mm},width=21cm, height = 21cm]{fond_feuille2}
+};
+\node[minimum width=21cm, minimum height = 9cm, fill = white] at (10.5,-25.145) {};
+
+\node[minimum width=21cm, minimum height = 4.5cm] at (10.5,-22.4) {
+\begin{minipage}[t]{2.5cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{11.9cm}
+\fontsize{8pt}{7.8pt}\selectfont \bfseries
+Conditions générales d’utilisation\\
+\fontsize{6.5pt}{7.8pt}\selectfont \normalfont 
+\raggedright
+Toute reproduction ou représentation intégrale ou partielle, par quelque procédé que ce soit, des pages publiées
+dans le présent ouvrage, faite sans l’autorisation de l’éditeur ou du Centre français d’exploitation du droit de copie
+(3, rue Hautefeuille — 75006 Paris), est illicite et constitue une contrefaçon. Seules sont autorisées, d’une part,
+les reproductions strictement réservées à l’usage privé du copiste et non destinées à une utilisation collective, et,
+d’autre part, les analyses et courtes citations justifiées par le caractère scientifque ou d’information de l’oeuvre
+dans laquelle elles sont incorporées (loi du 1er juillet 1992 — art. L.122-4 et L.122-5 et Code pénal art. 425).
+\end{minipage}\hfill
+\begin{minipage}[t]{6.5cm}
+\hfill
+\end{minipage}\hfill
+};
+
+\node[minimum width=21cm, minimum height = 4.5cm] at (10.5,-25) {
+\begin{minipage}[t]{2.5cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{3.5cm}
+\fontsize{8pt}{9.6pt}\selectfont \bfseries \raggedright
+\bfseries  Dépôt légal : \normalfont Octobre 2016 \\
+\bfseries  ISSN : \normalfont En cours \\
+%\bfseries  ISBN : \normalfont XXX-X-XX-XXXXXX-X
+\end{minipage}\hfill
+\begin{minipage}[t]{0.8cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{7.5cm}
+\fontsize{8pt}{9.6pt}\selectfont \color{white} \raggedright
+Achevé d'imprimer en mois XXXX.\\
+\bfseries Impression : \normalfont Lieu, utilisant du papier\\
+issu de forêts durablement gérées.\\
+\end{minipage}\hfill
+\begin{minipage}[t]{6.5cm}
+\hfill
+\end{minipage}\hfill
+};
+
+%pied de page
+\node[] at (10.5,-27.35) {
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill
+\begin{minipage}[t]{16cm}
+\raggedleft
+\fontsize{7}{5mm} \selectfont \textbf{\titreetude} : \soustitreetude - \thepage~  \textcolor{vert_n}{\rule{7pt}{7pt}} 
+\end{minipage}\hfill
+\begin{minipage}[t]{2.5cm}
+\end{minipage}\hfill};
+\draw[color = black, line width = 0.5pt] (2.5,-26.9) -- (18.5,-26.9);
+
+
+\end{tikzpicture}
+}
+
+%Commande pour la quatrième de couv
+\newcommand\quatrieme[1]{
+\noindent
+\begin{tikzpicture}[overlay, remember picture]
+%\shade[top color=vert_n,bottom color=light_vert_n] 
+%(current page.south west) rectangle (current page.north east);
+\node[minimum width=21cm, minimum height = 21cm] at (10.5,-10.2) {
+\includegraphics[trim = {1mm 1mm 1mm 1mm},width=21cm, height = 21cm]{fond_feuille2}
+};
+
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (4.87,-4.57) {};
+
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (4.87,-10.17) {
+};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white,fill = white,, line width = 10pt] at (4.87,-15.77) {\begin{minipage}{0.3cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}{3.6cm}
+\raggedright
+\mdseries \color{vert_n}\fontsize{16pt}{16pt}\selectfont \titreetude  \\
+\helvetlight \color{vert_n}\fontsize{16pt}{16pt}\selectfont \soustitreetude
+\vspace{2cm}
+\end{minipage}\hfill
+\begin{minipage}{0.3cm}
+\hfill
+\end{minipage}\hfill};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (10.47,-15.77) {
+};
+\node[minimum width=4.5cm, minimum height = 4.5cm, draw=white, line width = 10pt] at (16.07,-15.77) {};
+
+\node[minimum width=10.1cm, minimum height = 10.1cm, draw=white, fill = white, line width = 10pt] at (13.27,-7.37) {
+\begin{minipage}[t]{0.2cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{9.25cm}
+\vspace{2mm}
+{\helvetlight \fontsize{10pt}{11pt}\selectfont #1 \hfill}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.2cm}
+\hfill
+\end{minipage}\hfill
+};
+
+
+\node[minimum width=21cm, minimum height = 9cm, fill = white] at (10.5,-25.145) {
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{16.15cm}
+\raggedright
+\vspace{5mm}
+\helvetlight \fontsize{12pt}{13pt} \selectfont Service de l'économie, de l'évaluation et de l'intégration du développement durable \\
+Sous-direction mobilité et aménagement \\
+Tour Sequoia \\
+92055 La Défense cedex \\
+courriel : ma.seei.cgdd@developpement-durable.gouv.fr
+\vspace{3.5cm}
+\end{minipage}\hfill
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+}
+;
+
+
+\node[] at (10.5,-21.5) {
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{16.15cm}
+{\calibri \fontsize{24pt}{12pt}\selectfont \bfseries \textls[-25]{commissariat général au développement durable}} \\
+%\vspace{0.1cm}
+%\hrule
+\end{minipage}\hfill
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+};
+\draw[color = black, line width = 1.5pt] (0,-20.6) -- (21,-20.6);
+\draw[color = black, line width = 0.5pt] (0,-22) -- (21,-22);
+\node[minimum width=2.95cm, minimum height = 3.8cm] at (17.10,-26) {
+\includegraphics[width=2.95cm, height = 3.8cm]{Bloc-marque_MEEM_RVB_HD}
+};
+
+\node[minimum width=21cm, minimum height = 2cm] at (10.5,-27.7) {
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+\begin{minipage}[t]{16.15cm}
+ \fontsize{10pt}{10pt}\selectfont \bfseries www.developpement-durable.gouv.fr
+\end{minipage}\hfill
+\begin{minipage}[t]{2.45cm}
+\hfill
+\end{minipage}\hfill
+};
+\end{tikzpicture}
+}
+% couleurs et polices des sections
+\usepackage{sectsty}
+\usepackage[noindentafter]{titlesec}
+\renewcommand\thesection{\arabic{section}}
+\titleformat{\section}{\raggedright \sloppy}{}{0em}{\fontsize{35}{36}\selectfont}
+\titlespacing*{\section}{0mm}{0mm}{9mm}
+
+
+% titre de section invisible
+\makeatletter
+\newcommand\invisiblesection[1]{%
+  \refstepcounter{section}%
+  \def\@currentlabelname{#1}
+  \addcontentsline{toc}{section}{\protect\numberline{\thesection}#1}%
+  \sectionmark{#1}}
+\makeatother
+
+
+% version officielle
+%\titleformat{\subsection}{\raggedright \sloppy}{}{0em}{\fontsize{35}{36}\selectfont}
+%\titlespacing*{\subsection}{0mm}{0mm}{12mm}
+%\titleformat{\subsubsection}{\color{vert_n}\bfseries}{}{0em}{\fontsize{10.5}{12}\selectfont \scshape \uppercase}
+%\titleformat{\subsubsubsection}{\bfseries\fontsize{10.5}{12}\selectfont}{\thesubsubsection}{1em}{}
+%\titlespacing*{\subsubsubsection}{ 0mm }{7.5mm}{ 0mm }
+
+% version décalée d'un niveau
+%\titleformat{\subsection}{\raggedright \sloppy}{}{0em}{\fontsize{35}{36}\selectfont}
+%\titlespacing*{\subsection}{0mm}{0mm}{12mm}
+\titleformat{\subsection}{\color{vert_n}\bfseries}{}{0em}{\fontsize{10.5}{12}\selectfont \scshape \uppercase}
+\titleformat{\subsubsection}{\bfseries\fontsize{10.5}{12}\selectfont}{\thesubsubsection}{1em}{}
+\titlespacing*{\subsubsection}{0mm}{0mm}{ 0mm }
+
+
+% marges
+\usepackage[%
+      headheight=2.85cm,
+			headsep = 1.85cm,
+      includeheadfoot,
+      margin=2.5cm,
+			marginparsep = 0cm, 
+      textheight=19.25cm, 
+		%	showframe, 
+			footskip = 17mm,
+			includehead, includefoot,
+			left=2.5cm,right=2.5cm,
+			top=2.5cm,bottom=2.5cm,
+			asymmetric,
+]{geometry}
+
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+
+
+%\setlength{\voffset}{-0.04cm}
+%\setlength{\hoffset}{0cm}
+%\setlength{\footskip}{17mm}
+
+% en tête et pied de page
+\usepackage{fancyhdr}
+% nouvelle commande hrule avec un paramètre pour définir l'écart avant ou après
+\newcommand{\HRule}[1][\medskipamount]{\par
+  \vspace*{\dimexpr-\parskip-\baselineskip+#1}
+  \noindent\rule{\linewidth}{10pt}\par
+  \vspace*{\dimexpr-\parskip-.5\baselineskip+#1}}
+	
+
+\fancyhead{}
+\renewcommand{\headrulewidth}{0.5pt}
+\fancyhead{} 
+\fancyhead[L]{
+\textcolor{vert_n}{\HRule[0pt]}
+\vspace{0.2cm}
+\setlength{\fboxsep}{0mm}
+\fcolorbox{white}{white}{\parbox[t][2.3cm]{7.8cm}{\fontsize{10pt}{10pt} \selectfont \textls[-10]{\nouppercase{\leftmark}}}}
+}
+
+\fancyfoot{}
+\renewcommand{\footrulewidth}{0.5pt}
+\fancyfoot[LE]{ \textcolor{vert_n}{\rule{7pt}{7pt}} \fontsize{7}{5mm} \selectfont \thepage~ -
+\textbf{\titreetude} - \soustitreetude}
+ \fancyfoot[RO]{\fontsize{7pt}{5mm} \selectfont \textbf{\titreetude} - \soustitreetude - \thepage~  \textcolor{vert_n}{\rule{7pt}{7pt}}}
+
+
+% page style première page partie
+\fancypagestyle{partie}{%
+\newgeometry{headheight=0cm,
+			headsep = 0cm,
+      margin=0cm,
+			marginparsep = 0cm, 
+      textheight=0cm, 
+	%		showframe, 
+			footskip = 0mm,
+			includehead, includefoot,
+			left=0cm,right=0cm,
+			top=0cm,bottom=0cm,asymmetric}
+\fancyhf{} % clear all header and footer fields
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+}
+
+%##################################################################
+%######## Langue et sommaire
+%##################################################################
+
+\usepackage[frenchb]{babel}
+\usepackage{enumitem}
+
+%indentation des paragraphes (garder l'odre !!)
+\setlength{\parindent}{5mm}
+\frenchbsetup{IndentFirst=false}
+%\frenchbsetup{StandardLists=true}
+\selectlanguage{frenchb} 
+% espaces entre les paragraphes 
+\setlength{\parskip}{3mm}
+
+\usepackage{caption}
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{1}
+%couleurs et polices des titres de figures 
+\captionsetup[figure]{labelfont={bf},textfont={small,bf}}
+\captionsetup[table]{labelfont={bf},textfont={small,bf}, name = Tableau}
+
+\addtocontents{toc}{\protect\thispagestyle{fancy}}
+
+%change le nom de la table des matières+couleurs
+\addto\captionsfrench{% Replace "english" with the language you use
+ \renewcommand{\contentsname}%
+ {}%
+}
+
+%change le nom de la table des matières+couleurs
+\addto\captionsfrench{% Replace "english" with the language you use
+ \renewcommand{\contentsname}%
+ {}%
+}
+
+%Définit le titre et le sous-titre
+\newcommand\titreetude{Prix des terrains à bâtir}
+\newcommand\soustitreetude{Une analyse spatiale}
+\newcommand\annee{2016}
+\newcommand\mois{Octobre}
+
+\AtBeginDocument{\addtocontents{toc}{\protect\thispagestyle{partie}}} 
+\begin{document}
+
+\pagestyle{fancy}
+
+%\end{titlepage}
+
+\thispagestyle{partie}
+\pagetitre{}{}{}{}
+
+\newpage 
+
+\thispagestyle{partie}
+\sommaire{}{}
+
+\newpage 
+
+\thispagestyle{partie}
+\contributeurs{}{}
+
+\newpage 
+
+\thispagestyle{partie}
+\avantpropos{}{}
+
+\cleardoublepage
+%\thispagestyle{partie}
+%\cadreblanc{}{Introduction}
+
+\newpage
+\pagestyle{fancy}
+
+{\fontsize{10.5pt}{12pt}\selectfont 
+
+%\invisiblesection{Introduction}\label{sec:marker1}
+\section{Introduction}\label{sec:marker1}
+
+\markboth{Introduction}{}
+
+%\begin{itemize}
+
+\subsection{Pourquoi s'intéresser à la compréhension des marchés fonciers?}
+
+Du fait de l'extension progressive des zones urbaines, le foncier disponible à usage d'habitation en périphérie des villes se raréfie. La pression exercée sur le foncier dans des zones de plus en plus éloignées des centres urbains auparavant hors d'influence des villes se renforce. L'artificialisation progressive des sols est ainsi source de conflits entre usages concurrentiels, la ressource foncière étant présente en quantité limitée et répartie entre ces différents usages (habitat, activités économiques, agriculture, récréatifs, espaces naturels). Cette concurrence entre usages à la périphérie des villes se reflète particulièrement sur les prix fonciers en forte hausse dans les années 2000, y compris pour les terrains situés loin des pôles urbains dans les espaces à dominante rurale. \par
+
+La composante foncière des prix de l'immobilier fait aujourd'hui d'autant plus l'objet d'un intérêt renouvelé de la part des professionnels de la construction et des décideurs publics du fait de la hausse marquée des prix des logements qui ont plus que doublé entre 2000 et 2014 (+ 115~\% dans les logements \footnote{source :  indices Notaires-INSEE du prix des logements anciens}) alors que les coûts de construction ont connu une hausse plus modérée sur la même période (+53~\% \footnote{source : Indice du coût de la construction des immeubles à usage d'habitation (ICC)}). Dans les zones tendues, le prix élevé du foncier % qui est souvent la variable d'ajustement des opérations immobilières
+est ainsi perçu comme un frein à la construction. La demande de foncier se reporte ainsi progressivement dans les zones plus éloignées des centres urbains, où l'offre potentielle en foncier est plus grande mais où le foncier est souvent réglementé. L'ouverture à l'urbanisation de nouveaux terrains entre alors en conflit avec la préservation des activités agricoles, la diminution des terres dédiées à l’agriculture se faisant principalement au profit des sols artificialisés (\cite{Vermont14} à partir de Teruti-Lucas), ainsi qu'avec la préservation de l'environnement du fait des conséquences potentielles néfastes de l'artificialisation des sols sur la biodiversité,  le fonctionnement biologique et la pollution des sols et des milieux aquatiques, et de l'augmentation des risques liés à l'érosion et à l'imperméabilisation des sols (\cite{RapportEtatEnvir2014}). \par
+
+
+En France, si les études appliquées sur les prix immobiliers et leurs déterminants sont nombreuses dans la littérature, la composante foncière est souvent absente des analyses. Ceci tient notamment au fait qu'elle est en général non observable car difficilement séparable du prix du bien immobilier global. C'est notamment le cas pour le foncier dans le secteur du logement collectif. Un nombre restreint de bases de données renseignent la valeur du foncier, ce qui complique l'analyse quantitative des marchés fonciers. Enfin, un indice des prix fonciers, tel qu'il en existe pour le prix des logements, des loyers ou de la construction, peine à émerger. \par
+
+La définition de politiques publiques visant à modifier la fiscalité foncière ou les zonages réglementaires pour maîtriser la consommation  foncière ou à l'inverse à mobiliser du foncier pour répondre aux objectifs de construction de logements et développement d'activités, nécessite cependant de mieux comprendre les marchés fonciers. Cette étude s'inscrit dans cette optique en cherchant à décrire et expliquer les disparités spatiales observées sur les marchés fonciers dans le secteur résidentiel à la fois au sein des villes françaises mais également à la limite de l'aire d'influence des villes et au-delà. \par
+
+%	\begin{itemize}
+%		\item Nécessaire pour définir Politiques publiques visant à modifier la fiscalité foncière ou à mobiliser le foncier pour la construction de logements. 
+%		\item ex : Les incitations pour lutter contre l'artificialisation nécessitent de comprendre les mécanismes économiques à l'origine de ce choix
+%		\item ex : Prix élevé du foncier est un frein à la construction de logements neufs
+%		\item Renseigne sur la valorisation des ménages des attributs de terrains : demande d’accessibilité, de surface terrain  
+%	\end{itemize}
+
+\subsection{Littérature théorique sur l'analyse des prix fonciers}
+ 
+La littérature anglo-saxonne en économie urbaine fournit un cadre théorique pour l'analyse de l'étalement urbain  et des rentes foncières dans les villes (\cite{Alonso64, Mills67, Muth69}). Dans le modèle standard en économie urbaine, dit \og monocentrique \fg, les ménages arbitrent entre coût du sol pour le logement et coût de transport vers le centre de la ville où est situé le quartier d'affaires ou \textit{Central Business District (CBD)}. A l'équilibre urbain, atteint lorsque plus aucun ménage n'a de gains à se déplacer plus ou moins loin du centre urbain, le prix du sol est déterminé en tout point de la ville et il décroît du centre vers la périphérie de la ville. A la limite de la ville, le prix du sol constructible atteint une valeur minimale qui correspond dans la majorité des modélisations issues de cette lignée à la rentabilité de l'usage agricole de la terre. Si ces modèles sont utiles pour décrire de manière simplifiée les comportements des ménages et les mécanismes à l'origine des gradients de prix pour les terrains constructibles au sein de la ville, ils ne permettent pas de comprendre, sans relâcher certaines hypothèses, ce qui intervient sur les marchés du foncier à la limite des villes et au delà. \par
+ 
+A partir de ce cadre de référence assez contraint par ses hypothèses  (rente fixe correspondant à la rente agricole en frontière de la ville, sol considéré comme un bien homogène), des contributions ont permis d'apporter des éclairages sur les dynamiques des marchés fonciers non prises en compte formellement dans ces modèles. \cite{Capozza89,Capozza90} développent une modélisation théorique de l'évolution des prix du sol à la frontière urbain-rural. Ils formalisent les anticipations des agriculteurs quant à l'usage futur des terres agricoles et fournissent des éléments pour expliquer les écarts de prix entre la rente agricole et le prix des terrains constructibles à la limite de la ville. \par
+
+Un des inconvénients des modèles d'économie urbaine standards et de ces modèles avec anticipations provient du fait que la disparité des prix du sol dans la ville ou de la prime d'anticipation à la frontière n'est expliquée que par la distance au CBD. L'effet des caractéristiques de localisations autres que la distance au CBD sur les gradients de prix comme la proximité des aménités et la nature des zonages ne sont pas pris en compte (\cite{Geniaux05}). Ceci tient au fait que le sol est considéré comme homogène. Les développements du modèle monocentrique réalisé par \cite{Fujita89} intègrent cependant les aménités dans le gradient de prix du sol. D'autre part, si le modèle de \cite{Capozza89,Capozza90} fournit des éléments d'explications sur les écarts de prix entre usages des sols au delà des frontières de la ville, il ne permet pas d'expliquer pourquoi on observe également ces écarts en tout point de la ville (\cite{Cava03}). \par
+
+Pour étudier ces caractéristiques, un large éventail d'analyses de la littérature se base plutôt sur des modélisations de type hédonique. Le sol est considéré dans ces analyses comme un bien hétérogène composé de différents attributs qui peuvent être physiques (surface, qualité de la terre) ou liés à sa localisation (distance aux centres d'emplois, proximité des aménités positives ou nuisibles...) ou encore liés aux droits attribués aux terrains (terrain constructible ou non, limite de constructibilité comme le coefficient d'occupation des sols...). Ces modèles hédoniques permettent donc d'étudier non seulement l'influence des attributs liés à la distance au centre urbain mais aussi celles des autres attributs locaux et zonaux des terrains qui peuvent varier dans l'espace. \cite{Chicoine81} introduit par exemple explicitement les caractéristiques zonales des terrains (terrain agricole, résidentiel ou industriel et commercial) dans la fonction de prix hédonique. \par
+
+
+L'étude réalisée ici utilise un cadre proche d'une analyse hédonique même si sur certains aspects on peut la rapprocher des modèles issus de l'économie urbaine. Bien que provenant d'un cadre théorique micro-fondé, la plupart des analyses hédoniques restent appliquées et ne développent pas le cadre théorique associé aux estimations hédoniques. Les études faisant le lien entre le cadre hédonique et le cadre théorique en économie urbaine sont encore plus rares dans la littérature alors qu'il est théoriquement possible de consolider les deux approches en relâchant certaines hypothèses des modèles standards d'économie urbaine. Une contribution intéressante sur ces aspects est disponible dans les travaux de \cite{Cheshire95,CheshireSheppard02}. Dans la présente étude nous adoptons une approche hédonique appliquée sans revenir sur le cadre théorique sous-jacent qui est abondamment documenté dans la littérature. \par 
+
+\subsection{Les analyses appliquées récentes des marchés fonciers en France : l'importance de la dimension spatiale }
+
+Qu'ils s'inscrivent dans la lignée des modèles d'économie urbaine ou dans un cadre hédonique, une constance apparaît dans les analyses appliquées récentes sur les marchés fonciers, la localisation et les attributs zonaux des terrains structurent fortement les marchés fonciers. C'est d'autant plus le cas en France où la régulation foncière est l'outil privilégié des politiques publiques pour préserver ou mobiliser les ressources foncières. \par
+
+Malgré l'existence de nombreux zonages réglementaires qui affectent les marchés fonciers, dans les plans locaux d'urbanisme par exemple, des études récentes ont montré que les prix fonciers dans le secteur résidentiel au sein des aires urbaines françaises (voir \og Zoom sur : la typologie des communes utilisée\fg~p.20 pour une définition) présentent une distribution et des déterminants cohérents avec les modèles standard d'économie urbaine.  \cite{Goffette09} montre par exemple que les principaux déterminants des prix fonciers au sein des aires urbaines représentées dans les Enquêtes Logements de 1984 à 2002 sont la distance au centre de l'aire urbaine et sa population.  \cite{Combes_etal11, Combes_etal12} développent un cadre analytique dans la lignée du modèle monocentrique standard pour analyser les disparités de prix entre aires urbaines à l'aide de l'Enquête sur les Prix des terrains à bâtir. Ils montrent qu'en plus des déterminants classiques des prix fonciers (distance au centre, caractéristiques des terrains), l'ensemble des caractéristiques des aires urbaines explique une part importante des disparités de prix fonciers. Parmi ces caractéristiques, les principales sont la taille, la croissance de la population et la densité de population de l'aire urbaine. \par
+
+Un certain nombre d'analyses appliquées des prix fonciers montrent l'existence de déterminants spatiaux similaires pour les marchés des terres agricoles et des terrains à usage résidentiel. Partant du cadre d'analyse  de \cite{Capozza89}, \cite{Cava03} montrent ainsi que dans les communes entourant Dijon, les marchés des terrains destinés à un usage résidentiel et des terrains à usage agricole sont tous les deux influencés par la distance au centre de Dijon, y compris en dehors des limites de l'aire urbaine.  \cite{Geniaux05} partent du modèle de \cite{Capozza89} et en extraient une fonction de prix hédonique pour étudier les liens entre prix des terrains agricoles et prix des terrains dans le résidentiel. Ils montrent que ces liens varient avec la distance au pôle d'emploi et le niveau de régulation foncière. \cite{Lecat04} montre que les gradients de prix des terrains résidentiels et agricoles varient selon la localisation des terrains entre les pôles urbains, l'espace périurbain et l'espace à dominante rurale notamment du fait de l'influence simultanée des aménités paysagères et de l'accessibilité à l'emploi dans le périurbain. \par
+
+Enfin, l'évolution observée de la structure des villes et des prix du foncier a remis en cause la mesure de l'accessibilité des terrains uniquement par la distance au CBD.  \`{A} mesure que les villes s'étendent, elles se développent en effet de manière polycentrique et des centres secondaires émergent et influencent les gradients de prix et les densités de construction. 
+%(\textbf{chercher quelques références théoriques sur des modélisations polycentriques...}). 
+Peu de contributions de la littérature sur les marchés fonciers français tiennent compte de ces effets de polarisation multiples. Une contribution récente de la littérature hédonique compare des estimations sur les prix immobiliers basées sur le modèle monocentrique classique à des estimations basées sur des modèles d'accessibilité de plusieurs types (\cite{Gasch_etal11}). Nous suivons une méthodologie similaire pour étudier l'influence d'un indicateur d'accessibilité sur les prix fonciers dans cette étude. \par
+
+\subsection{Apports et structure de l'étude}
+
+L'objectif de l'étude est de fournir des éléments quantitatifs sur les marchés du foncier résidentiel sur la France entière et sur la période récente. L'étude se base sur la littérature évoquée plus haut pour en revisiter certains aspects en utilisant des données plus récentes allant de 2006 à 2014. Les données utilisées sont principalement issues de l'enquête sur le prix des terrains à bâtir (EPTB) et sont décrites dans l'encadré \og Zoom sur : les sources de données utilisées \fg page 10. La dimension spatiale est au centre de cette étude puisque, même si les modélisations développées dans l'étude se font à l'échelle nationale, on cherche à déterminer l'influence de la localisation  des terrains sur les prix du foncier. La localisation des terrains doit ici s'entendre au sens large du terme et comprend différents aspects selon l'échelle à laquelle on se situe. Au niveau local, communal par exemple, il peut s'agir de la proximité du terrain avec certaines aménités comme des équipements, des services ou des caractéristiques de la commune. Au niveau intercommunal, il peut s'agir de la proximité du terrain avec un  ou plusieurs pôles d'emploi. A un niveau plus agrégé, il peut s'agir de la localisation du terrain dans l'aire d'influence d'un pôle (aire urbaine) ou d'un autre, ou  encore de la localisation du terrain dans une zone climatique plus favorable qu'une autre.  D'autre part, nous nous intéresserons tout au long de l'étude non seulement aux espaces urbanisés ou polarisés par des pôles d'emplois mais aussi aux espaces ruraux. En effet, si beaucoup d'analyses développent un cadre théorique cohérent avec les observations sur la distribution des prix des terrains constructibles dans les villes et leur périphérie proche, peu d'analyses s'intéressent à l'évolution au-delà de la frontière urbain-rural qui est souvent approximée par la limite de l'agglomération ou de l'aire urbaine. \par  
+
+La dimension spatiale est également au centre de la structuration de cette étude. La première partie de l'étude explore la disparité spatiale des prix fonciers dans le secteur résidentiel sur la France entière en 2014 et fournit des outils d'analyse descriptifs de cette disparité. Un modèle économétrique permettant d'estimer les grands facteurs explicatifs de ces disparités est ensuite développé. La deuxième partie de l'étude est centrée principalement sur les grands pôles urbains et sur la comparaison des niveaux de prix foncier entre ces pôles. La troisième partie se consacre à l'échelle intercommunale et compare l'effet sur les prix de différentes mesures de l'accessibilité à l'emploi et aux équipements. La dernière partie de l'étude se concentre sur les disparités de prix observées à la frontière entre les aires urbaines et l'espace rural et au-delà. \par
+
+\newpage
+
+\cadrevert{Les sources de données utilisées}{\subsubsection{L’enquête sur le prix du terrain à bâtir (EPTB)}
+
+L’enquête sur le prix des terrains à bâtir (EPTB) fournit des informations sur les terrains à bâtir destinés à la construction d’une maison individuelle et sur la construction de la maison elle-même. L’enquête permet de disposer d’éléments sur les prix et les caractéristiques du terrain (surface, prix, date d’achat, viabilisation, intermédiaire lors de l'achat), de la construction de la maison 
+(prix, surface de plancher, degré d’avancement des travaux, mode de chauffage, type de maître d’oeuvre) mais également des éléments sur le
+pétitionnaire (âge, CSP). L’enquête a été relancée en 2006 et nous utilisons dans cette étude les données allant de 2006 à 2014. La base de sondage actuelle est constituée à partir de la base des permis de construire Sit@del2. Elle est exhaustive sur son champ depuis 2010. Elle constitue ainsi une source intéressante d'analyse des marchés fonciers du fait du grand nombre d'observations et des localisations variées enquêtées.\par}{  
+
+Ces données ne représentent donc que partiellement le secteur du foncier résidentiel puisqu'elle se restreignent au secteur individuel qui correspond à 30~\% des constructions de logements en 2014 (Source : Sita@del2). Les estimations réalisées dans cette étude doivent donc être interprétées en ayant en tête cette restriction du champ. Les marchés fonciers des grandes villes où la part des constructions de logement collectifs est importante sont sans aucun doute sous-représentés dans ces données. Néanmoins, peu de bases de données sur le foncier ont une couverture aussi large du territoire métropolitain ce qui en fait une source adaptée pour l'analyse des disparités spatiales des prix fonciers. \par
+
+\`{A} partir de la base brute, nous conservons les observations pour lesquelles le prix et les caractéristiques du terrain sont renseignés et non imputés. Après traitement et ajout de variables complémentaires, nous disposons de 311~747  observations pour l'achat de terrains à bâtir. \par
+
+\vspace{0.2cm}
+
+\input{tableaux_modif/moyenne_an_ter_euros2014}
+
+
+\subsubsection{Les données notariales PERVAL sur les terrains agricoles}
+
+En plus des transactions concernant les logements et les terrains résidentiels, les données notariales PERVAL rassemblent un certain nombre d’informations sur les transactions de biens agricoles que nous utilisons pour étudier les écarts de prix entre terrains résidentiels et agricoles. Ces données regroupent principalement des transactions de terres agricoles ainsi que quelques transactions de bâtiments agricoles, de bois et de domaines agricoles (terres + bâtiments). Pour cette analyse, on restreint le champ aux terrains agricoles sans bâtiments, vendus de gré à gré, dont l'acheteur n'est pas un marchand de biens et pour lesquels le prix de vente, la date de mutation, la superficie du terrain et la commune sont renseignés. On retire également les valeurs extrêmes (premier et dernier centiles) de la distribution des prix et des surfaces de terrains. D'autre part, seules les observations des années 2006 et 2008 sont conservées, les autres années disponibles étant antérieures à 2006 et donc à notre échantillon de terrains issus de l'EPTB. Nous disposons ainsi d'un échantillon de 49~810 observations sur ces deux années. \par
+
+Pour chaque transaction, le prix du terrain, sa date de mutation, sa localisation, les caractéristiques de la mutation, les caractéristiques du bien ainsi que des éléments sur les caractéristiques de l’acheteur et du vendeur sont renseignés. Peu de caractéristiques supplémentaires sont disponibles comme par exemple l'usage agricole qui est fait du terrain (cultures, prairies, friches...) ce qui ne permet pas de mener une analyse très poussée sur ces données.  Enfin, les bases PERVAL sont renseignées sur la base du volontariat et ne représentent pas l’ensemble des transactions annuelles. Le taux de couverture des transactions varie selon la zone. \par
+
+\subsubsection{Les autres sources de donn\'ees mobilis\'ees}
+
+\input{tableaux_modif/table_varexpli}
+}
+
+\cleardoublepage
+
+\thispagestyle{partie}
+\cadreblanc{Partie 1}{Comment expliquer la disparité spatiale des prix fonciers?}{Les prix des terrains à bâtir sont très variables d'une région du territoire métropolitain à l'autre et leur distribution dans l'espace est fortement structurée. Les zones de prix élevés correspondent aux zones d'influence des grandes aires urbaines, aux zones littorales et aux zones frontalières de la Suisse et du Luxembourg. L'analyse économétrique développée ensuite confirme l'importance des variables de localisation des terrains dans l'explication des disparités de prix fonciers.}
+
+\newpage
+\pagestyle{fancy}
+
+\invisiblesection{Comment expliquer la disparité spatiale des prix fonciers?}\label{sec:marker2}
+\markboth{Partie 1 : Comment expliquer la disparité spatiale des prix fonciers?}{}
+
+\subsection{\`{A} caractéristiques des terrains données, une forte variabilité locale des prix unitaires des terrains}
+
+La richesse de l'EPTB provient principalement de son nombre important d'observations qui couvrent une partie importante du territoire français. Même si le nombre de transactions varient fortement d'une localisation à l'autre, elle fournit une information précieuse sur les écarts de prix entre localisations. Les caractéristiques des terrains présentes dans la base influent cependant assez fortement sur les écarts de prix au m$^2$ des terrains et il est intéressant d'en tenir compte avant d'étudier la disparité des prix entre localisations. \par   
+
+\input{tableaux_modif/Stats_terrains_Tr_srf2}
+
+Le prix moyen des terrains et le prix moyen du m$^2$ diminuent par exemple significativement avec la taille des terrains, le prix  du m$^2$ passant de 204 euros pour des terrains de moins de 500 m$^2$ à 28 euros pour des terrains de plus de 1~500 m$^2$ (tableau \ref{Stats_terrains_Tr_srf}). Des effets de localisation peuvent expliquer en partie ces écarts de prix marqués entre terrains de tailles différentes étant donné que la taille des terrains achetés est plus petite lorsque l'on se rapproche des zones déjà en grande partie urbanisées. 18~\% des terrains achetés dans les pôles des grandes et moyennes aires urbaines ont ainsi des surfaces supérieures à 1~000 m$^2$ contre 43~\% dans l'espace  à dominante rurale (cf. \og Zoom sur : la typologie des communes utilisée\fg~p.20 pour la définition). Il peut également s'agir d'une moins grande valorisation par les acheteurs des m$^2$ de terrain au dessus d'une certaine surface, les premiers m$^2$ étant fortement valorisés car ils correspondent à l'emprise de la maison construite tandis qu'à partir d'une certaine surface, on peut supposer qu'un m$^2$ de terrain/jardin supplémentaire est moins valorisé. \par  
+
+\input{tableaux_modif/Stats_terrains_VIA}
+
+La viabilisation affecte significativement le prix des terrains achetés. En 2014, l'écart de prix moyen entre un terrain non viabilisé et un terrain viabilisé s'élevait à 2800 euros. L'écart entre le prix du m$^2$ d'un terrain non viabilisé et celui d'un terrain viabilisé est très marqué (44 euros en moyenne).  Ceci peut également être lié à des effets de localisation et le fait que les terrains viabilisés sont en moyenne plus petits (ou encore à des surcoûts de viabilisation plus importants pour les terrains de grande taille). \par 
+
+\newpage
+
+\input{tableaux_modif/Stats_terrains_intermed}
+
+Enfin, les terrains vendus par un intermédiaire présentent en moyenne des prix au m$^2$ sensiblement plus élevés (tableau \ref{Stats_terrains_intermed}). Les ventes de terrains dans l'espace à dominante rurale étant réalisées plus fréquemment sans intermédiaires, une partie de cet écart marqué peut également être dû à des effets de localisation et non à l'effet propre de l'intermédiaire de vente. \par    
+
+Les caractéristiques intrinsèques des terrains influent donc sur leur prix unitaire et sont potentiellement corrélées à la localisation des terrains. Pour isoler l'effet des caractéristiques sur le prix, il faudra donc modéliser explicitement les disparités de prix entre localisations. Afin de visualiser plus facilement ces disparités géographiques des prix fonciers en tenant compte des caractéristiques des terrains, on estime, dans un but exploratoire, le prix d'un terrain de référence à l'échelle communale en contrôlant pour les évolutions temporelles des prix et pour certaines caractéristiques individuelles des terrains (surface, viabilisation et intermédiaires). Le modèle estimé sur l'ensemble de l'échantillon est :  
+\begin{eqnarray*}
+\ln(P_{ict}) & =& \alpha_0 + \tau_{t} I_t + \gamma \ln(S_{ict}) + \delta I_{VIA} + \theta I_{INTERMED} +  \epsilon_{ict} \\
+\label{eq:}
+\end{eqnarray*}
+
+\begin{itemize}[font=\tiny]
+	\item $P_{ict}$ : prix au $m^2$ du terrain i dans la commune c en t
+	\item $I_t$ : indicatrices de l'année de vente du terrain (année référence : 2014)
+	\item $S_{ict}$ : surface du terrain en m$^2$
+	\item $I_{VIA}$ : indicatrice de viabilisation du terrain (1 si le terrain est viabilisé)
+	\item $I_{INTERMED}$ : Indicatrices pour l'intermédiaire d'achat du terrain (4 modalités : aucun, agence, constructeur, autre)
+\end{itemize}
+
+Les résultats de ces régressions ne sont pas présentés ici car ils sont principalement exploratoires mais ils sont reportés en annexes (tableau \ref{Regressions_caracterrains}). On peut néanmoins noter que les caractéristiques des terrains, bien que peu nombreuses dans les données, expliquent plus de la moitié de la variabilité des prix au $m^2$  ($R^2$ de 0.55). Ce fort pouvoir explicatif, notamment celui de la variable surface du terrain,  est probablement lié en partie à la forte corrélation entre taille des terrains et localisation. \par  
+
+La variabilité restante non expliquée par le modèle (et donc non expliquée par les caractéristiques des terrains) se retrouve dans le terme d'erreur $\epsilon_{ict}$. \`{A} partir de cette estimation, on récupère ensuite la moyenne des résidus de l'estimation par commune. On peut estimer $\hat{P_{c}}$, le prix d'un terrain de référence de surface $\bar{S} = 1~000$ m$^2$ situé dans la commune c, en 2014, non viabilisé ($I_{VIA} = 0$), acheté sans intermédiaire ($I_{INTERMED} = $\og aucun \fg). On peut ainsi comparer le prix des terrains entre les communes françaises pour lesquelles on dispose d'observations du prix (28~398 communes). 
+\begin{eqnarray}\label{eq:modelcarac}
+\hat{P_{c}} &  = & \bar{S}^{\hat{\gamma}} e^{\hat{\alpha_0} + \frac{1}{N_c} \sum \hat{\epsilon_{ict}}}
+\end{eqnarray}
+
+\begin{itemize}[font=\tiny]
+	\item $N_c$ : nombre d'observations dans la commune c
+	\item $\frac{1}{N_c} \sum \hat{\epsilon_ict}$ :  moyenne des résidus dans la commune c
+\end{itemize}
+
+Cette estimation relativement grossière a pour avantage par rapport à un prix moyen par commune de mobiliser l'ensemble de l'échantillon sur la période 2006-2014 et de contrôler pour les facteurs de disparité individuelles des terrains dont on dispose. Ces prix de références permettent de visualiser la valeur implicite de la localisation dans cette commune. Dans le modèle estimé ici, cette valeur est supposée fixe dans le temps pour chaque commune. Du fait de la forte corrélation entre surface des terrains et localisation, une partie de l'effet de la localisation sur les prix est capturée par la variable \og surface du terrain \fg~  et ne se retrouve pas dans les résidus utilisés ici. C'est pourquoi ces valeurs ont un intérêt uniquement descriptif pour visualiser la dispersion des prix entre communes et non pour estimer des prix communaux. \par  
+
+%\input{reg_communales_doc}
+\begin{figure}[!h]%
+\caption{Estimation d'un prix au m$^2$ de terrain par commune (référence : terrain de 1~000 m$^2$ non viabilisé acheté sans intermédiaire en 2014)}%
+\includegraphics[width=0.9\columnwidth]{residus_com2} \\
+\label{prix_com_2014}%
+\scriptsize \textit{\textbf{Sources :} EPTB, calculs CGDD}
+\end{figure}
+
+Sur la carte \ref{prix_com_2014}, on distingue clairement les zones de prix élevés (en rouge) qui correspondent aux zones d'influence des grandes aires urbaines (telles que Paris, Lyon, Bordeaux, Lille, Nantes, Toulouse, Aix-Marseille) ainsi que l'ensemble du littoral méditerranéen et les zones frontalières de la Suisse et du Luxembourg. Les prix sont globalement croissants lorsqu'on se rapproche des grands pôles urbains et du littoral. L'écart est de 1 à 5 entre les 10~\% des communes où le prix estimé est le plus faible et les 10~\% des communes où le prix estimé est le plus élevé. Enfin, la variabilité restante est plus importante entre communes que la variabilité intra communale moyenne des prix (l'écart type des prix moyen par commune est de 0.68  contre une moyenne des écarts-type intra-communaux de 0.35). \par  
+
+La carte de la figure \ref{prix_com_2014} révèle non seulement que les prix des terrains sont très variables d'une région du territoire métropolitain à l'autre mais aussi que la distribution des prix dans l'espace est fortement structurée. Cette structure spatiale est souvent observée dans les prix des biens immobiliers et fonciers. En effet, du fait de leur proximité, deux biens voisins partagent des caractéristiques communes (accessibilité à l'emploi, qualité du quartier, de l'environnement proche, proximité des services, proximité d'aménités négatives comme des aéroports ou des usines). Ensuite, la détermination du prix elle-même suit une logique spatiale puisque les vendeurs se renseignent sur le marché local de l'immobilier et du foncier avant d'établir leur prix de vente. De ce fait, le prix d'un bien est souvent lié à celui des biens dans son voisinage.\par   
+
+\`{A} l'échelle du territoire métropolitain, la corrélation globale des prix des terrains, mesurée par l'indice I de Moran (cf. annexe C), est très forte, positive et significative. Selon la matrice choisie pour représenter les relations de voisinage des communes, l'indice de Moran se situe entre 0.59 et 0.75 ce qui témoigne d'une très forte autocorrélation spatiale globale positive des prix. En d'autres termes, les valeurs hautes de prix des terrains, d'une part, et les valeurs faibles, d'autre part, ont tendance à être regroupées spatialement. \par     
+
+La carte de la figure \ref{prix_com_auto} représente les corrélations spatiales locales significatives (indices de Moran locaux ou LISA, cf. annexe C) entre les prix des terrains estimés dans les communes et ceux des communes voisines. Elles mettent en évidence des regroupements spatiaux de valeurs de prix des terrains homogènes. Les regroupements de valeurs hautes des prix (clusters HH, en rouge sur la carte) sont particulièrement marqués autour des grands pôles urbains. Les zones frontalières de l'Allemagne, de la Suisse et la Belgique concentrent également des communes dont le niveau de prix est élevé. Les villes situées dans les zones littorales attractives sont caractérisées par le même phénomène. Dans le Sud-Est de la France, les pôles urbains attractifs sont si proches les uns des autres que l'ensemble forme un regroupement continu de valeurs élevées des prix le long du littoral méditerranéen et le long du Rhône. Ces regroupements spatiaux témoignent des effets d'agglomérations marqués qui existent autour des pôles d'emploi dynamiques et des zones qui concentrent des aménités positives. Ces pôles attirent les entreprises et les ménages ce qui accroît la concurrence pour le foncier et exerce une pression à la hausse sur le prix du foncier dans leur voisinage.\par   
+
+En périphérie de ces zones, on observe la présence de zones tampons où la corrélation entre les niveaux de prix des terrains n'est plus significative (zones grisées) et où l'influence des pôles sur les prix diminue progressivement. Au delà de ces zones intermédiaires, le restant du territoire métropolitain est majoritairement constitué d'espaces où le prix du foncier est faible dans les communes et dans leur voisinage (clusters BB, en bleu sur la carte). Ces regroupements de valeurs faibles témoignent alors de la pression plus faible exercée sur le foncier et de la disponibilité plus importante de terrains à bâtir. \par  
+
+
+\begin{figure}[!h]%
+\caption{Corrélations spatiales locales significatives pour les résidus moyens par commune}%
+%{\centering
+\includegraphics[width=0.9\columnwidth]{residus_com_debut_lisa}%
+
+\scriptsize\textit{\textbf{Sources :} EPTB, calculs CGDD \\
+\textbf{Note de lecture :} La carte représente les corrélations spatiales locales significatives de la moyenne communale des résidus du modèle estimé par l'équation \ref{eq:modelcarac}.  Les zones rouges (clusters HH pour \og Haut-Haut \fg) sont les zones de regroupements significatifs de valeurs hautes des prix des terrains et les zones bleues (clusters BB pour \fg Bas-Bas \fg) sont les zones de regroupements significatifs de valeurs basses des prix des terrains. Les zones beiges correspondent à des zones où la corrélation spatiale entre communes situées à proximité est non significative.}
+\label{prix_com_auto}%
+\end{figure}
+
+Dans la suite de l'étude, ce sont bien ces disparités spatiales entre communes qui sont approfondies, l'hétérogénéité intracommunale locale est seulement prise en compte à travers les caractéristiques individuelles des terrains faute de données plus précises sur la localisation infracommunale et les autres caractéristiques des terrains. \par    
+
+\subsection{La prise en compte de la dimension spatiale dans les analyses appliquées des marchés fonciers}
+
+Il est important de noter que la présence de corrélations spatiales dans les résidus de ces premières estimations n'est pas étonnante et peut être simplement le signe d'une grande hétérogénéité spatiale non prise en compte par le modèle utilisé ici qui empile toutes les données sur l'ensemble du territoire et introduit peu de variables explicatives. \par  
+
+Pour modéliser cette hétérogénéité spatiale et réduire les biais statistiques qui en résultent, il n'est pas forcément nécessaire d'avoir recours à des méthodes sophistiquées qui modélisent spécifiquement l'autocorrélation spatiale. Une méthode simple pour traiter cette hétérogénéité peut être l'ajout d'indicatrices décrivant les différents territoires considérés. Des applications de ce type sont courantes dans la littérature sur le foncier où les auteurs contrôlent pour l'hétérogénéité entre localisations par des indicatrices par aire urbaine (\cite{Lecat04,Combes_etal12}), par communes (\cite{Geniaux05,Donz_etal07}) ou selon la localisation d'un terrain dans un pôle, sa couronne ou dans l'espace rural (\cite{Cava03}). On peut ensuite croiser ces indicatrices avec les autres paramètres du modèle si on suppose qu'ils varient dans l'espace. \par  
+
+Une alternative peut être de scinder l'échantillon de données en différents sous-territoires ou \og strates \fg~ et de vérifier si les paramètres estimés sont variables dans l'espace. C'est la méthode utilisée dans la construction des indices de prix  des logements (INSEE-Notaires) mais aussi dans certaines analyses hédoniques des marchés fonciers et immobiliers (\cite{Cavailhes05,Vermont15} par tailles d'aires urbaines, \cite{LefeRouq11} par région agricole). Nous utiliserons dans l'étude ces deux méthodes pour limiter les biais liés à l'hétérogénéité spatiale. \par  
+    
+
+Ensuite, l'autocorrélation spatiale des résidus est souvent liée à des variables omises qui tendent à faire se concentrer dans l'espace les valeurs similaires des prix. C'est notamment le cas des aménités comme celles liées aux littoraux, aux paysages ou aux centres urbains qui concentrent emplois et services. C'est également le cas des zonages réglementaires qui structurent fortement l'offre en terrains. Une possibilité pour réduire le biais lié à l'autocorrélation spatiale des résidus est alors d'introduire des indicatrices décrivant la présence de ces aménités à proximité des terrains ou d'introduire une variable de distance à ces aménités. \cite{Goffette09} identifie par exemple un impact positif significatif des aménités urbaines sur les prix des parcelles liés au fait que la parcelle se situe dans une commune urbaine plutôt que rurale. \cite{Brossard_etal08} estiment la valeur hédonique des aménités paysagères sur une base de données de terrains à bâtir. En ce qui concerne les variables de distance, nous en discutons dans la partie 3 de l'étude. \par   
+
+Enfin, certaines analyses intègrent l'autocorrélation spatiale spécifiquement dans leurs modèles économétriques (\cite{Cava03},\cite{Geniaux_etal15}). Les modèles d'économétrie spatiale, bien que d'un usage de plus en plus courant en économétrie appliquée, nécessitent des traitements informatiques plus lourds et supposent souvent de restreindre les estimations à un territoire moins étendu dans l'espace pour limiter les temps de calculs. D'autre part, l'utilisation de ces méthodes suppose d'avoir une idée sur les causes de l'autoccorrélation spatiale dans les données (interactions stratégiques entre agents voisins, variables omises...). Dans cette étude, nous n'utilisons pas d'estimation utilisant l'économétrie spatiale, mais nous testons la présence d'autocorrélation spatiale résiduelle pour différentes variantes de nos estimations. \par  
+
+\cadrevert{La typologie des communes utilisée}{
+
+L'échantillon de terrains est organisé selon le zonages en aires urbaines 2010 de l'INSEE. Ce zonage regroupe les communes sur la base des déplacements domicile travail de leurs habitants et distingue trois types d'aires urbaines : les grandes, les moyennes et les petites aires urbaines selon le nombre d'emploi de leur pôle (au moins 10~000, 5~000 ou 1~500 emplois respectivement). Chaque aire urbaine est composée d'un pôle d'emploi (\textit{définitions}), d'une couronne (plus de 40~\% de la population résidente ayant un emploi travaille dans le pôle ou dans des communes attirées par celui-ci). Autour des couronnes se situent des communes multipolarisées (plus de 40~\% de la population résidente ayant un emploi travaille dans plusieurs aires urbaines sans atteindre le seuil de 40~\% pour une aire urbaine). Le reste des communes est défini comme hors influence des pôles. \par}{ 
+
+De manière à ne pas multiplier les zones d'étude, nous choisissons dans cette étude de regrouper les communes en trois espaces distincts. L'espace des \textbf{pôles} est constitué par les pôles des grandes et moyennes aires urbaines, l'\textbf{espace périurbain} est constitué par leurs couronnes et les communes multipolarisées des grandes aires urbaines, l'\textbf{espace à dominante rurale} par les communes restantes. Nous choisissons ainsi de regrouper les petits pôles dans l'espace à dominante rurale comme le faisait le précédent zonage en aires urbaines de l'INSEE de 1999 car ces pôles ont des caractéristiques assez différentes des autres pôles (niveau faible des prix, couronne très peu étendue dans l'espace voire inexistante...) et les regrouper aux autres pôles urbains donnaient des résultats économétriques moins satisfaisants. Enfin nos données d'accessibilité à l'emploi ne couvrent que les pôles de plus de 5~000 emplois. \par  
+
+Au sein de ces espaces, il peut cependant coexister des zones hétérogènes. L'espace périurbain et l'espace à dominante rurale sont par exemple constitués à la fois de zones urbaines et de zones majoritairement rurales. \`{A} partir de la notion d'unité urbaine, on peut subdiviser ces espaces selon que les communes appartiennent à une unité urbaine ou non (communes rurales). Dans les estimations sur ces deux espaces, la variable \og commune appartenant à une unité urbaine \fg~contrôle pour cette hétérogénéité. \par  
+
+\begin{center}
+\input{corresp3}
+\end{center}
+
+Enfin, des indicatrices par aire urbaine sont créées pour associer chaque commune à une grande ou une moyenne aire urbaine. Si la commune appartient déjà à une aire urbaine selon le zonage INSEE, on lui attribue le code de l'aire urbaine en question. Si la commune n'appartient pas à une aire urbaine (communes multipolarisées des grandes aires urbaines, communes de l'espace à dominante rurale), elle est associée à l'aire urbaine grande ou moyenne pour laquelle le temps d'accès au pôle en voiture depuis la commune est le plus faible. \par   
+
+\subsubsection{\textbf{Définitions}}
+
+\textbf{Unité urbaine :} Ensemble de communes présentant une zone de bâti continu et qui compte au moins 2~000 habitants, par opposition aux communes rurales. \par  
+
+\noindent \textbf{Pôle d'emploi :} Unité urbaine regroupant de 1~500 à 5~000 emplois (petits pôles), de 5~000 à 10~000 emplois (moyens pôles) ou plus de 10~000 emplois (grands pôles). \par    
+
+\noindent \textbf{Commune urbaine/rurale :} Les communes appartenant à une unité urbaine sont définies comme urbaine, les autres sont définies ici comme rurales. \par   
+}
+
+\subsection{Un modèle pour expliquer ces facteurs de disparités locales}
+
+Pour prendre en compte l'hétérogénéité des prix entre localisations, nous introduisons dans la modélisation différentes variables selon différentes échelles spatiales.  Le prix au m$^2$ (en logarithme) d'un terrain $i$ situé dans ou à proximité d'une aire urbaine $a$, dans la commune $c$ vendu l'année $t$ est estimé selon l'équation :   
+\begin{eqnarray}
+\ln(P_{icat}) & =&  \tau_{t} I_t + \delta_{a} I_a + \sum_k \beta_k Z_{kca} + \sum_l \beta_l X_{licat}  + \epsilon_{icat} \\
+\label{eq:mod_general}
+\end{eqnarray}
+
+\begin{itemize}[font=\tiny]
+	\item $I_a$ : indicatrice de l'aire urbaine où est situé le terrain (ou de l'aire aire urbaine dont le temps d'accès au pôle est le plus faible pour les communes hors aires urbaines) 
+	\item $I_t$ : indicatrices annuelles pour la date d'achat du terrain
+	\item $Z_{kca}$ : variables communales (ou régionales), fixes dans le temps 
+	\item $X_{licat}$ : caractéristiques du terrain
+\end{itemize}
+
+La surface du terrain est introduite en logarithme pour tenir compte du fait que la relation entre le prix des terrains et leur surface est non linéaire. \cite{Colwell97} ont en effet montré l’importance d’une formalisation non linéaire des variables de surface pour les biens fonciers. La relation entre le prix des terrains et la distance au pôle d'emploi est plus fréquemment introduite selon une spécification semi-log (prix en logarithme et distance en niveau) dans la littérature (\cite{Cava03}, \cite{Goffette09}). Dans nos estimations, une forme log-linéaire pour la relation entre le prix et l'accessibilité au pôle d'emploi le plus proche (temps) donne cependant de meilleurs résultats. C'est pourquoi nous faisons le choix de conserver cette forme qui permet en outre d'interpréter les résultats comme des élasticités. \par  
+
+Ce modèle est estimé sur l'ensemble de l'échantillon métropolitain puis sur 3 sous-échantillons constitués par les terrains situés dans les communes appartenant aux pôles des grandes et moyennes aires urbaines, à l'espace périurbain et à l'espace à dominante rurale tels qu'ils sont définis dans l'encadré 2. Ces trois espaces ont en effet des niveaux de prix assez différents et ont connu une évolution variée des prix sur la période (figure \ref{Evol1}). Les prix dans les pôles des grandes et moyennes aires urbaines sont nettement supérieurs à la moyenne nationale tandis que ceux dans l'espace à dominante rurale sont deux fois plus faibles que la moyenne. La croissance des prix semble en revanche avoir été plus marquée dans cette espace majoritairement rural comme le montre le graphique de droite. \par  
+
+\begin{figure}[!h]%
+\caption{Evolution des prix selon la typologie des communes}%
+\label{Evol1}
+\begin{tabular}{cc}
+\includegraphics[width=0.46\columnwidth]{Evolution_zonage3_sansleg} & \includegraphics[width=0.6\columnwidth]{Evolution_zonage_base100_rogne}
+\end{tabular}
+
+\scriptsize\textit{\textbf{Sources :} EPTB, calculs CGDD}
+\end{figure}
+
+
+Cette modélisation considère que l'ensemble des paramètres en dehors des indicatrices par aire urbaine sont stables entre les localisations (à l'exception des modèles segmentés entre pôles urbains, espace périurbain et espace à dominante rurale qui permettent de voir si les paramètres changent selon la localisation du terrain dans un de ces trois espaces). Une autre façon de procéder aurait pu être de réaliser les estimations sur des sous-marchés ou différentes strates (sur chaque aire urbaine par exemple). Une modélisation sur différentes strates est néanmoins plus difficile à présenter, à agréger et les comparaisons entre sous-territoires sont souvent hasardeuses. Pour cette analyse qui cherche à dégager des valeurs \og moyennes \fg~ de l'effet des paramètres sur le prix des terrains et des grandes tendances à l'échelle du territoire français, nous faisons donc le choix de retenir un modèle plus général. \par  
+
+D'autre part, en dehors des caractéristiques des terrains, les paramètres estimés (y compris les indicatrices par aire urbaine) sont supposés stables dans le temps. La variabilité temporelle des prix n'est prise en compte que par les indicatrices $I_t$. Cette hypothèse de stabilité des paramètres est approfondie dans le tableau \ref{Regressions_an} en annexes qui compare les estimations sur l'ensemble de l'échantillon d'année à des estimations en coupe pour plusieurs années. Il montre une relative stabilité de la majorité des paramètres estimés ce qui rassure sur le fait que les effets estimés sur l'ensemble des données sont cohérents et peu variables dans le temps. Ces modèles estimés par année impliquent également que les effets fixes par aire urbaine varient d'une année à l'autre. On autorise en fait des variations annuelles de prix unitaire différentes d'une aire urbaine à l'autre ce qui n'est pas le cas dans le modèle où les observations sur toutes les années sont empilées. Les résultats montrent qu'il existe bien des évolutions de prix différentes d'une aire urbaine à l'autre. Il pourrait être intéressant d'approfondir ces évolutions de prix mais cela dépasse le cadre de cette étude qui se focalise sur les disparités spatiales des prix. \par      
+
+\subsection{Résultats des estimations}
+
+\input{tableaux_modif/Regressions1}
+
+%\textbf{une fois les résultats fixés, ajouter aux bas de tous les tableaux de régressions pour expliquer que les indicatrices ne sont pas reportées car trop nombreuses} \par  
+
+
+Les résultats de ces estimations sont présentés dans le tableau \ref{Regressions1}. On s'intéresse dans un premier temps aux résultats sur l'ensemble de l'échantillon (colonne 1). Ils montrent tout d'abord que l'ajout de variables de localisation permet d'améliorer significativement le pouvoir explicatif du modèle qui passe de 0.55 avec les caractéristiques des terrains uniquement à 0.83. Les paramètres estimés pour l'effet des caractéristiques des terrains sont sensiblement modifiés par l'ajout de variables de localisation ce qui confirme la corrélation entre la distribution de ces caractéristiques dans l'espace et la localisation du terrain. Le coefficient estimé pour la variable \og surface du terrain \fg~ passe ainsi de $-1.11$ à $-0.73$. \`{A} localisation donnée, on observe toujours des économies d'échelle significatives sur le prix unitaire des terrains lorsque la surface achetée augmente. Un doublement de la surface du terrain entraîne une baisse de $2^{-0.73}-1 = -40~\% $ du prix unitaire.  Le coût de viabilisation des terrains est légèrement plus important que dans les estimations sans variables de localisation et représente en moyenne 17~\% du prix unitaire.  Enfin, l'existence d'un intermédiaire lors de la vente  du terrain renchérit significativement le prix au m$^2$ du terrain (de + 2 à +9~\% selon le type d'intermédiaire). \par  
+
+Entre 2006 et 2012, le prix du m$^2$ a augmenté de 11~\% en moyenne toutes choses égales par ailleurs, l'évolution la plus marquée ayant eu lieu entre 2006 et 2008 (+ 14~\%). Les prix sont légèrement en baisse depuis 2012. La comparaison entre les colonnes 2 à 4 du tableau montre que les prix ont augmenté plus fortement dans l'espace rural (+ 19~\%) que dans les pôles (+12~\%) ou l'espace périurbain (+ 8~\%) sur la même période. Alors que les prix ont connu une légère baisse en 2009 dans ces deux espaces, ils ont augmenté de manière quasiment continue dans l'espace rural sur toute la période. \par  
+%\textbf{Hypothèses sur les raisons de ce rattrapage???, les prix terrains dans les zones urbaines étant déjà très élevés et les surfaces disponibles assez limitées, on peut supposer que l'influence urbaine sur les prix s'étend vers les zones rurales où l'offre est plus grande..., plus d'installations en zones rurales sur la période, tourisme???}. 
+
+Les évolutions de prix estimées ici sont d'une ampleur beaucoup moins grande que celles représentées à partir du prix au m$^2$ moyen sur la figure \ref{Evol1}.  Il semblerait donc que l'augmentation des prix au m$^2$ a été en grande partie due à une modification du type de terrain vendu (baisse des surfaces vendues par exemple) et/ou de la localisation de ces terrains (terrains moins loin des zones urbaines, etc...). L'évolution des prix des terrains purgée de ces effets liés aux caractéristiques et à la localisation est ainsi beaucoup moins marquée que son évolution apparente. Il n'est pas rare de trouver de tels résultats lorsqu'on réalise une analyse hédonique. L'évolution des indices de prix des biens immobiliers Notaires-INSEE ou l'évolution des prix des terres agricoles (voir \cite{LefeRouq11}) sont très différentes de l'évolution apparente des prix une fois que l'on contrôle pour les caractéristiques techniques et la localisation des biens échangés.\par   
+
+Les autres variables communales et régionales introduites sont toutes significatives. Elles ont en revanche un pouvoir explicatif complémentaire très faible par rapport aux indicatrices par aire urbaine. L'ajout de ces variables fait augmenter le R$^2$ des estimations de l'ordre de 2 à 3~\% par rapport aux modèles avec indicatrices par aire urbaine et entre 11~\% et 18~\% par rapport aux modèles avec caractéristiques des terrains seulement (comparaisons des tableaux \ref{Regressions_caracterrains} et \ref{Regressions_sansIAU} en annexes). La variabilité liée à ces variables communales est donc largement capturée par les caractéristiques des terrains et les différences entre aires urbaines. Dire que les prix sont différents d'une ville à l'autre sans en détailler les déterminants est en revanche peu informatif tandis que ces variables apportent des éclairages sur les déterminants des différences de prix entre localisations. Il est donc intéressant de commenter les coefficients estimés pour ces variables. \par  
+
+Les variables \og littoral \fg~et \og montagne \fg~identifient respectivement les communes désignées comme littorales  d'une mer, d'un lac ou d'un estuaire par la loi littoral (loi relative à l'aménagement, la protection et la mise en valeur du littoral) et les communes désignées comme appartenant à une zone de montagne par la loi montagne (loi relative au développement et à la protection de la montagne).  Les estimations montrent qu'un terrain situé dans une commune littorale a un prix au m$^2$ significativement plus élevé toutes choses égales par ailleurs (+ 20~\% en moyenne) tandis qu'un terrain en zone de montagne a un prix en moyenne 10~\% plus faible. L'écart de prix estimé pour les communes littorales est conforme aux observations de la carte \ref{prix_com_2014} qui montrent une forte hausse des prix dans les communes proches des littoraux. Il peut s'expliquer par le fort attrait pour ces zones littorales du fait de la valorisation par les acheteurs des aménités positives liées au littoral. Il peut aussi être lié à une offre en terrain à bâtir restreinte du fait des contraintes de la loi littoral sur les documents d'urbanisme qui visent à maîtriser l'urbanisation dans ces zones. L'écart de prix est encore plus marqué dans les communes de l'espace à dominante rurale puisqu'un terrain situé sur le littoral dans cet espace a un prix unitaire en moyenne 36~\% plus important. L'effet négatif sur les prix des zones de montagne peut en revanche s'expliquer par une moindre attractivité de ces zones (emploi, accessibilité plus faible aux services, climat). Cette moindre attractivité semble ainsi prédominer sur le fait que certaines de ces communes présentent une forte attractivité touristique saisonnière et des contraintes d'urbanisation renforcée par la loi montagne.\par   
+
+Deux variables climatiques complémentaires, \og température moyenne annuelle \fg~ et \og pluviométrie annuelle \fg~ (source : Méteo France, moyenne 1995-2014 par département), sont ajoutées pour capturer l'hétérogénéité des prix résultant de l'attractivité touristique et de la préférence des ménages en termes de zones climatiques de résidence. Ces variables de contrôle ont principalement pour but d'isoler l'effet du climat sur les autres variables d'intérêt potentiellement corrélées au climat (littoral, montagne, prix des terres agricoles). Les résultats montrent que les départements dont la température est plus élevée et la pluviométrie est moindre ont des prix au m$^2$ significativement plus élevés. \par  
+
+Les deux variables \og part des superficies urbanisées\fg~ et \og part des superficies agricoles \fg~ de la commune où est située le terrain visent à capturer les effets d'une plus ou moins grande disponibilité de terrains constructibles (ou potentiellement constructibles dans le cas des terrains agricoles) sur les prix. Elles peuvent aussi capturer des effets liés aux aménités positives paysagères qui seraient valorisées par les acheteurs (ex: proximité d'un paysage moins urbain et/ou plus agricole). Conformément à l'intuition, le prix au m$^2$ des terrains est d'autant plus élevé que la commune où ils sont situés est urbanisée. Selon l'estimation sur l'ensemble de l'échantillon, le prix des terrains dans une commune dont la superficie urbanisée est supérieure de 10~\% à une autre sont en moyenne 5,2~\% plus élevés. La présence d'une part importante de surfaces agricoles tend à l'inverse à modérer les prix fonciers. On identifie donc bien un effet de l'offre en terrain sur les prix : les zones urbanisées où l'offre est restreinte ont des prix plus élevés tandis que les zones où une part importante de terrains agricoles subsiste et où la pression sur la ressource en terre est vraisemblablement moins forte ont des prix moins élevés. Il convient néanmoins d'être prudent quant à l'interprétation de ces deux variables qui sont des proxys imparfaits de l'offre en terrain. Elles peuvent aussi capturer des effets de localisation non contrôlés par ailleurs comme une moins grande attractivité des zones rurales qui présentent nécessairement une part de superficie agricole plus importante. Les coefficients estimés restent cependant significatifs et du même ordre de grandeur lorsqu'on restreint l'échantillon aux espaces à dominante rurale ce qui conforte l'interprétation évoquée plus haut.\par  
+
+La variable \og commune appartenant à une unité urbaine \fg~capture l'hétérogénéité des prix en fonction de la nature de la commune dans laquelle le terrain est situé. En effet, sur l'ensemble de l'échantillon mais aussi dans l'espace périurbain et l'espace à dominante rurale, il coexiste des communes rurales et des communes appartenant à une unité urbaine (cf. encadré typologie). Cette indicatrice estime que le différentiel de prix d'un terrain acheté dans une commune urbaine est en moyenne de 17~\%. \`{A} titre de comparaison, \cite{Goffette09} estime qu'une parcelle dans une commune urbaine a un prix supérieur de 30 à 60~\% relativement aux communes rurales. L'écart de prix entre commune rurale et commune urbaine est plus important dans l'espace à dominante rurale (+ 15~\%) que l'espace périurbain  (+ 9~\%). Ceci peut témoigner du fait que les communes rurales de l'espace périurbain sont fortement sous l'influence des grands pôles urbains et ont des prix plus proches des unités urbaines du périurbain. Au sein de l'espace entourant les grands pôles urbains, l'influence des pôles se fait fortement ressentir sur les prix fonciers à la fois dans les unités urbaines et dans les communes rurales de l'espace périurbain qui présentent des prix élevés en comparaison aux autres communes rurales plus éloignées des grands pôles. La proximité des grands pôles d'emploi et la possibilité de s'y rendre pour travailler relativement facilement rend ces communes plus attractives. Au sein de l'espace à dominante rurale, les unités urbaines présentent des prix élevés en comparaison aux communes rurales alentours. On peut supposer que ces unités urbaines constituent des petits pôles locaux (commerces, services...) ce qui les rend attractifs au sein d'un espace majoritairement rural. Ainsi, la distance aux grands pôles et le caractère urbain ou rural des communes exercent des effets conjoints sur les prix fonciers.\par   
+
+De manière à tester les corrélations existantes entre les prix des terrains à usage agricole et les prix des terrains à usage résidentiel, nous introduisons enfin la variable  \og prix agricole par petite région agricole (PRA) \fg~ (source : AGRESTE, prix moyens des terres et prés libres de plus de 70 ares). Dans la représentation standard du modèle monocentrique en économie urbaine (voir \cite{Brueckner87} pour une description détaillée), la rente agricole en marge de la ville influence les prix du sol à usage résidentiel au sein de la ville et en constitue la valeur limite à la frontière de la ville. Quand cette valeur limite à la frontière augmente, les prix du sol augmentent en tout point de la ville également. Nous utilisons ici une mesure imparfaite de la rente agricole (voir \cite{Cava03} pour une discussion sur les différences entre rente et prix agricole) et mesuré non pas à la frontière des villes mais comme une moyenne par PRA. Le coefficient estimé pour l'effet de cette variable est significatif et positif ce qui montre que les prix des terrains à bâtir sont d'autant plus élevés que les prix agricoles de la PRA le sont. L'élasticité du prix des terrains à bâtir par rapport au prix des terres agricoles est de 0.2 sur l'ensemble de l'échantillon. Le sens de la causalité de cette corrélation entre prix des terres agricoles et prix des terrains à bâtir est cependant difficile à valider, l'extension des zones urbaines pouvant également exercer une influence à la hausse sur les prix des terres agricoles du fait de la pression exercée sur la ressource en terre disponible en quantité limitée (\cite{Cava03},\cite{Geniaux05}, \cite{LefeRouq11}). D'autre part, cette variable est potentiellement corrélée à d'autres comme les variables climatiques, la productivité des terres agricoles étant liée au climat, et peut donc capturer l'effet de variables inobservées. Nous reviendrons plus en détail sur les liens entre prix des terres agricoles et prix des terrains résidentiels dans la partie 4 de l'étude.\par  
+
+\subsection{Prise en compte de l'hétérogénéité spatiale par le modèle}
+
+Pour tester si les variables de localisation introduites dans la modélisation capturent bien les corrélations spatiales observées sur la carte \ref{prix_com_auto}, on estime à nouveau l'indicateur de Moran et les corrélations spatiales locales cette fois-ci sur les résidus moyens par commune de l'estimation du tableau \ref{Regressions1} (colonne 1). L'indice de Moran indique la présence d'une autocorrélation spatiale positive dans les résidus mais d'une ampleur bien moins marquée que dans les premières régressions (Indice de Moran de 0.17 à 0.27 selon la matrice de poids retenue). \par  
+
+\begin{figure}[!h]%
+\begin{center}
+\caption{Corrélations spatiales locales significatives restantes pour les résidus moyens par commune (modèle 1)}%
+\label{residus_com_lisa}%
+\includegraphics[width=0.85\columnwidth]{residus_com_lisa}%
+\end{center}
+
+\scriptsize\textit{\textbf{Sources :} EPTB, calculs CGDD \\
+\textbf{Note de lecture :} La carte représente les corrélations spatiales locales significatives de la moyenne communale des résidus du modèle estimé par l'estimation du tableau \ref{Regressions1} (colonne 1).  Les zones rouges (clusters HH pour \og Haut-Haut \fg) sont les zones de regroupements significatifs de valeurs hautes des prix des terrains et les zones bleues (clusters BB pour \fg Bas-Bas \fg) sont les zones de regroupements significatifs de valeurs basses des prix des terrains. Les zones beiges correspondent à des zones où la corrélation spatiale entre communes situées à proximité est non significative.}
+\end{figure}
+
+La carte \ref{residus_com_lisa} montre également que les indicateurs locaux de corrélations spatiales au niveau des communes sont moins nombreux à être significatifs. L'introduction de variables  capturant l'hétérogénéité spatiale  des prix des terrains a donc réduit fortement les corrélations spatiales existantes. \cite{Geniaux05} trouvent des résultats qui se rapprochent de ceux-ci avec une forte réduction de l'autocorrélation spatiale dans les estimations des prix de ventes des terres agricoles où l'hétérogénéité spatiale est contrôlée par des indicatrices communales.  Dans la suite de l'étude, nous faisons le choix de ne pas traiter la corrélation restante qui nécessiterait des modèles plus complexes et plus lourds à estimer sur un grand volume de données pour un apport limité en termes de compréhension des marchés fonciers. Une étude approfondie des causes de ces interactions spatiales serait cependant intéressante à mener mais suppose de se localiser sur un espace géographique plus restreint et de géo-référencer plus précisément les terrains. \par  
+
+
+
+\cleardoublepage
+
+\thispagestyle{partie}
+\cadreblanc{Partie 2}{Comment expliquer la variabilité des prix fonciers entre pôles?}{D'une d'aire urbaine à l'autre, les écarts de prix fonciers entre pôles sont très marqués. On constate par exemple un rapport de 1 à 5 entre Limoges et Paris et de 1 à 2 entre Le Havre et Montpellier. La taille de l'aire urbaine, son dynamisme démographique, son attractivité touristique, et la connectivité du pôle aux autres marchés de l'emploi expliquent plus des 3/4 de ces écarts de prix entre pôles}
+
+\newpage
+\pagestyle{fancy}
+
+\invisiblesection{Comment expliquer la variabilité des prix fonciers entre pôles?}\label{sec:marker3}
+
+\markboth{Partie 2 : Comment expliquer la variabilité des prix fonciers entre pôles?}{}
+
+\subsection{Une disparité forte des prix d'une aire urbaine à l'autre}
+
+Les estimations du tableau \ref{Regressions1} montrent que les indicatrices par aires urbaines expliquent une part importante de la variabilité des prix des terrains, le R$^2$ de ces estimations étant sensiblement plus élevé que celui des mêmes estimations sans les indicatrices par AU (tableau \ref{Regressions_sansIAU} en annexe). Ces estimations incluent cependant d'autres variables explicatives complémentaires. Les valeurs des indicatrices identifient donc les écarts de prix entre AU pour un niveau de référence (dans le cas d'une variable discrète) ou pour un niveau moyen (dans le cas d'une variable continue) de ces variables. Les variables communales et régionales rendent l'interprétation de ces valeurs difficiles. De manière à estimer la valeur globale de la localisation dans les différentes aires urbaines, on estime ici la valeur des indicatrices par aire urbaine grande ou moyenne en retirant les variables communales et régionales mais en conservant les caractéristiques individuelles des terrains. L'équation estimée est la suivante :
+\begin{eqnarray}
+\ln(P_{icat}) & =&  \tau_{t} I_t + \delta_{a} I_a + \gamma \ln(S_{icat}) + \delta I_{VIA} + \theta I_{INTERMED} +  \epsilon_{icat} \label{eq:modelsansvarcom}
+\end{eqnarray}
+
+On estime ce modèle sur les 4 échantillons comme pour la partie II de l'étude.  Selon une méthode similaire à la partie I, on calcule à partir des coefficients estimés pour ces indicatrices $\hat{\delta_{a}}$, $\hat{P_{a}}$ le prix d'un terrain de référence de surface $\bar{S} = 1000 $ m$^2$,  non viabilisé acheté sans intermédiaire, vendu en 2014 dans une commune située dans l'aire urbaine grande ou moyenne $a$ (ou dans une commune pour laquelle le pôle de l'aire urbaine $a$ est le grand ou moyen pôle dont le temps d'accès en voiture est le plus faible). Lorsqu'on estime le modèle sur les pôles uniquement, $\hat{P_{a}}$ correspond au prix d'un terrain situé dans le pôle de l'aire urbaine a. Similairement, lorsqu'on estime le modèle sur les communes de l'espace périurbain ou de l'espace à dominante rurale, $\hat{P_{a}}$ correspond respectivement au prix d'un terrain situé dans la couronne périurbaine de l'aire urbaine $a$ ou dans l'espace rural à proximité de l'aire urbaine $a$. 
+\begin{eqnarray*}
+\hat{P_{a}} &  = & \bar{S}^{\hat{\gamma}} e^{\hat{\delta_{a}}}
+\end{eqnarray*}
+
+Le tableau \ref{distribpmoy2} fournit des informations synthétiques sur la distribution des valeurs estimées pour $\hat{P_{a}}$ selon l'échantillon de données utilisés ainsi que des indications sur le pouvoir explicatif et la significativité des indicatrices par aire urbaine. L'ensemble des résultats des régressions estimées à partir de l'équation \ref{eq:modelsansvarcom} est reporté en annexes dans le tableau \ref{Regressions_sansIAU}. 
+L'ajout des effets fixes par aire urbaine aux modèles avec caractéristiques des terrains uniquement fait augmenter sensiblement le coefficient de détermination de 0.2 à 0.37 selon le sous-échantillon considéré. Sur l'ensemble de l'échantillon où la variabilité entre aires urbaines est la plus grande, 94~\% des indicatrices sont significatives au seuil de 5~\%. Dans les estimations sur l'espace à dominante rurale, les 3/4 des indicatrices restent significatives. Dans cet espace, les indicatrices correspondent à l'aire urbaine (grande ou moyenne) la plus proche en temps de parcours en voiture. La proximité d'une aire urbaine ou d'une autre influe donc significativement  sur le prix des terrains à bâtir y compris dans ces zones majoritairement rurales. \par  
+
+\input{tableaux_modif/distribpmoy2}\par  
+
+\begin{figure}[!h]%
+\begin{center}
+\caption{Valeurs estimées des prix pour les pôles des grandes et moyennes aires urbaines \label{EFpole}}
+\includegraphics[width=0.9\columnwidth]{prix_pole2}
+\end{center}
+\scriptsize \textit{\textbf{Sources :} EPTB, calculs CGDD}
+\end{figure}
+
+Les prix estimés sont plus élevés en moyenne dans les pôles des grandes et moyennes AU (69 euros par m$^2$) que dans l'espace périurbain et l'espace rural qui les entourent (47 et 37 euros par m$^2$ respectivement). Il en va de même pour les valeurs extrêmes (déciles 1 et 9) de la distribution qui sont plus élevés dans les pôles. Ces écarts de prix entre pôles des grandes et moyennes AU sont représentés sur la carte \ref{EFpole}. Autour de la valeur médiane 56 euros par m$^2$ pour le pôle urbain de Vienne, la dispersion des prix est grande malgré le caractère très urbain de tous les pôles considérés. On constate par exemple des écarts de 1 à 5 entre Limoges et Paris et de 1 à 2 entre Le Havre et Montpellier. \par  
+
+\subsection{Des écarts de prix entre aires urbaines fonction de leur taille, de leur accessibilité et de leur attractivité}
+
+Un premier facteur d'explication de ces disparités est de toute évidence la taille de l'aire urbaine centrée sur le pôle en question. Ainsi, il est raisonnable de penser qu'une aire urbaine plus peuplée (à superficie équivalente) ou plus densément peuplée présente des prix plus élevés du fait de la concurrence entre ménages pour une même ressource en foncier. La figure \ref{distriTAU} montre que les prix moyens estimés dans les pôles sont d’autant plus élevés que la taille de l’aire urbaine où les terrains sont situés est importante. Les aires urbaines de plus de 500~000  habitants se démarquent largement des autres avec des prix très élevés tandis que les aires urbaines dont la population est inférieure à 50~000 habitants présentent des prix inférieurs à la moyenne nationale.\par  
+
+\begin{figure}[!h]%
+\begin{center}
+\caption{Distributions  par taille d'aire urbaine des prix au m$^2$ estimés pour un terrain de référence situé dans les pôles (en euros 2014)\label{distriTAU}}
+\includegraphics[width=0.8\columnwidth]{distriEF_parTAU}
+\end{center}
+
+\scriptsize \textit{\textbf{Sources :} EPTB, calculs CGDD}
+\end{figure}
+
+Au sein de chaque tranche de taille d'aire urbaine, il existe cependant des disparités entre AU. Pour identifier les facteurs de disparités restants, selon une méthode similaire à celle utilisée par \cite{Combes_etal11}, on régresse les effets fixes par pôle d'aire urbaine, i.e. les $\delta_a$ obtenus par l'estimation de l'équation \ref{eq:modelsansvarcom} limitée aux communes des pôles, sur des caractéristiques des aires urbaines \footnote{Contrairement au modèle estimé par \cite{Combes_etal11}, nos effets fixes correspondent à une valeur moyenne des prix sur l'ensemble du pôle de l'aire urbaine a et non au prix au centre de l'aire urbaine a}. \par   
+
+\begin{eqnarray*}
+\delta_{a} & =& \beta_0 + \sum_k \beta_k Z_{ka} + \epsilon_{a} \\
+\label{eq:modelEFpole}
+\end{eqnarray*}
+
+Les caractéristiques $Z_{ka}$ sélectionnées reflètent le dynamisme et l'attractivité des aires urbaines. Elles sont introduites progressivement de manière à étudier leur pouvoir explicatif et identifier les éventuelles corrélations entre variables (tableau \ref{Reg_EF_pole_urbain_new}). La plupart des variables continues sont introduites en logarithme de manière à pouvoir les interpréter comme des élasticités.\par    
+
+La population de l'aire urbaine influe positivement sur les prix dans le pôle (colonne (1)). Lorsqu'on ne contrôle pas pour la superficie totale de l'aire urbaine (toutes les colonnes hormis la colonne (3)), le coefficient l'élasticité du prix à la population estimé est relativement stable autour de 0.14-0.22 quelles que soient les variables complémentaires introduites. Une aire urbaine de population deux fois plus importante qu'une autre présente ainsi des prix de 10 à 16~\% plus importants. Cette estimation de l'élasticité du prix des terrains à la population est cohérente avec d'autres estimations de la littérature. \cite{Goffette09} estime une augmentation de 10~\% de la population de l’aire urbaine augmente les prix fonciers de 2~\% tandis que \cite{Combes_etal11} estiment cette élasticité à 0.15 sur les données de l'EPTB de 2008.  La population de l'AU n'explique en revanche que 22~\% de la disparité des prix entre aires urbaines. \par  
+
+
+%\input{Reg_EF_AU_pole}
+\begin{landscape}
+\input{Reg_EF_pole_urbain_new}
+\end{landscape}
+
+La colonne (2) montre que les prix dans les pôles des AU dont la croissance de la population a été plus forte entre 1999 et 2010 sont significativement plus élevés. Les villes plus attractives et plus dynamiques sur le plan démographique ont des prix plus élevés (+ 2.8~\%  pour un taux de croissance de la population de 1~\% plus élevé). \`{A} superficie donnée de l'aire urbaine, l'élasticité du prix à la population est plus importante (0.45 pour la colonne (3)). \`{A} superficie donnée, augmenter la population revient à densifier l'aire urbaine. On identifie ici donc plutôt l'élasticité du prix à la densité de population de l'aire urbaine. Sans contrôler pour la superficie de l'aire urbaine, l’élasticité estimée représente l'effet d'un accroissement de la population de l'AU qui peut conduire soit à densifier, soit à étendre l'emprise spatiale de l'AU (étalement urbain). Population, croissance démographique et superficie de la ville expliquent près de la moitié des disparités de prix entre ville. En complément de la superficie totale de l'AU, la colonne (4) introduit deux mesures  de la disponibilité en terrains sur l'aire urbaine. Les aires urbaines où la part de superficie artificialisée est plus importante ont en moyenne des prix plus élevés du fait de la moins grande disponibilité en terrains tandis que celles où les terrains agricoles représentent encore une part importante du foncier ont des prix plus faibles. \par   
+
+La colonne (5) introduit une mesure de l'accessibilité du pôle de l'aire urbaine aux emplois situés dans les autres pôles d'emplois alentours. Cet indicateur est calculé à partir des coûts généralisés de transport pour atteindre les autres pôles d'emploi en voiture (les emplois du pôle lui-même sont donc exclus de l'indicateur). L'emploi dans les autres pôles est pondéré par le coût généralisé nécessaire pour les atteindre, les emplois les plus proches et donc les moins coûteux à atteindre ayant un poids plus important (cf annexes pour le détail du calcul de l'indicateur). Il mesure donc l'accessibilité du pôle aux emplois extérieurs au pôle ou en d'autres termes la connectivité du pôle aux autres marchés de l'emploi. L'élasticité des prix dans les pôles à cet indicateur est estimé à 0.09. Un pôle ayant une accessibilité aux emplois extérieurs deux fois plus importante présente ainsi des prix 6~\% plus élevés.\par   
+
+%(\textbf{Eventuellement ajouter une carte sur cet indicateur pour donner des valeurs chiffrées sur quelques pôles connus})\par  
+
+La colonne (6) introduit le \og Revenu moyen par UC \fg~ sur l'aire urbaine comme variable de contrôle. Comme on peut s'y attendre, les aires urbaines les plus riches présentent des prix moyens plus élevés en moyenne. \`{A} taille de la ville donnée, l'augmentation du revenu moyen des ménages accroît les prix fonciers avec une élasticité de l'ordre de 1.5. \`{A} revenu moyen donné, l'effet de la population de l'AU sur les prix est plus faible et l'élasticité passe de 0.2 à 0.16. \par  
+
+Dans la colonne (7), on ajoute six variables complémentaires mesurant l'attractivité de l'aire urbaine : la \og part de résidences secondaires \fg~, la \og température moyenne annuelle \fg~ et la \og pluviométrie annuelle \fg~ qui capturent l'attractivité touristique et climatique de l'aire urbaine et la \og part de logements vacants \fg~ qui capture la moindre attractivité du parc de logement existant et incidemment de l'aire urbaine elle-même. Enfin, les variables \og Pôle littoral \fg~  et \og Pôle de montagne \fg~ indiquent si au moins une des communes composant le pôle est désignée comme littorale ou de montagne. Le signe des coefficients estimés est intuitif pour ces cinq premières variables puisque les aires urbaines les plus attractives (plus de résidences secondaires, température moyenne plus élevée, pôle littoral, vacance des logements plus faible et pluviométrie plus basse) présentent des prix plus élevés. Le fait qu'un pôle soit situé sur le littoral n'est en revanche pas significatif. Le signe positif et la significativité de la variable  \og Pôle de montagne \fg~ est en revanche plus difficile à interpréter. Il peut s'agir ici d'un effet lié à l'attractivité touristique de ces pôles qui offrent une proximité aux équipements de sports d'hiver, aux stations thermales ou aux activités de montagne en été comme Sallanches, Chamonix, Grenoble, Digne-les-Bains ou Briançon. On observe également que le coefficient estimé pour l'effet du taux de croissance de la population diminue fortement du fait de l'introduction de ces variables complémentaires. Ce résultat n'est pas surprenant puisque l'accroissement de la population est aussi une mesure de l'attractivité de l'aire urbaine à travers notamment l'installation de nouveaux habitants.\par   
+
+La colonne (8) combine l'ensemble des variables introduites jusqu'ici. L'ensemble des caractéristiques des aires urbaines expliquent plus de 70~\% de la variabilité des prix entre pôles des aires urbaines.  Les signes et les ordres de grandeur des coefficients estimés sont cohérents avec les estimations des colonnes (1) à (7) même si la significativité de certains paramètres est plus faible. Les variables \og part de résidences secondaires \fg~  et \og Pôle de montagne \fg~ deviennent non significatives tandis que la variable \og Pôle littoral \fg~  le devient. On peut supposer ici une corrélation entre ces trois variables qui capturent des effets similaires d’attractivité touristique des pôles. \par  
+
+%\paragraph{} \textbf{Réfléchir à une conclusion rapide pour cette partie, avec une illustration sur des villes existantes...}
+
+On distingue donc ici plusieurs types d'effets qui participent aux niveaux élevés des prix au sein des grands et moyens pôles. Un effet de la taille de la ville ou de la densité de population qui accroît la demande de foncier dans ces pôles du fait du regroupement d'un grand nombre d'emplois et de la concentration d'aménités positives. Un second effet est lié à l'attractivité et au dynamisme démographique de la ville qui accroît la pression sur le foncier disponible comme en témoigne la variable croissance de la population et l'ensemble des variables décrivant l'attractivité touristique des villes. Le revenu moyen a également un impact positif sur les prix. Un dernier effet semble être lié à la connectivité des pôles aux autres marchés de l'emploi. \par  
+
+
+%\subsection{Évolution temporelle des prix : Les écarts entre villes et entre espace urbain et rural se réduisent?}
+%
+%\paragraph{} \textbf{Éventuellement creuser les évolutions contrastées des prix des différentes villes} 
+%
+%Les prix fonciers croissent entre 2006 et 2012 dans toutes les catégories d’aires urbaines, malgré une légère baisse en 2010 à Paris (tableau \ref{moyenne_TAU_ter_base2006}). La croissance des prix moyens des terrains est plus marquée dans les communes hors aires urbaines (+52~\% contre +41~\% dans les communes situées dans des AU de plus de 500 000 habitants).
+%
+%\input{moyenne_an_TAU_ter_base2006}
+
+\cleardoublepage
+
+\thispagestyle{partie}
+\cadreblanc{Partie 3}{Quels impacts de l'accessibilité aux emplois et aux services sur les prix fonciers?}{Toutes choses égales par ailleurs, une commune dont l'accessibilité à l'emploi est deux fois plus grande qu'une autre présente des prix plus élevés de 16~\%. Cet effet de l'accessibilité à l'emploi sur les prix est plus marqué dans l'espace périurbain. Dans l'espace à dominante rurale, l’accès aux pôles d’emploi est moins valorisé par les ménages tandis qu’un mauvais accès aux services et équipements dégrade la valeur des terrains.
+}
+
+\newpage
+\pagestyle{fancy}
+\invisiblesection{Quels impacts de l'accessibilité aux emplois et aux services sur les prix fonciers?}\label{sec:marker4}
+\markboth{Partie 3 : Quels impacts de l'accessibilité aux emplois et aux services sur les prix fonciers?}{}
+
+La disparité des niveaux de prix moyens d'une aire urbaine à l'autre reflète donc bien les choix de localisation des ménages dans une aire urbaine plutôt qu'une autre. \`{A} un niveau plus local, au sein d'une aire urbaine et dans les espaces ruraux qui l'entourent, l'arbitrage des ménages dans leur choix de localisation en fonction de la proximité des emplois, des services et des équipements devrait également se refléter dans les prix moyens des terrains à travers une concurrence plus forte pour les terrains ayant une accessibilité plus grande. \par
+
+Mesurer l'influence de l'accessibilité aux emplois et aux services sur les prix d'un bien immobilier ou foncier peut se faire selon différentes approches. La majorité des analyses économétriques sur le sujet introduisent des variables de distance géographiques à des pôles d'emploi, des équipements, des services. Ces variables sont souvent mesurées avec des degrés divers de précisions (distance à vol d'oiseau, distance du chemin le plus court, distance minimisant le temps de parcours ou le coût du transport). Un des problèmes récurrents dans l'utilisation de variable de proximité à des aménités va être les corrélations fortes qui existent entre variables explicatives. En effet, l'emploi, les équipements et les services ont tendance à être regroupés dans l'espace si bien qu'il est impossible de distinguer l'effet de la proximité d'un pôle d'emploi et/ou d'un service sur la variable d'intérêt.\par
+
+D'autre part, la distance au pôle ou à un type d'équipement le plus proche mesure de manière imparfaite l'accessibilité d'un bien puisque plusieurs pôles d'emplois ou de services peuvent se situer aux alentours du bien et à des distances similaires. Le fait d'être à proximité de deux pôles d'emplois ou plus n'a potentiellement pas le même effet sur la valeur d'un terrain que si ce même terrain était situé à proximité d'un pôle unique. On peut bien sûr envisager d'introduire de manière séparée la distance aux n pôles les plus proches mais on multiplie alors le risque de biais dans l'estimation des paramètres du fait des corrélations entre ces variables. \par
+
+Enfin, la relation entre la distance à un pôle et le prix est susceptible d'être variable selon la distance à laquelle le bien se trouve et selon le pôle. On peut alors introduire des transformations des variables de distances plus ou moins élaborées pour tenir compte de ces éventuelles non linéarités et vérifier la stabilité des paramètres de distances sur différents sous échantillons. Différentes approches pour modéliser ces paramètres seront comparées dans cette partie. \par
+
+Parmi les variables communales introduites dans les estimations du tableau \ref{Regressions1}, la variable \og Temps d’accès au pôle le plus proche \fg~ contrôle pour la proximité du pôle de plus de 5~000 emplois le plus proche de la commune où le terrain a été acheté. Elles montrent que lorsque le temps de parcours en voiture pour atteindre un pôle de plus de 5~000 emplois augmente de 10~\%, le prix des terrains baisse de 1~\%. Lorsque que le temps de parcours double, toutes choses égales par ailleurs, les terrains sont 7~\% moins chers. Les estimations sur les 3 espaces montrent que le gradient de prix avec le temps d'accès au pôle est plus marqué dans l'espace à dominante rurale que dans le périurbain. \par
+
+Selon la définition retenue pour définir le pôle d'emploi le plus proche, les paramètres estimés varient cependant assez significativement. Le tableau  \ref{Temps_pole_comp} montre les paramètres estimés pour l'effet de deux autres variables mesurant le temps d'accès aux pôles d'emplois : \par 
+
+\vspace{0.2cm}
+
+\begin{itemize}[font=\tiny]
+	\item Le temps d'accès au pôle de l'aire urbaine (grande ou moyenne) dans laquelle se situe la commune ou l'aire urbaine  (grande ou moyenne) la plus proche pour les communes en dehors de ces aires. 
+	\item Le temps d'accès en voiture au pôle d'emploi de plus de 10~000 emplois le plus proche. 
+\end{itemize}
+
+Ces variables de temps sont introduites une par une et les autres variables explicatives sont les mêmes que dans le tableau \ref{Regressions1}. Sur l'ensemble de l'échantillon, les résultats montrent un effet plus marqué de la distance au pôle de l'aire urbaine sur les prix par rapport à la distance aux pôles d'emploi les plus proches (élasticité de −0.17 aux temps d'accès au pôle de l'AU). Cette différence semble surtout marquée pour les communes de l'espace périurbain où un doublement du temps d'accès au pôle de l'AU dans les communes périurbaines fait baisser les prix au m$^2$ de 25~\%. Dans les deux autres espaces, les trois variables de distance donnent des résultats proches puisque les communes situées dans les pôles des grandes et moyennes aires urbaines appartiennent déjà à un pôle de plus de 5~000 emplois au moins tandis que le pôle de 5~000 emplois le plus proche d'une commune de l'espace rural correspond souvent à celui de l'aire urbaine la plus proche. Dans le périurbain en revanche, il existe un certain nombre de pôles d'emplois secondaires distincts du pôle de l'aire urbaine qui peuvent dépasser le seuil de 5~000 emplois, notamment dans les grandes aires urbaines. Les marchés du foncier locaux sont donc influencés à la fois par la proximité de ces pôles secondaires mais aussi par l'éloignement du pôle de l'AU qui concentre le plus d'emplois et d'aménités positives. L'effet distance au pôle de l'AU semble être plus important pour ces communes. \par
+%
+%\textbf{
+%\begin{itemize}
+%	\item Comparer avec d'autres valeurs dans la littérature 
+%	\item citation : \cite{Goffette09} le prix unitaire du sol diminue de 3,5~\% pour un éloignement d’un kilomètre du centre.
+%	\item citation : \cite{Goffette09} la croissance des prix fonciers est plus rapide en périphérie qu’au centre des agglomérations
+%	\item Eventuellement estimer une valeur hédonique du temps : combien les gens sont prêts à payer pour s'éloigner de 1h du centre 
+%\end{itemize}
+%}
+
+\input{tableaux_modif/Temps_pole_comp} 
+
+De manière à prendre en compte l'ensemble des pôles d'emplois (de plus de 5~000 emplois) au sein d'un seul indicateur, on estime les mêmes modèles en remplaçant ces variables de temps par un indicateur d'accessibilité à l'emploi. L'avantage d'une mesure de l'accessibilité de ce type est de tenir compte du polycentrisme de la distribution des emplois au sein des aires urbaines, les pôles d'emplois les plus importants et les plus accessibles depuis une commune ayant un poids plus important dans l'indicateur. Il est en revanche plus difficile à interpréter car la notion d'\og accessibilité \fg~est moins facile à appréhender que le temps de parcours ou la distance. La valeur calculée dépend également de la méthode de calcul retenue. Nous retenons ici une accessibilité de type gravitaire calculée sur tous les pôles de plus de 5~000 emplois qui regroupent 87~\% des emplois en France selon le recensement 2010 de l'INSEE (cf. annexe B).  \par
+
+Le tableau \ref{Reg_access1} montre un effet positif et significatif de cet indicateur d'accessibilité sur les prix. L'ajustement des modèles est également légèrement meilleur. Toutes choses égales par ailleurs, une commune dont l'accessibilité à l'emploi est deux fois plus grande qu'une autre présente des prix plus élevés de 16~\%. L'effet de l'accessibilité à l'emploi est particulièrement marqué dans l'espace périurbain où la variable explique une part plus importante des écarts de prix entre communes. Le R$^2$ du modèle estimé dans l'espace périurbain augmente de 0.03 par rapport au modèle estimé avec la variable \og Temps d’accès au pôle le plus proche \fg. On peut supposer que cet indicateur explique mieux les écarts de prix dans l'espace périurbain par rapport à la distance à un pôle unique (pôle le plus proche, pôle de l'aire urbaine) qui ignore les autres pôles situés à proximité qui peuvent influer sur la demande locale de foncier. Dans les pôles des aires urbaines, l'accessibilité à l'emploi est forte partout et explique peu les écarts de prix malgré un effet positif significatif. Dans l'espace rural, l'effet de l'accessibilité à l'emploi sur les prix est moindre. \par
+
+Les paramètres estimés pour certaines autres variables explicatives sont impactés assez significativement, notamment la variable \og part des superficies urbanisées \fg~ dans les pôles et l'espace périurbain dont le paramètre estimé diminue fortement en valeur absolue tout en restant significatif. Cette variable est corrélée avec l'accessibilité aux pôles d'emplois qui sont en général des communes ou des unités urbaines où la part des surfaces urbanisées est importante. Dans les estimations où la distance au pôle le plus proche était introduite, elle capturait donc potentiellement  l'effet sur les prix des aménités positives liées à ces pôles. L'effet positif de la variable \og littoral \fg~  et l'effet négatif de la variable \og montagne \fg~ sur les prix sont également moins marqués mais ils restent néanmoins significatifs. De plus, dans l'espace périurbain, le fait d'appartenir à une unité urbaine, à accessibilité à l'emploi donnée,  a un effet plus faible que dans les modèles précédents. Enfin, l'effet des trois variables de contrôles température annuelle, pluviométrie annuelle et prix agricole est également modifié pour les estimations sur les pôles et l'espace périurbain alors qu'il reste inchangé dans l'espace à dominante rurale. \par
+
+\input{tableaux_modif/Reg_access1} 
+
+Dans les régressions suivantes (tableau \ref{Reg_access3}), on ajoute deux variables mesurant l'effet de l'accessibilité aux équipements sur les prix. Les variables \og Temps équipts inter > 10 min \fg~ et \og Temps équipts sup > 20 min \fg~ mesurent, à accessibilité à l'emploi donnée, les écarts de prix entre communes situées respectivement à plus ou moins dix minutes en moyenne des équipements et services intermédiaires (cf définition en annexe B) et à plus ou moins 20 minutes en moyenne des équipements et services supérieurs. Sur l'ensemble de l'échantillon, les écarts estimés sont de -4 et -5~\% respectivement et le paramètre lié à l'accessibilité à l'emploi est peu modifié. Ces deux variables modifient très peu les paramètres estimés dans les pôles et l'espace périurbain et ont des effets faibles ou non significatifs à l'exception de l'effet de la distance aux équipements supérieurs dans les pôles qui est positif et significatif. Il pourrait s'agir d'une préférence à se situer loin de certains grands équipements qui entraînent des nuisances comme les équipements sportifs mais il faut interpréter avec prudence ce paramètre qui est peut être corrélé avec d'autres facteurs inobservés. \par
+
+Dans l'espace à dominante rurale, l'effet de ces deux variables sur les prix est plus fort tandis que le paramètre associé à l'accessibilité à l'emploi diminue lorsqu'elles sont ajoutées au modèle. Il semblerait donc que dans cet espace, l'accès aux pôles d'emploi est moins valorisé par les ménages dans leurs choix de localisation tandis qu'un mauvais accès aux services et équipements affectent la valeur des terrains. Ces paramètres peuvent également être révélateurs d'une demande plus forte des ménages de l'espace rural pour un meilleur accès aux équipements et services. \par
+
+%\textbf{Eventuellement évaluer là où le paramètre est plus fort = demande d'amélioration de l'accessibilité plus forte} \par
+
+\input{tableaux_modif/Reg_access3} 
+
+Pour conclure, la figure \ref{residus_com_lisa_access} montre que les corrélations spatiales restantes dans les résidus du modèle où l'indicateur d'accessibilité est introduit sont moins nombreuses. D'autre part, la statistique I de Moran est plus faible que dans les autres estimations (entre 0.08 et 0.21 selon la matrice de poids retenue). Ceci suggère que l'indicateur d'accessibilité capture mieux les corrélations spatiales que les indicateurs simples sur le temps ou la distance. \par
+
+\begin{figure}[!h]%
+\caption{Corrélation spatiales locales significatives restantes pour les résidus moyens par communes (modèle 1 du tableau  \ref{Reg_access1})}%
+\label{residus_com_lisa_access}%
+\includegraphics[width=0.9\columnwidth]{residus_com_lisa_access}%
+
+\scriptsize\textit{\textbf{Sources :} EPTB, calculs CGDD \\
+\textbf{Note de lecture :} La carte représente les corrélations spatiales locales significatives de la moyenne communale des résidus du modèle estimé par l'estimation du tableau \ref{Reg_access3} (colonne 1).  Les zones rouges (clusters HH pour \og Haut-Haut \fg) sont les zones de regroupements significatifs de valeurs hautes des prix des terrains et les zones bleues (clusters BB pour \fg Bas-Bas \fg) sont les zones de regroupements significatifs de valeurs basses des prix des terrains. Les zones beiges correspondent à des zones où la corrélation spatiale entre communes situées à proximité est non significative.}
+\end{figure}
+
+%\subsection{Des gradients variés d'une aire urbaine à l'autre}
+%A REPRENDRE OU ENLEVER
+%
+%D'une aire urbaine à l'autre, les gradients de prix des terrains au m$^2$ en fonction du temps pour atteindre un grand pôle varient (Cf estimations des gradients par aire urbaine en annexes). Graphiquement, on observe dans la majorité des cas une décroissance assez forte des prix sur les premières minutes et un palier à partir d'un certain temps. Ce palier peut varier d'une aire urbaine à l'autre (autour de 40 minutes dans les exemples de la figure \ref{Gradient_prix_temps}). La variabilité des gradients de prix entre zones peut être le signal de différences en termes de réseau routier et d'accessibilité entre villes. Il peut également signaler une valorisation moins grande de la proximité du pôle dans certaines villes.
+%
+%%\input{grad_temps_EPTB3}
+%
+%\paragraph{} De manière à tester ces discontinuités économétriquement, le gradient de prix des terrains en fonction du temps est estimé sur différents sous-échantillons de communes plus ou moins éloignées des grands pôles (tableau \ref{grad_temps4}). Les résultats montrent que la pente du gradient de prix foncier varie selon la distance aux grands pôles. Le gradient de prix est plus marqué entre 20 et 40 minutes. Au delà de 60 minutes, le gradient n'est plus significatif du fait du faible nombre d'observations. 
+
+\cleardoublepage
+
+\thispagestyle{partie}
+\cadreblanc{Partie 4}{Une limite à l'influence des villes sur les prix fonciers?}{L'analyse comparée des prix du foncier agricole et résidentiel montre des écarts de prix marqués entre terrains agricoles et terrains à bâtir y compris dans les communes rurales. Dans les communes rurales, la proximité des aires urbaines et l'accessibilité à l'emploi a toujours un effet significatif sur le prix des terrains à bâtir. Dans les communes situées à la frontière des aires urbaines, les prix sont significativement plus élevés que dans les communes rurales plus éloignées.
+}
+\newpage
+\pagestyle{fancy}
+
+\invisiblesection{Une limite à l'influence des villes sur les prix fonciers?}\label{sec:marker5}
+\markboth{Partie 4 : Une limite à l'influence des villes sur les prix fonciers?}{}
+
+Les estimations des parties précédentes ont montré que les déterminants des prix des terrains dans l'espace à dominante rurale sont similaires à ceux observés dans les pôles et l'espace périurbain. Les prix des terrains dans cet espace sont notamment significativement influencés par l'accessibilité aux emplois et par la proximité des grandes et moyennes aires urbaines. Les 3/4 des indicatrices par aire urbaine sont significatives y compris pour les estimations sur l'espace à dominante rurale (tableau \ref{distribpmoy2}). Ces résultats suggèrent que l'influence des grandes et moyennes aires urbaines s'étend sur l'ensemble de l'espace à dominante rurale. \par
+
+Dans les modèles standards d'économie urbaine (\cite{Alonso64,Mills67,Muth69}), on suppose l’existence d’un arbitrage entre usage du sol pour le logement et autres usages donnant lieu à un prix du sol au $m^2$ indépendant de l’agglomération à la frontière de l'agglomération. Ce prix de frontière correspond à la rente agricole selon l'hypothèse que la terre agricole est disponible en quantité illimitée au delà de l'aire d'influence de la ville et que la rente agricole n'est pas influencée par la ville. Cette hypothèse de prix du foncier fixé à la frontière des villes est importante car elle conditionne un certain nombre des résultats du modèle. Elle suppose que les prix des terrains à usage agricole ne sont pas influencés par la proximité des villes ce qui est remis en cause par les analyses empiriques des déterminants des prix agricoles (\cite{Cava03}, \cite{Geniaux05}). Les auteurs de ces analyses formulent différentes hypothèses pour expliquer les gradients de prix observés sur les prix agricoles en fonction de la localisation par rapport aux espaces urbanisés comme le fait que les acheteurs forment des anticipations sur le changement d'usage futur du terrain et sur une éventuelle plus value réalisée lors de sa revente ce qui suggère que les marchés agricoles et résidentiels ne sont pas complètement segmentés. D'autre part, les contraintes réglementaires en urbanisme portant sur les droits à bâtir peuvent entraîner des effets de rareté sur les terrains qui expliquent pourquoi l'écart observé entre prix des terrains constructibles et des terrains agricoles est empiriquement beaucoup plus important que le coût de conversion d'un usage à l'autre. \par 
+
+Cette partie explore empiriquement les données sur les prix des terrains en estimant les écarts de prix observés entre terrains agricoles et constructibles pour différentes localisations. Elle évalue ensuite si l'influence des grands et moyens pôles des aires urbaines persiste dans les communes rurales isolées. Elle estime enfin les écarts de prix entre les communes situées à la  limite des aires urbaines et les communes rurales alentours. \par
+
+\subsection{Des écarts de prix marqués entre terrains agricoles et terrains à bâtir y compris dans les communes rurales isolées} 
+
+\begin{figure}[!h]%
+\begin{center}
+\caption{Distribution des prix au m$^2$ des terrains en 2014 par espace (espace à dominante rurale désagrégé)}%
+\label{distrib_prix_rural3}%
+\includegraphics[width=0.9\columnwidth]{distrib_prix_rural3}%
+\end{center}
+
+\scriptsize \textit{\textbf{Sources :} EPTB, calculs CGDD}
+\end{figure}
+
+Empiriquement, un examen rapide des prix des terrains dans l'espace à dominante rurale montre que, même dans ces espaces où l'influence des pôles est moindre, il existe un important différentiel de prix entre les prix des terrains agricoles et ceux des terrains constructibles. L'espace à dominante rurale tel que nous l'avons défini jusqu'ici est cependant relativement hétérogène car il comprend à la fois des unités urbaines (pôles des petites aires urbaines ou \og~petits pôles \fg, autres unités urbaines rurales) et des communes rurales (- de 2~000 habitants). Lorsqu'on désagrège cet espace entre petits pôles, unités urbaines rurales et communes rurales, on observe que les prix au m$^2$ des terrains dans les communes rurales sont sensiblement plus faibles que dans les autres espaces (figure \ref{distrib_prix_rural3}) y compris par rapport aux petits pôles et aux unités urbaines rurales.\par 
+
+\input{tableaux_modif/prix_rural_REG}
+
+En 2014, le prix moyen d'un m$^2$ de terrain dans les communes rurales est de 30 \euro. D'une région à l'autre, on observe une assez large variabilité des prix moyens autour de cette moyenne nationale. On note également une assez grande disparité dans l'évolution des prix entre 2006 et 2012 autour de la moyenne nationale (entre +40~\% en PACA, + 110~\% en Franche-Comté, - 19~\% en Alsace). Le prix moyen des terrains à bâtir dans ces communes rurales est néanmoins loin d'atteindre le niveau très faible des prix des transactions de terrains agricoles qui est inférieur à 1 \euro~par m$^2$ dans la majorité des régions. La corrélation entre le niveau moyen des prix agricoles et le niveau moyen des prix des terrains à bâtir est positive et significative mais assez faible (coefficient de corrélation de 0.26 à 0.53 selon l'année) ce qui peut laisser penser à un lien entre le niveau des prix agricoles et le niveau de prix des terrains une fois qu'ils sont devenus constructibles. \par 
+
+La comparaison des prix des terrains à bâtir dans les communes rurales à des prix agricoles moyens par région ne permet cependant pas d'expliquer les écarts de prix observés entre ces deux usages des sols à une distance donnée des pôles. Il peut en effet exister une variabilité forte dans les prix agricoles autour de ces valeurs moyennes. Ces écarts de prix se réduisent-ils ou non lorsqu'on s'éloigne des pôles? Afin d'approfondir cette question, nous enrichissons notre base de données sur le prix des terrains par des données de transactions sur les biens agricoles issues des bases notariales. Ces données couvrent l'ensemble du territoire métropolitain hors Île de France et sont empilées avec les données de l'EPTB sur deux années, 2006 et 2008 (cf encadré \og les sources de données \fg~pour une description des données).\par 
+
+\`{A} partir de ces données, on cherche ensuite à estimer le différentiel de prix entre 3 types de terrains. On suppose que le prix au m$^2$ d'un terrain qui a pour usage $u$ ( $u =$terrains à usage agricole (A), terrains à usage résidentiel non viabilisé (NV) ou les terrains à usage résidentiel viabilisé (V)) situé dans la commune $c$ et  situé dans ou à proximité de l'aire urbaine grande ou moyenne $a$ est fonction de son type (indicatrice $I_u$), de l'aire urbaine a  (indicatrice $I_a$), de l'évolution temporelle des prix (indicatrice $I_{t}$), de  sa surface $S_{iucat}$, de l'accessibilité à l'emploi  de la commune où il est situé $E_{ca}$, et de variables de contrôle communales et régionales $Z_{kca}$.
+\begin{eqnarray*}
+\ln(P_{iucat}) & =&  \theta_{u} I_u + \delta_{a} I_a + \tau_{t} I_{t}  +  \gamma \ln(S_{iucat}) + \lambda \ln(E_{ca}) +
+\sum_k \beta_k Z_{kca}  + \epsilon_{icat} \\
+\label{eq:reg_agri}
+\end{eqnarray*}
+
+Dans un premier temps, on estime ce même modèle en n'autorisant pas les paramètres à varier selon le type de terrain (colonne (1) du tableau \ref{Reg_terrains_agri}). On suppose ainsi implicitement que les marchés du foncier agricole et du foncier résidentiel ne sont pas segmentés. Le paramètre $\theta_{A}$ permet d'estimer directement le surcoût d'un terrain agricole par rapport à un terrain résidentiel non viabilisé qui est pris pour référence ($\frac{\hat{P_{NVt}}}{\hat{P_{At}}} = e^{\hat{-\theta_{A}}} = e^{3.46} =  32 $). \`{A} localisation donnée, le prix d'un m$^2$ de terrain agricole est donc en moyenne 32 fois inférieur à celui d'un m$^2$  de terrain résidentiel non viabilisé et $\frac{\hat{P_{iVcat}}}{\hat{P_{iAcat}}} =  e^{\hat{\theta_{V}} - \hat{\theta_{A}}} =e^{0.36+3.46} = 46 $ fois inférieur à celui d'un m$^2$  de terrain résidentiel viabilisé.\par
+
+\input{tableaux_modif/Reg_terrains_agri}
+
+Il est cependant probable que les marchés du foncier agricole et résidentiel soient segmentés étant donné les contraintes réglementaires sur les droits à bâtir s'appliquant aux terres agricoles. Pour tenir compte de cet effet, on autorise certains paramètres à varier selon le type de terrain (surface, accessibilité et évolution annuelle des prix). On suppose ainsi implicitement que les attributs des terrains sont différents et/ou valorisés différemment par les acheteurs et que les prix du foncier agricole et résidentiel évoluent de manière différente dans le temps. Dans les données dont nous disposons, les terrains agricoles sont en effet beaucoup plus grands que les terrains résidentiels et il est probable que la valorisation par l'acheteur d'un m$^2$ de terrain supplémentaire soit différente lorsqu'il s'agit d'un terrain à usage agricole. Ensuite il est possible que l'accessibilité aux pôles d'emploi ait un effet différencié selon le marché considéré. On estime ainsi dans la colonne (2) du tableau \ref{Reg_terrains_agri} le modèle suivant où les paramètres $\tau$, $\gamma$ et $\lambda$ dépendent de l'usage agricole ou résidentiel du terrain :
+\begin{eqnarray*}
+\ln(P_{iucat}) & =&  \theta_{u} I_u + \delta_{a} I_a + \tau_{ut} I_{ut}  +  \gamma_u \ln(S_{iucat}) + \lambda_u \ln(E_{ca}) +
+\sum_k \beta_k Z_{kca}  + \epsilon_{icat} \\
+\end{eqnarray*}
+
+Les autres variables de contrôle sont supposées fixes selon l'usage du terrain. Les résultats montrent que les paramètres estimés varient fortement entre les terrains à usage agricole et les terrains à usage résidentiel. Le prix des terrains agricoles semble avoir en moyenne peu varié entre 2006 et 2008 tandis que le prix des terrains à usage résidentiel a progressé de 14~\%. Avec seulement deux points dans le temps, il est cependant hasardeux de faire des hypothèses sur un accroissement ou non des écarts entre prix dans les secteurs résidentiel et agricole. Le paramètre associé à la surface du terrain est également beaucoup plus faible pour les terrains agricoles ce qui suggère une décroissance moins rapide du prix au m$^2$ lorsque la surface du terrain augmente. Enfin, l'élasticité du prix des terrains à l'accessibilité à l'emploi est 8 fois plus grande pour les terrains à usage résidentiel. L'impact de l'accessibilité est cependant positif et significatif pour les terrains agricoles ce qui confirme que la proximité aux pôles d'emploi influent positivement sur les marchés agricoles même en l'absence de droits à bâtir pour ces terrains. Ce résultat est conforme avec les études empiriques sur les terrains agricoles (\cite{Cava03,Lecat04,LefeRouq11}). L'écart d'élasticité entre les types de terrain montre que les prix dans le secteur résidentiel diminuent plus rapidement que les prix agricoles à mesure que l'on s'éloigne des pôles d'emplois. La pente du gradient de prix pour les terrains agricoles est plus plate. L'écart entre les prix unitaires semblent donc se réduire dans les zones où l'accessibilité à l'emploi est plus faible. \par
+
+Pour illustrer cet effet, on calcule à partir des paramètres de la colonne (2), le ratio de prix entre un terrain à usage résidentiel et un terrain à usage agricole pour différentes valeurs de référence pour la surface des terrains ($\bar{S}_{NV}$, $\bar{S_A}$) et l'accessibilité à l'emploi ($\bar{E}$). Ce ratio s'exprime de la façon suivante :
+\begin{eqnarray*}
+\frac{\hat{P_{iNVcat}}}{\hat{P_{iAcat}}} & = &  \bar{S}_{NV}^{\gamma_{NV}} \bar{S}_{A}^{-\gamma_A} \bar{E}^{\lambda_{NV} - \lambda_A} e^{\tau_{NVt} - \tau_{At} + \theta_{NV} - \theta_{A}}
+\end{eqnarray*}
+
+Ce ratio est estimé pour des valeurs de $\bar{S}_{NV}$, $\bar{S_A}$ et $\bar{E}$ correspondant aux observations proches de la commune de Florac, une commune rurale des Cévennes, et aux observations situées dans les aires urbaines du Havre et de Bordeaux. Le rapport de prix évolue significativement entre les zones choisies du fait de l'effet conjoint de l'accroissement des surfaces moyennes des terrains et de la baisse de l'accessibilité à l'emploi. Dans une aire urbaine comme Bordeaux où l'accessibilité à l'emploi est grande et où les surfaces des terrains achetés sont plus faibles, le rapport de prix s'élève à 58. Dans une zone très rurale loin des grands pôles d'emplois, le rapport de prix diminue fortement mais le prix d'un m$^2$ de terrain constructible reste tout de même 16 fois supérieur à celui d'un m$^2$ de terrain agricole. \par 
+
+\input{tableaux_modif/table_surcout2}
+
+\subsection{Dans les communes rurales isolées, l'accessibilité aux pôles impacte également les prix fonciers} 
+
+Ces premières observations laissent à penser que si une limite basse pour le prix du foncier constructible à la frontière des villes existe, elle sera d'un niveau sensiblement supérieur au prix des terres agricoles y compris dans les zones rurales éloignées des grands pôles. D'autre part, même dans les communes rurales, la variabilité des prix est importante d'une commune à l'autre. La dispersion des prix est notamment plus forte entre les terrains situés dans les communes rurales par rapport à ceux situés dans des aires urbaines (figure \ref{distrib_prix_rural3}). Le coefficient de variation des prix au m$^2$ est de 1.03 dans les communes rurales alors qu'il est de 0.75 dans l'espace périurbain et de 0.83 dans les pôles des grandes et moyennes aires urbaines.\par
+
+Comment expliquer ces écarts de prix d'une commune rurale à l'autre si cet ensemble de communes rurales est vraiment hors de l'influence urbaine? Pour vérifier si les pôles des grandes et moyennes aires urbaines influent sur les prix des terrains dans ces communes, on estime des modèles similaires à celui de l'équation \ref{eq:mod_general} sur le sous-échantillon de terrains situés dans les communes rurales de l'espace à dominante rurale. Une variable de contrôle communale supplémentaire est introduite : la population de la commune par tranches (tableau \ref{Reg_terrains_rural}). \par
+
+\input{tableaux_modif/Reg_terrains_rural_bon}
+
+La colonne (1) du tableau introduit uniquement les caractéristiques du terrain et les variables de contrôle communales. Les coefficients estimés sont dans l'ensemble cohérents avec les estimations sur l'espace à dominante rurale. La population de la commune a un effet positif croissant sur les prix pour les communes de plus 500 habitants. La comparaison entre la colonne (1) et la colonne (2) montre que les 311 indicatrices pour les aires urbaines les plus proches introduites ont un pouvoir explicatif important (hausse du R$^2$ de 0.15). 75~\% de ces indicatrices sont significatives ce qui montre que les caractéristiques des aires urbaines situées à proximité des communes rurales affectent significativement les prix. Les colonnes (3) et  (4) montrent que les différences d'accessibilité à l'emploi et aux équipements entre communes rurales influencent également les prix des terrains. Sur l'ensemble des communes rurales, les déterminants des prix des terrains semblent donc être très similaires à ceux des autres espaces et l'influence des grandes et moyennes aires urbaines est significative. En effet, même lorsqu'on se restreint aux communes rurales, on observe qu'il existe des différences notables d'accessibilité aux grands pôles entre communes. Ces différences d'accessibilité se reflètent dans le niveau des prix fonciers ce qui suggèrent que les marchés du foncier résidentiel dans ces communes n'est pas totalement indépendant des grandes villes situées à proximité. \par
+
+La colonne (5) restreint à nouveau l'échantillon aux communes rurales qui ont un temps d'accès au pôle d'une grande ou moyenne AU supérieur à 40 minutes. De manière intéressante, le paramètre d'accessibilité à l'emploi devient non significatif et une grande partie des indicatrices d'aires urbaines également. Le dernier paramètre d'accessibilité à conserver un effet sur les prix est le temps d'accès moyen aux équipements intermédiaires. Ces résultats suggèrent que dans ces communes rurales éloignées des grands et moyens pôles, l'influence des villes s'efface. Le nombre d'observations est cependant fortement réduit (4~031 observations restantes) ce qui peut limiter la robustesse de ces résultats \footnote{\`{A} titre de comparaison, nous avons réalisé des estimations similaires sur les communes rurales ayant un temps d'accès à un pôle de 10 à 20 minutes, de 20 à 30 minutes ou de 30 à 40 minutes. On observe alors que le paramètre d'accessibilité à l'emploi diminue progressivement à mesure que l'on s'éloigne des pôles mais il reste positif et significatif dans chaque régression}. \par  
+
+%\input{distribEF_rural}
+
+\subsection{La limite de l'aire urbaine ne semble pas représenter la limite de l'influence des pôles sur le foncier}
+ 
+L'objectif de cette dernière partie est de quantifier les prix moyens fonciers en périphérie des aires urbaines en France et de les comparer avec les prix dans les communes rurales qui les entourent.  Pour approcher le niveau des prix en périphérie des AU, on découpe l'espace se situant à la frontière des aires urbaines grandes et moyennes en différentes parties : \par
+
+\begin{enumerate}
+		\item Les communes situées sur la bordure intérieure des aires urbaines (\og bordure intérieure \fg). Ces communes sont celles qui ont une frontière commune avec l'aire urbaine et qui sont situées à l'intérieur de l'aire urbaine. Un exemple sur 4 aires urbaines est présenté en annexe D. On exclut de ces communes celles appartenant au pôle de l'aire urbaine et les communes littorales qui présentent des prix généralement plus élevés.
+	\item Les communes situées sur les bordures extérieures des aires urbaines. Les communes de la première bordure extérieure de l'aire urbaine (\og bordure extérieure 1 \fg)  sont celles qui ont une frontière commune avec l'aire urbaine et qui sont situées à l'extérieur de l'aire urbaine. Les communes de la seconde bordure extérieure (\og bordure extérieure 2 \fg)  sont celles qui ont une frontière  commune avec la première bordure extérieure. On exclut de ces communes celles appartenant à une autre aire urbaine et les communes littorales. 	
+		\item Les communes rurales non littorales situées à proximité des aires urbaines mais en dehors des trois bordures définies au-dessus. 
+\end{enumerate}
+
+On compare les prix au m$^2$ des terrains vendus dans les bordures avec les prix dans les pôles des aires urbaines grandes et moyennes, dans l'espace périurbain de ces pôles et dans les communes rurales non littorales situées à proximité. Du fait de la typologie retenue, les communes des petites aires urbaines, les unités urbaines rurales et les communes littorales hors aire urbaine sont exclues de la distribution. La carte de la figure \ref{Bordure_AU} représente le découpage de la France ainsi obtenu. Elle met en évidence que l'espace constitué par les communes rurales (en vert) est très restreint une fois que l'on soustrait les aires urbaines, leurs deux bordures extérieures et les communes exclues par la typologie (\og Autres \fg).  \par
+
+\begin{figure}[!h]%
+\begin{center}
+\caption{Typologie utilisée pour les bordures des aires urbaines}%
+\label{Bordure_AU}%
+\includegraphics[width=0.95\columnwidth]{Bordure_AU}%
+\end{center} 
+\scriptsize \textit{\textbf{Sources :} EPTB, calculs CGDD}
+\end{figure}
+
+La figure \ref{Distri_prix_bordure} présente la distribution de ces prix selon la typologie des communes définies ici.  Conformément à l'intuition, lorsqu'on s'éloigne des grands et moyens pôles, le prix au m$^2$ des terrains diminuent fortement. Au niveau de la frontière intérieure des aires urbaines grandes et moyennes, les prix se rapprochent sensiblement des prix dans les communes rurales qui entourent les aires urbaines mais restent cependant plus élevés en moyenne. Le gradient de prix n'atteint pas un palier au niveau de la frontière des aires urbaines puisque les prix continuent à décroître significativement dans les bordures extérieures 1 et 2. L'influence des pôles sur les prix fonciers dépassent donc la frontière des aires urbaines. Ces observations ne sont pas étonnantes étant donné la manière dont est établi le zonage en aire urbaine i.e. à partir d'un seuil de 40~\% des actifs occupés travaillant dans l'aire urbaine. Dans les communes situées juste derrière la limite des aires urbaines, il peut donc exister une part importante d'actifs occupés
+travaillant dans une ou plusieurs aires urbaines sans atteindre ce seuil. Au niveau de la bordure extérieure 2, le niveau et la distribution des prix est très proche de ceux observés dans les communes rurales alentours. Il faut cependant s'éloigner significativement des bordures des aires urbaines pour trouver des communes où les niveaux de prix sont proches de ceux des communes rurales. \par
+ 
+\begin{figure}[!h]%
+\begin{center}
+\caption{Distribution des prix moyen au m$^2$ des terrains en 2014 au sein et à la frontière des aires urbaines}%
+\label{Distri_prix_bordure}%
+\includegraphics[width=0.9\columnwidth]{Distri_prix_bordure2}%
+\end{center}
+\scriptsize \textit{\textbf{Sources :} EPTB, calculs CGDD}
+\end{figure}
+
+
+
+\newpage
+
+De manière à tester si les différences de prix entre les bordures des AU et les communes rurales alentours sont significatives y compris lorsqu'on contrôle pour les caractéristiques des terrains, on estime le 
+modèle de l'équation \ref{eq:mod_general} en remplaçant les variables d'accessibilité par une variable unique multimodale qui indique si la commune où est situé le terrain appartient à un grand ou moyen pôle, à l'espace périurbain, à la bordure intérieure d'une AU, à la bordure extérieure 1 ou 2 d'une AU ou si la commune est rurale.  Les communes des petites aires urbaines, les unités urbaines rurales et les communes littorales hors aire urbaine sont exclues de l'échantillon. On teste le modèle avec des indicatrices régionales (colonne 1 du tableau \ref{Reg_terrains_bordures4})  et des indicatrices par aire urbaine (colonne~2).\par
+
+\newpage
+
+\input{tableaux_modif/Reg_terrains_bordures4}
+
+Les résultats confirment les observations de la figure \ref{Distri_prix_bordure} à savoir que les prix des terrains au niveau de la limite intérieure des aires urbaines est en moyenne plus élevé que celui des communes rurales alentours (+ 40~\% en moyenne). Les prix continuent à décroître lorsqu'on s'éloigne des frontières des AU et les prix dans les secondes bordures extérieures des AU sont proches de ceux dans les communes rurales les entourant (+ 7~\% seulement).\par
+
+
+\cleardoublepage
+
+%\thispagestyle{partie}
+%\cadreblanc{Partie 6}{Conclusion}
+
+%\newpage
+%\pagestyle{fancy}
+%\invisiblesection{Conclusion}\label{sec:marker6}
+\section{Conclusion}\label{sec:marker6}
+
+\markboth{Conclusion}{}
+
+L'analyse spatiale des marchés du foncier à bâtir développée dans cette étude montre qu'ils sont fortement structurés dans l’espace. Cette structuration se réalise principalement autour des grands et moyens pôles d’emploi qui regroupent les terrains dont les prix sont les plus élevés mais également autour des zones attractives comme les littoraux et les zones frontalières des pays voisins. Il n'est donc pas étonnant que, parmi les variables explicatives des prix du terrain, celles ayant un lien avec la localisation aient un impact marqué sur le niveau des prix. D'autre part, les caractéristiques des terrains échangés, leur taille notamment, varient fortement dans l'espace, ce qui participe à leur fort pouvoir explicatif des disparités observées dans les prix du foncier. La localisation est donc le principal déterminant des prix des terrains. \par  
+
+Parmi les variables de localisation, le niveau des prix fonciers dépend en premier lieu de l'aire urbaine dans laquelle le terrain est situé ou de l'aire urbaine à proximité de laquelle le terrain est situé. Toutes choses égales par ailleurs, un terrain situé dans le pôle ou à proximité de l'aire urbaine de Lyon aura, par exemple, un prix trois fois plus élevé qu'un terrain situé dans le pôle ou à proximité de l'aire urbaine de Limoges. Plusieurs effets participent aux niveaux élevés des prix au sein des grands et moyens pôles. La taille de l'aire urbaine et sa densité de population accroissent la demande de foncier du fait du regroupement d'un grand nombre d'emplois et de la concentration d'aménités positives dans les pôles. L'attractivité de l'aire urbaine, qu'elle se manifeste par le tourisme ou le dynamisme démographique de la ville, accroît également la pression sur le foncier disponible. Les villes où les ménages ont un revenu moyen plus élevé présentent également des niveaux de prix sensiblement supérieurs. Enfin, un dernier effet semble être lié à la connectivité des pôles aux autres marchés de l'emploi. \par  
+
+\`{A} l'échelle de la zone d'influence d'une aire urbaine en particulier, qui se compose de l’espace périurbain du pôle mais aussi des communes rurales à proximité, l'accessibilité à l'emploi, aux services et aux équipements expliquent une part significative des écarts de prix entre communes. Dans l'espace périurbain, non seulement la distance au pôle de l'aire urbaine mais aussi la distance aux pôles d'emplois secondaires, affectent les prix. L'indicateur d'accessibilité de type  gravitaire, utilisé dans cette étude, qui tient compte du polycentrisme des grandes aires urbaines, capture mieux l'effet de l'accessibilité à l'emploi sur les marchés fonciers que les mesures classiques basées sur la distance au pôle le plus proche.  \par 
+
+L’effet de l'accessibilité à l'emploi s'atténue lorsque l’on passe de l’espace périurbain aux communes rurales entourant les aires urbaines. Dans ces communes, c'est l'accès aux services et aux équipements qui semble être plus valorisé par les ménages que l'accessibilité à l'emploi. Dans les communes rurales éloignées de plus de 40 minutes des grands et moyens pôles, l'accessibilité à l'emploi n'a plus d'effet significatif sur le niveau des prix. Malgré tout, l'influence des grandes aires urbaines se fait ressentir sur les marchés du foncier y compris dans les espaces ruraux comme en témoignent les écarts de prix marqués entre le foncier résidentiel et le foncier agricole, y compris dans les communes rurales éloignées des pôles. Ces écarts dépassent largement le coût de conversion d'un terrain agricole en un terrain constructible et viabilisé. Par ailleurs, la proximité des pôles d'emplois influence le niveau des prix du foncier bien au-delà des frontières des aires urbaines telles qu'elles sont définies actuellement. \par
+
+Les résultats quantitatifs de cette étude peuvent être mobilisés pour l'évaluation de l'impact sur le foncier de politiques publiques qui viseraient par exemple à accroître la densité d'une ville, à modifier l'accessibilité aux pôles d'emplois dans une aire urbaine ou encore à modifier la fiscalité sur le foncier agricole ou résidentiel en périphérie des villes. Ils montrent également l'importance de disposer de données géo-référencées sur la valeur du foncier rendant compte de la grande variabilité des prix observée dans l'espace. L'émergence de nouvelles données sur le foncier devrait permettre de prolonger les travaux de cette étude en prenant mieux en compte la variabilité infra-communale des prix et en incluant le foncier des autres secteurs comme le tertiaire ou le logement collectif. 
+
+\cleardoublepage
+
+\thispagestyle{partie}
+\cadreblanc{Partie 5}{Annexes}{Cette partie fournit des résultats économétriques supplémentaires, des détails sur les données d'accessibilité utilisées dans l'étude et des éléments méthodologiques sur l'analyse exploratoire spatiale}
+
+\newpage
+\pagestyle{fancy}
+\invisiblesection{Annexes}\label{sec:marker7}
+\markboth{Annexes}{}
+
+\subsection{A. Résultats complémentaires}
+
+\subsubsection{Régressions sur les caractéristiques des terrains uniquement}
+
+\input{tableaux_modif/Regressions_caracterrains}
+
+\newpage
+
+\subsubsection{Régressions par année d'enquête}
+
+\input{tableaux_modif/Regressions_an}
+
+\newpage
+
+\subsubsection{Régressions sans les indicatrices par aire urbaine}
+
+
+\input{tableaux_modif/Regressions_sansIAU}
+
+\newpage
+
+\subsubsection{Régressions sans les variables communales}
+
+\input{tableaux_modif/Regressions_sans_varcom}
+
+
+\newpage
+
+\subsection{B. Calculs d'accessibilité aux grands pôles d'emploi et aux équipements}
+
+\subsubsection{Données d'entrée et distancier utilisé}
+
+Le réseau routier détaillé du modèle MODEV du CGDD \citep{Pochez_etal16} fournit la majeure partie des données d'entrée nécessaires à la création d'un distancier. \`{A} partir du réseau utilisé dans le modèle, on se restreint aux arcs routiers, aux ouvrages et aux ferrys (257527 arcs) en retirant les connecteurs préexistants et on ne conserve que les noeuds du réseau routier (94678 noeuds). On conserve également les attributs de chaque arc nécessaire au calcul du coût généralisé de transport (distance kilométrique, vitesses à vide et en charge, péage et prix de traversée des ouvrages, coût kilométrique pour les véhicules légers). \par 
+
+Pour pouvoir calculer des plus courts chemins de commune à commune, on ajoute ensuite un arc connecteur par commune entre le point correspondant aux coordonnées du chef lieu de la commune (données IGN) et le noeud le plus proche du réseau MODEV (repéré par traitement SIG). On impute ensuite les attributs de ces arcs\footnote{la distance kilométrique est fixé à 1.2*distance à vol d'oiseau entre le chef lieu et le noeud le plus proche, les vitesses et les coûts kilométriques sont fixés aux vitesses moyennes et aux coûts moyens sur routes urbaines sur l'ensemble du réseau, les péages sont nuls}. Une fois ces connecteurs ajoutés au réseau complet, le calcul du plus court chemin entre deux communes se fait grâce au plugin \textit{igraph} du logiciel \textit{R} qui permet de créer  un graph à partir d'un ensemble d'arcs. On attribue un poids à chaque arc et le calcul du plus court chemin se fait en utilisant un algorithme (djikstra) qui recherche le chemin minimisant la somme des poids. Le choix du poids est facilement modifiable et dépend de l'information que l'on recherche. On peut ainsi chercher à minimiser la distance parcourue, le temps de parcours, le coût monétaire voire le coût généralisé pour l'usager en intégrant des valeurs du temps. Dans sa version actuelle, le distancier sélectionne le chemin qui minimise le coût généralisé. Pour chaque arc le coût généralisé vaut :
+\begin{eqnarray*}
+CG = \underbrace{D  * (CKM + PEAGEKM) + COUVRAGE}_{\text{Coûts monétaires}} + 
+\underbrace{\frac{D}{V} * VTEMPS}_{\text{Coûts du temps}}
+\end{eqnarray*}       
+
+\begin{itemize}[font=\tiny]
+	\item D : longueur de l'arc
+	\item CKM : coûts kilométriques (essence, entretien du véhicule) qui varient selon le type de voie
+	\item PEAGEKM : péage par kilomètre sur l'arc qui varie selon le concessionnaire
+	\item COUVRAGE : coût fixe de traversée des ouvrages sur l'arc
+	\item V : vitesse en charge qui dépend du type de voie, du nombre de voie, du relief, 
+	\item VTEMPS : valeur du temps fixée à une valeur de 12 euros par heure pour cette étude
+\end{itemize}
+
+Le plus court chemin est celui qui minimise la somme des coûts généralisés sur l'ensemble des arcs parcourus entre deux localisations. Pour chaque trajet, il est ensuite possible de visualiser les plus courts chemins obtenus sur un logiciel de SIG. Deux exemples de trajets sont présentés dans la figure \ref{path_MODEV}. \par
+
+\begin{figure}[h!]%
+\caption{Exemples de chemin le plus court entre deux communes et visualisation}
+\begin{tabular}{cc}
+\includegraphics[width=0.5\columnwidth]{Mantes_LH}  & \includegraphics[width=0.5\columnwidth]{Nice_Puteaux}  \\
+\end{tabular}
+\label{path_MODEV}
+\end{figure}
+
+\subsubsection{Temps de parcours aux pôles d'emploi}
+
+\`{A} partir du distancier évoqué ci-dessus, il est possible de calculer pour chaque pôle d'emploi (unité urbaine de plus de 5~000 emplois), la distance, le temps et  le coût généralisé du parcours pour atteindre toutes les communes françaises depuis le pôle. Le centre du pôle d'emploi est défini par les coordonnées du chef lieu de la commune du pôle d'emploi ayant le plus grand nombre d'emplois. On obtient donc pour chaque commune une matrice qui permet de connaître la distance parcourue, le temps et  le coût généralisé pour se rendre à tous les pôles de plus de 5~000 emplois. On peut ensuite définir pour chaque commune, le pôle d'emploi pour lequel le temps de parcours est le plus faible. Pour chaque commune, trois temps sont calculés et utilisés dans cette étude : 1) Le temps minimal nécessaire pour se rendre à un pôle d'emploi de plus de 5~000 emplois, 2) le temps minimal nécessaire pour se rendre à un grand pôle (+ de 10~000 emplois) et 3) le temps nécessaire pour se rendre à un pôle d'aire urbaine grande ou moyenne. \par 
+
+Pour la commune centre du pôle, la distance au centre du pôle est définie à partir du carroyage de la population au 200 m de l'INSEE. La distance au centre est définie comme la moyenne des distances à vol d'oiseau entre les carreaux de ce carroyage et les coordonnées du chef lieu de la commune pondérée par la population de chaque carreau. On calcule ensuite un coût généralisé pour atteindre le centre du pôle depuis la commune centre du pôle en imputant la vitesse et les coûts kilométriques par la vitesse et le coût moyen sur routes urbaines sur l'ensemble du réseau. \par
+
+Les cartes représentent pour chaque commune, le temps nécessaire pour se rendre au grand pôle (+ de 10~000 emplois) et au pôle d'emploi de plus de 5~000 emplois le plus proche. Les grands pôles étant moins nombreux, on observe des temps globalement plus élevés pour atteindre ces grands pôles que si on étend le calcul aux pôles de plus de 5~000 emplois. Ces temps sont utilisées comme variables explicatives dans les estimations de l'étude.\par 
+
+\begin{figure}[h!]%
+\caption{Temps pour se rendre au grand pôle (10~000 emplois) et au pôle de plus de 5~000 emplois le plus proche en voiture depuis chaque commune francaise }
+\begin{tabular}{cc}
+\includegraphics[width=0.5\columnwidth]{Temps_GP2}  & \includegraphics[width=0.5\columnwidth]{Temps_pole2}  \\
+Grand pôle & Pôle de plus de 5~000 emplois
+\end{tabular}
+\label{distance_GPole}%
+\end{figure}
+
+\subsubsection{Indicateur d'accessibilité aux pôles d'emploi}
+
+\`{A} partir des matrices qui définissent pour chaque commune les coûts généralisés pour atteindre chacun des pôles de plus de 5~000 emplois en France, on peut calculer un indicateur d'accessibilité à l'emploi. L'emploi est pondéré par le coût généralisé nécessaire pour les atteindre, les emplois les plus proches et donc les moins coûteux à atteindre ayant un poids plus important. On retient un indicateur de type gravitaire où l'accessibilité de la commune c s'exprime :
+\begin{eqnarray*}
+E_c & = & \sum_j W_j e^{-\beta CG_{cj}}
+\end{eqnarray*}
+
+\begin{itemize}[font=\tiny]
+	\item $E_c$ = Accessibilité à l'emploi de la commune  c
+	\item $W_j$ = Nombre d'emplois dans le pôle d'emploi j
+	\item $CG_{cj}$ = Coût généralisé pour aller de c à j en voiture
+	\item $\beta$ = Paramètre de résistance de la fonction d'accessibilité (fixé à 0.19, \cite{Mercier08})
+ \end{itemize}
+
+
+\begin{figure}[h!]%
+\caption{Accessibilité gravitaire à l'emploi}
+\includegraphics[width=0.8\columnwidth]{access_EMPLT2}
+\label{Access_EMPLT}%
+\end{figure}
+ 
+Selon la même méthode, on calcule pour chaque pôle d'emploi un indicateur d'accessibilité aux emplois des autres pôles. On exclut donc de cet indicateur les emplois du pôle lui-même. On mesure ainsi l'accessibilité de ce pôle aux autres marchés de l'emploi situés à proximité. Cette variable est utilisée dans la partie III de l'étude.\par
+
+\subsubsection{Temps d'accès aux équipements}
+
+Les données de la Base Permanente des Equipements 2014 de l'INSEE sont utilisées en complément du distancier pour calculer des temps d'accès depuis les communes à chaque type d'équipement contenu dans la base. Certains de ces équipements sont géolocalisés précisément, on utilise dans ce cas les coordonnées précises de l'équipement pour calculer le temps d'accès à cet équipement. Les autres sont localisés au niveau du chef lieu de leur commune d'appartenance. Pour chaque type d'équipement et chaque commune, on calcule grâce au distancier le temps d'accès à l'équipement (s'il est géolocalisé) ou à la commune équipée le plus faible. On obtient donc pour chaque commune le temps d'accès minimimal à chaque type d'équipement. Si l'équipement se trouve dans la commune, la distance à cet équipement est calculée comme la moyenne des distances à vol d'oiseau entre les carreaux du carroyage INSEE et les coordonnées de l'équipement ou du chef lieu de la commune pondérée par la population de chaque carreau. \par
+
+99 types d'équipements sont retenus dans la base 2014, et se répartissent en trois gammes selon la fréquence de leur présence simultanée dans les communes : \par
+
+\begin{itemize}[font=\tiny]
+	\item La gamme de proximité qui comporte les équipements d'utilisation quotidienne (poste, banque, épicerie, pharmacie, école maternelle et élementaire...)
+	\item La gamme intermédiaire qui comprend des équipements et des services moins fréquents dans l'ensemble des communes (Police, Librairie, Magasin spécialisés divers, Station service, Collège, Gare, piscine...)
+	\item La gamme supérieure qui regroupe surtout des équipements et services de santé (Etablissements de santé, Maternité, médecins spécialistes...) mais aussi d'autres équipements de fréquence moindre dans les communes (Hypermarché, lycée d'enseignement général et/ou technologique et/ou professionnel, cinéma, théâtre...)
+\end{itemize}
+
+De manière à obtenir des indicateurs synthétiques d'accessibilité aux équipements, on calcule pour chaque gamme, le temps moyen d'accès à l'ensemble des équipements de la gamme qui est égal à la moyenne des temps minimaux d'accès à chaque type d'équipement. Les cartes ci-dessous présentes ces temps d'accès moyens pour les trois gammes d'équipement.  \par
+
+\begin{figure}[h!]%
+\label{Temps_equ}%
+\caption{Temps moyens pour atteindre les équipements des gammes de proximité, intermédiaire et supérieure}
+\begin{tabular}{cc}
+\includegraphics[width=0.5\columnwidth]{Temps_equ_proxi}  & \includegraphics[width=0.5\columnwidth]{Temps_equ_inter} \\
+\includegraphics[width=0.5\columnwidth]{Temps_equ_sup}
+\end{tabular}
+\end{figure}
+
+\newpage
+
+\subsection{C. L'analyse exploratoire spatiale}\label{ann:anaspa}
+
+L'analyse exploratoire des données spatiales est un ensemble de techniques destinées à décrire et
+visualiser les distributions spatiales (tendances spatiales et autocorrélation spatiale globale) et
+à repérer les schémas d'association spatiale (clusters spatiaux et autocorrélation spatiale locale).
+La première étape de l'analyse exploratoire consiste à évaluer l'autocorrélation spatiale globale au
+sein des données afin de déterminer si, globalement, il existe une concentration spatiale des valeurs de la variable d'intérêt. 
+La seconde étape de l'analyse consiste à expliciter les concentrations spatiales en distinguant les zones à fortes et à faibles valeurs pour cette variable à l'aide du diagramme de Moran et des statistiques LISA (Local Indicators of Spatial Association).\par
+
+L'autocorrélation spatiale exprime l'absence d'indépendance entre observations géographiques. L'autocorrélation spatiale est positive lorsque des valeurs élevées ou faibles d'une variable aléatoire tendent à se concentrer dans l'espace, l'autocorrélation
+spatiale est négative lorsque les unités géographiques tendent à être entourées par des unités
+géographiques voisines présentant des valeurs très différentes et il y a absence d'autocorrélation
+spatiale lorsque la caractéristique d'un lieu est indépendante de ce qui se passe chez ses voisins.\par
+
+
+Pour modéliser les interactions spatiales, il est nécessaire d'imposer une structure sur le
+voisinage. Il s'agit de définir la matrice de poids, $W$, matrice carrée d'ordre $N$ ($N=$nombre
+d'observations), où chaque terme $w_{ij}$ représente la façon dont la localisation $i$ et la
+localisation $j$ sont connectées spatialement. Ces matrices se classent dans deux grandes catégories
+: les matrices de contiguïté et les matrices de poids basées sur la distance. \par
+
+\subsubsection{Coefficient de Moran global}
+
+La mesure de l'autocorrélation spatiale globale est traditionnellement fondée sur la statistique $I$
+de Moran %\citep{Cliff81} 
+définie sous la forme suivante :
+\begin{eqnarray}
+  I={\frac{N}{S}}\times\frac{\sum_{i\neq{j}}w_{ij}\times({x_{i}-\bar{x}})\times({x_{j}-\bar{x}})}{\sum_{i}(x_{i}-\bar{x})^{2}}
+\end{eqnarray}
+où $x_{i}$ est l'observation dans l'unité spatiale $i$ pour la variable étudiée, $\overline{x}$ la
+moyenne des observations, $N$ le nombre d'unité spatiale, $w_{ij}$ l'élément de la matrice de poids
+entre les unités spatiales $i$ et $j$ et $S$ un facteur d'échelle égal à la somme de tous les éléments
+de $W$.\par
+
+La statistique $I$ de Moran permet de mesurer le degré d'association linéaire entre le vecteur des
+valeurs observées et le vecteur des moyennes spatialement pondérées des valeurs voisines appelé
+variable spatialement décalée. Des valeurs de $I$ plus grandes (resp. plus petites) que l'espérance
+mathématique $E(I)=\frac{-1}{N-1}$ indiquent une autocorrelation spatiale positive (resp. négative).\par
+
+Le test de significativité de la statistique $I$ de Moran, dont l'hypothèse nulle est l'absence
+d'autocorrélation, est effectué à l'aide d'une procédure de permutation proposée par
+\cite{Anselin95}.\par
+
+\subsubsection{Coefficient de Moran local}
+
+L'indice de Moran local ou LISA (Local indicators of Spatial Association) est une statistique
+d'autocorrélation locale qui répond à deux critères (\cite{Anselin95}). Cet indicateur donne pour
+chaque observation une indication sur le regroupement spatial significatif des valeurs similaires
+autour de cette observation. La moyenne des indices de Moran locaux correspond à l'indice de Moran
+global. Cet indice peut être utilisé comme indice de regroupement spatial local.
+\begin{eqnarray}
+  I_{i}={\frac{x_{i}-\bar{x}}{m_0}}\times\sum_{j}w_{ij}(x_{j}-\bar{x})
+\end{eqnarray}
+pour toutes les unités spatiales $i$ et $j$ voisines avec \begin{eqnarray} m_0={\frac{\sum (x_i-\bar{x})^2}{N}}
+\end{eqnarray}
+
+\begin{figure}[!h]%
+\begin{center}
+\caption{Quadrants des LISA pour les prix des terrains estimés par communes}%
+\label{}%
+\includegraphics[width=0.7\columnwidth]{FranceLISA_all_inverse_dist30km}%
+\end{center}
+
+\scriptsize\textit{\textbf{Sources :} EPTB, calculs CGDD \\
+\textbf{Note de lecture :} La carte représente les corrélations spatiales locales de la moyenne communale des résidus du modèle estimé par l'estimation de l'équation \ref{eq:modelcarac}.  Les zones rouges (clusters HH pour \og Haut-Haut \fg) sont les zones de regroupements de valeurs hautes des prix des terrains et les zones bleues (clusters BB pour \fg Bas-Bas \fg) sont les zones de regroupements de valeurs basses des prix des terrains. Les zones vertes (clusters BH pour \og Bas-Haut \fg) sont les zones où les prix sont faibles par rapport aux prix dans les communes alentours. \`{A} l'inverse, les zones oranges(clusters HB pour \og Haut-Bas \fg) sont les zones où les prix sont élevés par rapport aux prix dans les communes alentours.}
+\end{figure}
+
+Les LISA permettent de tester la significativité des regroupements spatiaux dans les quatres quadrants: HH, BB, BH et HB. Les quadrants HH (une unité spatiale associée à une valeur élevée entourée d'unités spatiales associées à des valeurs élevées) et 
+BB (une unité spatiale associée à une valeur faible entourée d'unités spatiales associées à des valeurs faibles) représentent une autocorrélation spatiale positive car ils indiquent un regroupement spatial de valeurs similaires. En revanche, les quadrants BH et HB représentent une autocorrélation spatiale négative car ils indiquent un regroupement spatial de valeurs dissemblables.\par
+
+\newpage
+
+\subsection{D. Définition des bordures intérieures et extérieures des aires urbaines}
+
+\begin{figure}[h!]%
+\caption{Définition des bordures intérieures et extérieures des aires urbaines}%
+\begin{tabular}{cc}
+\includegraphics[width=0.4\columnwidth]{bordures_Marseille_} & 
+\includegraphics[width=0.4\columnwidth]{bordures_Lyon_} \\
+Marseille & Lyon \\
+\includegraphics[width=0.4\columnwidth]{bordures_Paris_} & 
+\includegraphics[width=0.4\columnwidth]{bordures_Bordeaux_} \\
+Paris & Bordeaux \\
+\end{tabular}
+
+\scriptsize\textit{\textbf{Sources :} IGN, traitements CGDD}
+\end{figure}
+
+\cleardoublepage
+
+%\thispagestyle{partie}
+%\cadreblanc{Partie 7}{R\'ef\'erences}{}
+
+%\newpage
+\pagestyle{fancy}
+\invisiblesection{R\'ef\'erences}\label{sec:marker8}
+%\section{R\'ef\'erences}\label{sec:marker8}
+\markboth{R\'ef\'erences}{}
+
+\bibliographystyle{apalike-fr}
+\bibliography{H:/biblio_logement/Biblio_logement_classement/biblio_logement,H:/biblio_these/Biblio_theseBV}
+
+%\addcontentsline{toc}{section}{R\'ef\'erences}
+
+%Pour s'assurer que le doc termine sur une page paire
+\cleardoublepage
+
+\thispagestyle{partie}
+\troisieme{}{}
+
+\newpage 
+
+\thispagestyle{partie}
+\quatrieme{Cette étude développe une analyse économétrique des prix des terrains à bâtir en France entre 2006 et 2014. Elle se focalise sur les déterminants des prix fonciers liés à la localisation et compare les résultats des estimations économétriques entre les pôles, l’espace périurbain et l’espace rural. Les écarts de prix entre pôles des aires urbaines dépendent fortement de la taille de l’aire urbaine, de son dynamisme démographique, de son attractivité touristique, et de sa connectivité aux autres marchés de l’emploi. Dans l’espace périurbain et dans l’espace rural, les déterminants des prix fonciers sont similaires. L’accessibilité à l’emploi a cependant un impact plus marqué dans le premier  tandis que dans le second, c’est l’accessibilité aux services et aux équipements qui prévaut. La proximité des aires urbaines a un effet significatif sur le prix des terrains à bâtir y compris dans les communes rurales éloignées. L’aire d’influence des pôles d’emplois sur les marchés fonciers s’étend donc au-delà des limites des aires urbaines.
+\vspace{1.4cm}}
+\end{document}
+}

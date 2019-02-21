@@ -1,0 +1,997 @@
+---
+title: "Note audit paramÃ¨tres modÃ¨le tertiaire"
+author: "CGDD/SEEIDD/MA3"
+date: "7 dÃ©cembre 2016"
+output:
+  word_document: 
+    fig_height: 6
+    fig_width: 8
+  pdf_document:
+    keep_tex: yes
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=F, results=F}
+require(knitr)
+require(data.table)
+require(ggplot2)
+require(Hmisc)
+require(reshape2)
+require(plyr)
+require(ggthemes)
+require(texreg)
+require(scales)
+if (Sys.getenv("JAVA_HOME")!="")
+  Sys.setenv(JAVA_HOME="")
+options(java.parameters = "-Xmx4096m")
+require(XLConnect)
+
+
+
+# set pander table-layout options
+library(pander)
+panderOptions('table.alignment.default', function(df)
+    ifelse(sapply(df, is.numeric), 'right', 'left'))
+panderOptions('table.split.table', Inf)
+panderOptions('big.mark', ",")
+panderOptions('keep.trailing.zeros', TRUE)
+
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = F}
+source("analyse_param_utilisateurs.R",encoding = "ISO8859-1")
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, comment=F, cache.rebuild =T}
+#### liste des fichiers à lire
+wbfiles = "../_CGDD_Packaging_27.05.15/Result_Excel/resultats_sauvegarde/table_resultat_AME_2017_01_04.xls"
+wbfiles[length(wbfiles) +1] = "../_CGDD_Packaging_27.05.15/Result_Excel/resultats_sauvegarde/table_resultat_AMEprixMA3_valeurvertemoins100.xls"
+wbfiles[length(wbfiles) +1] = "../_CGDD_Packaging_27.05.15/Result_Excel/resultats_sauvegarde/table_resultat_maintenance_0.xls"
+
+#### noms des scenarios ###
+wbname = c("AME prix MA3")
+wbname[length(wbname) +1] = "AME prix MA3 valeur verte"
+wbname[length(wbname) +1] = "AME maintenance 0"
+
+#### fonction pour lire les fichiers ###
+source("read_resultats_xls.R")
+results = lecture_results_modele_tertiaire(wbfiles,wbname =  wbname)
+parc = rbindlist(results$parc)
+Conso = rbindlist(results$Conso)
+etiquette = rbindlist(results$etiquette)
+GES = rbindlist(results$GES)
+COUTS = rbindlist(results$COUTS)
+COUTS_AUTRES = rbindlist(results$COUTS_AUTRES)
+
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = T}
+source("graph_param_modele.R",encoding = "ISO8859-1")
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = T}
+source("calc_rentabilite_renovation.R",encoding = "UTF8")
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = T}
+logements_dpe = fread("../../Res-IRF/Phebus/scripts/logement_clode_dpe_all.csv")
+```
+
+Objectifs : 
+
+* Etat des lieux des paramètres du modèle pour la période de référence
+* Image précise du parc initial (surfaces, consommations, systèmes de chauffage)
+* Données sur les coûts des gestes de rénovation, des sytèmes de chauffage et des autres systèmes 
+* Calcul de la rentabilité des rénovations pour l'année initiale
+* Mode d'emploi à alimenter pour la compréhension du fonctionnement du modèle
+
+\tableofcontents 
+
+\newpage 
+
+# 1) Parc existant 
+
+Pour l'année de référence du parc tertiaire (2009), le parc est réparti entre 8 branches, 35 sous-branches à nouveau subdivisés en 96 types de bâtiment (voir en annexes pour la répartition du parc entre type de bâtiment). 
+
+
+
+```{r, echo=F, warning=F}
+parc_total = parc_init[,list(BRANCHE ="Total", 
+                             "Millions de m²" = sum(SURFACES)/10^6, 
+                      "Part du parc" = sum(SURFACES)/10^6/surf_tot_tertiaire, 
+                      "Nombre de sous-branche" = length(unique(SS_BRANCHE)),
+                      "Nombre de type de bâtiment" = length(unique(BAT_TYPE)))]
+parc_par_branche = parc_init[,list("Millions de m²" = sum(SURFACES)/10^6, 
+                      "Part du parc" = sum(SURFACES)/10^6/surf_tot_tertiaire, 
+                      "Nombre de sous-branche" = length(unique(SS_BRANCHE)),
+                      "Nombre de type de bâtiment" = length(unique(BAT_TYPE))) , by="BRANCHE"]
+  
+pander(rbind(parc_par_branche,parc_total), caption = "Distribution du parc existant par branche", digits = 2)
+```
+
+
+Pour chaque type de bâtiment, les surfaces sont également subdivisées par énergie de chauffage (5 types), système de production de chauffage (9 types de chauffage de base + 9 types de chauffages performants associés) et système de climatisation (climatisé ou non). Les données d'entrées sur le parc initial ("Parc_init.xls") sont constitués par les surfaces consacrées à chacun des segments de parc (6941 segments)
+
+```{r, echo=F, warning=F}
+pander(parc_init[,list("Millions de m²" = sum(SURFACES)/10^6, "Part du parc" = sum(SURFACES)/10^6/surf_tot_tertiaire), by="ENERGIE"], caption = "Distribution du parc existant par energie de chauffage", digits = 2)
+```
+
+
+```{r, fig.width=20, fig.height=10, echo=F, warning=F,fig.cap='Distribution du parc tertiaire par énergie et branche de bâtiment'}
+graph_PM_ENERGIE_BRANCHE 
+
+```` 
+
+La majorité des systèmes de chauffage sont associés à une seule énergie à l'exception de la catégorie "autre système centralisé". 
+
+```{r, fig.width=20, fig.height=10, echo=F, warning=F,fig.cap='Distribution du parc tertiaire par système de chauffage'}
+graph_PM_ENERGIE_SYSTEME_CHAUD
+
+```` 
+
+**A DISCUTER : incohérence entre les parts climatisées dans le fichier d'entrée du modèle et les paramètres du modèle** 
+
+```{r, fig.width=20, fig.height=10, echo=F, warning=F,fig.cap='Part des surfaces climatisées dans le parc existant selon la sous-branche de bâtiment tertiaire'}
+graph_PM_CLIM_SS_BRANCHE
+
+```` 
+
+\newpage 
+
+# 2) Besoins en énergie par usage et consommations finales 
+
+Le calcul des consommations par usage pour chaque segment du parc est nécessaire pour évaluer la rentabilité des gestes de rénovation ou des changements de système de chauffage car les coûts et les gains de consommations associés aux rénovations sont très variables selon le segment du parc considéré. Ces données ne sont pas fournies dans les données d'entrées du modèle, il faut les reconstituer à partir des besoins en énergie utile par usage pour chaque segment. 
+
+Les besoins en énergie utile par usage pour chacun des 6941 segments de parc constituent une grande partie des données d'entrée du modèle. Pour information, les besoins totaux (i.e. pas unitaire) pour chaque segment et par usage sont regroupés dans les fichiers "Usage.init.xls" (un fichier par usage).
+
+Les besoins en énergie pour le chauffage, les auxiliaires et la ventilation de chaque segment de parc sont dépendants du type de bâtiment, du système de chauffage, de l'énergie de chauffage utilisée et du fait que le bâtiment soit climatisé ou non. 
+
+Les besoins en énergie pour la climatisation ne dépendent que du type de bâtiment (et du fait que le bâtiment est climatisé ou non). 
+
+Les besoins en énergie pour les autres usages ne dépendent que du type de bâtiment (à l'exception de l'ECS pour laquelle le rendement dépend de l'énergie de chauffage)
+
+Pour reconstituer les consommations en énergie finale des usages chauffage, climatisation et ECS il faut associer à chaque système de chauffage, de climatisation et d'ECS son rendement (données des fichiers "Bibli_rdt_chauff.xls" pour le chauffage, "Bibli_rdt_clim.xls" pour la climatisation et onglet usage_ECS dans le fichier "paramètre_utilisateurs.xls" pour l'ECS"). Les consommations en énergie finale sont alors calculées comme suit $CONSO = BESOIN/RDT$.
+
+**A DISCUTER : incohérence entre les identifiants et les types d'énergie/système de chauffage dans le fichier Bibli_rdt_chauff.xls**
+
+Pour les auxiliaires, le calcul des consommations à partir des besoins totaux en auxiliaires du bâtiment fait intervenir des coefficients qui dépendent du système de chauffage utilisé et du fait que le bâtiment soit climatisé ou non.  
+
+Pour les autres usages, les besoins renseignés dans les fichiers d'entrée correspondent aux consommations en énergie finale
+
+A partir des besoins de chaque segment et des rendements de chaque système, on peut reconstituer les consommations en énergie par usage de l'ensemble du parc. Le tableau ci-dessous montre les résultats de cette reconstitution par branche et compare les consommations obtenues sur l'ensemble du parc avec  celles des sorties du modèle. 
+
+**BILAN : la somme des consommations sur chaque segment élementaire donne bien les consommations fournies par le modèle, on peut donc utiliser les résultats de ce calcul pour l'analyse de la rentabilité des rénovations**
+
+```{r, echo=F, warning=F, include = F}
+
+Conso = merge(Conso,COD_BRANCHE[,list(nom_branche = BRANCHE, branche = COD_BRANCHE) ], by = "branche")
+Conso = merge(Conso,COD_ENERGIE[,list(nom_energie = ENERGIE, energieUsage = COD_ENERGIE) ], by = "energieUsage")
+
+Conso = melt(Conso,id.vars = c("branche","nom_branche","occupation","periodeSimple","energieUsage","nom_energie","usage","usageSimple",
+                               "facteurEnergiePrimaire", "scenario"), variable.name = "annee")
+
+##### conso nationale totale
+Conso_nationale_tot =  dcast.data.table(Conso, scenario ~ annee ,fun.aggregate = function(x){sum(x)/10^9}, value.var = "value")
+Conso_nationale_tot = melt(Conso_nationale_tot, id.vars = "scenario",variable.name = "annee",value.name = "conso_tWhEF")
+
+##### conso nationale par usage
+Conso_nationale_usage = dcast.data.table(Conso, scenario + annee ~usage,fun.aggregate = function(x){sum(x)/10^9}, value.var = "value")
+
+
+conso_modele = Conso_nationale_usage[scenario == "AME prix MA3" & annee == "2009"]
+
+conso_modele = conso_modele[,list(BRANCHE = "Total modèle",
+                                       SURFACES = "",
+                                       CONSO_CHAUFF =  Chauffage,
+                                       BESOIN_AUXILIAIRES = Auxiliaires,
+                                       BESOIN_VENTILATION = Ventilation, 
+                                       BESOIN_CLIM = "", 
+                                       CONSO_CLIM = Climatisation,
+                                       BESOIN_ECS = "",
+                                       CONSO_ECS =ECS,
+                                       BESOIN_CUISSON = Cuisson,
+                                       BESOIN_PROCESS = Process,
+                                       BESOIN_BUREAUTIQUE = Bureautique,
+                                       BESOIN_ECLAIRAGE = Eclairage,
+                                       BESOIN_FROID = Froid_alimentaire,
+                                       BESOIN_ELEC_SPE = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire),
+                                       BESOIN_AUTRES = Autre)]
+
+table_conso = rbind(besoins_branche_EF, besoins_total_EF, conso_modele)
+table_conso_u = table_conso
+table_conso[, SURFACES :=NULL]
+table_conso[, BESOIN_CLIM  :=NULL]
+table_conso[,  BESOIN_ECS :=NULL]
+setnames(table_conso, c("Branche","Chauff", "Aux","Ventil","Clim","ECS","Cui","Proc","Bur","Ecl","Froid","Elec spé","Autres"))
+```
+
+```{r, echo=F, warning=F}
+pander(table_conso, caption = "Besoins et consommations par branche et par usage pour l'année 2009 (en tWh EF)", digits = 1)
+
+```
+
+```{r, echo=F, warning=F, include = F}
+plotdatatert = melt(table_conso, id.vars = "Branche", variable.name = "usage",value.name = "conso_kWh_EP")
+plotdatatert = plotdatatert[Branche == "Total EF" & usage != "Elec spé"]
+plotdatatert[,part := conso_kWh_EP/(sum(conso_kWh_EP))]
+plotdatatert[,usage := factor(usage,levels = c("Chauff","ECS","Clim", "Ecl","Aux","Ventil","Cui","Proc","Bur","Froid","Autres"), 
+                              labels =c("Chauffage", "ECS","Clim","Ecl","Aux","Ventil","Cui","Proc","Bur","Froid","Autres"))]
+
+plotdatatert = plotdatatert[order(usage)]
+```
+
+```{r, fig.width=20, fig.height=10, echo=F, warning=F, fig.cap='Répartition des consommations du parc tertiaire par usage'}
+ggplot(plotdatatert[Branche == "Total EF" & usage  != "Elec spé"], aes(x="", y=part, fill=usage))+
+geom_bar(width = 1, stat = "identity")+ coord_polar("y", start=0) + mytheme_facet_plot + theme_minimal()+
+  theme(axis.text.x=element_blank(), axis.title = element_blank(), axis.ticks = element_blank(), axis.title.x = element_blank(),
+        panel.border = element_blank(),panel.grid=element_blank(), axis.title.y = element_blank(), 
+        text = element_text(size = 20)) + 
+  geom_text(aes(y = part/3 + c(0, cumsum(part)[-length(part)]), 
+            label = percent(round(part, digits=2))), size=6, color = "white") + scale_color_discrete("Usage")
+
+```
+
+\newpage 
+
+
+# 3) Consommations unitaires du parc existant et étiquette énergie 
+
+## Consommations moyennes par usage pour l'ensemble du parc
+
+
+En rapportant la somme des consommations par usage sur l'ensemble du parc à la surface du parc, on peut évaluer la consommation unitaire moyenne du parc par usage (convertie en énergie primaire, pour comparer aux valeurs du dpe). La catégorie électricité spécifique correspond à la somme des usages auxiliaires, ventilation, process, bureautique, éclairage et froid alimentaire. Le parc consomme en moyenne 416 kWh EP par m² par an (246 kWh EF par m² par an) . 
+
+```{r, echo=F, warning=F}
+setnames(besoinsU_total_EP, c("Branche","Chauff", "Aux","Ventil","Clim","ECS","Cui","Proc","Bur","Ecl","Froid","Elec spé","Autres"))
+setnames(besoinsU_total_EF, c("Branche","Chauff", "Aux","Ventil","Clim","ECS","Cui","Proc","Bur","Ecl","Froid","Elec spé","Autres"))
+
+#sum(besoinsU_total_EP[,c(2:11,13), with=F])
+#sum(besoinsU_total_EF[,c(2:11,13), with=F])
+#sum(besoinsU_total_EF[,c(2:11,13), with=F])
+
+pander(rbind(besoinsU_total_EP,besoinsU_total_EF), caption = "Consommations unitaires moyennes par usage pour l'année 2009  (kwh par m² par an)", digits = 1)
+
+```
+
+\newpage 
+
+## Distributions des consommations moyennes par branche
+
+
+Le poste le plus important de consommation dans le tertiaire est le chauffage qui représente près de 50% des consommations en EF. Les consommations de chauffage varient sensiblement selon le type de bâtiment, les consommations moyennes par branche étant relativement proches de la moyenne sur l'ensemble du parc. 
+
+```{r, echo=F, warning=F, include = F}
+etiq_ini[,ETIQUETTE := factor(ETIQUETTE, levels = rev(levels(as.factor(etiq_ini$ETIQUETTE))))]
+etiq_ini[,conso_chauff_moy :=  mean(CONSO_CHAUFF_EP/SURFACES), by="BRANCHE"]
+#etiq_ini[,sum(CONSO_USAGES_RT_EP)/sum(SURFACES)]
+tmp = etiq_ini[, list(conso_chauff_moy= mean(CONSO_CHAUFF_EP/SURFACES)), by="BRANCHE"]
+```
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F, fig.cap='Consommations unitaires de chauffage (kwh EP par m² par an) du parc tertiaire'}
+ggplot(etiq_ini) + geom_boxplot(aes(BRANCHE ,CONSO_CHAUFF_EP/SURFACES)) + scale_y_continuous(limits = c(0,1000), breaks = seq(0,1000,100)) +  mytheme_facet_plot + geom_text(data=tmp, aes(BRANCHE, conso_chauff_moy , label =as.character(round(conso_chauff_moy, digits= 0)), vjust = -1), color="red", size = 12) + geom_point(data = tmp, aes(BRANCHE, conso_chauff_moy), color="red") +
+  theme(text = element_text(size = 20)) +
+  theme(axis.text.x = element_text(angle = 45, size = 20, hjust = 1))
+```
+
+\newpage 
+
+Les différences entre branches sont plus marquées sur les consommations pour l'ensemble des usages réglementés (chauffage, ECS, climatisation, Auxiliaires, ventilation et éclairage). Sur l'ensemble du parc, la consommation unitaire pour les usages RT est de 303 kWh EP par m² par an. En énergie primaire, le chauffage représente ainsi seulement 50 % des usages réglementés, l'éclairage un peu moins de 25%, l'ECS environ 10 % et la ventilation, les auxiliaires et la climatisation environ 5 % chacun. 
+
+
+
+```{r, echo=F, warning=F, include = F}
+tmp = etiq_ini[, list(conso_rt_moy=sum(CONSO_USAGES_RT_EP)/sum(SURFACES)), by="BRANCHE"]
+```
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F, fig.cap='Consommations unitaires pour les usages RT (kwh EP par m² par an) du parc tertiaire'}
+ggplot(etiq_ini) + geom_boxplot(aes(BRANCHE ,CONSOU_USAGES_RT_EP)) + scale_y_continuous(limits = c(0,1000), breaks = seq(0,1000,100))  + geom_text(data = tmp, aes(BRANCHE, conso_rt_moy  , label =as.character(round(conso_rt_moy, digits= 0)), vjust = -1), color="red", size = 12) + geom_point(data = tmp, aes(BRANCHE,conso_rt_moy ), color="red") +
+  mytheme_facet_plot +
+    theme(text = element_text(size = 30)) +
+  theme(axis.text.x = element_text(angle = 45, size = 20, hjust = 1))
+```
+
+\newpage 
+
+```{r, echo=F, warning=F, include = F}
+#etiq_ini[, sum(CONSOU_TOT*SURFACES)/sum(SURFACES)]
+tmp = etiq_ini[, list(conso_tot_moy =sum(CONSOU_TOT*SURFACES)/sum(SURFACES)), by="BRANCHE"]
+
+etiq_ini[,conso_tot_moy :=  sum(CONSOU_TOT*SURFACES)/sum(SURFACES), by="BRANCHE"]
+```
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F, fig.cap='Consommations unitaires totales (kwh EP par m² par an) du parc tertiaire'}
+
+ggplot(besoins_agreg2) + geom_boxplot(aes(BRANCHE , CONSOU_TOT)) + scale_y_continuous(limits = c(0,1000), breaks = seq(0,1000,100)) + mytheme_facet_plot + geom_text(data = tmp, aes(BRANCHE,conso_tot_moy   , label =as.character(round(conso_tot_moy , digits= 0)), vjust = -1), color="red", size = 12) + geom_point(data = tmp, aes(BRANCHE,conso_tot_moy  ), color="red") + 
+    theme(text = element_text(size = 20)) +
+  theme(axis.text.x = element_text(angle = 45, size = 20, hjust = 1))
+```
+
+\newpage
+
+## Distributions des consommations moyennes par étiquette
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F, fig.cap='Consommations unitaires des usages réglementés (kwh EP par m² par an) du parc tertiaire  par étiquette énergie'}
+
+ggplot(etiq_ini) + geom_boxplot(aes(ETIQUETTE , CONSOU_USAGES_RT_EP, weight = SURFACES)) + scale_y_continuous(limits = c(0,1000), breaks = seq(0,1000,100)) + mytheme_facet_plot +
+    theme(text = element_text(size = 20)) +
+  theme(axis.text.x = element_text(angle = 45, size = 20, hjust = 1))
+
+```
+
+\newpage
+
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F, fig.cap='Consommations unitaires de chauffage (kwh EP par m² par an) du parc tertiaire  par étiquette énergie'}
+ggplot(etiq_ini) + geom_boxplot(aes(ETIQUETTE , CONSO_CHAUFF_EP/SURFACES, weight = SURFACES)) + 
+  scale_y_continuous(limits = c(0,1000), breaks = seq(0,1000,100)) + mytheme_facet_plot +
+    theme(text = element_text(size = 20)) + scale_x_discrete(breaks = rev(levels(as.factor(etiq_ini$ETIQUETTE)))) +
+  theme(axis.text.x = element_text(angle = 45, size = 20, hjust = 1))
+
+```
+
+\newpage
+
+## Comparaison des consommations  avec le résidentiel 
+
+Dans cette partie, on compare les consommations du parc tertiaire avec les données Phébus :
+
+* Consommations théoriques par usage (uniquement Chauffage, ECS et clim) du volet dpe 
+* Consommations réelles des ménages : 
+    * Consommations totales = tous les usages (Chauffage, ECS et clim + elec spé + cuisson)
+    * Consommations de chauffage = consommations de l'énergie de chauffage définie comme principale. 
+    * Pour les logements  avec un chauffage électrique, on retire  33 kWh EF par m² qui correspond à une estimation moyenne des consommations d'électricité spécifique sur les logements non chauffés à l'électricité. 
+
+Le parc tertiaire consomme en moyenne 416 kWh EP par m² par an. A titre de comparaison, le parc résidentiel consomme en moyenne 276 kWh EP par m² par an selon l'enquête Phébus (consommations réelles totales des ménages). Selon le volet DPE de l'enquête, le même parc résidentiel consommerait 278 kWh EP par m² en moyenne uniquement pour les usages réglementés (Chauffage, ECS, climatisation) ce qui laisse à penser qu'il existe une forte surestimation des consommations par le DPE. 
+
+Le chauffage représente 80 % des usages réglementés dans le secteur résidentiel, selon le volet dpe, alors qu'il ne représente que 50 % des usages RT dans le tertiaire, 36 % des consommations totales. 
+
+
+
+```{r, echo=F, warning=F, include = F}
+###### conso dpe par usage residentiel
+
+residentiel_par_usage = logements_dpe[!is.na(poids_dpe),list(poids_dpe,surface_habitable, Chauffage, ECS, 
+                                                             Refroidissement_Elec, usage_production_Elec_production_Elec)]
+
+residentiel_par_usage = melt(residentiel_par_usage, id.vars = c("poids_dpe","surface_habitable"), variable.name = "usage", value.name = "Conso_dpe")
+
+residentiel_par_usage[,conso_kWh_m2_EP:= Conso_dpe/surface_habitable]
+
+plotdatares = residentiel_par_usage[!is.na(poids_dpe)  & !is.na(surface_habitable),list(conso_kWh_m2_EP = sum(Conso_dpe*poids_dpe, na.rm=T)/sum(surface_habitable*poids_dpe, na.rm=T)), by="usage"]
+
+#plotdatares[,sum(conso_kWh_m2_EP)]
+plotdatares[, usage := factor(usage,levels = c("Chauffage","ECS","Refroidissement_Elec","usage_production_Elec_production_Elec"),
+                             labels = c("Chauffage", "ECS","Clim","ProdElec"))]
+plotdatares[,parc :="Résidentiel (conso théorique dpe)"]
+#logements_dpe[ener_coll == 2, sum(conso_tot_kwh_EP*poids_clode, na.rm=T)/sum(EHST*poids_clode, na.rm=T)]
+
+
+#### conso reelle par usage residentiel
+
+#logements_dpe[,.N, by="Typ_Energie_Chauff_P2"]
+
+logements_dpe[Typ_Energie_Chauff_P2 == "Elec", conso_kwh_EF_ChauffP_clode := conso_elec_kwh_EP/2.58]
+logements_dpe[Typ_Energie_Chauff_P2 == "Gaz", conso_kwh_EF_ChauffP_clode := conso_gaz_kwh_EP]
+logements_dpe[Typ_Energie_Chauff_P2 == "Fioul", conso_kwh_EF_ChauffP_clode := conso_fioul_kwh_EP]
+logements_dpe[Typ_Energie_Chauff_P2 %in% c("boisb", "boisg"), conso_kwh_EF_ChauffP_clode := conso_bois_kwh_EP]
+logements_dpe[Typ_Energie_Chauff_P2 == "gplc", conso_kwh_EF_ChauffP_clode := conso_gplc_kwh_EP]
+logements_dpe[Typ_Energie_Chauff_P2 == "gplb", conso_kwh_EF_ChauffP_clode := conso_gplb_kwh_EP]
+logements_dpe[Typ_Energie_Chauff_P2 == "charb", conso_kwh_EF_ChauffP_clode := conso_charbon_kwh_EP]
+logements_dpe[Typ_Energie_Chauff_P2 == "kerdane", conso_kwh_EF_ChauffP_clode := conso_pk_kwh_EP]
+logements_dpe[Typ_Energie_Chauff_P2 == "solaire", conso_kwh_EF_ChauffP_clode := 0]
+logements_dpe[Typ_Energie_Chauff_P2 == "RDC", conso_kwh_EF_ChauffP_clode := NA]
+logements_dpe[Typ_Energie_Chauff_P2 == "autres", conso_kwh_EF_ChauffP_clode := NA]
+logements_dpe[Typ_Energie_Chauff_P2 == "NSP", conso_kwh_EF_ChauffP_clode := NA]
+
+logements_dpe[Typ_Energie_Chauff_P2 == "Elec", conso_kwh_EP_ChauffP_clode := conso_elec_kwh_EP]
+logements_dpe[Typ_Energie_Chauff_P2 != "Elec", conso_kwh_EP_ChauffP_clode := conso_kwh_EF_ChauffP_clode]
+
+#logements_dpe[,sum(conso_kwh_EF_ChauffP_clode, na.rm=T), by="Typ_Energie_Chauff_P2"]
+#logements_dpe[,sum(conso_kwh_EF_ChauffP_clode*poids_clode, na.rm=T)/sum(EHST*poids_clode,na.rm=T), by="Typ_Energie_Chauff_P2"]
+
+elec_spe_EF_moy = logements_dpe[!is.na(poids_dpe) & Typ_Energie_Chauff_P2 != "Elec" & Chauff_Appoint_Elec == 0 & Energie_ECS != "Elec", sum(conso_elec_kwh_EP/2.58*poids_clode, na.rm=T)/sum(EHST*poids_clode,na.rm=T)]
+elec_spe_EP_moy = logements_dpe[!is.na(poids_dpe) & Typ_Energie_Chauff_P2 != "Elec" & Chauff_Appoint_Elec == 0 & Energie_ECS != "Elec", sum(conso_elec_kwh_EP*poids_clode, na.rm=T)/sum(EHST*poids_clode,na.rm=T)]
+
+logements_dpe[Typ_Energie_Chauff_P2 == "Elec", conso_kwh_EF_ChauffP_clode2 := 
+conso_kwh_EF_ChauffP_clode - elec_spe_EF_moy*EHST]
+logements_dpe[Typ_Energie_Chauff_P2 != "Elec", conso_kwh_EF_ChauffP_clode2 := 
+conso_kwh_EF_ChauffP_clode]
+
+logements_dpe[Typ_Energie_Chauff_P2 == "Elec", conso_kwh_EP_ChauffP_clode2 := 
+conso_kwh_EP_ChauffP_clode - elec_spe_EP_moy*EHST]
+logements_dpe[Typ_Energie_Chauff_P2 != "Elec", conso_kwh_EP_ChauffP_clode2 := 
+conso_kwh_EP_ChauffP_clode]
+
+logements_dpe[,energie := Typ_Energie_Chauff_P4]
+logements_dpe[Typ_Energie_Chauff_P4 == "GPL",energie := "Autres"]
+
+
+plotdatares2 = logements_dpe[ener_coll==2,list(
+                                  conso_kwhEPtotm2 = sum(conso_tot_kwh_EP*poids_clode, na.rm=T)/sum(EHST*poids_clode,na.rm=T),
+                                  conso_kwhEPm2_2 = sum(conso_kwh_EP_ChauffP_clode*poids_clode, na.rm=T)/sum(EHST*poids_clode,na.rm=T),
+                                  conso_kwhEPm2 =sum(conso_kwh_EP_ChauffP_clode2*poids_clode, na.rm=T)/sum(EHST*poids_clode,na.rm=T))]
+
+plotdatares2[, conso_kwhEP_autre := conso_kwhEPtotm2 - conso_kwhEPm2]
+plotdatares2[, parc:="Résidentiel (conso réelle)"]
+plotdatares2 = melt(plotdatares2, id.vars = "parc", variable.name = "usage",value.name = "conso_kWh_m2_EP")
+plotdatares2[usage ==  "conso_kwhEPm2", usage := "Chauffage",]
+plotdatares2[usage ==  "conso_kwhEP_autre", usage :=  "Autres usages",]
+plotdatares2 = plotdatares2[usage %in% c( "Chauffage", "Autres usages")]
+
+##### conso tertiaire par usage
+
+plotdatatert = melt(besoinsU_total_EP, id.vars = "Branche", variable.name = "usage",value.name = "conso_kWh_m2_EP")
+plotdatatert = plotdatatert[usage!="Elec spé"]
+plotdatatert[ ,Branche := NULL ]
+plotdatatert[ ,parc := "Tertiaire" ]
+plotdatatert[,usage := factor(usage,levels = c("Chauff","ECS","Clim", "Ecl","Aux","Ventil","Cui","Proc","Bur","Froid","Autres"), 
+                              labels =c("Chauffage", "ECS","Clim","Ecl","Aux","Ventil","Cui","Proc","Bur","Froid","Autres"))]
+
+
+plotdata = rbind(plotdatatert,plotdatares)
+plotdata = rbind(plotdata ,plotdatares2)
+
+
+plotdata[,usage := factor(usage,levels = c("Chauffage","ECS","Clim", "Ecl","Aux","Ventil","Cui","Proc","Bur","Froid","Autres","ProdElec", "Autres usages"), 
+                              labels =c("Chauffage", "ECS","Clim","Ecl","Aux","Ventil","Cui","Proc","Bur","Froid","Autres", "ProdElec", "Autres usages"))]
+
+plotdata[, parc := factor(parc, levels = c("Résidentiel (conso théorique dpe)", "Résidentiel (conso réelle)", "Tertiaire"))]
+plotdata = plotdata[order(parc)]
+plotdata = plotdata[order(usage)]
+```
+
+```{r, fig.width=20, fig.height=12, echo=F, warning=F, fig.cap='Consommations unitaires par usage des parcs tertiaire et résidentiel'}
+
+ggplot(plotdata) + geom_bar(aes(parc,conso_kWh_m2_EP,fill = usage), stat = "identity") + mytheme_facet_plot + 
+  ylab("kWh EP par m² par an") +xlab("")+ theme(text = element_text(size = 30))
+
+```
+
+
+
+```{r, echo=F, warning=F, include = F}
+residentiel_partchauffage_energie = logements_dpe[!is.na(poids_dpe),
+                                                  list(poids_dpe,surface_habitable, Chauffage,Chauffage_Elec,Chauffage_Gaz,                                                                Chauffage_Bois,Chauffage_Autres,ECS,Refroidissement_Elec,usage_production_Elec_production_Elec)]
+
+residentiel_partchauffage_energie =  melt(residentiel_partchauffage_energie, id.vars = c("poids_dpe","surface_habitable"), variable.name = "usage", value.name = "Conso_kwhEP")
+
+residentiel_partchauffage_energie = residentiel_partchauffage_energie[!is.na(poids_dpe) & !is.na(Conso_kwhEP) & Conso_kwhEP >0 &
+                                                                        !is.na(surface_habitable),
+                                                                      list(SURFACES = sum(surface_habitable*poids_dpe, na.rm=T),
+                                                                           Conso_kwhEP =sum(Conso_kwhEP*poids_dpe, na.rm=T)
+                                                                           ),by=c("usage")]
+
+residentiel_partchauffage_energie[, Part := Conso_kwhEP/residentiel_partchauffage_energie[usage == "Chauffage",Conso_kwhEP]]
+residentiel_partchauffage_energie[, Part := Conso_kwhEP/residentiel_partchauffage_energie[usage == "Chauffage",Conso_kwhEP]]
+plotdatares = residentiel_partchauffage_energie[usage%in% c("Chauffage_Elec","Chauffage_Gaz","Chauffage_Bois","Chauffage_Autres")]
+plotdatares[, parc:="Résidentiel (conso théorique dpe)"]
+plotdatares[,energie := factor(usage,levels = c("Chauffage_Elec", "Chauffage_Gaz","Chauffage_Bois", "Chauffage_Autres"), 
+                              labels =c("Electricité", "Gaz","Bois","Autres (Fioul, GPL, solaire, biomasse, charbon...)"))]
+
+besoins_parc_init[, Chauffage_Elec := BESOIN_chauff_02*2.58/RDT]
+besoins_parc_init[, Chauffage_Gaz := BESOIN_chauff_04/RDT]
+besoins_parc_init[, Chauffage_Fioul := BESOIN_chauff_03/RDT]
+besoins_parc_init[, Chauffage_Urbain := BESOIN_chauff_06/RDT]
+besoins_parc_init[, Chauffage_Autres := BESOIN_chauff_01/RDT]
+besoins_parc_init[, Chauffage := CONSO_CHAUFF_EP]
+
+plotdatatert =  melt(besoins_parc_init[,list(SURFACES,ID,Chauffage, Chauffage_Elec, Chauffage_Gaz,Chauffage_Fioul, Chauffage_Urbain, Chauffage_Autres)], id.vars = c("SURFACES","ID"), variable.name = "usage", value.name = "Conso_kwhEP")
+plotdatatert  = plotdatatert [!is.na(Conso_kwhEP) & !is.na(SURFACES ), list(SURFACES = sum(SURFACES, na.rm=T),
+                                                         Conso_kwhEP = sum(Conso_kwhEP, na.rm=T)
+                                                                           ),by=c("usage")]
+
+plotdatatert[, Part := Conso_kwhEP/plotdatatert[usage == "Chauffage",Conso_kwhEP]]
+
+plotdatatert = plotdatatert[usage !="Chauffage"]
+plotdatatert[,energie := factor(usage,levels = c("Chauffage_Elec", "Chauffage_Gaz","Chauffage_Fioul", "Chauffage_Urbain", "Chauffage_Autres"), 
+                              labels =c("Electricité", "Gaz","Fioul","Urbain","Autres (GPL, solaire, biomasse, charbon)"))]
+
+plotdatatert[, parc:="Tertiaire"]
+
+plotdata = rbind(plotdatatert,plotdatares)
+plotdata[,energie := factor(energie,levels = c("Electricité","Gaz","Fioul","Urbain","Bois","Autres (Fioul, GPL, solaire, biomasse, charbon...)","Autres (GPL, solaire, biomasse, charbon)"))]
+plotdata = plotdata[order(energie)]
+
+```
+
+```{r, fig.width=20, fig.height=12, echo=F, warning=F, fig.cap='Part de marché des énergies dans les consommations de chauffage des parcs tertiaire et résidentiel'}
+ggplot(plotdata) + geom_bar(aes(parc,Part,fill = energie), stat = "identity") + mytheme_facet_plot + 
+  ylab("Part de marché des énergies pour le chauffage") +xlab("")+ theme(text = element_text(size = 30))
+
+```
+
+
+```{r, echo=F, warning=F, include = F}
+plotdata[,Conso_kwhEPm2 := Conso_kwhEP/SURFACES]
+```
+
+```{r, fig.width=20, fig.height=12, echo=F, warning=F, fig.cap='Consommations unitaires par énergie pour le chauffage, en énergie primaire'}
+ggplot(plotdata) + geom_bar(aes(parc,Conso_kwhEPm2,fill = energie), stat = "identity", position = "dodge") + mytheme_facet_plot + 
+  ylab("kwh EP par m2 par an") +xlab("")+ theme(text = element_text(size = 30))
+
+```
+
+
+
+```{r, echo=F, warning=F, include = F}
+
+#logements_dpe[,.N, by="Typ_Energie_Chauff_P2"]
+
+logements_dpe[Typ_Energie_Chauff_P2 == "Elec", conso_kwh_EF_ChauffP_clode := conso_elec_kwh_EP/2.58]
+logements_dpe[Typ_Energie_Chauff_P2 == "Gaz", conso_kwh_EF_ChauffP_clode := conso_gaz_kwh_EP]
+logements_dpe[Typ_Energie_Chauff_P2 == "Fioul", conso_kwh_EF_ChauffP_clode := conso_fioul_kwh_EP]
+logements_dpe[Typ_Energie_Chauff_P2 %in% c("boisb", "boisg"), conso_kwh_EF_ChauffP_clode := conso_bois_kwh_EP]
+logements_dpe[Typ_Energie_Chauff_P2 == "gplc", conso_kwh_EF_ChauffP_clode := conso_gplc_kwh_EP]
+logements_dpe[Typ_Energie_Chauff_P2 == "gplb", conso_kwh_EF_ChauffP_clode := conso_gplb_kwh_EP]
+logements_dpe[Typ_Energie_Chauff_P2 == "charb", conso_kwh_EF_ChauffP_clode := conso_charbon_kwh_EP]
+logements_dpe[Typ_Energie_Chauff_P2 == "kerdane", conso_kwh_EF_ChauffP_clode := conso_pk_kwh_EP]
+logements_dpe[Typ_Energie_Chauff_P2 == "solaire", conso_kwh_EF_ChauffP_clode := 0]
+logements_dpe[Typ_Energie_Chauff_P2 == "RDC", conso_kwh_EF_ChauffP_clode := NA]
+logements_dpe[Typ_Energie_Chauff_P2 == "autres", conso_kwh_EF_ChauffP_clode := NA]
+logements_dpe[Typ_Energie_Chauff_P2 == "NSP", conso_kwh_EF_ChauffP_clode := NA]
+
+#logements_dpe[,sum(conso_kwh_EF_ChauffP_clode, na.rm=T), by="Typ_Energie_Chauff_P2"]
+#logements_dpe[,sum(conso_kwh_EF_ChauffP_clode*poids_clode, na.rm=T)/sum(EHST*poids_clode,na.rm=T), by="Typ_Energie_Chauff_P2"]
+
+elec_spe_EF_moy = logements_dpe[!is.na(poids_dpe) & Typ_Energie_Chauff_P2 != "Elec" & Chauff_Appoint_Elec == 0 & Energie_ECS != "Elec", sum(conso_elec_kwh_EP/2.58*poids_clode, na.rm=T)/sum(EHST*poids_clode,na.rm=T)]
+
+logements_dpe[Typ_Energie_Chauff_P2 == "Elec", conso_kwh_EF_ChauffP_clode2 := 
+conso_kwh_EF_ChauffP_clode - elec_spe_EF_moy*EHST]
+logements_dpe[Typ_Energie_Chauff_P2 != "Elec", conso_kwh_EF_ChauffP_clode2 := 
+conso_kwh_EF_ChauffP_clode]
+
+logements_dpe[,energie := Typ_Energie_Chauff_P4]
+logements_dpe[Typ_Energie_Chauff_P4 == "GPL",energie := "Autres"]
+
+plotdatares = logements_dpe[,sum(conso_kwh_EF_ChauffP_clode*poids_clode, na.rm=T)/sum(EHST*poids_clode,na.rm=T), by="Typ_Energie_Chauff_P4"]
+plotdatares = logements_dpe[,list(conso_kwhEFm2_2 = sum(conso_kwh_EF_ChauffP_clode*poids_clode, na.rm=T)/sum(EHST*poids_clode,na.rm=T),
+                                  conso_kwhEFm2 =sum(conso_kwh_EF_ChauffP_clode2*poids_clode, na.rm=T)/sum(EHST*poids_clode,na.rm=T)), by="energie"]
+
+
+plotdatares[, energie := factor(energie, levels = c("Elec","Gaz","Fioul","Bois","Autres","RDC","NA"), 
+                                labels = c("Electricité", "Gaz","Fioul","Bois","Autres (GPL, solaire, biomasse, charbon)","Urbain","NA"))]
+plotdatares[,parc := "Résidentiel (conso réelle)"]
+plotdatares = plotdatares[energie %in%  c("Electricité", "Gaz","Fioul","Bois","Autres (GPL, solaire, biomasse, charbon)"),]
+
+plotdatatert[, conso_kwhEF := Conso_kwhEP]
+plotdatatert[usage ==  "Chauffage_Elec", conso_kwhEF := Conso_kwhEP/2.58]
+plotdatatert[, conso_kwhEFm2 := conso_kwhEF/SURFACES]
+
+plotdata = rbind(plotdatatert[,list(parc,energie,conso_kwhEFm2)],plotdatares[,list(parc,energie,conso_kwhEFm2)])
+
+plotdata[,energie := factor(energie,levels = c("Electricité","Gaz","Fioul","Autres (GPL, solaire, biomasse, charbon)","Bois","Urbain"))]
+```
+
+```{r, fig.width=20, fig.height=12, echo=F, warning=F, fig.cap='Consommations unitaires par énergie pour le chauffage, en énergie réelle finale'}
+
+ggplot(plotdata) + geom_bar(aes(parc,conso_kwhEFm2,fill = energie), stat = "identity", position = "dodge") + mytheme_facet_plot + 
+  ylab("kwh EF par m2 par an") +xlab("")+ theme(text = element_text(size = 30)) 
+
+
+```
+
+
+
+```{r, echo=F, warning=F, include = F}
+conso_tot_recap = data.table(parc = c("Résidentiel (conso théorique dpe)", "Résidentiel (conso réelle)", "Tertiaire")) 
+  
+conso_tot_recap[parc == "Résidentiel (conso réelle)", ConsoTwhEF := logements_dpe[ener_coll==2, sum(conso_tot_kwh_EF*poids_clode)/10^9]]
+conso_tot_recap[parc == "Résidentiel (conso théorique dpe)", ConsoTwhEF :=
+logements_dpe[, sum(Chauffage_Elec*poids_dpe/2.58,-usage_production_Elec_production_Elec*poids_dpe/2.58, ECS_Elec*poids_dpe/2.58, Refroidissement_Elec*poids_dpe/2.58,
+                    Chauffage_Gaz*poids_dpe, ECS_Gaz*poids_dpe, Chauffage_Bois*poids_dpe, ECS_Bois*poids_dpe,Chauffage_Autres*poids_dpe,ECS_Appoint_Autres*poids_dpe, na.rm=T)/10^9]]
+
+# logements_dpe[, sum(Chauffage_Elec*poids_dpe,-usage_production_Elec_production_Elec*poids_dpe, ECS_Elec*poids_dpe, Refroidissement_Elec*poids_dpe,
+#                     Chauffage_Gaz*poids_dpe, ECS_Gaz*poids_dpe, Chauffage_Bois*poids_dpe, ECS_Bois*poids_dpe,Chauffage_Autres*poids_dpe,ECS_Appoint_Autres*poids_dpe, na.rm=T)/10^9]
+# logements_dpe[!is.na(poids_dpe),sum(conso_TROIS_CL_DPE_Lgt*surface_habitable*poids_dpe, na.rm=T)/10^9]
+
+conso_tot_recap[parc == "Tertiaire", ConsoTwhEF := Conso_nationale_tot[scenario == "AME prix MA3" & annee == "2009", conso_tWhEF]]
+```
+
+```{r, fig.width=20, fig.height=12, echo=F, warning=F, fig.cap='Consommations totales des parcs résidentiel et tertiaire'}
+ggplot(conso_tot_recap) + geom_bar(aes(parc,ConsoTwhEF, fill = parc), stat = "identity", show.legend = F) + mytheme_facet_plot + 
+  ylab("tWh EF par an") +xlab("")+ theme(text = element_text(size = 30)) 
+#logements_dpe[ener_coll==2, sum(conso_kwh_EF_ChauffP_clode2*poids_clode, na.rm=T)/10^9]
+```
+
+
+\newpage
+
+# 4) Coûts et rendements des gestes de rénovation
+
+## Coûts et gains moyens des gestes 
+
+
+A partir des coûts et des surfaces pour les différents segments de parc, on peut calculer un "coût moyen" par geste en pondérant les coûts apr les surfaces de chaque segment. 
+
+```{r, echo=F, warning=F} 
+tableau_cout_moy_geste2 = tableau_cout_moy_geste
+
+setnames(tableau_cout_moy_geste2 , c("geste","cout inv","gain (%)","gain kWhEF","cout du kWh EF","gain (%) corrigé","DV"))
+
+pander(tableau_cout_moy_geste2[,c(1:5,7), with=F], caption = "Coûts et gains moyens des gestes pondérés par la surface des segments du parc", digits = 2)
+```
+
+
+## Comparaison avec les coûts des sauts de classe du modèle ResIRF
+
+On compare les gains et des coûts moyens des gestes de rénovation dans le tertiaire avec ceux des changements de classe énergétiques du modèle ResIRF (points bleus et courbe). Ob observe montre que les gestes de rénovation dans le tertiare sont en moyenne plus coûteux à l'exception de la GTB. 
+
+```{r, fig.width=20, fig.height=10, echo=F, warning=F, fig.cap='Comparaison des coûts et des gains dans le tertiaire avec la matrice de coût du modèle ResIRF'}
+
+setnames(tableau_cout_moy_geste, c("geste","cout","gainp","gainu","coutu","gainp2","DV"))
+
+ggplot() + geom_line(data = fitdataResIRF , aes(gain,cout)) + mytheme_facet_plot + 
+  geom_point(data = tableau_cout_moy_geste, aes(gainp, cout, label = geste),color = "red") + 
+  geom_text(data = tableau_cout_moy_geste, aes(gainp, cout, label = geste), vjust = -1,color = "red", size = 8) +
+  geom_point(data = cout_renov_resIRF, aes(gainp,cout),color = "blue") +
+  geom_text(data = cout_renov_resIRF, aes(gainp,cout, label = saut),color = "blue", vjust = -1, size = 8)
+
+```
+
+\newpage
+
+
+## Comparaison avec les données BIIS/OPEN
+
+Sur l'ensemble du parc, les coûts des gestes de rénovations sur les fenêtres sont en moyenne de 53 euros par m² (modéré) et 81 euros par m² (BBC). Les résultats de BIIS à partir de l'enquête OPEN indiquent des coûts de 14.4 à 73.2 euros au m² pour les rénovations des ouvertures (niveau minimum et optimum). Les gains sont en moyenne de 10 et 20 kWh par m² dans le modèle et autour de 5 ou 6 kWh par m² dans les résultats de BIIS.
+Cela donne un coût du kWh économisé de 5.5 et 4.05 respectivement ce qui est assez différent des résultats de BIIS où le coût croît avec la performance de la rénovation: 2.3 euros par kWh pour le niveau minimum, 4.6 pour le niveau medium et 12.4 pour le niveau optimum, 7.1 euros en moyenne sur l'ensemble des rénovations. 
+
+Concernant la rénovation des murs, l'enquête de BIIS évoque un coût de 45 à 64 à euros par m² pour des gains de  44 kwh par m2 en moyenne pour la rénovation des parois opaques. Les données du modèle sont difficiles à comparer car les geste FEN_MURBBC et FEN_MURMOD comprennent des rénovations sur les murs ET les fenêtres. Si on considère que les rénovations sur les fenêtres et les murs sont additives, on a un écart de 20 et 32 euros par m² entre les rénovations fenêtres et les rénovations fenêtres + murs ce qui correspondrait à une approximation du coût de rénovation des murs. L'écart de gains en consommation est en revanche assez faible entre 10 et 12 kWh par m². BIIS obtient un coût du kWh économisé de 1.17 euros par kWh  pour la rénovation des parois. Dans le modèle tertiaire, le coût du kWh économisé pour les rénovations fenêtres + murs (3.4 euros par kWh en moyenne) est plus faible que celui des rénovations sur les fenêtres seules. 
+
+Enfin, BIIS reporte des coûts de 52 à 106 euros par m² pour la rénovation d'une toiture selon niveau d'exigence, 75 en moyenne pour des gains de 25 kWh par m² en moyenne. Dans le modèle les écarts entre des rénovations fenêtres + murs et des rénovations sur l'ensemble du bâtiment (fenêtre, murs, toiture, plancher) sont de 23 euros par m² pour les rénovations modérées et de 113 euros par m² pour les rénovations BBC. Ces rénovations apportent un gain additionnel de 31 et 66 kWh par m² en moyenne par rapport aux rénovations fenêtres + murs. 
+
+Pour les rénovations d'ensemble, le coût du kWh économisé est encore plus bas dans les données du modèle par rapport aux rénovations sur un ou deux élements. Il est en moyenne plus pas pour les rénovations "ensemble modéré" que pour les rénovations "ensemble BBC". Les rénovations d'ensemble dans les données BIIS  ont un coût du kWh économisé encore plus faible de 0.89 ( rénovations "trois étoiles" :parois opaques + ouvertures + chauffage).
+
+
+*** CONCLUSION : Les données "moyennes" sur les coûts des gestes de rénovation ne semblent pas aberrantes. Mais la distribution des coûts est très large***
+
+
+<!-- ```{r, echo=F, warning=F} -->
+<!-- pander(cout_moy_geste[,list(BRANCHE, GTB, FENMOD, FENBBC, FEN_MURMOD, FEN_MURBBC, ENSMOD, ENSBBC)], caption = "Coûts moyens des gestes pondérés par la surface des segments du parc", digits = 0) -->
+<!-- ``` -->
+
+
+<!-- ```{r, echo=F, warning=F} -->
+<!-- pander(gain_moy_geste[BRANCHE == "Ensemble",list(BRANCHE, GTB, FENMOD, FENBBC, FEN_MURMOD, FEN_MURBBC, ENSMOD, ENSBBC)], caption = "gains moyens  en kWh des gestes pondérés par la surface des segments du parc", digits = 0) -->
+<!-- ``` -->
+
+<!-- ```{r, echo=F, warning=F} -->
+<!-- pander(coutkWh_moy_geste[BRANCHE == "Ensemble",list(BRANCHE, GTB, FENMOD, FENBBC, FEN_MURMOD, FEN_MURBBC, ENSMOD, ENSBBC)], caption = "Coût moyen du kWh économisé des gestes pondérés par la surface des segments du parc", digits = 2) -->
+<!-- ``` -->
+
+\newpage
+
+## Distribution des coûts et gains des gestes sur les différents segments du parc
+
+Autour des valeurs moyennes étudiées ci-dessus, les coûts sont très variables d'un segment de parc à l'autre 
+3 dimensions influencent particulièrement les coûts de rénovation :
+
+* 1- Le type de geste qui détermine le type d'élement rénové et le niveau d'exigence de la rénovation
+* 2- Le type de bâtiment sur lequel porte la rénovation 
+* 3- Dans une moindre mesure, la période de construction du bâtiment
+
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Variabilité des coûts de rénovation par geste'}
+
+var_cout_pargeste + ylab("Coûts en euros HT par m²")
+
+```` 
+
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F, fig.cap='Variabilité des coûts de rénovation par geste et sous branche de parc tertiaire'}
+var_cout_parSS_BRANCHE + facet_wrap(~GESTE, nrow = 4)  + ylab("Coûts en euros HT par m²")
+
+```` 
+
+
+\newpage
+
+Les gains associés aux gestes de rénovation dépendent principalement du type de geste mais il existe également une variabilité en fonction du type de bâtiment. 
+
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Variabilité des gains sur la consommation par geste'}
+
+var_gain_pargeste + ylab("gain sur la consommation")
+
+````
+
+
+\newpage
+La période de construction du bâtiment a un impact plus significatif sur les gains que sur les coûts. Plus le bâtiment est ancien, plus les gains attendus sont importants. 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Variabilité des gains sur la consommation par geste et période de construction'}
+
+var_gain_parPERIODE + ylab("gain sur la consommation")
+
+```` 
+
+\newpage
+Il est difficile d'établir une relation claire entre le gain sur la consommation et  le coût de rénovation. Lorsqu'on représente graphiquement le nuage de points associé pour tous les types de bâtiments construits avant 1980 et tous les types de gestes, on observe néanmoins une tendance croissante du coût avec le gain sur la consommation. 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='lien entre gain et coût de rénovation'}
+nuage_cout_gain_av1980 +xlab("Coûts en euros HT par m²") + xlab("gain sur la consommation")
+
+```` 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='lien entre gain et coût de rénovation par branche du parc'}
+nuage_cout_gain_av1980 +ylab("Coûts en euros HT par m²") + xlab("gain sur la consommation") + facet_wrap(~ BRANCHE, nrow = 4) + mytheme_facet_plot 
+
+```` 
+
+\newpage
+
+# 5) Rentabilité des gestes de rénovation
+
+Pour chaque segment du parc tertiaire, on peut également calculer la VAN de chacun des 7 gestes de rénovations du bâtiment à partir des consommations initiales en 2009. 
+
+$VAN_{s,e,g}  = -CINV_{s,e,g}*SURFACE_{s,e,g} + \sum_{i = 1}^{i = DV_g} \frac{CONSO_{s,e} * GAINCONSO_g * PRIX_{e,2009+i-1}} {(1+r)^{i}}$
+
+avec 
+
+* $s$ le segment de parc 
+* $e$ le type d'énergie de chauffage
+* $CINV_{s,e,g}$ le coût d'investissement au m² du geste g sur le segment
+* $SURFACE_{s,e,g}$ la surface du segment en 2009
+* $DV_g$ la durée de vie du geste
+* $CONSO_{s,e}$ la consommation de chauffage du segment en 2009
+* $GAINCONSO_g$ le gain en consommation en % du geste 
+* $PRIX_{e,t}$ le prix de l'énergie e en t
+* $r$ le taux d'actualisation (0.04 pour un occupant public, 0.07 pour un occupant privé)
+
+
+On ne considère ici que les gains de consommations de chauffage dans ce calcul (les consommations d'auxiliaires et de ventilation ne sont pas modifiées comme c'est le cas dans le modèle). 
+
+La distribution des VAN par euros investi (VAN/CINV) selon le type de geste, montre qu'un certain nombre de rénovations sont rentables pour certains segments du parc, notamment les rénovations modérées sur l'ensemble du bâtiment. 
+
+<!-- ```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Distribution des VAN pour les gestes de rénovation'} -->
+<!-- ggplot(renta_geste[!is.na(VAN)]) + geom_boxplot(aes(geste,VAN/10^9)) + mytheme_facet_plot  -->
+<!-- ```` -->
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Distribution des VAN par euro investi pour les gestes de rénovation'}
+ggplot(renta_geste[!is.na(VAN)]) + geom_boxplot(aes(geste,VAN/COUTTOT)) + mytheme_facet_plot 
+````
+
+<!-- ```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Distribution des VAN pour les gestes de rénovation'} -->
+<!-- ggplot(renta_geste[!is.na(VAN)]) + geom_point(aes(geste,VAN/10^9)) + mytheme_facet_plot + facet_wrap(~BRANCHE, ncol = 2) -->
+<!-- ```` -->
+
+Les résultats sont similaires pour la majorité des branches. Des gestes rentables existent et les gestes d'ensemble ont des VAN par euro investi plus grandes.
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Distribution des VAN par euro investi  pour les gestes de rénovation'}
+ggplot(renta_geste[!is.na(VAN)]) + geom_point(aes(geste,VAN/COUTTOT)) + mytheme_facet_plot + facet_wrap(~BRANCHE, ncol = 2)
+````
+
+\newpage
+
+Pour chaque segment du parc, on peut ensuite repérer la rénovation la plus rentable c'est à dire celle ayant  avec la VAN/CINV positive la plus élevée. On calcule ensuite les surfaces qui devraient en théorie être rénovées ainsi que ce que représentent les investissements et les gains de consommations associés. On force en quelque sorte la réalisation des gestes les plus rentables sur chaque segment de parc. 
+
+Le tableau ci-dessous montre pour chacun des gestes les surfaces sur lesquelles ils sont les plus rentables et le coût d'investissement nécessaire pour rénover ces surfaces selon ce geste ainsi que le gain en tWh associé. Le "total rénovation" correspond à la somme sur tous les gestes. Le "total AME" correspond aux sorties du modèle tertiaire pour le scénario AME (issue de la publication MA3 en cours). Le "Total sans coûts intangibles"  correspond aux sorties du modèle en retirant les coûts intangibles dans le calcul du coût global des rénovations. 
+
+```{r, echo=F, warning=F, include = F}
+
+delta_chauffage_modele_AME  = Conso[scenario == "AME prix MA3" & annee == "2009" & usage == "Chauffage", sum(value)]/10^9- Conso[scenario == "AME prix MA3" & annee == "2010" & usage == "Chauffage", sum(value)]/10^9
+recap_renta_AME[, GAINCONSO_tWh := delta_chauffage_modele_AME ]
+
+delta_chauffage_modele_CINT  = Conso[scenario == "AME prix MA3 valeur verte" & annee == "2009" & usage == "Chauffage", sum(value)]/10^9- Conso[scenario == "AME prix MA3 valeur verte" & annee == "2010" & usage == "Chauffage", sum(value)]/10^9
+recap_renta_AME2[, GAINCONSO_tWh := delta_chauffage_modele_CINT  ]
+````
+
+```{r, echo=F, warning=F}
+pander(rbind(recap_renta_geste, recap_renta_geste_tot, recap_renta_AME, recap_renta_AME2), digits = 2, 
+      caption ="Surfaces, investissements et gain de consommation pour les gestes les plus rentables")
+
+
+````
+
+BILAN : 
+
+* beaucoup de gestes rentables pour la première année de simulations, non réalisés du fait des coûts intangibles ajoutés pour reproduire les rénovations observées en réalité
+* moins de rénovations avec le calcul de VAN simple par rapport aux simulations sans coûts intangibles : effets de la combinaison des rénovations avec un changement de système de chauffage? rénovations plus coûteuses dans les simulations du fait de la fonction de passage à l'acte (on ne fait pas seulement la rénovation la plus rentable, cf paramètre d'hétérogénéité nu)
+
+
+
+
+\newpage
+# 6) Coûts des systèmes de chauffage
+
+## Coûts et gains moyens des systèmes de chauffage sur l'ensemble du parc
+
+Le tableau ci-dessous montre les coûts et les gains associés à la rénovation du système de chauffage dans le parc existant en 2009.  Pour chaque segment, on a calculé le coût et le gain associé au passage vers chacun des systèmes de chauffage. On ne conserve que ceux qui apporte un gain en consommation d'énergie par rapport au système déjà présent dans le segment de parc considéré.
+
+* gain en consommation élévé
+* coût du kWh économisé plus faible que pour les rénovations
+
+```{r, echo=F, warning=F}
+
+tableau_cout_moy_syst2 = tableau_cout_moy_syst
+
+setnames(tableau_cout_moy_syst2 , c("energie finale","systeme","cout inv","rdt","gain (%)","gain kWhEF","cout du kWhEF","gain (%) corrigé","DV","syst_short"))
+
+pander(tableau_cout_moy_syst2[,c(1:7,9), with=F], caption = "Coûts et gains moyens des gestes pondérés par la surface des segments du parc", digits = 2)
+
+```
+
+## Comparaison des coûts des systèmes aux sauts de classes ResIRF
+
+```{r, fig.width=20, fig.height=10, echo=F, warning=F,fig.cap='Variabilité des coûts des systèmes de chauffage'}
+setnames(tableau_cout_moy_geste, c("geste","cout","gainp","gainu","coutu","gainp2","DV"))
+setnames(tableau_cout_moy_syst, c("energie","syst","cout","rdt","gainp","gainu","coutu","gainp2","DV","syst_short"))
+
+graph_comp_RESIRF2
+```` 
+
+
+```{r, fig.width=20, fig.height=10, echo=F, warning=F,fig.cap='Variabilité des coûts des systèmes de chauffage, avec correction pour les autres usages'}
+graph_comp_RESIRF3
+```` 
+
+Quand on compare les coûts et les gains moyens des systèmes de chauffage avec les changements de classe du modèle ResIRF, on observe que la rénovation des systèmes dans le tertiaire paraît très peu coûteuse, notamment pour les PAC. 
+
+\newpage
+
+## Comparaison avec les coûts des systèmes dans études CSTB et UFE
+
+cf excel associé
+
+* Les coûts des systèmes dans le modèle sont cohérents avec ceux du CSTB pour des bâtiments de 300 m², à l'exception des chauffages urbains (Autre système centralisé) qui sont plus faibles (30 euros par m² dans le modèle, 50 pour le CSTB)
+* Ils sont plus élevés que ceux du CSTB pour des bâtiments de 500 m². Il semble qu'il existe de fortes économies d'échelle lorsque la surface des bâtiments augmentent. 
+
+* Les coûts de l'UFE sont encore plus bas. 
+
+\newpage
+## Distribution des coûts et des gains des systèmes de chauffage sur l'ensemble du parc
+
+Les coûts au m² des systèmes de chauffage varient assez fortement entre les sytèmes. Pour un système donné, la technologie performante associé présente des coûts supérieurs en moyenne (chaudière fioul et chaudière condensation fioul). Pour un système donné, la variabilité dépend surtout du type de bâtiment. Cette variabilité est forte notamment les PAC et les Rooftop. 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Variabilité des coûts des systèmes de chauffage'}
+
+var_cout_parsyst + ylab("Coûts en euros HT par m²")
+
+```` 
+
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F, fig.cap='Variabilité  des coûts des systèmes de chauffage par sous branche de parc tertiaire'}
+var_coutsyst_parSS_BRANCHE + facet_wrap(~PRODUCTION_CHAUD, nrow = 4) + ylab("Coûts en euros HT par m²")
+
+```` 
+
+\newpage
+
+La variabilité des rendements est bien moindre (ce qui est rassurant) à l'exception de la catégorie "autres système centralisé". Les sytèmes performants ont bien des rendements plus élevés par rapport à la technologie de référence. En revanche, certains systèmes ont des valeurs extrêmes très différentes de la majorité des bâtiments ce qui est étrange (Chaudière gaz et fioul, PAC, rooftop notamment). **A DISCUTER**
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Variabilité des rendements des systèmes de chauffage'}
+
+var_rdt_parsyst + ylab("Rendement du système")
+
+````
+
+Les coûts semblent augmenter avec le rendement des systèmes mais la relation est peu claire. 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='lien entre rendement et coût des systèmes de chauffage'}
+nuage_rdt_cout_syst +ylab("Coûts en euros HT par m²") + xlab("rendement du système") + facet_wrap(~ BRANCHE, nrow = 4) + mytheme_facet_plot 
+
+```` 
+\newpage
+
+# 7) Rentabilité des changements de systèmes de chauffage
+
+
+Pour chaque segment du parc tertiaire, on peut calculer, selon une méthode similaire que pour les gestes de rénovations, la VAN de chacun des changements de système de chauffage (18 systèmes) à partir des consommations initiales en 2009. On suppose ici que le choix se fait entre remettre le système déjà existant sur un segment de parc ou passser vers un système plus performant. 
+
+$VAN_{s,ei,ef,ci,cf}  = (CINV_{s,ei,ci}-CINV_{s,ei,cf})*SURFACE_{s,ei,ci} + \sum_{i = 1}^{i = DV_{cf}} (\frac{CONSO_{s,ei,ci} * PRIX_{ei,2009+i-1} - CONSO_{s,ef,cf} * PRIX_{ef,2009+i-1}} {(1+r)^{i}})$
+
+avec 
+
+* $s$ le segment de parc 
+* $ei, ef$ le type d'énergie de chauffage initial et final
+* $CINV_{s,ei,cf}$ le coût d'investissement au m² du  système cf sur le segment
+* $SURFACE_{s,ei,ci}$ la surface du segment en 2009
+* $DV_{cf}$ la durée de vie du système cf
+* $CONSO_{s,ei,ci}$ la consommation de chauffage du segment en 2009 avec le système initial ci
+* $CONSO_{s,ef,cf}$ la consommation de chauffage du segment en 2009 avec le système initial cf
+* $PRIX_{ei,t}$ et $PRIX_{ef,t}$ les prix de l'énergie ei et ef en t
+* $r$ le taux d'acutalisaton (0.04 pour un occupant public, 0.07 pour un occupant privé)
+
+
+La distribution des VAN selon le type de geste montre qu'un certain nombre de rénovations sont rentables pour certains segments du parc, notamment les rénovations sur l'ensemble du bâtiment. On ne considère ici que les gains 
+
+
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Distribution des VAN par euro investi pour les changements de système de chauffage'}
+  ggplot(renta_syst[!is.na(VAN)]) + geom_boxplot(aes(SYSTEME_CHAUD_FIN,VAN/COUTTOT)) + mytheme_facet_plot + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+````
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Distribution des VAN  euro investi pour les changements de système de chauffage par branche'}
+ggplot(renta_syst[!is.na(VAN)]) + geom_boxplot(aes(SYSTEME_CHAUD_FIN,VAN/COUTTOT)) + mytheme_facet_plot + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) + facet_wrap(~BRANCHE, ncol = 2)
+````
+
+
+\newpage
+
+On récapitule ici comme pour les gestes de rénovations en forçant chaque segment du parc à passer au système le plus rentable entre 2009 et 2010. Le système le plus rentable pour un segment donné est défini comme celui ayant la VAN/CINV positive la plus élevée. 
+
+
+```{r, echo=F, warning=F, include = F}
+delta_chauffage_modele_AME  = Conso[scenario == "AME prix MA3" & annee == "2009" & usage == "Chauffage", sum(value)]/10^9- Conso[scenario == "AME prix MA3" & annee == "2010" & usage == "Chauffage", sum(value)]/10^9
+recap_renta_syst_AME[, GAINCONSO_tWh := delta_chauffage_modele_AME ]
+
+delta_chauffage_modele_CINT  = Conso[scenario == "AME prix MA3 valeur verte" & annee == "2009" & usage == "Chauffage", sum(value)]/10^9- Conso[scenario == "AME prix MA3 valeur verte" & annee == "2010" & usage == "Chauffage", sum(value)]/10^9
+recap_renta_syst_AME2[, GAINCONSO_tWh := delta_chauffage_modele_CINT  ]
+
+tmp = rbind(recap_renta_syst, recap_renta_syst_tot, recap_renta_syst_AME, recap_renta_syst_AME2)
+setnames(tmp, c("Ei","Ci","Ef","Cf","Srenov_Mm2","CINV_Mdeuros","GAINCONSO_twh"))
+````
+
+```{r, echo=F, warning=F}
+pander(tmp, digits = 2, 
+      caption ="Surfaces, investissements et gain de consommation pour les gestes les plus rentables")
+````
+
+* Beaucoup plus de rénovations des systèmes avec ce calcul que dans les sorties du modèle sans coûts intangibles (Surface rénovée très importante)
+* Part très importante des rénovations vers le chauffage urbain pour un gain faible en énergie (coût sous-estimé?)
+* Gains importants par les chauidères gaz et condensation gaz
+* Rq : dans les sorties du modèle, les rénovations les plus importantes se font sur 1) les chaudières condensation gaz, 2) les chaudières gaz, 3) les autres systèmes centralisés ce qui est cohérent. 
+
+
+\newpage
+# 8) Coûts des systèmes de climatisation
+
+Les sorties du modèle montrent des investissements très importants dans la climatisation (2 milliards d'euros par an). On étudie ici rapidement les paramètres de coûts pour les systèmes de climatisation de manire à comprendre d'où viennent ces montants.
+Les coûts des systèmes varient uniquement selon le type de bâtiment. Ils sont moins variables que les coûts des systèmes de chauffages. 
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Variabilité des coûts des systèmes de climatisation selon la sous-branche de bâtiment tertiaire'}
+var_cout_clim  +ylab("Coûts en euros HT par m²")
+
+```` 
+
+\newpage
+Les coûts des systèmes de climatisation sont stables dans le temps. En revanche les rendements des systèmes augmentent de manière linéaire entre 2009 et 2050. Ces derniers sont également peu variables entre les branches du parc à l'exception des transports où les rendements sont faibles et des commerces où les rendements dépendent du type de commerce.
+
+```{r, fig.width=20, fig.height=16, echo=F, warning=F,fig.cap='Variabilité des coûts des systèmes de climatisation selon la sous-branche de bâtiment tertiaire'}
+evol_rdt_clim + facet_wrap(~ BRANCHE, nrow = 4) + mytheme_facet_plot 
+  
+```` 
+
+\newpage
+Tentative pour calculer le coût des systèmes de climatisation en prenant 1% de la surface existante en 2009 climatisée en 2010 (hypothèse de base du modèle pour la période 2010-2015)
+
+
+```{r, echo=F, warning=F}
+pander(Inv_clim_2010_branche, digits = 2, caption ="Calcul des coûts d'investissement dans la climatisation (2010)")
+````
+
+On arrive à un total de 1.2 milliards d'euros par an pour l'ensemble du parc à comparer aux 2.2 milliards d'euros dans les simulations du modèle. C'est moins mais les sorties du modèle ne paraissent pas aberrantes.   **A DISCUTER** 
+
+\newpage 
+
+# CONCLUSION
+
+* Les consommations unitaires de chauffage du tertiaire sont similaires au résidentiel (consommations réelles)
+* Par rapport à la courbe coût = f(gain de conso) sous-jacente à la matrice de coûts du modèle ResIRF :
+    * Coûts moyens de rénovation de l'enveloppe dans le tertiaire plutôt plus élevés (à part GTB)
+    * Coûts moyens des systèmes plutôt moins élevés que la courbe mais la comparaison avec l'étude CSTB relativise ce constat, l'UFE utilise des coûts encore plus faibles.
+
+* Il apparaît que c'est surtout la dispersion des coûts (et des consommations) qui explique que de nombreaux gestes sont rentables. L'introduction de coûts intangibles dans le modèle explique le faible niveau des rénovations dans les sorties du modèle 
+
+* Propositions : 
+    * On ne modifie pas les paramètres de coûts du modèle et il faut soit assumer d'afficher des coûts de la tonne de CO2 évitée très bas, soit ne pas commenter cette partie
+    * On modifie à la hausse le coût des PAC, des PAC performantes, des rooftop, des systèmes urbain, et à la baisse les gains du geste GTB
+    * On peut parler de l'évolution des consommations de climatisation mais ne pas évoquer le niveau des investissements sur la climatisation qui est de toutes façons exogène.
+
+\newpage 
+# Annexes 
+```{r, echo=F, warning=F}
+pander(parc_init[,list(
+  #"Millions de m²" = sum(SURFACES)/10^6,
+  "Part du parc" = sum(SURFACES)/10^6/surf_tot_tertiaire), by=c("SS_BRANCHE","BAT_TYPE")][order(SS_BRANCHE)],
+caption = "Distribution du parc existant par type de bâtiment", digits = 2)
+
+```
+
+
+

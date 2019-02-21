@@ -1,0 +1,488 @@
+---
+title: "Calibrage_CODA"
+author: "CGDD/SEEIDD/MA3"
+date: "20 décembre 2018"
+header-includes: #allows you to add in your own Latex packages
+- \usepackage{float} #use the 'float' package
+- \floatplacement{figure}{H} #make every figure with caption = h
+output:
+  pdf_document: 
+    fig_caption: yes
+    keep_tex: yes
+  word_document:
+    fig_height: 6
+    fig_width: 8
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+```{r, echo=F, message=F, warning=F, cache=F, results=F}
+require(knitr)
+require(data.table)
+require(ggplot2)
+require(Hmisc)
+require(reshape2)
+require(plyr)
+#require(ggthemes)
+require(texreg)
+if (Sys.getenv("JAVA_HOME")!="")
+  Sys.setenv(JAVA_HOME="")
+options(java.parameters = "-Xmx8192m")
+require(XLConnect)
+require(RColorBrewer)
+# set pander table-layout options
+library(pander)
+panderOptions('table.alignment.default', function(df)
+    ifelse(sapply(df, is.numeric), 'right', 'left'))
+panderOptions('table.split.table', Inf)
+panderOptions('big.mark', ",")
+panderOptions('keep.trailing.zeros', TRUE)
+
+colorpalette = "Spectral"
+fillpalette = "Spectral"
+
+#colorpalette = "Set2"
+#fillpalette = "Set2"
+```
+
+
+```{r, echo=F, message=F, warning=F, cache=T, results=F, comment = F, include = F, cache.rebuild = F}
+
+##### prix des energies ####
+prix_energie = fread("../AME_AMS_dataDGEC/parametrage modele/Prix_scenario_AME_BV_01_2017.csv", dec = ",")
+
+prix_energie = melt(prix_energie,id.vars = "annee")
+
+prix_energie[variable == "prix_elec", energie := "Electricité"]
+prix_energie[variable == "prix_gaz", energie := "Gaz"]
+prix_energie[variable == "prix_fioul", energie := "Fioul"]
+prix_energie[variable == "prix_urbain", energie := "Urbain"]
+prix_energie[variable == "prix_autres", energie := "Autres"]
+prix_energie[variable == "CCE", energie := "CCE"]
+
+prix_energie =dcast.data.table(prix_energie, annee~energie)
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = F}
+source("analyse_param_utilisateurs.R",encoding = "ISO8859-1")
+
+colors_syst= 
+  data.table(SYSTEME_CHAUD =factor(unique(COD_SYSTEME_CHAUD$SYSTEME_CHAUD), 
+                                   levels = c("Chaudière gaz","Chaudière condensation gaz",
+                                                           "Tube radiant", "Tube radiant performant" ,
+                                                           "Chaudière fioul","Chaudière condensation fioul",
+                                                           "Electrique direct","Electrique direct performant",
+                                                           "Cassette rayonnante","Cassette rayonnante performant",
+                                                           "PAC","PAC performant",
+                                                           "Rooftop", "Rooftop performant",
+                                                            "DRV", "DRV performant",
+                                                           "Autre système centralisé",  "Autre système centralisé performant",
+                                                           "nr","NA"))
+                         )
+
+colors_syst = colors_syst[order(SYSTEME_CHAUD)]
+colors_syst[,color := c("dodgerblue1","dodgerblue4", "blue1","blue4","springgreen1","springgreen4",
+                "yellow1","yellow4","gold1","gold4","chocolate1","chocolate4","coral1","coral3",
+                "salmon1","salmon4","red1","red4","gray86","gray86")]
+
+
+color_energie = data.table(ENERGIE = factor(c("Gaz", "Fioul","Electricité","Urbain","Autres"), levels = c("Gaz", "Fioul","Electricité","Urbain","Autres")), 
+                           color = c("dodgerblue1","forestgreen","gold1", "orange1","red1"))
+
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = T,include = F}
+
+#### liste des fichiers à lire
+   
+wbfiles  = "../tertiaire/model/Result_csv/publi_thema/prix_constant_nopol_verif"
+#wbfiles[2]  = "../tertiaire/model/Result_csv/publi_thema/prix_AME_noTC_verif"
+wbfiles[2]  = "../tertiaire/model/Result_csv/publi_thema/2050_AME_final_verif"
+#wbfiles[3]  = "../tertiaire/model/Result_csv/publi_thema/calibration_CODAH/couts_syst_DV30_facteurcommun"
+#wbfiles[3]  = "../tertiaire/model/Result_csv/publi_thema/calibration_CODAH/couts_syst_boostreno"
+wbfiles[3]  = "../tertiaire/model/Result_csv/publi_thema/calibration_CODAH/couts_syst2_boostreno"
+#wbfiles[4]  = "../tertiaire/model/Result_csv/publi_thema/calibration_CODAH/couts_syst2_boostreno2"
+wbfiles[4]  = "../tertiaire/model/Result_csv/publi_thema/calibration_CODAH/couts_syst3_boostreno2"
+
+####### noms des scenarios ########
+
+wbname = c( paste0("S",1:length(wbfiles)))
+  
+wbname = c("S0 Nopol","S1 AME","S2 AMS","modèle",  paste0("S",5:(length(wbfiles))))
+
+### choix du scenario de référence 
+
+scenario_ref =c("S0 Nopol")
+scenario_toexport = c("S1 AME")
+scenario_sansCEE = c( "S0 Nopol")
+scenario_comp_AMS = c("S0 Nopol","S1 AME","S2 AMS","modèle")
+
+wbdir_scenario_toexport = c("../publication_thema/run_AMS/")
+write_excel =T
+
+scenarioshortnames = substring(wbname,1,2)
+scenarioshortnames = c("S0 Nopol","S1 AME","S2 AMS","modèle", paste0("S",5:(length(wbfiles))))
+scenarioshortnames = wbname
+
+
+scenariolabels = c("S0 Nopol" = "Nopol",
+                   "S1 AME"= "AME","S3 AMS"="AMS","modèle"="modèle")
+
+scenarios_taxeelec = ""
+
+##### émissions de référence en MTCO2 
+Em_ref_2012_tous_usages = 33.5
+Em_ref_2012_chauffage = 23.6
+
+Em_ref_1990_tous_usages = 28.8
+Em_ref_1990_chauffage =  Em_ref_2012_chauffage/Em_ref_2012_tous_usages*Em_ref_1990_tous_usages 
+
+
+##### lecture des resultats
+
+source("read_resultats_csv.R", encoding= "UTF-8")
+
+##### Conso de référence en tWh 
+Conso_ref_2012_chauffage = Conso[usage=="Chauffage" & annee == "2012" & scenario==scenario_ref, sum(value)/10^9]
+Conso_ref_2012_tous_usages = Conso[ annee == "2012" & scenario==scenario_ref, sum(value)/10^9]
+
+annee_ref_MEDPRO = "2015"
+annee_MEDPRO = c("2015","2020","2025","2030","2050")
+
+Conso[annee == "2030"& usage=="Chauffage",sum(value), by=c("nom_energie", "scenario") ]
+Conso[annee == "2050"& usage=="Chauffage",sum(value), by=c("nom_energie", "scenario") ]
+Conso[annee == "2030",sum(value), by=c("nom_energie", "scenario") ]
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = T,include = F}
+
+###comp surfaces rénovées en 2010 2015
+
+#### surfaces totales rénovées changements de chauffage + geste bâti
+COUTS[annee %in% c("2010","2016","2020"),  list(Surftot = sum(surface)/10^6, INVtot =sum( investissement)/10^9), by=c("annee","scenario")]
+unique(COUTS$typeRenovationSysteme)
+
+#### surfaces rénovées changement de système
+#### CODA 23 millions de m² 
+COUTS[annee %in% c("2010","2015") & typeRenovationSysteme != "Etat initial_NP" & typeRenovationBatiment== "Etat initial", 
+      list(Surftot = sum(surface)/10^6, INVtot =sum( investissement)/10^9) , by=c("annee","scenario")]
+INV_Syst_tot = COUTS[annee %in% c("2010","2016","2020") & typeRenovationSysteme != "Etat initial_NP", 
+      list(Surftot = sum(surface)/10^6, INVtot =sum( investissement)/10^6) , by=c("annee","scenario")]
+
+#### INVestissements par systèmes 
+COUTS[annee %in% c("2010","2016","2020") & typeRenovationSysteme != "Etat initial_NP" & typeRenovationBatiment== "Etat initial", list(Surf = sum(surface)/10^6, INV =sum( investissement)/10^6), by=c("annee","scenario","SYSTEME_CHAUD")]
+INV_Syst =  COUTS[annee %in% c("2010","2016", "2020") & typeRenovationSysteme != "Etat initial_NP", list(Surf = sum(surface)/10^6, INV =sum( investissement)/10^6), by=c("annee","scenario","SYSTEME_CHAUD")]
+
+INV_Syst = merge(INV_Syst,INV_Syst_tot, by=c("annee","scenario"))
+
+INV_Syst[,PM_syst := INV/INVtot*100]
+
+INV_Syst[,sum(PM_syst), by=c("annee","scenario")]
+
+pander(INV_Syst[annee == "2016" & scenario == "S2 AMS",],digits = 2)
+pander(INV_Syst[annee == "2016" & scenario == "modèle",],digits =0)
+
+INV_Syst[annee == "2016" ,]
+ggplot(INV_Syst[annee == "2016" ,]) + geom_bar(aes(scenario,INV, fill=SYSTEME_CHAUD), stat="identity") 
+ggplot(INV_Syst[annee == "2020" ,]) + geom_bar(aes(scenario,INV, fill=SYSTEME_CHAUD), stat="identity") 
+ggplot(INV_Syst[annee == "2016" ,]) + geom_bar(aes(scenario,PM_syst, fill=SYSTEME_CHAUD), stat="identity") 
+
+INV_Syst[annee == "2016" & scenario == "modèle",]
+
+#### investissement système par branche
+INV_Syst_branche =  COUTS[typeRenovationSysteme != "Etat initial_NP", list(Surf = sum(surface)/10^6, INV =sum( investissement)/10^6), by=c("annee","scenario","SYSTEME_CHAUD", "branche")]
+ggplot(INV_Syst_branche[annee == "2010" ,]) + geom_bar(aes(branche,INV, fill=SYSTEME_CHAUD), stat="identity") + facet_wrap(~scenario)  
+ggplot(INV_Syst_branche[annee == "2016" ,]) + geom_bar(aes(branche,INV, fill=SYSTEME_CHAUD), stat="identity") + facet_wrap(~scenario)  
+ggplot(INV_Syst_branche[annee == "2020" ,]) + geom_bar(aes(branche,INV, fill=SYSTEME_CHAUD), stat="identity") + facet_wrap(~scenario)  
+
+#### investissement total geste bâti
+COUTS[annee %in% c("2010","2015","2016","2020") & typeRenovationBatiment!= "Etat initial" &  typeRenovationSysteme == "Etat initial_NP", list(Surf = sum(surface)/10^6, INV =sum( investissement)/10^6), by=c("annee","scenario")]
+COUTS[annee %in% c("2010","2015","2016","2020") & typeRenovationBatiment!= "Etat initial", list(Surf = sum(surface)/10^6, INV =sum( investissement)/10^6), by=c("annee","scenario")]
+
+COUTS[annee %in% c("2016","2017","2018","2019") & typeRenovationBatiment!= "Etat initial" ,
+      list(Surf = sum(surface)/10^6/4, INV =sum( investissement)/10^6/4), by=c("scenario")]
+
+#### investissement total geste bâti par branche
+COUTS[annee %in% c("2010","2015","2016") & typeRenovationBatiment!="Etat initial" &  typeRenovationSysteme == "Etat initial_NP", list(Surf = sum(surface)/10^6, INV =sum( investissement)/10^6), by=c("annee","scenario", "branche")]
+  
+
+COUTS[annee %in% c("2020") & typeRenovationBatiment!= "Etat initial" &  typeRenovationSysteme == "Etat initial_NP",
+      list(Surf = sum(surface)/10^6, INV =sum( investissement)/10^6), by=c("annee","scenario", "branche")]
+
+COUTS[annee %in% c("2016","2017","2018","2019") & typeRenovationBatiment!= "Etat initial" &  typeRenovationSysteme == "Etat initial_NP",
+      list(Surf = sum(surface)/10^6/4, INV =sum( investissement)/10^6/4), by=c("scenario", "branche")]
+COUTS[annee %in% c("2016","2017","2018","2019") & typeRenovationBatiment!= "Etat initial" ,
+      list(Surf = sum(surface)/10^6/4, INV =sum( investissement)/10^6/4), by=c("scenario", "branche")]
+
+##### investissements par geste
+COUTS[annee %in% c("2010","2015","2016","2020"), list(Surf = sum(surface)/10^6, INV =sum( investissement)/10^6), by=c("annee","scenario","typeRenovationBatiment")]
+COUTS[annee %in% c("2020"), list(Surf = sum(surface)/10^6, INV =sum( investissement)/10^6), by=c("annee","scenario","typeRenovationBatiment")]
+
+COUTS_AUTRES[annee %in% c("2010","2015","2016"), sum(surface)/10^6, by=c("annee","scenario")]
+
+COUTS_AUTRES[annee %in% c("2010","2015","2016"), sum(surface)/10^6, by=c("annee","scenario","typeRenovationSysteme")]
+COUTS_AUTRES[annee %in% c("2010","2015","2016"), sum( investissement)/10^6, by=c("annee","scenario","typeRenovationSysteme")]
+
+INV_autres_branche = COUTS_AUTRES[, list(Surf = sum(surface)/10^6, INV =sum( investissement)/10^6), by=c("annee","scenario","typeRenovationSysteme", "branche")]
+
+ggplot(INV_autres_branche[annee == "2020" ,]) + geom_bar(aes(branche,INV, fill=typeRenovationSysteme), stat="identity") + facet_wrap(~scenario)  
+
+setnames(INV_Syst_branche, "SYSTEME_CHAUD","typeRenovationSysteme")
+
+INV_all = rbind(INV_autres_branche ,INV_Syst_branche)
+ggplot(INV_all[annee == "2020" & typeRenovationSysteme %in% c("ECS","Eclairage") == F,]) + geom_bar(aes(branche,INV, fill=typeRenovationSysteme), stat="identity") + facet_wrap(~scenario)  
+
+```
+
+```{r, echo=F, message=FALSE, warning=F, cache=T, results=F, cache.rebuild = T,include = F}
+### comparaison des investissements sur le bâti avec l'étude CODA
+
+INV_CODA_BRANCHE = data.table(COD_BRANCHE)
+
+INV_CODA_BRANCHE[, scenario :=  "CODA"]
+INV_CODA_BRANCHE[, Surf :=  rep(0,8)]
+INV_CODA_BRANCHE[, INV :=  c(402,103,210,235,55,116,90,NA)]
+
+INV_modele_BRANCHE = COUTS[annee %in% c("2016","2017","2018","2019","2020") & typeRenovationBatiment!= "Etat initial" ,
+      list(Surf = sum(surface)/10^6/5, INV =sum( investissement)/10^6/5), by=c("scenario", "branche")]
+setnames(INV_modele_BRANCHE , "branche","COD_BRANCHE")
+
+INV_modele_BRANCHE = merge(INV_modele_BRANCHE, COD_BRANCHE, by="COD_BRANCHE")
+
+
+INV_CODA_BRANCHE = rbind(INV_modele_BRANCHE,INV_CODA_BRANCHE )
+
+ggplot(INV_CODA_BRANCHE) + geom_bar(aes(scenario,INV, fill=BRANCHE), stat="identity")+ facet_grid(~BRANCHE)+ scale_fill_brewer(palette = fillpalette)   
+
+ggplot(INV_CODA_BRANCHE[ scenario %in% c("CODA","modèle")]) + geom_bar(aes(scenario,INV, fill=BRANCHE), stat="identity", show.legend = F)+  
+ facet_grid(~BRANCHE,label = labeller(BRANCHE = label_wrap_gen(10))) + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1,angle =45), title  = element_text(size = 20)) + 
+  ylab("Millions d'euros")+ xlab("")+
+  mytheme_facet_plot + scale_fill_brewer("", palette = "Set2") 
+ggsave("../publication_thema/figures/Comparaison_Renovbati_CODA.pdf",width = 20, height=12)
+
+INV_modele = COUTS[annee %in% c("2016","2017","2018","2019","2020") & typeRenovationBatiment!= "Etat initial" ,
+      list(Surf = sum(surface)/10^6/5, INV =sum( investissement)/10^6/5), by=c("scenario")]
+INV_modele_geste = COUTS[annee %in% c("2016","2017","2018","2019","2020") & typeRenovationBatiment!= "Etat initial" ,
+      list(Surf = sum(surface)/10^6/5, INV =sum( investissement)/10^6/5), by=c("scenario","typeRenovationBatiment")]
+
+### comparaison des investissements dans le chauffage climatisation ventilation avec CODA par branche
+INV_CODA_CVC_BRANCHE = data.table(COD_BRANCHE)
+
+INV_CODA_CVC_BRANCHE[, scenario :=  "CODA"]
+INV_CODA_CVC_BRANCHE[, Surf :=  rep(0,8)]
+INV_CODA_CVC_BRANCHE[, INV :=  c(1145,298,634,699,62,562,325,NA)]
+INV_CODA_CVC_BRANCHE[, sum(INV, na.rm=T)]
+
+INV_CVC_modele = INV_all[annee %in% c("2016","2017","2018","2019","2020")  & typeRenovationSysteme %in% c("ECS","Eclairage") == F, 
+                         list(Surf = sum(Surf)/5, INV =sum(INV)/5), by=c("scenario","branche")]
+#INV_CVC_modele = INV_all[annee %in% c("2016","2020")  & typeRenovationSysteme %in% c("ECS","Eclairage") == F,
+#                         list(Surf = sum(Surf)/2, INV =sum( INV)/2), by=c("scenario","branche")]
+
+setnames(INV_CVC_modele , "branche","COD_BRANCHE")
+
+INV_CVC_modele= merge(INV_CVC_modele, COD_BRANCHE, by="COD_BRANCHE")
+INV_CODA_CVC_BRANCHE = rbind(INV_CODA_CVC_BRANCHE,INV_CVC_modele)
+
+ggplot(INV_CODA_CVC_BRANCHE[ scenario %in% c("CODA","modèle")]) + geom_bar(aes(scenario,INV, fill=BRANCHE), stat="identity", show.legend = F)+  
+ facet_grid(~BRANCHE,label = labeller(BRANCHE = label_wrap_gen(10))) + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1,angle =45), title  = element_text(size = 20)) + 
+  ylab("Millions d'euros")+ xlab("")+
+  mytheme_facet_plot + scale_fill_brewer("", palette = "Set2") 
+ggsave("../publication_thema/figures/Comparaison_CVC_CODA.pdf",width = 20, height=12)
+
+INV_CVC_modele_tot = INV_all[annee %in% c("2016","2017","2018","2019","2020")  & typeRenovationSysteme %in% c("ECS","Eclairage") == F,
+                         list(Surf = sum(Surf)/5, INV =sum( INV)/5), by=c("scenario")]
+
+
+##### comparaison marchés par système de chauffage 
+unique(INV_all$typeRenovationSysteme)
+INV_all[typeRenovationSysteme %in% c("PAC","PAC performant"), Syst2 :="PAC"]
+INV_all[typeRenovationSysteme %in% c("Chaudière condensation gaz"), Syst2 :="Chaudière condensation gaz"]
+INV_all[typeRenovationSysteme %in% c("Chaudière gaz"), Syst2 :="Chaudière standard gaz"]
+INV_all[typeRenovationSysteme %in% c("Chaudière condensation fioul"), Syst2 :="Chaudière condensation fioul"]
+INV_all[typeRenovationSysteme %in% c("Chaudière fioul"), Syst2 :="Chaudière standard fioul"]
+INV_all[typeRenovationSysteme %in% c("DRV","DRV performant","Rooftop", "Rooftop performant", "Climatisation" ), Syst2 :="DRV, RoofTop, climatisation"]
+INV_all[typeRenovationSysteme %in% c("Cassette rayonnante" ,"Cassette rayonnante performant" , "Electrique direct" ,  "Electrique direct performant" ), 
+        Syst2 :="Effet joule (convecteurs, rayonnants)"]
+INV_all[typeRenovationSysteme %in% c("Autre système centralisé"   ,"Autre système centralisé performant") , 
+        Syst2 :="Autre système centralisé (urbain, biomasse)"]
+
+
+INV_CVC_modele_type = INV_all[annee %in% c("2016","2017","2018","2019","2020")  & typeRenovationSysteme %in% c("ECS","Eclairage") == F & !is.na(Syst2), 
+                         list(Surf = sum(Surf)/5, INV =sum(INV)/5), by=c("scenario","Syst2")]
+INV_CVC_modele_type = INV_all[annee %in% c("2014","2015","2016","2017","2018","2019","2020")  & typeRenovationSysteme %in% c("ECS","Eclairage") == F & !is.na(Syst2), 
+                         list(Surf = sum(Surf)/7, INV =sum(INV)/7), by=c("scenario","Syst2")]
+
+
+INV_CVC_modele_type[, sum(INV), by=c("scenario")]
+
+INV_CODA_CVC_type = data.table(Syst2 = c("PAC","Chaudière condensation gaz","Chaudière standard gaz",
+                                          "Chaudière condensation fioul","Chaudière standard fioul",
+                                          "DRV, RoofTop, climatisation", "Effet joule (convecteurs, rayonnants)","Autre système centralisé (urbain, biomasse)"))
+
+INV_CODA_CVC_type[, scenario :=  "CODA"]
+INV_CODA_CVC_type[, Surf :=  rep(0,8)]
+INV_CODA_CVC_type[, INV :=  c(230,388,124,138,73,2000,39,78)]
+INV_CODA_CVC_type[, sum(INV, na.rm=T)]
+
+INV_CODA_CVC_type = rbind(INV_CODA_CVC_type,INV_CVC_modele_type)
+
+INV_CODA_CVC_type[,Syst2 := factor(Syst2,levels = c("Chaudière standard gaz","Chaudière condensation gaz",
+                                                     "Chaudière standard fioul","Chaudière condensation fioul",
+                                                          "Effet joule (convecteurs, rayonnants)",
+                                                          "PAC",
+                                                           "DRV, RoofTop, climatisation",
+                                                           "Autre système centralisé (urbain, biomasse)") )]
+
+colors_syst2 = c("dodgerblue1","dodgerblue4","springgreen1","springgreen4",
+                "yellow1","chocolate1","salmon1","red1")
+
+ggplot(INV_CODA_CVC_type[ scenario %in% c("CODA","modèle")]) + geom_bar(aes(scenario,INV, fill=Syst2), stat="identity", show.legend = F)+  
+ facet_grid(~Syst2,label = labeller(Syst2 = label_wrap_gen(10))) + 
+  theme(axis.text.x = element_text(size = 12, hjust = 1,angle =45), title  = element_text(size = 20)) + 
+  ylab("Millions d'euros")+ xlab("") +
+  mytheme_facet_plot + scale_fill_manual("", values = colors_syst2) 
+ggsave("../publication_thema/figures/Comparaison_CVC_par_systeme_CODA.pdf",width = 20, height=12)
+
+
+
+```
+
+
+```{r,echo=F, warning=F,include = F}
+##### tableau des consos DGEC
+
+Conso_nationale_usage = dcast.data.table(Conso, scenario + annee ~usage,fun.aggregate = function(x){sum(x)/10^9}, value.var = "value")
+
+Conso_nationale_usage = melt(Conso_nationale_usage, id.vars = c("scenario","annee"), variable.name = "usage", value.name = "conso_tWhEF")
+
+
+conso_parusage = dcast.data.table(Conso_nationale_usage[annee %in% c("2010","2011","2013","2015","2020","2025","2030","2035","2050"),],
+                                  scenario + annee ~ usage)
+
+conso_parusage = conso_parusage[,list(Chauffage,
+                                      AU_ther = sum(ECS,Cuisson,Autre),
+                                      Elec_spe = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire),
+                                      Clim = Climatisation,
+ Total_RT=sum(Chauffage,Climatisation,ECS,Auxiliaires,Ventilation,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","annee")]
+
+conso_parusage = melt(conso_parusage,id.vars = c("scenario","annee"),variable.name ="usage" )
+
+conso_parusage[, conso_mtep := value/11630*10^3]
+conso_parusage[, conso := value]
+
+
+conso_parusage_tWh = dcast.data.table(conso_parusage, scenario + usage ~ annee, value.var = "value")
+conso_parusage_tWh = conso_parusage_tWh[order(usage),]
+#conso_parusage_tWh[, scenario := substring(scenario,1,2)]
+
+
+conso_parusage_mtep = dcast.data.table(conso_parusage, scenario + usage ~ annee, value.var = "conso_mtep")
+conso_parusage_mtep  = conso_parusage_mtep[order(usage),]
+#conso_parusage_mtep[, scenario := substring(scenario,1,2)]
+annee_ref = "2010"
+
+evolconso = conso_parusage_tWh 
+
+evolconso = evolconso[,list(scenario, usage,
+                Evol_2015 = paste0(round((get("2015")/get(annee_ref)-1)*100, digits=1), " %"),
+                Evol_2020 = paste0(round((get("2020")/get(annee_ref)-1)*100, digits=1), " %"),
+                Evol_2020 = paste0(round((get("2025")/get(annee_ref)-1)*100, digits=1), " %"),
+                Evol_2030 = paste0(round((get("2030")/get(annee_ref)-1)*100, digits=1), " %"),
+                Evol_2035 = paste0(round((get("2035")/get(annee_ref)-1)*100, digits=1), " %"),
+                Evol_2050 = paste0(round((get("2050")/get(annee_ref)-1)*100, digits=1), " %"))]
+
+annee_ref2 = "2015"
+evolconso2 = conso_parusage_tWh 
+
+evolconso2 = evolconso2[,list(scenario, usage,
+                Evol_2015 = paste0(round((get("2015")/get(annee_ref2)-1)*100, digits=1), " %"),
+                Evol_2020 = paste0(round((get("2020")/get(annee_ref2)-1)*100, digits=1), " %"),
+                Evol_2020 = paste0(round((get("2025")/get(annee_ref2)-1)*100, digits=1), " %"),
+                Evol_2030 = paste0(round((get("2030")/get(annee_ref2)-1)*100, digits=1), " %"),
+                Evol_2035 = paste0(round((get("2035")/get(annee_ref2)-1)*100, digits=1), " %"),
+                Evol_2050 = paste0(round((get("2050")/get(annee_ref2)-1)*100, digits=1), " %"))]
+
+#evolconso[, scenario := substring(scenario,1,2)]
+
+setnames(evolconso, c("scenario", "usage",paste(annee_ref,c(15,20,25,30,35,50), sep="-")))
+#♦Consotab = merge(conso_parusage_mtep,evolconso,by=c("scenario","usage"))
+###
+conso_parusage_ini = dcast.data.table(Conso_nationale_usage[annee %in% c("2010","2011","2013","2015","2016","2017","2018","2019","2020","2025","2030","2035","2050"),],
+                                  scenario + annee ~ usage)
+
+
+conso_parusage_ini = conso_parusage_ini[,list(Chauffage,
+                                      AU_ther = sum(ECS,Cuisson,Autre),
+                                      Elec_spe = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire),
+                                      Clim = Climatisation,
+ Total_RT=sum(Chauffage,Climatisation,ECS,Auxiliaires,Ventilation,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","annee")]
+
+conso_parusage_ini = melt(conso_parusage_ini,id.vars = c("scenario","annee"),variable.name ="usage" )
+
+conso_parusage_ini[, conso_mtep := value/11630*10^3]
+conso_parusage_ini[, conso := value]
+
+
+conso_parusage_ini_tWh = dcast.data.table(conso_parusage_ini, scenario + usage ~ annee, value.var = "value")
+conso_parusage_ini_tWh = conso_parusage_ini_tWh[order(usage),]
+#conso_parusage_ini_tWh[, scenario := substring(scenario,1,2)]
+
+
+##### Différence de conso totales par usage par rapport à un scénario de ref
+
+comp_conso_ref = dcast.data.table(Conso_nationale_usage[annee %in% c(2010:2021,
+                                                                     "2025","2030","2035","2040","2045","2050"),],
+                                  scenario + annee ~ usage)
+
+comp_conso_ref=comp_conso_ref[,list(Chauffage,
+                                      AU_ther = sum(ECS,Cuisson,Autre),
+                                      Elec_spe = sum(Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire),
+                                      Clim = Climatisation,
+ Total_RT=sum(Chauffage,Climatisation,ECS,Auxiliaires,Ventilation,Eclairage),                                      Total=sum(Chauffage,Climatisation,ECS,Cuisson,Autre,Auxiliaires,Ventilation,Process,Bureautique,Eclairage,Froid_alimentaire) ), by=c("scenario","annee")]
+
+comp_conso_ref = melt(comp_conso_ref,id.vars = c("scenario","annee"),variable.name ="usage" )
+
+comp_conso_ref[, conso_mtep := value/11630*10^3]
+comp_conso_ref[, conso := value]
+
+conso_parusage_refsansCEE = comp_conso_ref[scenario ==scenario_sansCEE] 
+comp_conso_refsansCEE = comp_conso_ref[scenario !=scenario_sansCEE]
+comp_conso_refsansCEE= merge(comp_conso_refsansCEE,conso_parusage_refsansCEE[,list(conso_ref = conso,conso_mtep_ref=conso_mtep,annee,usage )], by=c("annee","usage"))
+comp_conso_refsansCEE[, diffconso := (conso-conso_ref)]
+
+conso_parusage_ref = comp_conso_ref[scenario ==scenario_ref] 
+comp_conso_ref = comp_conso_ref[scenario !=scenario_ref]
+comp_conso_ref = merge(comp_conso_ref,conso_parusage_ref[,list(conso_ref = conso,conso_mtep_ref=conso_mtep,annee,usage )], by=c("annee","usage"))
+comp_conso_ref[, diffconso := (conso-conso_ref)]
+
+
+
+tab_diffconso_2010_2020 = comp_conso_refsansCEE[annee%in% 2014:2021]
+
+tab_diffconso_2010_2020 
+
+
+``` 
+
+
+```{r, echo=F, warning=F}
+pander(conso_parusage_tWh[order(usage)], digits = 2, caption = "Bilan des consommations en tWh EF")
+```
+
+```{r,echo=F, warning=F,include = F}
+#### vérification calage conso avec CEREN
+
+ceren_details <- fread("../../Data/CEREN/exportCEREN_Branche_usage_energie_tertiaire.csv",sep=";", header=T, dec=",")
+
+
+ceren_details_melt <- melt(ceren_details, id.vars = c("BRANCHE","ENERGIE","USAGE"),variable.name = "annee",value.name = "conso_GWhEF")
+ceren_details_melt [,scenario:="CEREN"]
+ceren_details_melt[USAGE=="Chauffage",sum(conso_GWhEF)/10^3, by="annee"]
+
+``` 
