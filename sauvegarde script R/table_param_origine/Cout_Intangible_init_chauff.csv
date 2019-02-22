@@ -1,0 +1,1250 @@
+BRANCHE;BAT_TYPE;PRODUCTION_CHAUD;ENERGIE;COUT;DUREE_VIE;BESOIN_U;RDT;PM_2009;COUT_ENERGIE
+Sport Loisir Culture;Petite salle multisport;Rooftop;Electricité;8.758738681;17;99.83514431;2.598429767;0.019065145;0.0774
+Sport Loisir Culture;Petite salle de spectacle;Tube radiant;Gaz;10;25;235.5109321;0.8;0.040564329;0.0513
+Bureaux Administration;immeuble peri urbain;Autre système centralisé performant;Autres;26.91756478;25;154.2301391;0.764904192;9.994E-05;0.015468227
+Bureaux Administration;immeuble peri urbain;Autre système centralisé performant;Urbain;26.629339;25;183.0880401;0.779309582;9.994E-05;0.0616
+Bureaux Administration;immeuble peri urbain;Chaudière condensation fioul;Fioul;14.79359919;20;158.4983341;0.720201468;9.994E-05;0.074414716
+Bureaux Administration;immeuble peri urbain;Chaudière condensation gaz;Gaz;10.49131027;20;151.47616;0.950520162;9.994E-05;0.0513
+Sport Loisir Culture;Petit cinéma;Rooftop;Electricité;9.144339994;17;172.3195585;2.598429767;0.049467324;0.0774
+Sport Loisir Culture;Petite salle de spectacle;Rooftop;Electricité;9.905476829;17;181.9742662;2.598429767;0.041423019;0.0774
+Sport Loisir Culture;Piscine;Rooftop;Electricité;6.058952136;17;45.03726873;2.751069767;0.01384586;0.0774
+Bureaux Administration;immeuble peri urbain;DRV performant;Electricité;32.91208416;17;162.0223914;3.177309767;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;Autre système centralisé;Urbain;37.17778419;25;227.9880548;0.7;0.002405174;0.0616
+Bureaux Administration;immeuble peri urbain;Electrique direct performant;Electricité;12;13;150.0533578;1;9.994E-05;0.0774
+Sport Loisir Culture;Piscine;Autre système centralisé;Urbain;41.67480409;25;60.5724684;1.974287284;0.002409455;0.0616
+Sport Loisir Culture;Grande salle de spectacle;Tube radiant;Gaz;10;25;66.84453797;0.8;0.046065096;0.0513
+Bureaux Administration;immeuble rénové;Autre système centralisé performant;Autres;20.95197108;25;118.0564324;0.762935764;9.994E-05;0.015468227
+Bureaux Administration;immeuble rénové;Autre système centralisé performant;Urbain;19.02370941;25;129.8619577;0.775915156;9.994E-05;0.0616
+Bureaux Administration;immeuble rénové;Chaudière condensation fioul;Fioul;10.82802199;20;118.6485177;0.723246621;9.994E-05;0.074414716
+Bureaux Administration;immeuble rénové;Chaudière condensation gaz;Gaz;7.645030479;20;114.8398547;0.954692338;9.994E-05;0.0513
+Sport Loisir Culture;Salle non spécialisée;Autre système centralisé;Urbain;51.57691026;25;86.42467098;1.991946606;0.00264144;0.0616
+Sport Loisir Culture;Grande salle multisport;Autre système centralisé;Urbain;18.28208744;25;21.98064594;2.334352923;0.002857402;0.0616
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;Autre système centralisé;Autres;26.11770114;25;93.07731171;0.84;0.003272187;0.015468227
+Bureaux Administration;immeuble rénové;Electrique direct performant;Electricité;12;13;114.9262151;1;9.994E-05;0.0774
+Enseignement Recherche;R&D sciences physiques et naturelles;PAC;Electricité;41.74127498;20;70.04374904;2.713175581;0.020316409;0.0774
+Bureaux Administration;immeuble rénové;PAC performant;Electricité;56.64252179;20;113.074884;3.397956279;9.994E-05;0.0774
+Enseignement Recherche;R&D en sciences humaines et sociales;Chaudière fioul;Fioul;10.3090575;20;50.70053428;0.708387462;0.001107777;0.074414716
+Sport Loisir Culture;Petite salle multisport;Autre système centralisé;Urbain;61.21132833;25;118.9556333;1.969054412;0.005163958;0.0616
+Bureaux Administration;immeuble résidentiel;Autre système centralisé performant;Autres;30.7164714;25;168.4238532;0.770234755;9.995E-05;0.015468227
+Bureaux Administration;immeuble résidentiel;Autre système centralisé performant;Urbain;30.73150997;25;182.5358396;0.782436439;9.995E-05;0.0616
+Bureaux Administration;immeuble résidentiel;Chaudière condensation fioul;Fioul;33.00853082;20;166.6586514;0.718621645;9.995E-05;0.074414716
+Bureaux Administration;immeuble résidentiel;Chaudière condensation gaz;Gaz;33.11449375;20;169.5993244;0.948575888;9.995E-05;0.0513
+Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;Autre système centralisé;Urbain;40.64385446;25;237.5316642;0.686629245;0.006425098;0.0616
+Enseignement Recherche;Cantine préélémentaire;Autre système centralisé;Autres;49.58470014;25;277.2494347;0.776900515;0.00670165;0.015468227
+Sport Loisir Culture;Piscine;Tube radiant;Gaz;10;25;86.79300588;0.8;0.019444739;0.0513
+Bureaux Administration;immeuble résidentiel;Electrique direct performant;Electricité;12;13;159.7971816;1;9.995E-05;0.0774
+Sport Loisir Culture;Grande salle multisport;Rooftop;Electricité;2.619505589;17;21.64719816;2.679567309;0.021185973;0.0774
+Santé Action Sociale;Garderie;Autre système centralisé;Autres;12.87680806;25;95.65863979;0.725788208;0.00927046;0.015468227
+Bureaux Administration;plateau large bureau paysagés;Autre système centralisé performant;Autres;18.44604112;25;69.94749295;0.770903963;9.994E-05;0.015468227
+Bureaux Administration;plateau large bureau paysagés;Autre système centralisé performant;Urbain;19.59213286;25;67.84132092;0.787324315;9.994E-05;0.0616
+Bureaux Administration;plateau large bureau paysagés;Chaudière condensation fioul;Fioul;5.240535487;20;74.25193126;0.725216306;9.994E-05;0.074414716
+Bureaux Administration;plateau large bureau paysagés;Chaudière condensation gaz;Gaz;3.897488892;20;71.78206613;0.957295666;9.994E-05;0.0513
+Café Hôtel Restaurant;Petit restaurant rapide;Autre système centralisé;Autres;73.78;25;124.1601322;0.703169805;0.012263399;0.015468227
+Café Hôtel Restaurant;Grand restaurant rapide;Autre système centralisé;Autres;48.75642327;25;141.7056044;0.719009166;0.01319721;0.015468227
+Commerce;Grand brico;Autre système centralisé;Urbain;30.34141421;25;111.4002863;1.565145623;0.013275862;0.0616
+Bureaux Administration;plateau large bureau paysagés;Electrique direct performant;Electricité;12;13;69.24815047;1;9.994E-05;0.0774
+Enseignement Recherche;école;Chaudière fioul;Fioul;11.09251113;20;78.01578098;0.714680607;0.003375073;0.074414716
+Bureaux Administration;plateau large bureau paysagés;PAC performant;Electricité;53.28387755;20;72.36895338;3.397956279;9.994E-05;0.0774
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;Autre système centralisé;Autres;21.56060358;25;71.84783137;0.6275;0.013823228;0.015468227
+Santé Action Sociale;Centre accueil;Autre système centralisé;Autres;15.33278633;25;94.73295988;0.723377421;0.014038159;0.015468227
+Bureaux Administration;plateau large bureaux cloisonnés;Autre système centralisé performant;Autres;19.93667987;25;87.64848138;0.763741222;9.994E-05;0.015468227
+Bureaux Administration;plateau large bureaux cloisonnés;Autre système centralisé performant;Urbain;20.72036855;25;99.67190187;0.78319629;9.994E-05;0.0616
+Bureaux Administration;plateau large bureaux cloisonnés;Chaudière condensation fioul;Fioul;5.287163537;20;94.31214895;0.725259074;9.994E-05;0.074414716
+Bureaux Administration;plateau large bureaux cloisonnés;Chaudière condensation gaz;Gaz;4.117418495;20;94.10594977;0.95731213;9.994E-05;0.0513
+Enseignement Recherche;Cantine élémentaire;Autre système centralisé;Autres;46.11170223;25;263.6117344;0.758511635;0.014724857;0.015468227
+Sport Loisir Culture;Patinoire;Tube radiant;Gaz;10;25;58.54157361;0.8;0.038860617;0.0513
+Commerce;Hypermarché;Autre système centralisé;Urbain;32.29005253;25;115.5081553;1.536793371;0.015096284;0.0616
+Bureaux Administration;plateau large bureaux cloisonnés;Electrique direct performant;Electricité;12;13;84.30010892;1;9.994E-05;0.0774
+Sport Loisir Culture;Piscine;PAC;Electricité;25.41927589;20;51.36624388;2.838613953;0.027382221;0.0774
+Bureaux Administration;plateau large bureaux cloisonnés;PAC performant;Electricité;58.14448797;20;94.54365804;3.397956279;9.994E-05;0.0774
+Sport Loisir Culture;Grande salle de spectacle;Autre système centralisé;Autres;34.85296991;25;57.63321517;2.767449784;0.015320259;0.015468227
+Bureaux Administration;plateau mince;Autre système centralisé;Autres;19.51355204;25;97.13568853;0.649001027;0.015810885;0.015468227
+Bureaux Administration;plateau mince;Autre système centralisé performant;Autres;24.39194005;25;97.13568853;0.778801232;9.994E-05;0.015468227
+Bureaux Administration;plateau mince;Autre système centralisé performant;Urbain;24.86722588;25;105.4664931;0.782857968;9.994E-05;0.0616
+Bureaux Administration;plateau mince;Chaudière condensation fioul;Fioul;5.965524318;20;101.9522445;0.725278393;9.994E-05;0.074414716
+Bureaux Administration;plateau mince;Chaudière condensation gaz;Gaz;4.573826326;20;105.5361057;0.95736883;9.994E-05;0.0513
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;Autre système centralisé;Urbain;28.73530009;25;165.3954742;0.649588349;0.015948765;0.0616
+Enseignement Recherche;R&D en sciences humaines et sociales;PAC;Electricité;43.80325996;20;93.51636003;2.666169767;0.017358261;0.0774
+Bureaux Administration;plateau large bureau paysagés;Autre système centralisé;Autres;14.75683289;25;69.94749295;0.64241997;0.016658985;0.015468227
+Bureaux Administration;plateau mince;Electrique direct performant;Electricité;12;13;99.56893455;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit restaurant traditionnel;Autre système centralisé;Autres;73.78;25;114.4330648;0.701480109;0.017674384;0.015468227
+Bureaux Administration;plateau mince;PAC performant;Electricité;69.48377231;20;105.1961592;3.397956279;9.994E-05;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;Autre système centralisé;Autres;30.87403998;25;133.1849401;0.703613015;0.017732481;0.015468227
+Café Hôtel Restaurant;Grand restaurant traditionnel;Autre système centralisé;Autres;34.15114522;25;83.88356219;0.692732828;0.017949803;0.015468227
+Café Hôtel Restaurant;Grand bar café tabac;Autre système centralisé performant;Autres;30.33611105;25;114.3565952;0.849277828;9.993E-05;0.015468227
+Café Hôtel Restaurant;Grand bar café tabac;Autre système centralisé performant;Urbain;30.54825182;25;124.0882839;0.807524243;9.993E-05;0.0616
+Café Hôtel Restaurant;Grand bar café tabac;Chaudière condensation fioul;Fioul;21.05152192;20;92.67101513;0.754189753;9.993E-05;0.074414716
+Café Hôtel Restaurant;Grand bar café tabac;Chaudière condensation gaz;Gaz;14.99977594;20;91.63378722;0.981787082;9.993E-05;0.0513
+Enseignement Recherche;Préélémentaire;Autre système centralisé;Autres;20.6024439;25;96.11651225;0.784432749;0.018191507;0.015468227
+Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;Autre système centralisé;Autres;19.32174075;25;76.10339518;0.705404988;0.01823884;0.015468227
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;Autre système centralisé;Autres;30.52582553;25;164.5489645;0.660410745;0.018345479;0.015468227
+Café Hôtel Restaurant;Grand bar café tabac;Electrique direct performant;Electricité;12;13;76.72378167;1;9.993E-05;0.0774
+Enseignement Recherche;Elémentaire;Autre système centralisé;Autres;22.42419042;25;95.59296476;0.768719094;0.018928708;0.015468227
+Café Hôtel Restaurant;Grand bar café tabac;PAC performant;Electricité;78.82256483;20;89.54505975;3.397956279;9.993E-05;0.0774
+Commerce;Grand process;Autre système centralisé;Urbain;28.28803588;25;100.6923106;1.603316683;0.019187661;0.0616
+Café Hôtel Restaurant;Grand bar café tabac;Rooftop performant;Electricité;39.37740132;17;81.68971161;3.328610233;9.993E-05;0.0774
+Bureaux Administration;immeuble rénové;Autre système centralisé;Autres;16.76157686;25;118.0564324;0.635779803;0.020345197;0.015468227
+Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;Autre système centralisé;Autres;17.87381586;25;87.52485835;0.692062597;0.020404214;0.015468227
+Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;Autre système centralisé performant;Autres;23.61087187;25;84.0981279;0.80649954;9.993E-05;0.015468227
+Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;Autre système centralisé performant;Urbain;23.80388897;25;98.44082597;0.708578579;9.993E-05;0.0616
+Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;Chaudière condensation fioul;Fioul;14.75095851;20;74.87636767;0.753837866;9.993E-05;0.074414716
+Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;Chaudière condensation gaz;Gaz;10.75160336;20;74.98391021;0.981434951;9.993E-05;0.0513
+Commerce;Supermarché;Autre système centralisé;Urbain;30.17884227;25;100.0940823;1.571368118;0.020606654;0.0616
+Sport Loisir Culture;Grande salle multisport;PAC;Electricité;12.54264171;20;22.6233581;2.838613953;0.033425085;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;Autre système centralisé;Autres;18.37788361;25;64.5491216;0.75;0.020863486;0.015468227
+Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;Electrique direct performant;Electricité;12;13;60.15011519;1;9.993E-05;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;Autre système centralisé;Autres;28.72614336;25;114.6745673;0.664292087;0.020962215;0.015468227
+Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;PAC performant;Electricité;63.54325038;20;70.5546691;3.397956279;9.993E-05;0.0774
+Bureaux Administration;plateau large bureaux cloisonnés;Autre système centralisé;Autres;15.9493439;25;87.64848138;0.636451019;0.021116998;0.015468227
+Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;Rooftop performant;Electricité;28.9400134;17;71.57233753;3.328610233;9.993E-05;0.0774
+Bureaux Administration;immeuble résidentiel;Autre système centralisé;Autres;24.57317712;25;168.4238532;0.641862296;0.021391296;0.015468227
+Commerce;Grand commerce de gros;Autre système centralisé;Urbain;27.78604333;25;81.31678654;1.585338183;0.021465387;0.0616
+Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;Autre système centralisé performant;Autres;22.34226983;25;87.52485835;0.830475117;9.993E-05;0.015468227
+Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;Autre système centralisé performant;Urbain;22.45641669;25;88.07564825;0.746398835;9.993E-05;0.0616
+Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;Chaudière condensation fioul;Fioul;13.30244593;20;70.44710642;0.758352405;9.993E-05;0.074414716
+Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;Chaudière condensation gaz;Gaz;9.751625505;20;70.86595833;0.98229892;9.993E-05;0.0513
+Habitat Communautaire;Résidence universitaire;Autre système centralisé;Autres;14.46721142;25;91.2666177;1.515989009;0.021731535;0.015468227
+Enseignement Recherche;Elémentaire;Autre système centralisé;Urbain;21.11972999;25;89.13931108;0.896192387;0.021828248;0.0616
+Commerce;Complexe brico;Autre système centralisé;Urbain;22.56120618;25;55.69373953;1.542420753;0.021938181;0.0616
+Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;Electrique direct performant;Electricité;12;13;53.95199348;1;9.993E-05;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;Autre système centralisé;Autres;23.27229822;25;122.035446;0.681399259;0.02210531;0.015468227
+Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;PAC performant;Electricité;60.76047678;20;65.07442857;3.397956279;9.993E-05;0.0774
+Habitat Communautaire;Foyers;Autre système centralisé;Autres;16.20670487;25;98.20311781;1.529897198;0.022305488;0.015468227
+Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;Rooftop performant;Electricité;26.95172643;17;65.9860333;3.328610233;9.993E-05;0.0774
+Santé Action Sociale;Hopital maison;Autre système centralisé;Autres;13.18863587;25;115.6542678;0.720585652;0.022447754;0.015468227
+Bureaux Administration;immeuble peri urbain;Autre système centralisé;Autres;21.53405182;25;154.2301391;0.63742016;0.022568086;0.015468227
+Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;Autre système centralisé performant;Autres;29.09037277;25;122.035446;0.817679111;9.993E-05;0.015468227
+Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;Autre système centralisé performant;Urbain;29.22875763;25;132.6844913;0.789064208;9.993E-05;0.0616
+Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;Chaudière condensation fioul;Fioul;13.14613116;20;101.4015903;0.76249866;9.993E-05;0.074414716
+Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;Chaudière condensation gaz;Gaz;9.784518223;20;100.7375776;0.99009464;9.993E-05;0.0513
+Habitat Communautaire;Maison retraite médicalisée;Autre système centralisé;Urbain;13.99822476;25;91.95242209;1.65303591;0.022984213;0.0616
+Commerce;Grand alimentaire;Autre système centralisé;Urbain;26.37855574;25;91.19129398;1.685;0.023433456;0.0616
+Commerce;ZAC Mode;Autre système centralisé;Urbain;30.21267046;25;106.2419086;1.575613447;0.023714875;0.0616
+Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;Electrique direct performant;Electricité;12;13;82.05660811;1;9.993E-05;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;Chaudière fioul;Fioul;20.2316101;20;145.2453434;0.521972851;0.00475746;0.074414716
+Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;PAC performant;Electricité;80.84290603;20;95.40528029;3.397956279;9.993E-05;0.0774
+Sport Loisir Culture;Grande salle de spectacle;Rooftop;Electricité;3.5669561;17;40.72984762;2.644576744;0.067750284;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;Rooftop performant;Electricité;33.79097921;17;92.22172893;3.328610233;9.993E-05;0.0774
+Sport Loisir Culture;Patinoire;Rooftop;Electricité;6.775125999;17;33.29167139;2.679567309;0.048182541;0.0774
+Santé Action Sociale;Hopital pavillonnaire;Autre système centralisé;Autres;18.28392166;25;178.1425156;0.735383503;0.024321306;0.015468227
+Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;Autre système centralisé performant;Autres;24.15217594;25;76.10339518;0.846485985;9.993E-05;0.015468227
+Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;Autre système centralisé performant;Urbain;24.26756657;25;72.7924942;0.765696838;9.993E-05;0.0616
+Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;Chaudière condensation fioul;Fioul;15.01468622;20;81.45263657;0.753844297;9.993E-05;0.074414716
+Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;Chaudière condensation gaz;Gaz;10.93739433;20;78.68620791;0.981436514;9.993E-05;0.0513
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;Autre système centralisé;Autres;25.89524131;25;134.9468564;0.684212278;0.024915285;0.015468227
+Habitat Communautaire;Résidence universitaire;PAC;Electricité;38.50947572;20;82.94393767;2.831630233;0.085817319;0.0774
+Habitat Communautaire;Maison de pré-retraite;Autre système centralisé;Autres;16.52353576;25;86.97372491;1.569403377;0.025492208;0.015468227
+Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;Electrique direct performant;Electricité;12;13;64.14669548;1;9.993E-05;0.0774
+Habitat Communautaire;Résidentiel;PAC;Electricité;42.3630526;20;88.7599324;2.831630233;0.088897995;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;PAC performant;Electricité;64.95881007;20;76.16359376;3.397956279;9.993E-05;0.0774
+Enseignement Recherche;Cantine LEGT;PAC;Electricité;121.6233163;20;316.786822;2.783818605;0.048675051;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;Rooftop performant;Electricité;29.56403723;17;74.72694622;3.328610233;9.993E-05;0.0774
+Enseignement Recherche;Préélémentaire;PAC;Electricité;59.8660507;20;89.74465796;2.783818605;0.10175596;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;Autre système centralisé;Autres;28.67925949;25;151.7952991;0.692375954;0.026372458;0.015468227
+Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;Autre système centralisé performant;Autres;22.97235452;25;64.5491216;0.9;9.993E-05;0.015468227
+Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;Autre système centralisé performant;Urbain;22.96835043;25;68.41907939;0.830668236;9.993E-05;0.0616
+Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;Chaudière condensation fioul;Fioul;13.58298646;20;83.76985909;0.762990495;9.993E-05;0.074414716
+Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;Chaudière condensation gaz;Gaz;9.921164155;20;78.16638102;0.988026551;9.993E-05;0.0513
+Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;Autre système centralisé;Autres;44.3494539;25;197.7241064;0.691045413;0.026489441;0.015468227
+Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;Autre système centralisé;Autres;18.8886975;25;84.0981279;0.67208295;0.02668099;0.015468227
+Habitat Communautaire;Maison de pré-retraite;PAC;Electricité;46.47241046;20;92.86089417;2.698554695;0.086156992;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;Electrique direct performant;Electricité;12;13;60.95631378;1;9.993E-05;0.0774
+Sport Loisir Culture;Grand cinéma;Autre système centralisé;Autres;28.68725113;25;71.2116506;2.478235866;0.026865895;0.015468227
+Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;PAC performant;Electricité;62.2739317;20;74.20836655;3.397956279;9.993E-05;0.0774
+Commerce;Grand librairie;Autre système centralisé;Urbain;26.30462174;25;76.0973368;1.568740305;0.027191094;0.0616
+Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;Rooftop performant;Electricité;27.64640932;17;72.51293626;3.328610233;9.993E-05;0.0774
+Sport Loisir Culture;Grand cinéma;Rooftop;Electricité;3.675450363;17;63.4958172;2.683624186;0.064919711;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Luxe;Autre système centralisé performant;Urbain;29.55897586;25;98.52175852;0.84;9.994E-05;0.0616
+Café Hôtel Restaurant;Grand Hotel sans restaurant Luxe;Chaudière condensation fioul;Fioul;13.35117801;20;67.6814564;0.736903963;9.994E-05;0.074414716
+Café Hôtel Restaurant;Grand Hotel sans restaurant Luxe;Chaudière condensation gaz;Gaz;9.901960638;20;83.95202788;0.988723649;9.994E-05;0.0513
+Enseignement Recherche;Cantine préélémentaire;PAC;Electricité;128.6594685;20;290.3263447;2.783818605;0.095732759;0.0774
+Commerce;ZAC Mode;Autre système centralisé;Autres;30.56369147;25;101.2027728;1.548411286;0.028062977;0.015468227
+Enseignement Recherche;Cantine LEGT;Electrique direct;Electricité;10;13;288.1854685;0.9;0.050924097;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Luxe;Electrique direct performant;Electricité;12;13;88.01416117;1;9.994E-05;0.0774
+Habitat Communautaire;Maison retraite médicalisée;Autre système centralisé;Autres;14.9298637;25;80.2693904;1.5326836;0.028491151;0.015468227
+Café Hôtel Restaurant;Grand Hotel sans restaurant Luxe;PAC performant;Electricité;82.27380841;20;100.6179846;3.480686512;9.994E-05;0.0774
+Commerce;Superette;Autre système centralisé;Autres;33.63592255;25;86.75390971;1.555545711;0.028638006;0.015468227
+Café Hôtel Restaurant;Grand Hotel sans restaurant Luxe;Rooftop performant;Electricité;34.44867498;17;95.9776201;3.409652093;9.994E-05;0.0774
+Santé Action Sociale;Hopital bloc;Autre système centralisé;Autres;10.88189529;25;125.6743306;0.75904029;0.02892531;0.015468227
+Commerce;Grand librairie;Autre système centralisé;Autres;26.34292539;25;72.08483329;1.558763514;0.02934935;0.015468227
+Café Hôtel Restaurant;Grand restaurant rapide;Autre système centralisé performant;Autres;60.94552909;25;141.7056044;0.862810999;9.993E-05;0.015468227
+Café Hôtel Restaurant;Grand restaurant rapide;Autre système centralisé performant;Urbain;61.3834475;25;132.7042649;0.812232273;9.993E-05;0.0616
+Café Hôtel Restaurant;Grand restaurant rapide;Chaudière condensation fioul;Fioul;38.61584698;20;179.7045831;0.757492449;9.993E-05;0.074414716
+Café Hôtel Restaurant;Grand restaurant rapide;Chaudière condensation gaz;Gaz;28.0998667;20;178.8784076;0.985089871;9.993E-05;0.0513
+Commerce;Petit mode;Autre système centralisé;Autres;32.85193908;25;78.29823199;1.544919674;0.029497463;0.015468227
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;Autre système centralisé;Urbain;25.98446205;25;154.3526495;0.620586105;0.02969772;0.0616
+Sport Loisir Culture;Musée;Autre système centralisé;Autres;26.13302534;25;91.30996185;2.191087932;0.029963789;0.015468227
+Café Hôtel Restaurant;Grand restaurant rapide;Electrique direct performant;Electricité;12;13;145.2758073;1;9.993E-05;0.0774
+Enseignement Recherche;Préélémentaire;Electrique direct;Electricité;10;13;83.99439414;0.9;0.1055978;0.0774
+Café Hôtel Restaurant;Grand restaurant rapide;PAC performant;Electricité;164.0068315;20;170.3529561;3.397956279;9.993E-05;0.0774
+Sport Loisir Culture;Petite salle multisport;PAC;Electricité;42.88856246;20;78.65023543;2.838613953;0.048688435;0.0774
+Café Hôtel Restaurant;Grand restaurant rapide;Rooftop performant;Electricité;75.26015133;17;162.4401495;3.328610233;9.993E-05;0.0774
+Enseignement Recherche;Cantine préélémentaire;Electrique direct;Electricité;10;13;273.8713025;0.9;0.098524141;0.0774
+Commerce;Grand Mode;Autre système centralisé;Autres;26.41545163;25;71.50102182;1.556459275;0.030793484;0.015468227
+Café Hôtel Restaurant;Grand restaurant traditionnel;Autre système centralisé performant;Autres;42.68893153;25;83.88356219;0.831279394;9.993E-05;0.015468227
+Café Hôtel Restaurant;Grand restaurant traditionnel;Autre système centralisé performant;Urbain;42.7065433;25;81.29390174;0.805905482;9.993E-05;0.0616
+Café Hôtel Restaurant;Grand restaurant traditionnel;Chaudière condensation fioul;Fioul;29.01456464;20;111.400692;0.756818941;9.993E-05;0.074414716
+Café Hôtel Restaurant;Grand restaurant traditionnel;Chaudière condensation gaz;Gaz;20.79663628;20;109.9002417;0.984414426;9.993E-05;0.0513
+Santé Action Sociale;Cabinet médical;Autre système centralisé;Autres;10.88704617;25;79.20364663;0.730094341;0.030842498;0.015468227
+Café Hôtel Restaurant;Grande cantine;Autre système centralisé;Autres;32.89609623;25;107.8719617;0.700614019;0.030923332;0.015468227
+Café Hôtel Restaurant;Grand bar café tabac;Autre système centralisé;Autres;24.26888884;25;114.3565952;0.707731523;0.031019059;0.015468227
+Café Hôtel Restaurant;Grand restaurant traditionnel;Electrique direct performant;Electricité;12;13;92.52079242;1;9.993E-05;0.0774
+Sport Loisir Culture;Patinoire;PAC;Electricité;23.09959997;20;43.14784271;2.838613953;0.055360147;0.0774
+Café Hôtel Restaurant;Grand restaurant traditionnel;PAC performant;Electricité;111.7431234;20;106.6067628;3.397956279;9.993E-05;0.0774
+Café Hôtel Restaurant;Petite cantine;Autre système centralisé;Autres;73.78;25;154.8793588;0.707371445;0.031987706;0.015468227
+Café Hôtel Restaurant;Grand restaurant traditionnel;Rooftop performant;Electricité;54.52886329;17;98.93868709;3.328610233;9.993E-05;0.0774
+Enseignement Recherche;Elémentaire;PAC;Electricité;62.2340185;20;92.1230774;2.783818605;0.122465511;0.0774
+Commerce;Petit brico;Autre système centralisé;Autres;32.68859206;25;81.92237577;1.559194914;0.032154455;0.015468227
+Café Hôtel Restaurant;Grande cantine;Autre système centralisé performant;Autres;41.12012028;25;107.8719617;0.840736823;9.993E-05;0.015468227
+Café Hôtel Restaurant;Grande cantine;Autre système centralisé performant;Urbain;41.44099869;25;113.3086817;0.791531024;9.993E-05;0.0616
+Café Hôtel Restaurant;Grande cantine;Chaudière condensation fioul;Fioul;28.17811965;20;86.09980624;0.756655538;9.993E-05;0.074414716
+Café Hôtel Restaurant;Grande cantine;Chaudière condensation gaz;Gaz;20.26138129;20;88.40320651;0.984276467;9.993E-05;0.0513
+Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;Autre système centralisé;Autres;37.16379539;25;165.6157726;0.614;0.03232216;0.015468227
+Café Hôtel Restaurant;Grand bar café tabac;PAC;Electricité;63.05805186;20;89.54505975;2.831630233;0.092189395;0.0774
+Commerce;Grand commerce de gros;Autre système centralisé;Autres;27.86318313;25;85.50686564;1.562318086;0.032905377;0.015468227
+Café Hôtel Restaurant;Grande cantine;Electrique direct performant;Electricité;12;13;69.85722685;1;9.993E-05;0.0774
+Enseignement Recherche;université;PAC;Electricité;63.81526893;20;100.3895001;2.705654651;0.068484149;0.0774
+Café Hôtel Restaurant;Grande cantine;PAC performant;Electricité;107.9653405;20;84.25489086;3.397956279;9.993E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;Autre système centralisé;Autres;40.41293975;25;209.2126929;0.704830015;0.033226676;0.015468227
+Café Hôtel Restaurant;Grande cantine;Rooftop performant;Electricité;53.09443758;17;81.35828421;3.328610233;9.993E-05;0.0774
+Café Hôtel Restaurant;Petite cantine;PAC;Electricité;45.60177714;20;112.1643268;2.831630233;0.091091153;0.0774
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Haut de gamme;Autre système centralisé performant;Urbain;31.71094505;25;119.3639214;0.84;9.994E-05;0.0616
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Haut de gamme;Chaudière condensation fioul;Fioul;16.96810747;20;96.39702787;0.766407067;9.994E-05;0.074414716
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Haut de gamme;Chaudière condensation gaz;Gaz;12.53046568;20;97.76653936;0.990807302;9.994E-05;0.0513
+Santé Action Sociale;Hopital bloc;Autre système centralisé;Urbain;10.7535103;25;136.0684253;0.780175843;0.033598315;0.0616
+Commerce;Grand brico;Autre système centralisé;Autres;30.58165572;25;113.3594351;1.568275434;0.033921602;0.015468227
+Enseignement Recherche;Lycée d’enseignement général et technologique (LEGT);PAC;Electricité;49.71647044;20;75.89778635;2.783818605;0.08460325;0.0774
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Haut de gamme;Electrique direct performant;Electricité;12;13;75.42588031;1;9.994E-05;0.0774
+Commerce;Petit librairie;Autre système centralisé;Autres;32.83882453;25;79.99810517;1.55578698;0.034273655;0.015468227
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Haut de gamme;PAC performant;Electricité;87.47112341;20;89.03416388;3.434056744;9.994E-05;0.0774
+Commerce;Hypermarché;Autre système centralisé;Autres;31.73245526;25;111.2879707;1.558951724;0.034585569;0.015468227
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Haut de gamme;Rooftop performant;Electricité;37.5928655;17;90.13217023;3.363973953;9.994E-05;0.0774
+Enseignement Recherche;Préélémentaire;Autre système centralisé;Urbain;22.82871287;25;90.16098565;0.901379813;0.034687837;0.0616
+Sport Loisir Culture;Grand bar café tabac;Rooftop;Electricité;10.644592;17;100.1295657;2.679567309;0.087165867;0.0774
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;Autre système centralisé performant;Autres;26.95075448;25;71.84783137;0.753;9.993E-05;0.015468227
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;Autre système centralisé performant;Urbain;26.97586883;25;90.42531706;0.74;9.993E-05;0.0616
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;Chaudière condensation fioul;Fioul;12.48438258;20;66.66647413;0.761834183;9.993E-05;0.074414716
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;Chaudière condensation gaz;Gaz;9.302771541;20;63.83263295;0.987567163;9.993E-05;0.0513
+Sport Loisir Culture;Patinoire;Autre système centralisé;Urbain;46.18596926;25;141.8889308;1.995433973;0.034907802;0.0616
+Commerce;Grand process;Autre système centralisé;Autres;28.2675782;25;99.25944733;1.549921246;0.035092147;0.015468227
+Commerce;Petit brico;Autre système centralisé;Urbain;32.50037113;25;90.86732922;1.576619689;0.035223827;0.0616
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;Electrique direct performant;Electricité;12;13;53.75715729;1;9.993E-05;0.0774
+Commerce;Petit commerce de gros;Autre système centralisé;Urbain;27.95094746;25;81.2049989;1.567215388;0.035337419;0.0616
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;PAC performant;Electricité;74.45184347;20;63.1218856;3.397956279;9.993E-05;0.0774
+Commerce;Petit commerce de gros;Autre système centralisé;Autres;28.23128047;25;83.83713702;1.557780691;0.035383436;0.015468227
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;Rooftop performant;Electricité;31.25612886;17;60.06005963;3.328610233;9.993E-05;0.0774
+Commerce;Grand Mode;Autre système centralisé;Urbain;26.39855237;25;74.80677768;1.570590333;0.035638769;0.0616
+Café Hôtel Restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Autre système centralisé performant;Urbain;32.26966591;25;85.88206685;0.84;9.994E-05;0.0616
+Café Hôtel Restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Chaudière condensation fioul;Fioul;17.22162934;20;79.54424802;0.75464094;9.994E-05;0.074414716
+Café Hôtel Restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Chaudière condensation gaz;Gaz;12.68392637;20;98.15093355;0.990797516;9.994E-05;0.0513
+Café Hôtel Restaurant;Grande cantine;PAC;Electricité;86.3722724;20;84.25489086;2.831630233;0.092336492;0.0774
+Enseignement Recherche;Collège;Autre système centralisé;Urbain;17.94993441;25;73.62918579;0.819674601;0.035857721;0.0616
+Commerce;Entrepôt;Autre système centralisé;Urbain;21.27557765;25;57.17201074;1.557308421;0.036461928;0.0616
+Café Hôtel Restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Electrique direct performant;Electricité;12;13;61.59598567;1;9.994E-05;0.0774
+Habitat Communautaire;Foyers;PAC;Electricité;44.41616724;20;102.4536283;2.831630233;0.120226185;0.0774
+Café Hôtel Restaurant;Hotel d'affaire sans restaurant Haut de Gamme;PAC performant;Electricité;88.97459199;20;74.31014258;3.382162326;9.994E-05;0.0774
+Enseignement Recherche;école;PAC;Electricité;60.15649458;20;93.25559199;2.666169767;0.040291948;0.0774
+Café Hôtel Restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Rooftop performant;Electricité;38.26284762;17;73.05116154;3.313138605;9.994E-05;0.0774
+Café Hôtel Restaurant;Hotel d'affaire sans restaurant Luxe;Chaudière condensation gaz;Gaz;9.292765401;20;73.14162264;0.992334404;9.999E-05;0.0513
+Enseignement Recherche;Lycée d’enseignement général et technologique (LEGT);Autre système centralisé;Autres;19.61207396;25;77.94102971;0.756825685;0.036985057;0.015468227
+Habitat Communautaire;Résidentiel;Autre système centralisé;Autres;24.80021024;25;87.78349655;1.583530072;0.037287258;0.015468227
+Enseignement Recherche;Lycée professionnel (LP);PAC;Electricité;50.81278855;20;73.60684945;2.783818605;0.088936748;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;Autre système centralisé performant;Autres;38.15728192;25;164.5489645;0.792492894;9.993E-05;0.015468227
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;Autre système centralisé performant;Urbain;38.35348761;25;187.9299683;0.823964339;9.993E-05;0.0616
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;Chaudière condensation fioul;Fioul;24.98213439;20;142.5695339;0.754205893;9.993E-05;0.074414716
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;Chaudière condensation gaz;Gaz;18.06751105;20;142.7607012;0.981803554;9.993E-05;0.0513
+Habitat Communautaire;Maison retraite médicalisée;PAC;Electricité;43.00956496;20;90.86124669;2.687009611;0.116709004;0.0774
+Commerce;Complexe brico;Autre système centralisé;Autres;22.71763364;25;56.31605722;1.54538578;0.03803707;0.015468227
+Café Hôtel Restaurant;Grand restaurant traditionnel;Autre système centralisé;Urbain;34.16523464;25;81.29390174;0.671587902;0.038326793;0.0616
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;Electrique direct performant;Electricité;12;13;111.6934722;1;9.993E-05;0.0774
+Enseignement Recherche;Elémentaire;Electrique direct;Electricité;10;13;84.1110438;0.9;0.129072263;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;PAC performant;Electricité;101.8599374;20;130.7409507;3.397956279;9.993E-05;0.0774
+Commerce;Petit process;Autre système centralisé;Autres;35.11493568;25;104.3906368;1.54982111;0.038778455;0.015468227
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;Rooftop performant;Electricité;47.38898961;17;132.3577516;3.328610233;9.993E-05;0.0774
+Sport Loisir Culture;Vestiaire et rangement;Autre système centralisé;Urbain;85.20990389;25;117.6022319;1.943069522;0.039050957;0.0616
+Enseignement Recherche;Internat LEGT;PAC;Electricité;50.35039898;20;131.0200123;2.783818605;0.068826923;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;Autre système centralisé performant;Autres;35.84907436;25;151.7952991;0.830851145;9.993E-05;0.015468227
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;Autre système centralisé performant;Urbain;35.91912511;25;165.3954742;0.779506019;9.993E-05;0.0616
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;Chaudière condensation fioul;Fioul;22.55480693;20;133.4210496;0.755009135;9.993E-05;0.074414716
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;Chaudière condensation gaz;Gaz;16.39757673;20;130.0436769;0.982603523;9.993E-05;0.0513
+Café Hôtel Restaurant;Grand bar café tabac;Autre système centralisé;Urbain;24.43860146;25;124.0882839;0.672936869;0.041248998;0.0616
+Commerce;Petit process;Autre système centralisé;Urbain;34.80362919;25;123.0242192;1.579665746;0.042328204;0.0616
+Enseignement Recherche;Collège;PAC;Electricité;49.5915828;20;73.82080344;2.783818605;0.104902065;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;Electrique direct performant;Electricité;12;13;104.7579232;1;9.993E-05;0.0774
+Sport Loisir Culture;Grand bar café tabac;Autre système centralisé;Autres;20.37669614;25;99.95088001;0.898767037;0.043096853;0.015468227
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;PAC performant;Electricité;96.40809017;20;122.8327924;3.397956279;9.993E-05;0.0774
+Santé Action Sociale;Cabinet médical;PAC;Electricité;27.33757992;20;71.74007621;2.831630233;0.090409271;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;Rooftop performant;Electricité;43.77086907;17;124.3738406;3.328610233;9.993E-05;0.0774
+Commerce;Grand alimentaire;Autre système centralisé;Autres;26.86498283;25;91.61734955;1.650657873;0.044937669;0.015468227
+Enseignement Recherche;Internat LEGT;Electrique direct;Electricité;10;13;126.408594;0.9;0.072917341;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;Autre système centralisé performant;Autres;32.36905163;25;134.9468564;0.821054734;9.993E-05;0.015468227
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;Autre système centralisé performant;Urbain;32.48057756;25;154.3526495;0.744703327;9.993E-05;0.0616
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;Chaudière condensation fioul;Fioul;18.14899821;20;113.3289058;0.762500708;9.993E-05;0.074414716
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;Chaudière condensation gaz;Gaz;13.36284229;20;114.7696798;0.990096728;9.993E-05;0.0513
+Sport Loisir Culture;Piscine;Cassette rayonnante;Electricité;10;10;41.41431687;0.8;0.057499374;0.0774
+Santé Action Sociale;Garderie;PAC;Electricité;33.66031806;20;88.45952898;2.831630233;0.101604824;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;Autre système centralisé;Urbain;23.38300611;25;132.6844913;0.657553506;0.046171701;0.0616
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;Electrique direct performant;Electricité;12;13;93.08145077;1;9.993E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel sans restaurant Haut de gamme;Autre système centralisé;Autres;40.874178;25;187.1968576;0.740717047;0.046453931;0.015468227
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;PAC performant;Electricité;88.73070471;20;107.4122491;3.397956279;9.993E-05;0.0774
+Enseignement Recherche;Collège;Autre système centralisé;Autres;17.26757655;25;67.31311377;0.787163727;0.047632553;0.015468227
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;Rooftop performant;Electricité;38.56386011;17;105.4653677;3.328610233;9.993E-05;0.0774
+Sport Loisir Culture;Grande salle multisport;Cassette rayonnante;Electricité;10;10;23.15996621;0.8;0.060379519;0.0774
+Sport Loisir Culture;Petit cinéma;PAC;Electricité;33.22882711;20;149.6509616;2.842911628;0.096070428;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;Autre système centralisé performant;Autres;38.59254997;25;133.1849401;0.844335619;9.993E-05;0.015468227
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;Autre système centralisé performant;Urbain;38.92632305;25;135.4692134;0.764746648;9.993E-05;0.0616
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;Chaudière condensation fioul;Fioul;25.28951263;20;145.2453434;0.754216465;9.993E-05;0.074414716
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;Chaudière condensation gaz;Gaz;18.27493704;20;139.7839739;0.981810997;9.993E-05;0.0513
+Enseignement Recherche;Lycée professionnel (LP);Autre système centralisé;Autres;18.37123861;25;76.22742141;0.772846207;0.048388885;0.015468227
+Café Hôtel Restaurant;Grand bar café tabac;Rooftop;Electricité;31.50192105;17;81.68971161;2.672974884;0.108393854;0.0774
+Sport Loisir Culture;Petite salle de spectacle;Autre système centralisé;Autres;50.95189485;25;135.6110873;1.970463783;0.048713754;0.015468227
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;Electrique direct performant;Electricité;12;13;113.2011997;1;9.993E-05;0.0774
+Habitat Communautaire;Maison de pré-retraite;Autre système centralisé;Urbain;15.83677577;25;107.9612959;1.711736467;0.049328722;0.0616
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;PAC performant;Electricité;103.3669168;20;130.899734;3.397956279;9.993E-05;0.0774
+Commerce;Entrepôt;Rooftop;Electricité;23.96806191;17;61.13423136;2.672974884;0.147492099;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;Rooftop performant;Electricité;48.04048416;17;130.0910522;3.328610233;9.993E-05;0.0774
+Commerce;Entrepôt;Autre système centralisé;Autres;21.03181391;25;61.25040943;1.569943943;0.050203036;0.015468227
+Café Hôtel Restaurant;Petite cantine;Rooftop;Electricité;133.0574;17;120.1616896;2.672974884;0.10784626;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;Autre système centralisé performant;Autres;35.90767919;25;114.6745673;0.797150504;9.993E-05;0.015468227
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;Autre système centralisé performant;Urbain;36.07912958;25;125.0762569;0.773976124;9.993E-05;0.0616
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;Chaudière condensation fioul;Fioul;22.64237352;20;135.1558765;0.754990906;9.993E-05;0.074414716
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;Chaudière condensation gaz;Gaz;16.46148594;20;130.0551851;0.982585748;9.993E-05;0.0513
+Sport Loisir Culture;Musée;Cassette rayonnante;Electricité;10;10;110.7316843;0.8;0.08362376;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;Autre système centralisé;Urbain;30.68279009;25;187.9299683;0.686636949;0.050345021;0.0616
+Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;Autre système centralisé;Autres;43.36277311;25;248.480283;0.686253263;0.050540911;0.015468227
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;Electrique direct performant;Electricité;12;13;105.2512625;1;9.993E-05;0.0774
+Enseignement Recherche;Cantine LP;PAC;Electricité;116.008662;20;317.4572023;2.783818605;0.082781987;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;PAC performant;Electricité;96.7715368;20;121.6789782;3.397956279;9.993E-05;0.0774
+Sport Loisir Culture;Patinoire;Cassette rayonnante;Electricité;10;10;20.04192312;0.8;0.075077934;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;Rooftop performant;Electricité;43.97138448;17;120.5583024;3.328610233;9.993E-05;0.0774
+Enseignement Recherche;Internat college;PAC;Electricité;45.17209666;20;123.6306879;2.783818605;0.091561845;0.0774
+Santé Action Sociale;Centre accueil;PAC;Electricité;41.74804653;20;91.01388358;2.831630233;0.105381393;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;Autre système centralisé performant;Autres;32.64712642;25;93.07731171;1.008;9.993E-05;0.015468227
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;Autre système centralisé performant;Urbain;32.63927526;25;112.8361518;0.822;9.993E-05;0.0616
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;Chaudière condensation fioul;Fioul;18.28128254;20;120.1060334;0.763718224;9.993E-05;0.074414716
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;Chaudière condensation gaz;Gaz;13.46109815;20;129.2606243;0.990923571;9.993E-05;0.0513
+Enseignement Recherche;Internat LP;PAC;Electricité;47.02057002;20;134.6496277;2.783818605;0.081868487;0.0774
+Sport Loisir Culture;Petit cinéma;Autre système centralisé;Autres;48.07648073;25;132.3110899;1.966165499;0.05176441;0.015468227
+Enseignement Recherche;Cantine élémentaire;PAC;Electricité;128.002615;20;291.4951638;2.783818605;0.134918325;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;Electrique direct performant;Electricité;12;13;103.9996378;1;9.993E-05;0.0774
+Enseignement Recherche;Lycée professionnel (LP);Autre système centralisé;Urbain;18.10605306;25;86.8211915;0.80273449;0.052188107;0.0616
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;PAC performant;Electricité;89.20691051;20;126.1623757;3.406336744;9.993E-05;0.0774
+Café Hôtel Restaurant;Petit bar café tabac;PAC;Electricité;68.85444147;20;128.6023319;2.831630233;0.083291613;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;Rooftop performant;Electricité;38.80805445;17;122.2267025;3.336819668;9.993E-05;0.0774
+Enseignement Recherche;Cantine LP;Electrique direct;Electricité;10;13;300.4865773;0.9;0.084431097;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;Autre système centralisé;Urbain;19.04311118;25;98.44082597;0.59048215;0.052483455;0.0616
+Café Hôtel Restaurant;Petit bar café tabac;Autre système centralisé performant;Autres;46.22250678;25;173.799719;0.844711052;9.993E-05;0.015468227
+Café Hôtel Restaurant;Petit bar café tabac;Autre système centralisé performant;Urbain;46.2361383;25;183.5009359;0.829190029;9.993E-05;0.0616
+Café Hôtel Restaurant;Petit bar café tabac;Chaudière condensation fioul;Fioul;50.194;20;133.0688795;0.747392582;9.993E-05;0.074414716
+Café Hôtel Restaurant;Petit bar café tabac;Chaudière condensation gaz;Gaz;50.194;20;133.8838834;0.974998744;9.993E-05;0.0513
+Habitat Communautaire;Foyers;Autre système centralisé;Urbain;16.75233614;25;109.2229148;1.67335611;0.05268971;0.0616
+Enseignement Recherche;Lycée d’enseignement général et technologique (LEGT);Electrique direct;Electricité;10;13;64.12355727;0.9;0.103819347;0.0774
+Commerce;Supermarché;Autre système centralisé;Autres;30.39396499;25;98.63062766;1.558456441;0.053694797;0.015468227
+Café Hôtel Restaurant;Petit bar café tabac;Electrique direct performant;Electricité;12;13;105.4526925;1;9.993E-05;0.0774
+Café Hôtel Restaurant;Grande cantine;Rooftop;Electricité;42.47555006;17;81.35828421;2.672974884;0.110240235;0.0774
+Café Hôtel Restaurant;Petit bar café tabac;PAC performant;Electricité;86.06805184;20;128.6023319;3.397956279;9.993E-05;0.0774
+Café Hôtel Restaurant;Grand restaurant rapide;Autre système centralisé;Urbain;49.106758;25;132.7042649;0.676860227;0.05393837;0.0616
+Café Hôtel Restaurant;Petit bar café tabac;Rooftop performant;Electricité;83.160875;17;119.6938962;3.328610233;9.993E-05;0.0774
+Enseignement Recherche;Cantine élémentaire;Electrique direct;Electricité;10;13;285.5395429;0.9;0.137265754;0.0774
+Sport Loisir Culture;Petite salle multisport;Cassette rayonnante;Electricité;10;10;77.84701727;0.8;0.07289214;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;Autre système centralisé performant;Autres;54.20346639;25;248.480283;0.823503915;9.993E-05;0.015468227
+Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;Autre système centralisé performant;Urbain;54.52931719;25;274.0554125;0.826127086;9.993E-05;0.0616
+Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;Chaudière condensation fioul;Fioul;38.10406927;20;197.1354542;0.751779607;9.993E-05;0.074414716
+Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;Chaudière condensation gaz;Gaz;26.52736354;20;211.6272649;0.979378945;9.993E-05;0.0513
+Santé Action Sociale;Hopital maison;Autre système centralisé;Urbain;12.93065031;25;123.9303494;0.731333674;0.054697194;0.0616
+Sport Loisir Culture;Grande salle multisport;Electrique direct;Electricité;10;13;23.84503771;0.9;0.067643073;0.0774
+Enseignement Recherche;Internat LP;Electrique direct;Electricité;10;13;130.3548984;0.9;0.085365874;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;Electrique direct performant;Electricité;12;13;149.7998112;1;9.993E-05;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;PAC;Electricité;81.4879499;20;130.7409507;2.831630233;0.089156313;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;PAC performant;Electricité;136.9780141;20;178.7197853;3.397956279;9.993E-05;0.0774
+Enseignement Recherche;école;Autre système centralisé;Autres;18.39163498;25;85.7494415;0.755910154;0.056323252;0.015468227
+Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;Rooftop performant;Electricité;73.51117448;17;181.0435141;3.328610233;9.993E-05;0.0774
+Enseignement Recherche;Lycée professionnel (LP);Electrique direct;Electricité;10;13;63.37270396;0.9;0.107595802;0.0774
+Enseignement Recherche;université;Autre système centralisé;Autres;19.43661017;25;74.58554529;0.777167183;0.056487328;0.015468227
+Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;Autre système centralisé performant;Autres;50.51617468;25;209.2126929;0.845796018;9.993E-05;0.015468227
+Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;Autre système centralisé performant;Urbain;50.80481807;25;237.5316642;0.823955094;9.993E-05;0.0616
+Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;Chaudière condensation fioul;Fioul;35.58144253;20;181.9506864;0.752377037;9.993E-05;0.074414716
+Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;Chaudière condensation gaz;Gaz;24.96267083;20;192.9143238;0.979975515;9.993E-05;0.0513
+Santé Action Sociale;Centre accueil;Autre système centralisé;Urbain;16.149101;25;99.643201;0.713988635;0.056581905;0.0616
+Commerce;Petit librairie;Autre système centralisé;Urbain;32.50740182;25;90.98496489;1.603848112;0.056701682;0.0616
+Café Hôtel Restaurant;Grand restaurant rapide;PAC;Electricité;131.2054652;20;170.3529561;2.831630233;0.093863811;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;Electrique direct performant;Electricité;12;13;137.1647099;1;9.993E-05;0.0774
+Sport Loisir Culture;Piscine;Electrique direct;Electricité;10;13;43.57329245;0.9;0.069729974;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;PAC performant;Electricité;130.1715953;20;160.0229322;3.397956279;9.993E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;PAC;Electricité;98.47997536;20;139.0759949;2.831630233;0.097648181;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;Rooftop performant;Electricité;67.02916548;17;162.3200247;3.328610233;9.993E-05;0.0774
+Café Hôtel Restaurant;Grand restaurant traditionnel;PAC;Electricité;89.39449873;20;106.6067628;2.831630233;0.096726093;0.0774
+Café Hôtel Restaurant;Petite cantine;Autre système centralisé;Urbain;73.78;25;151.5276467;0.664776715;0.058321126;0.0616
+Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;Autre système centralisé performant;Autres;46.45474423;25;165.6157726;0.7368;9.993E-05;0.015468227
+Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;Autre système centralisé performant;Urbain;46.47223024;25;227.9880548;0.84;9.993E-05;0.0616
+Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;Chaudière condensation fioul;Fioul;31.00874217;20;151.9130937;0.760442591;9.993E-05;0.074414716
+Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;Chaudière condensation gaz;Gaz;22.3442898;20;165.7015263;0.98804509;9.993E-05;0.0513
+Café Hôtel Restaurant;Petit restaurant rapide;PAC;Electricité;47.07992883;20;114.3499719;2.831630233;0.085692321;0.0774
+Santé Action Sociale;Hopital pavillonnaire;Electrique direct;Electricité;10;13;175.5440479;0.896416926;0.112032336;0.0774
+Enseignement Recherche;Collège;Electrique direct;Electricité;10;13;63.20564887;0.9;0.121517968;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;Electrique direct performant;Electricité;12;13;120.5071677;1;9.993E-05;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;Autre système centralisé;Urbain;17.96513335;25;88.07564825;0.621999029;0.05974219;0.0616
+Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;PAC performant;Electricité;123.0999692;20;139.0759949;3.397956279;9.993E-05;0.0774
+Habitat Communautaire;Résidentiel;Autre système centralisé;Urbain;24.79258732;25;91.84296586;1.641795924;0.059974711;0.0616
+Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;Rooftop performant;Electricité;58.13058562;17;141.2199111;3.328610233;9.993E-05;0.0774
+Commerce;Entrepôt;Electrique direct;Electricité;10;13;61.13423136;0.9;0.15853803;0.0774
+Sport Loisir Culture;Salle non spécialisée;PAC;Electricité;59.38817174;20;72.18363613;2.838613953;0.083073848;0.0774
+Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;Autre système centralisé performant;Autres;55.43681738;25;197.7241064;0.829254496;9.993E-05;0.015468227
+Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;Autre système centralisé performant;Urbain;55.6240681;25;196.8638308;0.772;9.993E-05;0.0616
+Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;Chaudière condensation fioul;Fioul;38.97856561;20;221.2584534;0.751794894;9.993E-05;0.074414716
+Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;Chaudière condensation gaz;Gaz;27.08544634;20;199.7506386;0.979389222;9.993E-05;0.0513
+Café Hôtel Restaurant;Petit bar café tabac;Autre système centralisé;Autres;36.97800542;25;173.799719;0.703925877;0.061724809;0.015468227
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;Autre système centralisé;Urbain;28.86330366;25;125.0762569;0.644980103;0.062182505;0.0616
+Bureaux Administration;immeuble peri urbain;Autre système centralisé;Urbain;21.3034712;25;183.0880401;0.649424652;0.062612371;0.0616
+Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;Electrique direct performant;Electricité;12;13;169.0880913;1;9.993E-05;0.0774
+Café Hôtel Restaurant;Petit restaurant traditionnel;PAC;Electricité;46.84699233;20;117.4439898;2.831630233;0.098397368;0.0774
+Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;PAC performant;Electricité;140.2125829;20;193.5347688;3.397956279;9.993E-05;0.0774
+Enseignement Recherche;Lycée d’enseignement général et technologique (LEGT);Autre système centralisé;Urbain;19.33907017;25;94.94438156;0.821475318;0.062924324;0.0616
+Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;Rooftop performant;Electricité;74.86984327;17;197.1674418;3.328610233;9.993E-05;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;Autre système centralisé;Urbain;31.14105844;25;135.4692134;0.637288874;0.063319127;0.0616
+Café Hôtel Restaurant;Petit Hotel sans restaurant Haut de gamme;Autre système centralisé performant;Autres;51.0927225;25;187.1968576;0.888860456;9.994E-05;0.015468227
+Café Hôtel Restaurant;Petit Hotel sans restaurant Haut de gamme;Chaudière condensation fioul;Fioul;35.89858094;20;167.2986419;0.752510186;9.994E-05;0.074414716
+Café Hôtel Restaurant;Petit Hotel sans restaurant Haut de gamme;Chaudière condensation gaz;Gaz;25.18377681;20;180.7251656;0.980105767;9.994E-05;0.0513
+Enseignement Recherche;Cantine LEGT;Autre système centralisé;Autres;46.56647971;25;326.9250512;0.901616525;0.063742721;0.015468227
+Enseignement Recherche;R&D sciences physiques et naturelles;Chaudière fioul;Fioul;10.13106199;20;61.5183014;0.709090652;0.015954572;0.074414716
+Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;Autre système centralisé;Urbain;19.41405326;25;72.7924942;0.638080699;0.064146167;0.0616
+Café Hôtel Restaurant;Petit Hotel sans restaurant Haut de gamme;Electrique direct performant;Electricité;12;13;135.4433372;1;9.994E-05;0.0774
+Commerce;Petit boulangerie;Autre système centralisé;Urbain;48.57013574;25;143.8022984;1.633875052;0.065231072;0.0616
+Café Hôtel Restaurant;Petit Hotel sans restaurant Haut de gamme;PAC performant;Electricité;131.0904462;20;151.9373017;3.397956279;9.994E-05;0.0774
+Sport Loisir Culture;Grand bar café tabac;Autre système centralisé;Urbain;20.5784225;25;112.7090223;0.973785869;0.065648931;0.0616
+Café Hôtel Restaurant;Petit Hotel sans restaurant Haut de gamme;Rooftop performant;Electricité;67.46930771;17;155.4287025;3.328610233;9.994E-05;0.0774
+Commerce;Petit poissonnerie;Autre système centralisé;Autres;46.21404059;25;123.3805972;1.56079248;0.065867974;0.015468227
+Café Hôtel Restaurant;Petit Hotel sans restaurant Luxe;Autre système centralisé performant;Autres;47.2131945;25;157.7100102;0.864044776;9.994E-05;0.015468227
+Café Hôtel Restaurant;Petit Hotel sans restaurant Luxe;Chaudière condensation fioul;Fioul;31.49469435;20;160.9226032;0.76783233;9.994E-05;0.074414716
+Café Hôtel Restaurant;Petit Hotel sans restaurant Luxe;Chaudière condensation gaz;Gaz;22.78164787;20;135.0880829;0.982799764;9.994E-05;0.0513
+Sport Loisir Culture;Vestiaire et rangement;Autre système centralisé;Autres;80.87444915;25;100.3547873;1.792732998;0.066307421;0.015468227
+Sport Loisir Culture;Petite salle multisport;Electrique direct;Electricité;10;13;76.46640802;0.9;0.08523527;0.0774
+Habitat Communautaire;Résidence universitaire;Autre système centralisé;Urbain;12.79188469;25;84.38634594;1.633432319;0.066983513;0.0616
+Café Hôtel Restaurant;Petit Hotel sans restaurant Luxe;Electrique direct performant;Electricité;12;13;118.6830583;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Autre système centralisé;Urbain;25.81573273;25;85.88206685;0.7;0.06701771;0.0616
+Café Hôtel Restaurant;Petit Hotel sans restaurant Luxe;PAC performant;Electricité;125.7452295;20;140.5411836;3.419229767;9.994E-05;0.0774
+Sport Loisir Culture;Grande salle de spectacle;Cassette rayonnante;Electricité;10;10;45.14698117;0.8;0.110914433;0.0774
+Café Hôtel Restaurant;Petit Hotel sans restaurant Luxe;Rooftop performant;Electricité;59.29797167;17;138.3928042;3.349449568;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;Autre système centralisé;Urbain;43.62345375;25;274.0554125;0.688439238;0.067442602;0.0616
+Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;PAC;Electricité;104.1372762;20;160.0229322;2.831630233;0.116141298;0.0774
+Café Hôtel Restaurant;Petit restaurant rapide;Autre système centralisé performant;Autres;92.225;25;124.1601322;0.843803766;9.993E-05;0.015468227
+Café Hôtel Restaurant;Petit restaurant rapide;Autre système centralisé performant;Urbain;92.225;25;108.8436453;0.814983136;9.993E-05;0.0616
+Café Hôtel Restaurant;Petit restaurant rapide;Chaudière condensation fioul;Fioul;100.388;20;150.8650358;0.746284323;9.993E-05;0.074414716
+Café Hôtel Restaurant;Petit restaurant rapide;Chaudière condensation gaz;Gaz;100.388;20;132.7414795;0.97387889;9.993E-05;0.0513
+Sport Loisir Culture;Grande salle de spectacle;PAC;Electricité;25.90723619;20;45.24078443;2.801546512;0.111247802;0.0774
+Sport Loisir Culture;Immeuble péri urbain;Autre système centralisé;Autres;16.78906254;25;113.5445298;0.850612817;0.067981387;0.015468227
+Enseignement Recherche;Cantine collége;Electrique direct;Electricité;10;13;299.5415062;0.9;0.100153729;0.0774
+Café Hôtel Restaurant;Petit restaurant rapide;Electrique direct performant;Electricité;12;13;107.2738074;1;9.993E-05;0.0774
+Bureaux Administration;immeuble rénové;Autre système centralisé;Urbain;15.21896753;25;129.8619577;0.646595963;0.069387083;0.0616
+Café Hôtel Restaurant;Petit restaurant rapide;PAC performant;Electricité;58.84991104;20;114.3499719;3.397956279;9.993E-05;0.0774
+Sport Loisir Culture;Grand bar café tabac;PAC;Electricité;11.42599993;20;105.5145755;2.838613953;0.122068456;0.0774
+Café Hôtel Restaurant;Petit restaurant rapide;Rooftop performant;Electricité;166.32175;17;120.3249358;3.328610233;9.993E-05;0.0774
+Enseignement Recherche;R&D sciences physiques et naturelles;Autre système centralisé;Autres;16.12811615;25;89.06631951;0.768310526;0.069842343;0.015468227
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Haut de gamme;PAC;Electricité;69.97689873;20;89.03416388;2.861713953;0.110503011;0.0774
+Café Hôtel Restaurant;Petit restaurant traditionnel;Autre système centralisé performant;Autres;92.225;25;114.4330648;0.841776131;9.993E-05;0.015468227
+Café Hôtel Restaurant;Petit restaurant traditionnel;Autre système centralisé performant;Urbain;92.225;25;109.0791277;0.82176855;9.993E-05;0.0616
+Café Hôtel Restaurant;Petit restaurant traditionnel;Chaudière condensation fioul;Fioul;100.388;20;145.0125251;0.746282122;9.993E-05;0.074414716
+Café Hôtel Restaurant;Petit restaurant traditionnel;Chaudière condensation gaz;Gaz;100.388;20;132.3613223;0.973877456;9.993E-05;0.0513
+Sport Loisir Culture;Patinoire;Electrique direct;Electricité;10;13;23.59391195;0.9;0.095769967;0.0774
+Sport Loisir Culture;Petite salle de spectacle;Autre système centralisé;Urbain;57.24514579;25;154.7319371;2.00129012;0.072119757;0.0616
+Commerce;Petit boulangerie;Autre système centralisé;Autres;49.09994434;25;130.839361;1.559574829;0.072314004;0.015468227
+Café Hôtel Restaurant;Petit restaurant traditionnel;Electrique direct performant;Electricité;12;13;107.2100363;1;9.993E-05;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;Autre système centralisé;Urbain;18.37468034;25;68.41907939;0.69222353;0.072325102;0.0616
+Café Hôtel Restaurant;Petit restaurant traditionnel;PAC performant;Electricité;58.55874041;20;117.4439898;3.397956279;9.993E-05;0.0774
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;PAC;Electricité;59.56147478;20;63.1218856;2.831630233;0.114408091;0.0774
+Café Hôtel Restaurant;Petit restaurant traditionnel;Rooftop performant;Electricité;166.32175;17;123.3511515;3.328610233;9.993E-05;0.0774
+Sport Loisir Culture;Musée;Electrique direct;Electricité;10;13;111.4630206;0.9;0.106140673;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;PAC;Electricité;48.60838142;20;65.07442857;2.831630233;0.113801635;0.0774
+Café Hôtel Restaurant;Petite cantine;Autre système centralisé performant;Autres;92.225;25;154.8793588;0.848845734;9.993E-05;0.015468227
+Café Hôtel Restaurant;Petite cantine;Autre système centralisé performant;Urbain;92.225;25;151.5276467;0.797732058;9.993E-05;0.0616
+Café Hôtel Restaurant;Petite cantine;Chaudière condensation fioul;Fioul;100.388;20;124.7804383;0.746208778;9.993E-05;0.074414716
+Café Hôtel Restaurant;Petite cantine;Chaudière condensation gaz;Gaz;100.388;20;126.7921685;0.9738116;9.993E-05;0.0513
+Bureaux Administration;plateau mince;Electrique direct;Electricité;10;13;99.56893455;0.9;0.100956906;0.0774
+Bureaux Administration;plateau large bureau paysagés;Electrique direct;Electricité;10;13;69.24815047;0.9;0.107439865;0.0774
+Santé Action Sociale;Hopital maison;Electrique direct;Electricité;10;13;111.5095122;0.894567401;0.132942694;0.0774
+Café Hôtel Restaurant;Petite cantine;Electrique direct performant;Electricité;12;13;96.35353236;1;9.993E-05;0.0774
+Santé Action Sociale;Hopital pavillonnaire;PAC;Electricité;48.38263731;20;175.6655334;2.791458958;0.126694159;0.0774
+Café Hôtel Restaurant;Petite cantine;PAC performant;Electricité;57.00222143;20;112.1643268;3.397956279;9.993E-05;0.0774
+Café Hôtel Restaurant;Hotel d'affaire sans restaurant Haut de Gamme;PAC;Electricité;71.17967359;20;74.31014258;2.818468605;0.126358576;0.0774
+Café Hôtel Restaurant;Petite cantine;Rooftop performant;Electricité;166.32175;17;120.1616896;3.328610233;9.993E-05;0.0774
+Enseignement Recherche;université;Electrique direct;Electricité;10;13;54.31709199;0.9;0.109992257;0.0774
+Commerce;Petit poissonnerie;Autre système centralisé;Urbain;45.7471679;25;139.9205787;1.627294043;0.074628585;0.0616
+Commerce;Complexe brico;Autre système centralisé performant;Autres;28.39704205;25;56.31605722;1.854462936;9.994E-05;0.015468227
+Commerce;Complexe brico;Autre système centralisé performant;Urbain;28.20150772;25;55.69373953;1.850904904;9.994E-05;0.0616
+Commerce;Complexe brico;Chaudière condensation fioul;Fioul;11.80135552;20;55.63503076;0.761583139;9.994E-05;0.074414716
+Commerce;Complexe brico;Chaudière condensation gaz;Gaz;8.799380921;20;57.31892665;0.989367103;9.994E-05;0.0513
+Enseignement Recherche;école;Electrique direct;Electricité;10;13;69.26538328;0.9;0.078393596;0.0774
+Café Hôtel Restaurant;Grande cantine;Autre système centralisé;Urbain;33.15279895;25;113.3086817;0.659609187;0.075213058;0.0616
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;PAC;Electricité;77.12647214;20;122.8327924;2.831630233;0.123313182;0.0774
+Commerce;Complexe brico;Electrique direct performant;Electricité;12;13;60.84970102;1;9.994E-05;0.0774
+Santé Action Sociale;Cabinet médical;Electrique direct;Electricité;10;13;69.22774144;0.9;0.122717463;0.0774
+Commerce;Complexe brico;Rooftop performant;Electricité;32.23264313;17;54.66928024;3.328610233;9.994E-05;0.0774
+Enseignement Recherche;Cantine collége;PAC;Electricité;118.2021261;20;318.1277205;2.783818605;0.1091469;0.0774
+Santé Action Sociale;Hopital bloc;PAC;Electricité;30.64341027;20;121.9879316;2.774977641;0.13842045;0.0774
+Commerce;Entrepôt;Autre système centralisé performant;Autres;26.28976738;25;61.25040943;1.883932732;9.994E-05;0.015468227
+Commerce;Entrepôt;Autre système centralisé performant;Urbain;26.59447206;25;57.17201074;1.868770105;9.994E-05;0.0616
+Commerce;Entrepôt;Chaudière condensation fioul;Fioul;8.540409898;20;61.88186616;0.761583139;9.994E-05;0.074414716
+Commerce;Entrepôt;Chaudière condensation gaz;Gaz;6.426774989;20;61.48221662;0.989367103;9.994E-05;0.0513
+Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;PAC;Electricité;51.96704806;20;76.16359376;2.831630233;0.111965454;0.0774
+Bureaux Administration;plateau large bureaux cloisonnés;Autre système centralisé;Urbain;16.57629484;25;99.67190187;0.652663575;0.078234185;0.0616
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;PAC;Electricité;71.36552841;20;126.1623757;2.838613953;0.111905729;0.0774
+Commerce;Entrepôt;Electrique direct performant;Electricité;12;13;61.13423136;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit bar café tabac;Rooftop;Electricité;66.5287;17;119.6938962;2.672974884;0.109466078;0.0774
+Commerce;Entrepôt;Rooftop performant;Electricité;29.96007739;17;61.13423136;3.328610233;9.994E-05;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;PAC;Electricité;64.67432483;20;95.40528029;2.831630233;0.122794909;0.0774
+Enseignement Recherche;R&D en sciences humaines et sociales;Autre système centralisé;Autres;17.51265007;25;84.9870304;0.789730031;0.079866868;0.015468227
+Commerce;Grand alimentaire;Autre système centralisé performant;Autres;33.58122854;25;91.61734955;1.980789447;9.994E-05;0.015468227
+Commerce;Grand alimentaire;Autre système centralisé performant;Urbain;32.97319468;25;91.19129398;2.022;9.994E-05;0.0616
+Commerce;Grand alimentaire;Chaudière condensation fioul;Fioul;18.55968364;20;86.06037263;0.757500176;9.994E-05;0.074414716
+Commerce;Grand alimentaire;Chaudière condensation gaz;Gaz;13.60675363;20;86.47517264;0.986787164;9.994E-05;0.0513
+Enseignement Recherche;Internat college;Electrique direct;Electricité;10;13;101.1318771;0.9;0.120299591;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Luxe;PAC;Electricité;65.81904673;20;100.6179846;2.900572093;0.099546735;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;PAC;Electricité;50.83460031;20;70.5546691;2.831630233;0.129752401;0.0774
+Commerce;Grand alimentaire;Electrique direct performant;Electricité;12;13;86.32690769;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Grand bar café tabac;Electrique direct;Electricité;10;13;76.72378167;0.9;0.140802774;0.0774
+Commerce;Grand alimentaire;PAC performant;Electricité;93.62173364;20;80.54561241;3.363789767;9.994E-05;0.0774
+Sport Loisir Culture;Grande salle de spectacle;Electrique direct;Electricité;10;13;39.23363764;0.9;0.125279449;0.0774
+Santé Action Sociale;Hopital maison;PAC;Electricité;36.65569924;20;119.3938995;2.773716447;0.141457615;0.0774
+Commerce;Grand brico;Autre système centralisé performant;Autres;38.22706964;25;113.3594351;1.881930521;9.994E-05;0.015468227
+Commerce;Grand brico;Autre système centralisé performant;Urbain;37.92676776;25;111.4002863;1.878174747;9.994E-05;0.0616
+Commerce;Grand brico;Chaudière condensation fioul;Fioul;26.24393225;20;112.9546343;0.761583139;9.994E-05;0.074414716
+Commerce;Grand brico;Chaudière condensation gaz;Gaz;18.70107807;20;114.4173888;0.989367103;9.994E-05;0.0513
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;Rooftop;Electricité;37.91119169;17;132.3577516;2.672974884;0.116704296;0.0774
+Café Hôtel Restaurant;Petite cantine;Electrique direct;Electricité;10;13;96.35353236;0.9;0.141356473;0.0774
+Sport Loisir Culture;Piscine;Chaudière fioul;Fioul;13.39942448;20;52.28431622;0.68101526;0.012124041;0.074414716
+Commerce;Grand brico;Electrique direct performant;Electricité;12;13;110.8270688;1;9.994E-05;0.0774
+Bureaux Administration;plateau large bureaux cloisonnés;Electrique direct;Electricité;10;13;84.30010892;0.9;0.120354273;0.0774
+Commerce;Grand brico;Rooftop performant;Electricité;48.74294623;17;115.658077;3.328610233;9.994E-05;0.0774
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;Autre système centralisé;Urbain;21.58069507;25;90.42531706;0.616666667;0.085404697;0.0616
+Sport Loisir Culture;Grand cinéma;PAC;Electricité;20.54008655;20;68.50063521;2.842911628;0.123398446;0.0774
+Commerce;Grand commerce de gros;Autre système centralisé performant;Autres;34.82897892;25;85.50686564;1.874781703;9.994E-05;0.015468227
+Commerce;Grand commerce de gros;Autre système centralisé performant;Urbain;34.73255417;25;81.31678654;1.90240582;9.994E-05;0.0616
+Commerce;Grand commerce de gros;Chaudière condensation fioul;Fioul;10.05095216;20;83.82581539;0.761583139;9.994E-05;0.074414716
+Commerce;Grand commerce de gros;Chaudière condensation gaz;Gaz;7.555895665;20;83.86674549;0.989367103;9.994E-05;0.0513
+Sport Loisir Culture;Vestiaire et rangement;PAC;Electricité;51.32944748;20;105.7692782;2.842911628;0.119001249;0.0774
+Café Hôtel Restaurant;Grand restaurant rapide;Rooftop;Electricité;60.20812106;17;162.4401495;2.672974884;0.122564458;0.0774
+Bureaux Administration;plateau large bureau paysagés;Autre système centralisé;Urbain;15.67370629;25;67.84132092;0.656103596;0.086369328;0.0616
+Commerce;Grand commerce de gros;Electrique direct performant;Electricité;12;13;85.48528338;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;Rooftop;Electricité;46.50446849;17;141.2199111;2.672974884;0.126534647;0.0774
+Commerce;Grand commerce de gros;Rooftop performant;Electricité;39.22885946;17;82.70205257;3.328610233;9.994E-05;0.0774
+Café Hôtel Restaurant;Grand restaurant traditionnel;Rooftop;Electricité;43.62309063;17;98.93868709;2.672974884;0.125744859;0.0774
+Santé Action Sociale;Garderie;Electrique direct;Electricité;10;13;81.028829;0.9;0.143074801;0.0774
+Commerce;Grand librairie;Autre système centralisé performant;Autres;32.92865674;25;72.08483329;1.870516216;9.994E-05;0.015468227
+Commerce;Grand librairie;Autre système centralisé performant;Urbain;32.88077718;25;76.0973368;1.882488366;9.994E-05;0.0616
+Commerce;Grand librairie;Chaudière condensation fioul;Fioul;18.11203177;20;74.06698981;0.75886589;9.994E-05;0.074414716
+Commerce;Grand librairie;Chaudière condensation gaz;Gaz;13.33211762;20;75.718178;0.986637569;9.994E-05;0.0513
+Sport Loisir Culture;Petit cinéma;Autre système centralisé;Urbain;50.17757949;25;173.5210618;2.013507792;0.087471378;0.0616
+Santé Action Sociale;Hopital bloc;Electrique direct;Electricité;10;13;107.8303606;0.895022357;0.148306478;0.0774
+Café Hôtel Restaurant;Petit restaurant rapide;Rooftop;Electricité;133.0574;17;120.3249358;2.672974884;0.114952319;0.0774
+Commerce;Grand librairie;Electrique direct performant;Electricité;12;13;76.821078;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;PAC;Electricité;77.41722944;20;121.6789782;2.831630233;0.112099331;0.0774
+Commerce;Grand librairie;PAC performant;Electricité;90.893407;20;71.7924476;3.397956279;9.994E-05;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;PAC;Electricité;70.98456377;20;107.4122491;2.831630233;0.138774871;0.0774
+Sport Loisir Culture;Grande salle multisport;Chaudière fioul;Fioul;8.910820382;20;38.9264275;0.681261085;0.012613842;0.074414716
+Commerce;Grand Mode;Autre système centralisé performant;Autres;33.01931454;25;71.50102182;1.86775113;9.994E-05;0.015468227
+Commerce;Grand Mode;Autre système centralisé performant;Urbain;32.99819046;25;74.80677768;1.884708399;9.994E-05;0.0616
+Commerce;Grand Mode;Chaudière condensation fioul;Fioul;18.13100726;20;74.52227668;0.758876621;9.994E-05;0.074414716
+Commerce;Grand Mode;Chaudière condensation gaz;Gaz;13.3123889;20;77.09330194;0.986623667;9.994E-05;0.0513
+Commerce;Superette;PAC;Electricité;84.87558867;20;82.88495205;2.831630233;0.119665339;0.0774
+Sport Loisir Culture;Grand cinéma;Cassette rayonnante;Electricité;10;10;66.03033194;0.8;0.126239139;0.0774
+Sport Loisir Culture;Petite salle de spectacle;PAC;Electricité;65.35542582;20;139.5483581;2.842911628;0.128492947;0.0774
+Commerce;Grand Mode;Electrique direct performant;Electricité;12;13;77.60909072;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Grande cantine;Electrique direct;Electricité;10;13;69.85722685;0.9;0.14604772;0.0774
+Commerce;Grand Mode;PAC performant;Electricité;90.92541149;20;72.52050505;3.397956279;9.994E-05;0.0774
+Enseignement Recherche;Cantine LEGT;Chaudière fioul;Fioul;28.45830055;20;297.2814798;0.731660293;0.022547936;0.074414716
+Enseignement Recherche;Internat LP;Autre système centralisé;Autres;17.66632459;25;127.0757617;0.882168666;0.091329244;0.015468227
+Commerce;Grand process;Autre système centralisé performant;Autres;35.33447275;25;99.25944733;1.859905495;9.994E-05;0.015468227
+Commerce;Grand process;Autre système centralisé performant;Urbain;35.36004485;25;100.6923106;1.923980019;9.994E-05;0.0616
+Commerce;Grand process;Chaudière condensation fioul;Fioul;18.97891974;20;99.85361829;0.759143864;9.994E-05;0.074414716
+Commerce;Grand process;Chaudière condensation gaz;Gaz;13.99645478;20;100.8616688;0.986925401;9.994E-05;0.0513
+Bureaux Administration;plateau mince;Autre système centralisé;Urbain;19.8937807;25;105.4664931;0.65238164;0.092374158;0.0616
+Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;PAC;Electricité;109.5824113;20;178.7197853;2.831630233;0.142953048;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Luxe;Chaudière fioul;Fioul;10.68094241;20;67.6814564;0.40656838;0.018637829;0.074414716
+Commerce;Grand process;Electrique direct performant;Electricité;12;13;103.435331;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;PAC;Electricité;49.81914536;20;74.20836655;2.831630233;0.129406286;0.0774
+Commerce;Grand process;PAC performant;Electricité;97.6654858;20;97.20448989;3.397956279;9.994E-05;0.0774
+Sport Loisir Culture;Salle non spécialisée;Cassette rayonnante;Electricité;10;10;65.59763578;0.8;0.11535751;0.0774
+Café Hôtel Restaurant;Petit restaurant traditionnel;Rooftop;Electricité;133.0574;17;123.3511515;2.672974884;0.129820187;0.0774
+Commerce;Hypermarché;Autre système centralisé performant;Autres;39.66556907;25;111.2879707;1.870742069;9.994E-05;0.015468227
+Commerce;Hypermarché;Autre système centralisé performant;Urbain;40.36256567;25;115.5081553;1.844152045;9.994E-05;0.0616
+Commerce;Hypermarché;Chaudière condensation fioul;Fioul;10.8487115;20;113.0967669;0.761583139;9.994E-05;0.074414716
+Commerce;Hypermarché;Chaudière condensation gaz;Gaz;8.142118579;20;111.5550674;0.989367103;9.994E-05;0.0513
+Sport Loisir Culture;Grande salle multisport;Autre système centralisé;Autres;19.74161016;25;32.136535;1.653734848;0.095277192;0.015468227
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;PAC;Electricité;82.69353343;20;130.899734;2.831630233;0.100171907;0.0774
+Santé Action Sociale;Garderie;Autre système centralisé;Urbain;12.98587506;25;91.58374649;0.735230585;0.0965908;0.0616
+Commerce;Hypermarché;Electrique direct performant;Electricité;12;13;113.8064527;1;9.994E-05;0.0774
+Santé Action Sociale;Hopital pavillonnaire;Autre système centralisé;Urbain;18.24332526;25;173.7150879;0.746529216;0.097066794;0.0616
+Commerce;Hypermarché;Rooftop performant;Electricité;44.99797385;17;107.6745541;3.328610233;9.994E-05;0.0774
+Sport Loisir Culture;Grand cinéma;Electrique direct;Electricité;10;13;59.0797914;0.9;0.13490456;0.0774
+Santé Action Sociale;Centre accueil;Electrique direct;Electricité;10;13;84.5692177;0.9;0.151345669;0.0774
+Commerce;Petit boulangerie;Autre système centralisé performant;Autres;61.37493043;25;130.839361;1.871489795;9.994E-05;0.015468227
+Commerce;Petit boulangerie;Autre système centralisé performant;Urbain;60.71266967;25;143.8022984;1.960650063;9.994E-05;0.0616
+Commerce;Petit boulangerie;Chaudière condensation fioul;Fioul;41.52871097;20;133.0528565;0.751617554;9.994E-05;0.074414716
+Commerce;Petit boulangerie;Chaudière condensation gaz;Gaz;30.94426089;20;146.5961653;0.984949197;9.994E-05;0.0513
+Enseignement Recherche;université;Autre système centralisé;Urbain;17.93237584;25;76.43896991;0.754987884;0.097477195;0.0616
+Commerce;Supermarché;Electrique direct;Electricité;10;13;102.806313;0.9;0.145661997;0.0774
+Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;Autre système centralisé;Urbain;44.49925448;25;196.8638308;0.643333333;0.099612633;0.0616
+Commerce;Petit boulangerie;Electrique direct performant;Electricité;12;13;125.4042909;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel sans restaurant Haut de gamme;PAC;Electricité;104.872357;20;151.9373017;2.831630233;0.125176097;0.0774
+Commerce;Petit boulangerie;PAC performant;Electricité;149.7215367;20;119.2556171;3.397956279;9.994E-05;0.0774
+Sport Loisir Culture;Petit cinéma;Cassette rayonnante;Electricité;10;10;126.3745098;0.8;0.148562225;0.0774
+Bureaux Administration;immeuble résidentiel;Autre système centralisé;Urbain;24.58520797;25;182.5358396;0.652030365;0.1008308;0.0616
+Commerce;Petit brico;Autre système centralisé performant;Autres;40.86074008;25;81.92237577;1.871033896;9.994E-05;0.015468227
+Commerce;Petit brico;Autre système centralisé performant;Urbain;40.62546391;25;90.86732922;1.891943627;9.994E-05;0.0616
+Commerce;Petit brico;Chaudière condensation fioul;Fioul;30.88861538;20;85.65777149;0.749223878;9.994E-05;0.074414716
+Commerce;Petit brico;Chaudière condensation gaz;Gaz;30.88861538;20;91.73773485;0.976994424;9.994E-05;0.0513
+Bureaux Administration;immeuble résidentiel;Chaudière fioul;Fioul;26.40682465;20;166.6586514;0.500037634;0.033640027;0.074414716
+Café Hôtel Restaurant;Petit Hotel sans restaurant Luxe;PAC;Electricité;100.5961836;20;140.5411836;2.84935814;0.13660489;0.0774
+Café Hôtel Restaurant;Petit bar café tabac;Autre système centralisé;Urbain;36.98891064;25;183.5009359;0.690991691;0.101183535;0.0616
+Commerce;Petit brico;Electrique direct performant;Electricité;12;13;83.32914275;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;Rooftop;Electricité;53.62333238;17;162.3200247;2.672974884;0.14990375;0.0774
+Commerce;Petit brico;PAC performant;Electricité;91.54985264;20;81.93726194;3.397956279;9.994E-05;0.0774
+Sport Loisir Culture;Immeuble péri urbain;Electrique direct;Electricité;10;13;120.1538957;0.9;0.157208952;0.0774
+Commerce;Petit brico;PAC;Electricité;73.23988211;20;81.93726194;3.243503721;0.174027707;0.0774
+Commerce;Petit commerce de gros;Autre système centralisé performant;Autres;35.28910059;25;83.83713702;1.869336829;9.994E-05;0.015468227
+Commerce;Petit commerce de gros;Autre système centralisé performant;Urbain;34.93868433;25;81.2049989;1.880658466;9.994E-05;0.0616
+Commerce;Petit commerce de gros;Chaudière condensation fioul;Fioul;14.73593196;20;82.73587781;0.761583139;9.994E-05;0.074414716
+Commerce;Petit commerce de gros;Chaudière condensation gaz;Gaz;10.94277036;20;83.04869933;0.989367103;9.994E-05;0.0513
+Sport Loisir Culture;Petite salle de spectacle;Cassette rayonnante;Electricité;10;10;125.6384299;0.8;0.142822765;0.0774
+Enseignement Recherche;Internat LEGT;Autre système centralisé;Autres;16.80543366;25;138.7821965;0.826439316;0.103029061;0.015468227
+Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;PAC;Electricité;112.1700663;20;193.5347688;2.831630233;0.128190094;0.0774
+Commerce;Petit commerce de gros;Electrique direct performant;Electricité;12;13;84.12351127;1;9.994E-05;0.0774
+Bureaux Administration;immeuble rénové;PAC;Electricité;45.31401743;20;113.074884;2.831630233;0.137985627;0.0774
+Commerce;Petit commerce de gros;Rooftop performant;Electricité;40.09076605;17;82.80863229;3.328610233;9.994E-05;0.0774
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Haut de gamme;Rooftop;Electricité;30.0742924;17;90.13217023;2.701373023;0.145864526;0.0774
+Sport Loisir Culture;Vestiaire et rangement;Cassette rayonnante;Electricité;10;10;88.84502938;0.8;0.139472233;0.0774
+Commerce;Petit librairie;Autre système centralisé performant;Autres;41.04853066;25;79.99810517;1.866944376;9.994E-05;0.015468227
+Commerce;Petit librairie;Autre système centralisé performant;Urbain;40.63425228;25;90.98496489;1.924617735;9.994E-05;0.0616
+Commerce;Petit librairie;Chaudière condensation fioul;Fioul;30.88861538;20;85.19740748;0.749265957;9.994E-05;0.074414716
+Commerce;Petit librairie;Chaudière condensation gaz;Gaz;30.88861538;20;93.30224842;0.979612559;9.994E-05;0.0513
+Sport Loisir Culture;Petite salle multisport;Autre système centralisé;Autres;59.29281423;25;106.0527558;1.641099067;0.106554507;0.015468227
+Commerce;Grand alimentaire;PAC;Electricité;74.89738691;20;80.54561241;3.210890233;0.157421538;0.0774
+Commerce;Petit process;PAC;Electricité;79.31955167;20;106.9489808;3.243503721;0.175201038;0.0774
+Commerce;Petit librairie;Electrique direct performant;Electricité;12;13;79.9906071;1;9.994E-05;0.0774
+Commerce;Superette;Electrique direct;Electricité;10;13;87.99605088;0.9;0.13934116;0.0774
+Commerce;Petit librairie;PAC performant;Electricité;92.02920431;20;74.78618016;3.397956279;9.994E-05;0.0774
+Sport Loisir Culture;Salle non spécialisée;Autre système centralisé;Autres;54.10857227;25;92.07316825;1.612099574;0.108274008;0.015468227
+Habitat Communautaire;Résidence universitaire;Electrique direct;Electricité;10;13;80.09658519;0.9;0.169185605;0.0774
+Commerce;Petit mode;Autre système centralisé performant;Autres;41.06492386;25;78.29823199;1.853903608;9.994E-05;0.015468227
+Commerce;Petit mode;Autre système centralisé performant;Urbain;40.48268312;25;91.31284703;1.949615604;9.994E-05;0.0616
+Commerce;Petit mode;Chaudière condensation fioul;Fioul;30.88861538;20;84.33495441;0.749259862;9.994E-05;0.074414716
+Commerce;Petit mode;Chaudière condensation gaz;Gaz;30.88861538;20;93.11608369;0.982567001;9.994E-05;0.0513
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;Rooftop;Electricité;25.00490309;17;60.06005963;2.672974884;0.150717641;0.0774
+Commerce;Grand commerce de gros;Electrique direct;Electricité;10;13;85.48528338;0.9;0.16574667;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;Rooftop;Electricité;21.56138114;17;65.9860333;2.672974884;0.150365061;0.0774
+Commerce;Petit mode;Electrique direct performant;Electricité;12;13;78.17280256;1;9.994E-05;0.0774
+Enseignement Recherche;Internat LEGT;Chaudière fioul;Fioul;6.745851849;20;126.3759299;0.732812339;0.02762543;0.074414716
+Commerce;Petit mode;PAC performant;Electricité;91.7717187;20;72.95960432;3.397956279;9.994E-05;0.0774
+Bureaux Administration;plateau mince;Chaudière fioul;Fioul;4.772419454;20;101.9522445;0.512052006;0.027638199;0.074414716
+Habitat Communautaire;Maison de pré-retraite;Electrique direct;Electricité;10;13;90.35449164;0.886431759;0.170370494;0.0774
+Commerce;Petit poissonnerie;Autre système centralisé performant;Autres;57.76755074;25;123.3805972;1.872950976;9.994E-05;0.015468227
+Commerce;Petit poissonnerie;Autre système centralisé performant;Urbain;57.18395988;25;139.9205787;1.952752851;9.994E-05;0.0616
+Commerce;Petit poissonnerie;Chaudière condensation fioul;Fioul;38.53421968;20;127.4466137;0.751367845;9.994E-05;0.074414716
+Commerce;Petit poissonnerie;Chaudière condensation gaz;Gaz;30.88861538;20;143.8560897;0.984690855;9.994E-05;0.0513
+Habitat Communautaire;Résidentiel;Electrique direct;Electricité;10;13;87.67640216;0.9;0.174088026;0.0774
+Café Hôtel Restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Rooftop;Electricité;30.6102781;17;73.05116154;2.660550698;0.163551177;0.0774
+Commerce;Supermarché;Rooftop;Electricité;34.90886739;17;103.5457561;2.672974884;0.160122939;0.0774
+Commerce;Petit poissonnerie;Electrique direct performant;Electricité;12;13;120.2216309;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;Rooftop;Electricité;35.01669526;17;124.3738406;2.672974884;0.161365978;0.0774
+Commerce;Petit poissonnerie;PAC performant;Electricité;139.5511845;20;114.3655286;3.397956279;9.994E-05;0.0774
+Sport Loisir Culture;Salle non spécialisée;Electrique direct;Electricité;10;13;64.9883637;0.9;0.137650824;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;Rooftop;Electricité;23.65122978;17;74.72694622;2.672974884;0.151045324;0.0774
+Commerce;Petit process;Autre système centralisé performant;Autres;43.89366961;25;104.3906368;1.859785332;9.994E-05;0.015468227
+Commerce;Petit process;Autre système centralisé performant;Urbain;43.50453649;25;123.0242192;1.895598895;9.994E-05;0.0616
+Commerce;Petit process;Chaudière condensation fioul;Fioul;30.88861538;20;111.5555006;0.749470522;9.994E-05;0.074414716
+Commerce;Petit process;Chaudière condensation gaz;Gaz;30.88861538;20;120.2457653;0.977268355;9.994E-05;0.0513
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;Rooftop;Electricité;31.04644356;17;122.2267025;2.679567309;0.151037496;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;Rooftop;Electricité;27.03278337;17;92.22172893;2.672974884;0.162441982;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;Chaudière fioul;Fioul;18.11389882;20;135.1558765;0.523449439;0.02396553;0.074414716
+Commerce;Petit process;Electrique direct performant;Electricité;12;13;109.809274;1;9.994E-05;0.0774
+Bureaux Administration;immeuble peri urbain;DRV;Electricité;26.32966733;17;162.0223914;2.276943946;0.156316375;0.0774
+Commerce;Petit process;PAC performant;Electricité;99.14943959;20;106.9489808;3.397956279;9.994E-05;0.0774
+Enseignement Recherche;Internat LP;Chaudière fioul;Fioul;6.516672588;20;126.9802532;0.728748237;0.030297174;0.074414716
+Sport Loisir Culture;Grande salle de spectacle;Autre système centralisé;Urbain;26.6501252;25;52.36329754;2.134482198;0.121281828;0.0616
+Commerce;Superette;Autre système centralisé performant;Autres;42.04490318;25;86.75390971;1.866654853;9.994E-05;0.015468227
+Commerce;Superette;Autre système centralisé performant;Urbain;41.95293603;25;104.0857167;1.861011621;9.994E-05;0.0616
+Commerce;Superette;Chaudière condensation fioul;Fioul;29.34705082;20;92.50011719;0.752057912;9.994E-05;0.074414716
+Commerce;Superette;Chaudière condensation gaz;Gaz;20.14869354;20;107.3890518;0.979846856;9.994E-05;0.0513
+Café Hôtel Restaurant;Grand Hotel sans restaurant Luxe;Rooftop;Electricité;27.55893999;17;95.9776201;2.738053953;0.140001188;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;Rooftop;Electricité;23.15201072;17;71.57233753;2.672974884;0.170204061;0.0774
+Commerce;Petit mode;Autre système centralisé;Urbain;32.38614649;25;91.31284703;1.62467967;0.121515334;0.0616
+Commerce;Superette;Electrique direct performant;Electricité;12;13;87.99605088;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;Chaudière fioul;Fioul;31.18285249;20;221.2584534;0.515390381;0.024303208;0.074414716
+Commerce;Superette;PAC performant;Electricité;106.0944858;20;82.88495205;3.397956279;9.994E-05;0.0774
+Enseignement Recherche;Cantine LP;Autre système centralisé;Autres;43.2194719;25;314.7442989;0.841754794;0.122097231;0.015468227
+Commerce;Hypermarché;Rooftop;Electricité;35.99837908;17;107.6745541;2.672974884;0.180269151;0.0774
+Commerce;Supermarché;Autre système centralisé performant;Autres;37.99245624;25;98.63062766;1.870147729;9.994E-05;0.015468227
+Commerce;Supermarché;Autre système centralisé performant;Urbain;37.72355284;25;100.0940823;1.885641742;9.994E-05;0.0616
+Commerce;Supermarché;Chaudière condensation fioul;Fioul;15.5156505;20;103.9497824;0.761583139;9.994E-05;0.074414716
+Commerce;Supermarché;Chaudière condensation gaz;Gaz;11.5329496;20;102.5241681;0.989367103;9.994E-05;0.0513
+Commerce;Superette;Chaudière fioul;Fioul;23.47764065;20;92.50011719;0.657877679;0.031124148;0.074414716
+Enseignement Recherche;école;Autre système centralisé;Urbain;18.23041881;25;86.45918623;0.867370346;0.126136948;0.0616
+Enseignement Recherche;Cantine collége;Chaudière fioul;Fioul;27.57533536;20;283.1692743;0.731578891;0.031716439;0.074414716
+Commerce;Supermarché;Electrique direct performant;Electricité;12;13;102.806313;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel sans restaurant Haut de gamme;Chaudière fioul;Fioul;28.71886475;20;167.2986419;0.516901603;0.025433084;0.074414716
+Commerce;Supermarché;Rooftop performant;Electricité;43.63608424;17;103.5457561;3.328610233;9.994E-05;0.0774
+Enseignement Recherche;Cantine LP;Chaudière fioul;Fioul;27.46977145;20;282.1177721;0.731569812;0.032053577;0.074414716
+Enseignement Recherche;Cantine collége;Autre système centralisé;Autres;42.51677727;25;305.2150206;0.844222805;0.12892556;0.015468227
+Commerce;ZAC Mode;Autre système centralisé performant;Autres;38.20461433;25;101.2027728;1.858093544;9.994E-05;0.015468227
+Commerce;ZAC Mode;Autre système centralisé performant;Urbain;37.76583807;25;106.2419086;1.890736136;9.994E-05;0.0616
+Commerce;ZAC Mode;Chaudière condensation fioul;Fioul;21.12291093;20;102.96474;0.761583139;9.994E-05;0.074414716
+Commerce;ZAC Mode;Chaudière condensation gaz;Gaz;15.51340328;20;107.5577995;0.989367103;9.994E-05;0.0513
+Sport Loisir Culture;Salle non spécialisée;Chaudière fioul;Fioul;35.75303446;20;91.48158355;0.671282577;0.02150709;0.074414716
+Sport Loisir Culture;Petite salle multisport;Chaudière fioul;Fioul;29.4887063;20;112.2691385;0.678573948;0.018518397;0.074414716
+Enseignement Recherche;Internat college;Autre système centralisé;Autres;15.94389423;25;118.1187795;0.838777457;0.130384786;0.015468227
+Commerce;ZAC Mode;Electrique direct performant;Electricité;12;13;101.7723028;1;9.994E-05;0.0774
+Commerce;Grand alimentaire;Electrique direct;Electricité;10;13;86.32690769;0.9;0.181140817;0.0774
+Commerce;ZAC Mode;Rooftop performant;Electricité;44.93867787;17;96.28833269;3.328610233;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel sans restaurant Luxe;Autre système centralisé;Autres;37.7705556;25;157.7100102;0.720037313;0.130806455;0.015468227
+Café Hôtel Restaurant;Petit bar café tabac;Electrique direct;Electricité;10;13;105.4526925;0.9;0.161815007;0.0774
+Enseignement Recherche;Cantine collége;Autre système centralisé performant;Autres;53.14597159;25;305.2150206;1.013067366;9.994E-05;0.015468227
+Enseignement Recherche;Cantine collége;Autre système centralisé performant;Urbain;52.57664665;25;319.7526914;1.011091322;9.994E-05;0.0616
+Enseignement Recherche;Cantine collége;Chaudière condensation fioul;Fioul;34.46916921;20;283.1692743;0.760067865;9.994E-05;0.074414716
+Enseignement Recherche;Cantine collége;Chaudière condensation gaz;Gaz;24.89154475;20;243.3167195;0.986470316;9.994E-05;0.0513
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;Rooftop;Electricité;35.17710758;17;120.5583024;2.672974884;0.156166232;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;Rooftop;Electricité;30.85108809;17;105.4653677;2.672974884;0.182887645;0.0774
+Commerce;ZAC Mode;Rooftop;Electricité;35.9509423;17;96.28833269;2.672974884;0.201657953;0.0774
+Enseignement Recherche;Cantine collége;Electrique direct performant;Electricité;12;13;299.5415062;1;9.994E-05;0.0774
+Bureaux Administration;immeuble rénové;Chaudière fioul;Fioul;8.662417593;20;118.6485177;0.51196395;0.033580209;0.074414716
+Enseignement Recherche;Cantine collége;PAC performant;Electricité;147.7526576;20;318.1277205;3.340582326;9.994E-05;0.0774
+Bureaux Administration;plateau large bureau paysagés;Chaudière fioul;Fioul;4.192428389;20;74.25193126;0.512052006;0.033948619;0.074414716
+Café Hôtel Restaurant;Petit restaurant rapide;Chaudière fioul;Fioul;80.3104;20;150.8650358;0.5060633;0.027172327;0.074414716
+Enseignement Recherche;Cantine élémentaire;Autre système centralisé performant;Autres;57.63962778;25;263.6117344;0.910213961;9.994E-05;0.015468227
+Enseignement Recherche;Cantine élémentaire;Autre système centralisé performant;Urbain;58.08492117;25;289.7330699;1.085223155;9.994E-05;0.0616
+Enseignement Recherche;Cantine élémentaire;Chaudière condensation fioul;Fioul;36.38630851;20;259.5511816;0.760672812;9.994E-05;0.074414716
+Enseignement Recherche;Cantine élémentaire;Chaudière condensation gaz;Gaz;26.56057451;20;230.1993086;0.987070626;9.994E-05;0.0513
+Sport Loisir Culture;Patinoire;Autre système centralisé;Autres;33.7012953;25;46.45119536;1.6794546;0.13722377;0.015468227
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;Electrique direct;Electricité;10;13;111.6934722;0.9;0.171800263;0.0774
+Habitat Communautaire;Foyers;Electrique direct;Electricité;10;13;97.82475324;0.9;0.221897609;0.0774
+Enseignement Recherche;Cantine élémentaire;Electrique direct performant;Electricité;12;13;285.5395429;1;9.994E-05;0.0774
+Commerce;Complexe brico;Rooftop;Electricité;25.7861145;17;54.66928024;2.672974884;0.20372661;0.0774
+Enseignement Recherche;Cantine élémentaire;PAC performant;Electricité;160.0032688;20;291.4951638;3.340582326;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;Rooftop;Electricité;58.80893959;17;181.0435141;2.672974884;0.189484798;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;Rooftop;Electricité;22.11712746;17;72.51293626;2.672974884;0.176047584;0.0774
+Enseignement Recherche;Cantine LEGT;Autre système centralisé performant;Autres;58.20809964;25;326.9250512;1.08193983;9.994E-05;0.015468227
+Enseignement Recherche;Cantine LEGT;Autre système centralisé performant;Urbain;54.6522689;25;326.4995468;1.010024592;9.994E-05;0.0616
+Enseignement Recherche;Cantine LEGT;Chaudière condensation fioul;Fioul;35.57287568;20;297.2814798;0.760066274;9.994E-05;0.074414716
+Enseignement Recherche;Cantine LEGT;Chaudière condensation gaz;Gaz;25.50758244;20;277.8443156;0.986474411;9.994E-05;0.0513
+Commerce;Grand Mode;PAC;Electricité;72.74032919;20;72.52050505;3.243503721;0.206709579;0.0774
+Bureaux Administration;plateau large bureaux cloisonnés;Chaudière fioul;Fioul;4.22973083;20;94.31214895;0.512052006;0.0352433;0.074414716
+Bureaux Administration;immeuble peri urbain;Chaudière fioul;Fioul;11.83487935;20;158.4983341;0.508932358;0.03552008;0.074414716
+Enseignement Recherche;Cantine LEGT;Electrique direct performant;Electricité;12;13;288.1854685;1;9.994E-05;0.0774
+Enseignement Recherche;université;Chaudière fioul;Fioul;5.490610034;20;71.77212632;0.714680607;0.035523554;0.074414716
+Enseignement Recherche;Cantine LEGT;PAC performant;Electricité;152.0291454;20;316.786822;3.340582326;9.994E-05;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;Rooftop;Electricité;38.43238733;17;130.0910522;2.672974884;0.147879131;0.0774
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Haut de gamme;Autre système centralisé;Urbain;25.36875604;25;119.3639214;0.7;0.143300808;0.0616
+Enseignement Recherche;Cantine LP;Autre système centralisé performant;Autres;54.02433987;25;314.7442989;1.010105752;9.994E-05;0.015468227
+Enseignement Recherche;Cantine LP;Autre système centralisé performant;Urbain;52.98309218;25;320.1682157;1.078075337;9.994E-05;0.0616
+Enseignement Recherche;Cantine LP;Chaudière condensation fioul;Fioul;34.33721431;20;282.1177721;0.760080245;9.994E-05;0.074414716
+Enseignement Recherche;Cantine LP;Chaudière condensation gaz;Gaz;25.05626337;20;264.5290114;0.986473977;9.994E-05;0.0513
+Sport Loisir Culture;Musée;Chaudière gaz;Gaz;7.817937954;20;110.2128278;0.661058019;0.177153103;0.0513
+Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;Electrique direct;Electricité;10;13;120.5071677;0.9;0.184307578;0.0774
+Sport Loisir Culture;Piscine;Autre système centralisé;Autres;35.9353792;25;48.6014636;1.666373286;0.144560828;0.015468227
+Enseignement Recherche;Cantine LP;Electrique direct performant;Electricité;12;13;300.4865773;1;9.994E-05;0.0774
+Enseignement Recherche;R&D en sciences humaines et sociales;Electrique direct;Electricité;10;13;106.5301013;0.9;0.147367729;0.0774
+Enseignement Recherche;Cantine LP;PAC performant;Electricité;145.0108275;20;317.4572023;3.340582326;9.994E-05;0.0774
+Commerce;Petit mode;PAC;Electricité;73.41737496;20;72.95960432;3.243503721;0.205702266;0.0774
+Commerce;Grand librairie;PAC;Electricité;72.7147256;20;71.7924476;3.243503721;0.2193418;0.0774
+Enseignement Recherche;Cantine préélémentaire;Autre système centralisé performant;Autres;61.98087517;25;277.2494347;0.932280618;9.994E-05;0.015468227
+Enseignement Recherche;Cantine préélémentaire;Autre système centralisé performant;Urbain;58.67876498;25;291.8295336;1.095892931;9.994E-05;0.0616
+Enseignement Recherche;Cantine préélémentaire;Chaudière condensation fioul;Fioul;36.3100721;20;263.9161864;0.760673012;9.994E-05;0.074414716
+Enseignement Recherche;Cantine préélémentaire;Chaudière condensation gaz;Gaz;26.33897591;20;233.6090795;0.987057731;9.994E-05;0.0513
+Sport Loisir Culture;Petit cinéma;Electrique direct;Electricité;10;13;129.4706259;0.9;0.196695168;0.0774
+Habitat Communautaire;Maison retraite médicalisée;Electrique direct;Electricité;10;13;85.30685793;0.885381271;0.227439954;0.0774
+Sport Loisir Culture;Petite salle de spectacle;Electrique direct;Electricité;10;13;126.0826083;0.9;0.188836199;0.0774
+Enseignement Recherche;Cantine préélémentaire;Electrique direct performant;Electricité;12;13;273.8713025;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel sans restaurant Haut de gamme;Rooftop;Electricité;53.97544616;17;155.4287025;2.672974884;0.175047603;0.0774
+Enseignement Recherche;Cantine préélémentaire;PAC performant;Electricité;160.8243356;20;290.3263447;3.340582326;9.994E-05;0.0774
+Commerce;Superette;Autre système centralisé;Urbain;33.56234882;25;104.0857167;1.550843017;0.150202295;0.0616
+Commerce;Hypermarché;Electrique direct;Electricité;10;13;113.8064527;0.9;0.207755016;0.0774
+Enseignement Recherche;Collège;Autre système centralisé performant;Autres;21.58447069;25;67.31311377;0.944596472;9.994E-05;0.015468227
+Enseignement Recherche;Collège;Autre système centralisé performant;Urbain;22.43741801;25;73.62918579;0.983609521;9.994E-05;0.0616
+Enseignement Recherche;Collège;Chaudière condensation fioul;Fioul;9.407223321;20;67.25869023;0.764069138;9.994E-05;0.074414716
+Enseignement Recherche;Collège;Chaudière condensation gaz;Gaz;7.009772886;20;67.53412145;0.990459691;9.994E-05;0.0513
+Commerce;Petit librairie;PAC;Electricité;73.62336345;20;74.78618016;3.243503721;0.211717556;0.0774
+Café Hôtel Restaurant;Petit Hotel sans restaurant Luxe;Rooftop;Electricité;47.43837733;17;138.3928042;2.689709502;0.187160608;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;Autre système centralisé;Urbain;26.11142021;25;112.8361518;0.685;0.152414729;0.0616
+Enseignement Recherche;Collège;Electrique direct performant;Electricité;12;13;63.20564887;1;9.994E-05;0.0774
+Commerce;Grand process;PAC;Electricité;78.13238864;20;97.20448989;3.243503721;0.227711083;0.0774
+Enseignement Recherche;Collège;PAC performant;Electricité;61.9894785;20;73.82080344;3.340582326;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit bar café tabac;Chaudière fioul;Fioul;40.1552;20;133.0688795;0.509774422;0.030942683;0.074414716
+Sport Loisir Culture;Grande salle multisport;Tube radiant;Gaz;10;25;35.10035502;0.8;0.167380723;0.0513
+Enseignement Recherche;école;Autre système centralisé performant;Autres;22.98954372;25;85.7494415;0.907092184;9.994E-05;0.015468227
+Enseignement Recherche;école;Autre système centralisé performant;Urbain;22.78802352;25;86.45918623;1.040844415;9.994E-05;0.0616
+Enseignement Recherche;école;Chaudière condensation fioul;Fioul;13.86563891;20;78.01578098;0.766210596;9.994E-05;0.074414716
+Enseignement Recherche;école;Chaudière condensation gaz;Gaz;10.24295856;20;74.3233328;0.992608556;9.994E-05;0.0513
+Café Hôtel Restaurant;Grand Hotel sans restaurant Luxe;Autre système centralisé;Urbain;23.64718069;25;98.52175852;0.7;0.154914228;0.0616
+Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;Rooftop;Electricité;59.89587462;17;197.1674418;2.672974884;0.180133538;0.0774
+Commerce;Grand brico;Electrique direct;Electricité;10;13;110.8270688;0.9;0.226292128;0.0774
+Enseignement Recherche;école;Electrique direct performant;Electricité;12;13;69.26538328;1;9.994E-05;0.0774
+Sport Loisir Culture;Vestiaire et rangement;Chaudière gaz;Gaz;49.75622714;20;172.4665198;0.615913521;0.189642771;0.0513
+Enseignement Recherche;école;PAC performant;Electricité;75.19561822;20;93.25559199;3.199403721;9.994E-05;0.0774
+Enseignement Recherche;Internat college;Chaudière fioul;Fioul;6.501907107;20;117.1079386;0.732812339;0.04011271;0.074414716
+Commerce;Grand brico;Rooftop;Electricité;38.99435698;17;115.658077;2.672974884;0.231173662;0.0774
+Enseignement Recherche;Elémentaire;Autre système centralisé performant;Autres;28.03023802;25;95.59296476;0.922462913;9.994E-05;0.015468227
+Enseignement Recherche;Elémentaire;Autre système centralisé performant;Urbain;26.39966249;25;89.13931108;1.075430864;9.994E-05;0.0616
+Enseignement Recherche;Elémentaire;Chaudière condensation fioul;Fioul;15.2940843;20;87.88804812;0.760166146;9.994E-05;0.074414716
+Enseignement Recherche;Elémentaire;Chaudière condensation gaz;Gaz;11.25915789;20;87.05905501;0.986497661;9.994E-05;0.0513
+Commerce;ZAC Mode;Electrique direct;Electricité;10;13;101.7723028;0.9;0.231118253;0.0774
+Sport Loisir Culture;Immeuble péri urbain;Autre système centralisé;Urbain;14.82670705;25;117.2347395;0.858946135;0.164112671;0.0616
+Santé Action Sociale;Cabinet médical;Autre système centralisé;Urbain;11.99961875;25;79.52850311;0.721356669;0.165961591;0.0616
+Enseignement Recherche;Elémentaire;Electrique direct performant;Electricité;12;13;84.1110438;1;9.994E-05;0.0774
+Sport Loisir Culture;Musée;Chaudière fioul;Fioul;13.31972079;20;118.9533447;0.679807158;0.033293305;0.074414716
+Enseignement Recherche;Elémentaire;PAC performant;Electricité;77.79252313;20;92.1230774;3.340582326;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;Chaudière gaz;Gaz;21.22189083;20;211.6272649;0.6027262;0.216441284;0.0513
+Sport Loisir Culture;Grand cinéma;Autre système centralisé;Urbain;25.16259542;25;74.38088994;2.09097044;0.167596878;0.0616
+Enseignement Recherche;Internat college;Autre système centralisé performant;Autres;19.92986778;25;118.1187795;1.006532948;9.994E-05;0.015468227
+Enseignement Recherche;Internat college;Autre système centralisé performant;Urbain;16.92488029;25;116.1582489;0.976439445;9.994E-05;0.0616
+Enseignement Recherche;Internat college;Chaudière condensation fioul;Fioul;8.127383884;20;117.1079386;0.765002326;9.994E-05;0.074414716
+Enseignement Recherche;Internat college;Chaudière condensation gaz;Gaz;5.705225563;20;89.68316842;0.991429044;9.994E-05;0.0513
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;Chaudière fioul;Fioul;14.62502603;20;120.1060334;0.532595416;0.033642197;0.074414716
+Sport Loisir Culture;Patinoire;Chaudière fioul;Fioul;12.39283604;20;56.20226841;0.697897894;0.024034456;0.074414716
+Sport Loisir Culture;Vestiaire et rangement;Electrique direct;Electricité;10;13;94.63015122;0.9;0.201708452;0.0774
+Enseignement Recherche;Internat college;Electrique direct performant;Electricité;12;13;101.1318771;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;Electrique direct;Electricité;10;13;137.1647099;0.9;0.217428654;0.0774
+Enseignement Recherche;Internat college;PAC performant;Electricité;56.46512083;20;123.6306879;3.340582326;9.994E-05;0.0774
+Commerce;Petit boulangerie;PAC;Electricité;119.7772294;20;119.2556171;3.243503721;0.221656739;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;Chaudière fioul;Fioul;12.01174898;20;81.45263657;0.518684063;0.033805715;0.074414716
+Enseignement Recherche;Internat LEGT;Autre système centralisé performant;Autres;21.00679207;25;138.7821965;0.991727179;9.994E-05;0.015468227
+Enseignement Recherche;Internat LEGT;Autre système centralisé performant;Urbain;21.36919399;25;132.5168167;1.073112993;9.994E-05;0.0616
+Enseignement Recherche;Internat LEGT;Chaudière condensation fioul;Fioul;8.432314811;20;126.3759299;0.764992872;9.994E-05;0.074414716
+Enseignement Recherche;Internat LEGT;Chaudière condensation gaz;Gaz;6.334846038;20;110.7697032;0.991389907;9.994E-05;0.0513
+Commerce;Complexe brico;Electrique direct;Electricité;10;13;60.84970102;0.9;0.234589138;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;Chaudière fioul;Fioul;19.98570751;20;142.5695339;0.521636978;0.034060346;0.074414716
+Commerce;Petit commerce de gros;Electrique direct;Electricité;10;13;84.12351127;0.9;0.222065882;0.0774
+Enseignement Recherche;Internat LEGT;Electrique direct performant;Electricité;12;13;126.408594;1;9.994E-05;0.0774
+Commerce;Grand Mode;Electrique direct;Electricité;10;13;77.60909072;0.9;0.237837786;0.0774
+Enseignement Recherche;Internat LEGT;PAC performant;Electricité;62.93799872;20;131.0200123;3.340582326;9.994E-05;0.0774
+Commerce;Petit poissonnerie;PAC;Electricité;111.6409476;20;114.3655286;3.243503721;0.224268607;0.0774
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Haut de gamme;Electrique direct;Electricité;10;13;75.42588031;0.9;0.216587556;0.0774
+Enseignement Recherche;Internat LP;Autre système centralisé performant;Autres;22.08290574;25;127.0757617;1.058602399;9.994E-05;0.015468227
+Enseignement Recherche;Internat LP;Autre système centralisé performant;Urbain;18.98726789;25;125.9197758;1.042949205;9.994E-05;0.0616
+Enseignement Recherche;Internat LP;Chaudière condensation fioul;Fioul;8.145840734;20;126.9802532;0.764145482;9.994E-05;0.074414716
+Enseignement Recherche;Internat LP;Chaudière condensation gaz;Gaz;5.967680167;20;103.3946297;0.991413284;9.994E-05;0.0513
+Café Hôtel Restaurant;Petit Hotel sans restaurant Luxe;Chaudière fioul;Fioul;25.19575548;20;160.9226032;0.559487021;0.035493453;0.074414716
+Café Hôtel Restaurant;Petit restaurant traditionnel;Chaudière fioul;Fioul;80.3104;20;145.0125251;0.5060598;0.035551729;0.074414716
+Commerce;Petit commerce de gros;Rooftop;Electricité;32.07261284;17;82.80863229;2.672974884;0.228926029;0.0774
+Enseignement Recherche;Internat LP;Electrique direct performant;Electricité;12;13;130.3548984;1;9.994E-05;0.0774
+Sport Loisir Culture;Vestiaire et rangement;Tube radiant;Gaz;10;25;203.3495793;0.8;0.211010964;0.0513
+Enseignement Recherche;Internat LP;PAC performant;Electricité;58.77571253;20;134.6496277;3.340582326;9.994E-05;0.0774
+Commerce;Petit mode;Electrique direct;Electricité;10;13;78.17280256;0.9;0.238213609;0.0774
+Commerce;Grand librairie;Electrique direct;Electricité;10;13;76.821078;0.9;0.252099397;0.0774
+Enseignement Recherche;Lycée d’enseignement général et technologique (LEGT);Autre système centralisé performant;Autres;24.51509245;25;77.94102971;0.908190821;9.994E-05;0.015468227
+Enseignement Recherche;Lycée d’enseignement général et technologique (LEGT);Autre système centralisé performant;Urbain;24.17383771;25;94.94438156;0.985770381;9.994E-05;0.0616
+Enseignement Recherche;Lycée d’enseignement général et technologique (LEGT);Chaudière condensation fioul;Fioul;9.470057621;20;71.4765522;0.764300862;9.994E-05;0.074414716
+Enseignement Recherche;Lycée d’enseignement général et technologique (LEGT);Chaudière condensation gaz;Gaz;7.098328585;20;76.15208037;0.990620621;9.994E-05;0.0513
+Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;Chaudière fioul;Fioul;10.86638917;20;83.76985909;0.55930071;0.03612369;0.074414716
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;Electrique direct;Electricité;10;13;53.75715729;0.9;0.223336741;0.0774
+Café Hôtel Restaurant;Grand restaurant rapide;Chaudière fioul;Fioul;30.89267759;20;179.7045831;0.525688221;0.036462517;0.074414716
+Enseignement Recherche;Lycée d’enseignement général et technologique (LEGT);Electrique direct performant;Electricité;12;13;64.12355727;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;Electrique direct;Electricité;10;13;53.95199348;0.9;0.223491912;0.0774
+Enseignement Recherche;Lycée d’enseignement général et technologique (LEGT);PAC performant;Electricité;62.14558805;20;75.89778635;3.340582326;9.994E-05;0.0774
+Santé Action Sociale;Cabinet médical;Chaudière fioul;Fioul;6.422596906;20;71.83230301;0.597989184;0.046091378;0.074414716
+Commerce;Petit librairie;Electrique direct;Electricité;10;13;79.9906071;0.9;0.24534784;0.0774
+Enseignement Recherche;Lycée professionnel (LP);Autre système centralisé performant;Autres;22.96404826;25;76.22742141;0.927415449;9.994E-05;0.015468227
+Enseignement Recherche;Lycée professionnel (LP);Autre système centralisé performant;Urbain;22.63256632;25;86.8211915;0.963281388;9.994E-05;0.0616
+Enseignement Recherche;Lycée professionnel (LP);Chaudière condensation fioul;Fioul;9.541472748;20;73.21766742;0.764229158;9.994E-05;0.074414716
+Enseignement Recherche;Lycée professionnel (LP);Chaudière condensation gaz;Gaz;7.02385352;20;75.32045729;0.990636065;9.994E-05;0.0513
+Café Hôtel Restaurant;Petit Hotel sans restaurant Luxe;Chaudière gaz;Gaz;18.2253183;20;135.0880829;0.577211061;0.221062908;0.0513
+Commerce;Grand commerce de gros;Rooftop;Electricité;31.38308756;17;82.70205257;2.672974884;0.242505596;0.0774
+Café Hôtel Restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Electrique direct;Electricité;10;13;61.59598567;0.9;0.23793638;0.0774
+Enseignement Recherche;Lycée professionnel (LP);Electrique direct performant;Electricité;12;13;63.37270396;1;9.994E-05;0.0774
+Commerce;Grand process;Electrique direct;Electricité;10;13;103.435331;0.9;0.262040503;0.0774
+Enseignement Recherche;Lycée professionnel (LP);PAC performant;Electricité;63.51598568;20;73.60684945;3.340582326;9.994E-05;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;Electrique direct;Electricité;10;13;104.7579232;0.9;0.23747157;0.0774
+Commerce;Supermarché;Chaudière fioul;Fioul;12.4125204;20;103.9497824;0.6713266;0.047678149;0.074414716
+Enseignement Recherche;Préélémentaire;Autre système centralisé performant;Autres;25.75305487;25;96.11651225;0.941319299;9.994E-05;0.015468227
+Enseignement Recherche;Préélémentaire;Autre système centralisé performant;Urbain;28.53589108;25;90.16098565;1.081655775;9.994E-05;0.0616
+Enseignement Recherche;Préélémentaire;Chaudière condensation fioul;Fioul;15.24711926;20;89.1716455;0.760180594;9.994E-05;0.074414716
+Enseignement Recherche;Préélémentaire;Chaudière condensation gaz;Gaz;11.33990593;20;87.76110641;0.986495619;9.994E-05;0.0513
+Café Hôtel Restaurant;Grand restaurant traditionnel;Chaudière fioul;Fioul;23.21165171;20;111.400692;0.525148974;0.038688561;0.074414716
+Enseignement Recherche;R&D en sciences humaines et sociales;Autre système centralisé;Urbain;18.01633643;25;84.64884778;0.916004463;0.194527501;0.0616
+Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;Electrique direct;Electricité;10;13;64.14669548;0.9;0.229205064;0.0774
+Enseignement Recherche;Préélémentaire;Electrique direct performant;Electricité;12;13;83.99439414;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;Electrique direct;Electricité;10;13;103.9996378;0.9;0.229301028;0.0774
+Enseignement Recherche;Préélémentaire;PAC performant;Electricité;74.83256337;20;89.74465796;3.340582326;9.994E-05;0.0774
+Sport Loisir Culture;Vestiaire et rangement;Chaudière fioul;Fioul;64.25654826;20;96.33367936;0.658767878;0.033006592;0.074414716
+Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;Electrique direct;Electricité;10;13;82.05660811;0.9;0.241736128;0.0774
+Enseignement Recherche;R&D en sciences humaines et sociales;Autre système centralisé performant;Autres;21.89081259;25;84.9870304;0.947676037;9.994E-05;0.015468227
+Enseignement Recherche;R&D en sciences humaines et sociales;Autre système centralisé performant;Urbain;22.52042054;25;84.64884778;1.099205355;9.994E-05;0.0616
+Enseignement Recherche;R&D en sciences humaines et sociales;Chaudière condensation fioul;Fioul;12.88632188;20;50.70053428;0.759390537;9.994E-05;0.074414716
+Enseignement Recherche;R&D en sciences humaines et sociales;Chaudière condensation gaz;Gaz;9.86270623;20;81.71631417;0.985731096;9.994E-05;0.0513
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Haut de gamme;Chaudière fioul;Fioul;13.57448597;20;96.39702787;0.576295955;0.039779981;0.074414716
+Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;Chaudière fioul;Fioul;24.80699373;20;151.9130937;0.526258645;0.03987525;0.074414716
+Café Hôtel Restaurant;Petit restaurant traditionnel;Chaudière gaz;Gaz;80.3104;20;132.3613223;0.593792737;0.237776154;0.0513
+Enseignement Recherche;R&D en sciences humaines et sociales;Electrique direct performant;Electricité;12;13;106.5301013;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Luxe;Electrique direct;Electricité;10;13;88.01416117;0.9;0.220910095;0.0774
+Enseignement Recherche;R&D en sciences humaines et sociales;PAC performant;Electricité;54.75407494;20;93.51636003;3.199403721;9.994E-05;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;Electrique direct;Electricité;10;13;60.15011519;0.9;0.25110738;0.0774
+Enseignement Recherche;Lycée d’enseignement général et technologique (LEGT);Chaudière fioul;Fioul;7.576046097;20;71.4765522;0.732812339;0.050676318;0.074414716
+Enseignement Recherche;R&D sciences physiques et naturelles;Autre système centralisé performant;Autres;20.16014519;25;89.06631951;0.921972632;9.994E-05;0.015468227
+Enseignement Recherche;R&D sciences physiques et naturelles;Autre système centralisé performant;Urbain;21.17380532;25;93.07964533;1.008256722;9.994E-05;0.0616
+Enseignement Recherche;R&D sciences physiques et naturelles;Chaudière condensation fioul;Fioul;12.66382749;20;61.5183014;0.759604797;9.994E-05;0.074414716
+Enseignement Recherche;R&D sciences physiques et naturelles;Chaudière condensation gaz;Gaz;10.32802487;20;80.90857722;0.985838356;9.994E-05;0.0513
+Commerce;Grand alimentaire;Chaudière fioul;Fioul;14.84774691;20;86.06037263;0.663769796;0.050684782;0.074414716
+Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;Chaudière fioul;Fioul;10.64195674;20;70.44710642;0.537119373;0.040674784;0.074414716
+Commerce;Petit commerce de gros;Chaudière fioul;Fioul;11.78874556;20;82.73587781;0.6713266;0.051059208;0.074414716
+Enseignement Recherche;R&D sciences physiques et naturelles;Electrique direct performant;Electricité;12;13;91.83756544;1;9.994E-05;0.0774
+Enseignement Recherche;Lycée professionnel (LP);Chaudière fioul;Fioul;7.633178198;20;73.21766742;0.732812339;0.051167603;0.074414716
+Enseignement Recherche;R&D sciences physiques et naturelles;PAC performant;Electricité;52.17659372;20;70.04374904;3.255810698;9.994E-05;0.0774
+Commerce;Petit boulangerie;Electrique direct;Electricité;10;13;125.4042909;0.9;0.259211549;0.0774
+Commerce;Petit poissonnerie;Chaudière fioul;Fioul;30.82737574;20;127.4466137;0.654348647;0.052117541;0.074414716
+Enseignement Recherche;université;Autre système centralisé performant;Autres;24.29576272;25;74.58554529;0.93260062;9.994E-05;0.015468227
+Enseignement Recherche;université;Autre système centralisé performant;Urbain;22.4154698;25;76.43896991;0.905985461;9.994E-05;0.0616
+Enseignement Recherche;université;Chaudière condensation fioul;Fioul;6.863262542;20;71.77212632;0.766210596;9.994E-05;0.074414716
+Enseignement Recherche;université;Chaudière condensation gaz;Gaz;5.376970292;20;72.85965007;0.992608556;9.994E-05;0.0513
+Café Hôtel Restaurant;Petit restaurant traditionnel;Autre système centralisé;Urbain;73.78;25;109.0791277;0.684807125;0.208857793;0.0616
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;Chaudière fioul;Fioul;9.987506066;20;66.66647413;0.544916427;0.041788992;0.074414716
+Commerce;Petit poissonnerie;Electrique direct;Electricité;10;13;120.2216309;0.9;0.2625244;0.0774
+Enseignement Recherche;université;Electrique direct performant;Electricité;12;13;54.31709199;1;9.994E-05;0.0774
+Santé Action Sociale;Hopital pavillonnaire;Chaudière fioul;Fioul;3.638312149;20;171.808815;0.597235057;0.052658217;0.074414716
+Enseignement Recherche;université;PAC performant;Electricité;79.76908616;20;100.3895001;3.246785581;9.994E-05;0.0774
+Commerce;Petit boulangerie;Chaudière fioul;Fioul;33.22296877;20;133.0528565;0.65478686;0.052660091;0.074414716
+Enseignement Recherche;R&D sciences physiques et naturelles;Electrique direct;Electricité;10;13;91.83756544;0.9;0.230291503;0.0774
+Habitat Communautaire;Foyers;Autre système centralisé performant;Autres;20.25838109;25;98.20311781;1.835876637;9.994E-05;0.015468227
+Habitat Communautaire;Foyers;Autre système centralisé performant;Urbain;20.94042017;25;109.2229148;2.008027332;9.994E-05;0.0616
+Habitat Communautaire;Foyers;Chaudière condensation fioul;Fioul;11.86308031;20;100.7114091;0.75331167;9.994E-05;0.074414716
+Habitat Communautaire;Foyers;Chaudière condensation gaz;Gaz;8.86414755;20;104.8689121;0.982019517;9.994E-05;0.0513
+Café Hôtel Restaurant;Grand restaurant rapide;Electrique direct;Electricité;10;13;145.2758073;0.9;0.251717369;0.0774
+Santé Action Sociale;Centre accueil;Chaudière fioul;Fioul;9.553037086;20;92.93767523;0.593994728;0.053916647;0.074414716
+Commerce;Petit process;Electrique direct;Electricité;10;13;109.809274;0.9;0.28514026;0.0774
+Habitat Communautaire;Foyers;Electrique direct performant;Electricité;12;13;97.82475324;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;Chaudière fioul;Fioul;10.51690493;20;101.4015903;0.527817078;0.043500762;0.074414716
+Habitat Communautaire;Foyers;PAC performant;Electricité;55.52020905;20;102.4536283;3.397956279;9.994E-05;0.0774
+Café Hôtel Restaurant;Grand restaurant traditionnel;Electrique direct;Electricité;10;13;92.52079242;0.9;0.256329305;0.0774
+Café Hôtel Restaurant;Petit restaurant rapide;Electrique direct;Electricité;10;13;107.2738074;0.9;0.246622306;0.0774
+Habitat Communautaire;Maison de pré-retraite;Autre système centralisé performant;Autres;20.6544197;25;86.97372491;1.883284053;9.994E-05;0.015468227
+Habitat Communautaire;Maison de pré-retraite;Autre système centralisé performant;Urbain;19.79596971;25;107.9612959;2.05408376;9.994E-05;0.0616
+Habitat Communautaire;Maison de pré-retraite;Chaudière condensation fioul;Fioul;12.68618934;20;95.8450232;0.70899045;9.994E-05;0.074414716
+Habitat Communautaire;Maison de pré-retraite;Chaudière condensation gaz;Gaz;9.046183986;20;97.60492409;0.909550247;9.994E-05;0.0513
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;Electrique direct;Electricité;10;13;105.2512625;0.9;0.244300032;0.0774
+Sport Loisir Culture;Immeuble péri urbain;DRV;Electricité;12.67330203;17;127.7357053;2.276943946;0.276041085;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;Electrique direct;Electricité;10;13;93.08145077;0.9;0.271113193;0.0774
+Habitat Communautaire;Maison de pré-retraite;Electrique direct performant;Electricité;12;13;90.35449164;1;9.994E-05;0.0774
+Commerce;Petit brico;Electrique direct;Electricité;10;13;83.32914275;0.9;0.292975226;0.0774
+Habitat Communautaire;Maison de pré-retraite;PAC performant;Electricité;58.09051307;20;92.86089417;2.668658392;9.994E-05;0.0774
+Sport Loisir Culture;Immeuble péri urbain;Chaudière fioul;Fioul;9.630360044;20;135.6153913;0.509001759;0.055671419;0.074414716
+Sport Loisir Culture;Immeuble péri urbain;Chaudière gaz;Gaz;6.773352871;20;117.1284735;0.672328875;0.278384846;0.0513
+Habitat Communautaire;Maison retraite médicalisée;Autre système centralisé performant;Autres;18.66232962;25;80.2693904;1.83922032;9.994E-05;0.015468227
+Habitat Communautaire;Maison retraite médicalisée;Autre système centralisé performant;Urbain;17.49778095;25;91.95242209;1.983643092;9.994E-05;0.0616
+Habitat Communautaire;Maison retraite médicalisée;Chaudière condensation fioul;Fioul;8.322621447;20;88.14047505;0.704042145;9.994E-05;0.074414716
+Habitat Communautaire;Maison retraite médicalisée;Chaudière condensation gaz;Gaz;6.002423737;20;86.54493563;0.898122668;9.994E-05;0.0513
+Sport Loisir Culture;Grand bar café tabac;Electrique direct;Electricité;10;13;93.76280936;0.9;0.275286928;0.0774
+Santé Action Sociale;Garderie;Chaudière fioul;Fioul;8.001604296;20;88.7035867;0.593443481;0.055724125;0.074414716
+Café Hôtel Restaurant;Petit restaurant rapide;Chaudière gaz;Gaz;80.3104;20;132.7414795;0.593795146;0.25082377;0.0513
+Habitat Communautaire;Maison retraite médicalisée;Electrique direct performant;Electricité;12;13;85.30685793;1;9.994E-05;0.0774
+Sport Loisir Culture;Petite salle multisport;Tube radiant;Gaz;10;25;227.0185547;0.8;0.243333273;0.0513
+Habitat Communautaire;Maison retraite médicalisée;PAC performant;Electricité;53.7619562;20;90.86124669;2.536578557;9.994E-05;0.0774
+Sport Loisir Culture;Grand cinéma;Chaudière fioul;Fioul;11.43557067;20;55.49597076;0.681529751;0.03764104;0.074414716
+Commerce;Hypermarché;Chaudière fioul;Fioul;8.678969199;20;113.0967669;0.6713266;0.056582757;0.074414716
+Habitat Communautaire;Résidence universitaire;Autre système centralisé performant;Autres;18.08401428;25;91.2666177;1.81918681;9.994E-05;0.015468227
+Habitat Communautaire;Résidence universitaire;Autre système centralisé performant;Urbain;15.98985586;25;84.38634594;1.960118782;9.994E-05;0.0616
+Habitat Communautaire;Résidence universitaire;Chaudière condensation fioul;Fioul;7.291512052;20;78.33211725;0.75642283;9.994E-05;0.074414716
+Habitat Communautaire;Résidence universitaire;Chaudière condensation gaz;Gaz;5.526602078;20;79.85987813;0.985134313;9.994E-05;0.0513
+Commerce;Grand commerce de gros;Chaudière fioul;Fioul;8.040761725;20;83.82581539;0.6713266;0.056642238;0.074414716
+Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;Chaudière gaz;Gaz;21.66835707;20;199.7506386;0.603118029;0.256551152;0.0513
+Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;Electrique direct;Electricité;10;13;149.7998112;0.9;0.282548298;0.0774
+Habitat Communautaire;Résidence universitaire;Electrique direct performant;Electricité;12;13;80.09658519;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;Electrique direct;Electricité;10;13;60.95631378;0.9;0.26933018;0.0774
+Habitat Communautaire;Résidence universitaire;PAC performant;Electricité;48.13684465;20;82.94393767;3.397956279;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit restaurant traditionnel;Electrique direct;Electricité;10;13;107.2100363;0.9;0.271222874;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;Chaudière fioul;Fioul;18.04384554;20;133.4210496;0.52309827;0.047207591;0.074414716
+Habitat Communautaire;Résidentiel;Autre système centralisé performant;Autres;31.0002628;25;87.78349655;1.900236086;9.994E-05;0.015468227
+Habitat Communautaire;Résidentiel;Autre système centralisé performant;Urbain;30.99073415;25;91.84296586;1.970155108;9.994E-05;0.0616
+Habitat Communautaire;Résidentiel;Chaudière condensation fioul;Fioul;33.46266667;20;88.1852053;0.751417743;9.994E-05;0.074414716
+Habitat Communautaire;Résidentiel;Chaudière condensation gaz;Gaz;33.46266667;20;88.81891495;0.980154422;9.994E-05;0.0513
+Santé Action Sociale;Hopital maison;Chaudière fioul;Fioul;2.889285672;20;115.7765163;0.596465634;0.059194852;0.074414716
+Sport Loisir Culture;Musée;Autre système centralisé;Urbain;31.74221105;25;91.97528283;2.383207289;0.236772807;0.0616
+Enseignement Recherche;Cantine élémentaire;Autre système centralisé;Urbain;46.46793694;25;289.7330699;0.904352629;0.237004319;0.0616
+Habitat Communautaire;Résidentiel;Electrique direct performant;Electricité;12;13;87.67640216;1;9.994E-05;0.0774
+Habitat Communautaire;Maison de pré-retraite;Chaudière fioul;Fioul;10.14895147;20;95.8450232;0.585982552;0.059386545;0.074414716
+Habitat Communautaire;Résidentiel;PAC performant;Electricité;52.95381575;20;88.7599324;3.397956279;9.994E-05;0.0774
+Commerce;Petit mode;Chaudière fioul;Fioul;24.71089231;20;84.33495441;0.651787465;0.059401223;0.074414716
+Sport Loisir Culture;Salle non spécialisée;Chaudière gaz;Gaz;23.85337631;20;97.79201288;0.62825222;0.259813324;0.0513
+Santé Action Sociale;Cabinet médical;Autre système centralisé performant;Autres;13.60880772;25;79.20364663;0.876113209;9.994E-05;0.015468227
+Santé Action Sociale;Cabinet médical;Autre système centralisé performant;Urbain;14.99952344;25;79.52850311;0.865628003;9.994E-05;0.0616
+Santé Action Sociale;Cabinet médical;Chaudière condensation fioul;Fioul;8.028246133;20;71.83230301;0.764099764;9.994E-05;0.074414716
+Santé Action Sociale;Cabinet médical;Chaudière condensation gaz;Gaz;5.974702838;20;70.71834492;0.98996504;9.994E-05;0.0513
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;Electrique direct;Electricité;10;13;113.2011997;0.9;0.243293579;0.0774
+Commerce;Petit librairie;Chaudière fioul;Fioul;24.71089231;20;85.19740748;0.651799779;0.06038128;0.074414716
+Habitat Communautaire;Résidence universitaire;Chaudière fioul;Fioul;5.833209642;20;78.33211725;0.595090487;0.06076779;0.074414716
+Santé Action Sociale;Cabinet médical;Electrique direct performant;Electricité;12;13;69.22774144;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;Chaudière fioul;Fioul;28.46515402;20;181.9506864;0.516455072;0.048616395;0.074414716
+Santé Action Sociale;Cabinet médical;PAC performant;Electricité;34.17197491;20;71.74007621;3.397956279;9.994E-05;0.0774
+Santé Action Sociale;Hopital bloc;Chaudière fioul;Fioul;2.281512497;20;123.1519575;0.596593723;0.060794798;0.074414716
+Bureaux Administration;plateau large bureaux cloisonnés;PAC;Electricité;46.51559038;20;94.54365804;2.831630233;0.278617657;0.0774
+Santé Action Sociale;Centre accueil;Autre système centralisé performant;Autres;19.16598291;25;94.73295988;0.868052906;9.994E-05;0.015468227
+Santé Action Sociale;Centre accueil;Autre système centralisé performant;Urbain;20.18637625;25;99.643201;0.856786362;9.994E-05;0.0616
+Santé Action Sociale;Centre accueil;Chaudière condensation fioul;Fioul;11.94129636;20;92.93767523;0.761213749;9.994E-05;0.074414716
+Santé Action Sociale;Centre accueil;Chaudière condensation gaz;Gaz;8.47459303;20;92.56418933;0.987107086;9.994E-05;0.0513
+Bureaux Administration;immeuble peri urbain;Electrique direct;Electricité;10;13;150.0533578;0.9;0.279490134;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;Chaudière fioul;Fioul;11.80076681;20;74.87636767;0.51816735;0.048849082;0.074414716
+Enseignement Recherche;Collège;Chaudière fioul;Fioul;7.525778657;20;67.25869023;0.732812339;0.061876117;0.074414716
+Santé Action Sociale;Centre accueil;Electrique direct performant;Electricité;12;13;84.5692177;1;9.994E-05;0.0774
+Bureaux Administration;immeuble rénové;Electrique direct;Electricité;10;13;114.9262151;0.9;0.281710788;0.0774
+Santé Action Sociale;Centre accueil;PAC performant;Electricité;52.18505817;20;91.01388358;3.397956279;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel sans restaurant Haut de gamme;Electrique direct;Electricité;10;13;135.4433372;0.9;0.274790615;0.0774
+Sport Loisir Culture;Salle non spécialisée;Tube radiant;Gaz;10;25;118.0017109;0.8;0.270882595;0.0513
+Santé Action Sociale;Garderie;Autre système centralisé performant;Autres;16.09601008;25;95.65863979;0.87094585;9.994E-05;0.015468227
+Santé Action Sociale;Garderie;Autre système centralisé performant;Urbain;16.23234383;25;91.58374649;0.882276702;9.994E-05;0.0616
+Santé Action Sociale;Garderie;Chaudière condensation fioul;Fioul;10.00200537;20;88.7035867;0.760956568;9.994E-05;0.074414716
+Santé Action Sociale;Garderie;Chaudière condensation gaz;Gaz;7.174311054;20;88.13130976;0.986854796;9.994E-05;0.0513
+Café Hôtel Restaurant;Petit Hotel avec restaurant Bas de gamme;Chaudière fioul;Fioul;30.48325542;20;197.1354542;0.514991451;0.049889548;0.074414716
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;Chaudière gaz;Gaz;10.69027384;20;114.7696798;0.61530598;0.301362452;0.0513
+Habitat Communautaire;Résidentiel;Chaudière fioul;Fioul;26.77013333;20;88.1852053;0.58146532;0.063000487;0.074414716
+Santé Action Sociale;Garderie;Electrique direct performant;Electricité;12;13;81.028829;1;9.994E-05;0.0774
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Luxe;Chaudière fioul;Fioul;14.51919857;20;113.3289058;0.527579063;0.050549323;0.074414716
+Santé Action Sociale;Garderie;PAC performant;Electricité;42.07539757;20;88.45952898;3.397956279;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel sans restaurant Luxe;Electrique direct;Electricité;10;13;118.6830583;0.9;0.288272046;0.0774
+Enseignement Recherche;R&D sciences physiques et naturelles;Autre système centralisé;Urbain;16.93904425;25;93.07964533;0.840213935;0.254527575;0.0616
+Santé Action Sociale;Hopital bloc;Autre système centralisé performant;Autres;13.60236911;25;125.6743306;0.910848349;9.994E-05;0.015468227
+Santé Action Sociale;Hopital bloc;Autre système centralisé performant;Urbain;13.44188788;25;136.0684253;0.936211011;9.994E-05;0.0616
+Santé Action Sociale;Hopital bloc;Chaudière condensation fioul;Fioul;2.851890622;20;123.1519575;0.744777473;9.994E-05;0.074414716
+Santé Action Sociale;Hopital bloc;Chaudière condensation gaz;Gaz;2.055031348;20;121.3969198;0.954919;9.994E-05;0.0513
+Sport Loisir Culture;Petite salle de spectacle;Chaudière gaz;Gaz;16.28095492;20;233.3796442;0.641470108;0.296248677;0.0513
+Bureaux Administration;plateau large bureau paysagés;PAC;Electricité;42.62710204;20;72.36895338;2.831630233;0.292234273;0.0774
+Café Hôtel Restaurant;Grand Hotel sans restaurant Haut de gamme;Chaudière gaz;Gaz;7.936931324;20;78.16638102;0.649060634;0.295204162;0.0513
+Santé Action Sociale;Hopital bloc;Electrique direct performant;Electricité;12;13;107.8303606;1;9.994E-05;0.0774
+Commerce;Complexe brico;Chaudière fioul;Fioul;9.441084415;20;55.63503076;0.6713266;0.064845234;0.074414716
+Santé Action Sociale;Hopital bloc;PAC performant;Electricité;38.30426284;20;121.9879316;2.973213543;9.994E-05;0.0774
+Café Hôtel Restaurant;Petit Hotel sans restaurant Bas de gamme;Electrique direct;Electricité;10;13;169.0880913;0.9;0.284020424;0.0774
+Café Hôtel Restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Chaudière fioul;Fioul;13.77730347;20;79.54424802;0.52017675;0.051973372;0.074414716
+Santé Action Sociale;Hopital maison;Autre système centralisé performant;Autres;16.48579484;25;115.6542678;0.864702783;9.994E-05;0.015468227
+Santé Action Sociale;Hopital maison;Autre système centralisé performant;Urbain;16.16331289;25;123.9303494;0.877600409;9.994E-05;0.0616
+Santé Action Sociale;Hopital maison;Chaudière condensation fioul;Fioul;3.61160709;20;115.7765163;0.743589258;9.994E-05;0.074414716
+Santé Action Sociale;Hopital maison;Chaudière condensation gaz;Gaz;2.732925476;20;117.7484371;0.95361361;9.994E-05;0.0513
+Café Hôtel Restaurant;Petit restaurant rapide;Autre système centralisé;Urbain;73.78;25;108.8436453;0.679152613;0.261774047;0.0616
+Sport Loisir Culture;Grand bar café tabac;Chaudière fioul;Fioul;14.94384136;20;103.4201999;0.524528175;0.052428701;0.074414716
+Commerce;Grand Mode;Chaudière fioul;Fioul;14.50480581;20;74.52227668;0.670002752;0.066632646;0.074414716
+Santé Action Sociale;Hopital maison;Electrique direct performant;Electricité;12;13;111.5095122;1;9.994E-05;0.0774
+Enseignement Recherche;Internat LP;Autre système centralisé;Urbain;15.18981431;25;125.9197758;0.869124338;0.266836208;0.0616
+Santé Action Sociale;Hopital maison;PAC performant;Electricité;45.81962406;20;119.3938995;2.970643461;9.994E-05;0.0774
+Commerce;Petit poissonnerie;Chaudière gaz;Gaz;24.71089231;20;143.8560897;0.742244797;0.319993253;0.0513
+Bureaux Administration;plateau mince;PAC;Electricité;55.58701785;20;105.1961592;2.831630233;0.297605917;0.0774
+Santé Action Sociale;Hopital pavillonnaire;Autre système centralisé performant;Autres;22.85490207;25;178.1425156;0.882460204;9.994E-05;0.015468227
+Santé Action Sociale;Hopital pavillonnaire;Autre système centralisé performant;Urbain;22.80415658;25;173.7150879;0.89583506;9.994E-05;0.0616
+Santé Action Sociale;Hopital pavillonnaire;Chaudière condensation fioul;Fioul;4.547890186;20;171.808815;0.746685683;9.994E-05;0.074414716
+Santé Action Sociale;Hopital pavillonnaire;Chaudière condensation gaz;Gaz;3.518502557;20;174.5063771;0.958722249;9.994E-05;0.0513
+Café Hôtel Restaurant;Grand Hotel avec restaurant Bas de gamme;Chaudière gaz;Gaz;8.601282689;20;74.98391021;0.605900422;0.32022312;0.0513
+Commerce;Petit process;Chaudière fioul;Fioul;24.71089231;20;111.5555006;0.652218457;0.068171947;0.074414716
+Enseignement Recherche;Cantine préélémentaire;Chaudière fioul;Fioul;29.04805768;20;263.9161864;0.559301437;0.068220174;0.074414716
+Santé Action Sociale;Hopital pavillonnaire;Electrique direct performant;Electricité;12;13;175.5440479;1;9.994E-05;0.0774
+Sport Loisir Culture;Petit cinéma;Chaudière gaz;Gaz;16.59091718;20;219.6782114;0.640209262;0.321033755;0.0513
+Santé Action Sociale;Hopital pavillonnaire;PAC performant;Electricité;60.47829663;20;175.6655334;3.011226162;9.994E-05;0.0774
+Commerce;Petit boulangerie;Chaudière gaz;Gaz;24.75540871;20;146.5961653;0.742698247;0.328326905;0.0513
+Commerce;ZAC Mode;Chaudière fioul;Fioul;16.89832875;20;102.96474;0.6713266;0.069086602;0.074414716
+Sport Loisir Culture;Grand bar café tabac;Autre système centralisé performant;Autres;25.47087017;25;99.95088001;1.014318348;9.993E-05;0.015468227
+Sport Loisir Culture;Grand bar café tabac;Autre système centralisé performant;Urbain;25.72302812;25;112.7090223;1.100261569;9.993E-05;0.0616
+Sport Loisir Culture;Grand bar café tabac;Chaudière condensation fioul;Fioul;18.6798017;20;103.4201999;0.754143823;9.993E-05;0.074414716
+Sport Loisir Culture;Grand bar café tabac;Chaudière condensation gaz;Gaz;13.30731502;20;104.7006386;0.981730013;9.993E-05;0.0513
+Commerce;Grand brico;Chaudière fioul;Fioul;20.9951458;20;112.9546343;0.6713266;0.069806677;0.074414716
+Sport Loisir Culture;Petite salle de spectacle;Chaudière fioul;Fioul;24.59008874;20;130.932736;0.679217655;0.039879362;0.074414716
+Sport Loisir Culture;Grand cinéma;Chaudière gaz;Gaz;8.275506154;20;72.20674702;0.663776736;0.317634971;0.0513
+Sport Loisir Culture;Grand bar café tabac;Electrique direct performant;Electricité;12;13;93.76280936;1;9.993E-05;0.0774
+Enseignement Recherche;Internat college;Chaudière gaz;Gaz;4.56418045;20;89.68316842;0.84927826;0.321366519;0.0513
+Sport Loisir Culture;Grand bar café tabac;PAC performant;Electricité;14.28249991;20;105.5145755;3.406336744;9.993E-05;0.0774
+Café Hôtel Restaurant;Grande cantine;Chaudière fioul;Fioul;22.54249572;20;86.09980624;0.524199696;0.056529008;0.074414716
+Sport Loisir Culture;Grand bar café tabac;Rooftop performant;Electricité;13.30574;17;100.1295657;3.336819668;9.993E-05;0.0774
+Enseignement Recherche;Cantine LP;Autre système centralisé;Urbain;42.38647374;25;320.1682157;0.898396114;0.283409589;0.0616
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Luxe;Chaudière gaz;Gaz;10.76887852;20;129.2606243;0.620538584;0.317727123;0.0513
+Sport Loisir Culture;Grand cinéma;Autre système centralisé performant;Autres;35.85906392;25;71.2116506;3.177057777;9.99201E-05;0.015468227
+Sport Loisir Culture;Grand cinéma;Autre système centralisé performant;Urbain;31.45324428;25;74.38088994;2.664907011;9.99201E-05;0.0616
+Enseignement Recherche;Cantine préélémentaire;Autre système centralisé;Urbain;46.94301199;25;291.8295336;0.91324411;0.284228775;0.0616
+Sport Loisir Culture;Grand cinéma;Cassette rayonnante performant;Electricité;12;10;66.03033194;1;9.99201E-05;0.0774
+Sport Loisir Culture;Grand cinéma;Chaudière condensation fioul;Fioul;14.29446334;20;55.49597076;0.757256696;9.99201E-05;0.074414716
+Sport Loisir Culture;Grand cinéma;Chaudière condensation gaz;Gaz;10.34438269;20;72.20674702;0.981239302;9.99201E-05;0.0513
+Commerce;Petit mode;Chaudière gaz;Gaz;24.71089231;20;93.11608369;0.739689476;0.345070467;0.0513
+Commerce;Grand librairie;Chaudière fioul;Fioul;14.48962541;20;74.06698981;0.669987218;0.071932618;0.074414716
+Commerce;Petit brico;Chaudière fioul;Fioul;24.71089231;20;85.65777149;0.651744131;0.071978905;0.074414716
+Sport Loisir Culture;Grand cinéma;Electrique direct performant;Electricité;12;13;59.0797914;1;9.99201E-05;0.0774
+Café Hôtel Restaurant;Petite cantine;Chaudière fioul;Fioul;80.3104;20;124.7804383;0.505489344;0.057580941;0.074414716
+Sport Loisir Culture;Grand cinéma;PAC performant;Electricité;25.67510819;20;68.50063521;3.411493953;9.99201E-05;0.0774
+Sport Loisir Culture;Petit cinéma;Chaudière fioul;Fioul;24.46580115;20;133.090995;0.677479496;0.048135952;0.074414716
+Sport Loisir Culture;Grand cinéma;Rooftop performant;Electricité;4.594312954;17;63.4958172;3.341871628;9.99201E-05;0.0774
+Commerce;Grand process;Chaudière fioul;Fioul;15.18313579;20;99.85361829;0.67040623;0.073228692;0.074414716
+Enseignement Recherche;Internat college;Autre système centralisé;Urbain;13.53990423;25;116.1582489;0.813699538;0.295674909;0.0616
+Sport Loisir Culture;Grande salle de spectacle;Autre système centralisé performant;Autres;43.56621239;25;57.63321517;3.550587188;9.99101E-05;0.015468227
+Sport Loisir Culture;Grande salle de spectacle;Autre système centralisé performant;Urbain;33.3126565;25;52.36329754;2.744133344;9.99101E-05;0.0616
+Enseignement Recherche;Cantine collége;Autre système centralisé;Urbain;42.06131732;25;319.7526914;0.842576102;0.298244368;0.0616
+Sport Loisir Culture;Grande salle de spectacle;Cassette rayonnante performant;Electricité;12;10;45.14698117;1;9.99101E-05;0.0774
+Sport Loisir Culture;Grande salle de spectacle;Chaudière condensation fioul;Fioul;6.077880142;20;36.06145348;0.757182985;9.99101E-05;0.074414716
+Sport Loisir Culture;Grande salle de spectacle;Chaudière condensation gaz;Gaz;4.583816519;20;48.34529728;0.978031098;9.99101E-05;0.0513
+Café Hôtel Restaurant;Grand bar café tabac;Chaudière fioul;Fioul;16.84121753;20;92.67101513;0.524491824;0.059780475;0.074414716
+Sport Loisir Culture;Musée;PAC;Electricité;54.2067027;20;90.18916944;2.842911628;0.332353052;0.0774
+Enseignement Recherche;Cantine collége;Chaudière gaz;Gaz;19.9132358;20;243.3167195;0.84803237;0.331213364;0.0513
+Sport Loisir Culture;Grande salle de spectacle;Electrique direct performant;Electricité;12;13;39.23363764;1;9.99101E-05;0.0774
+Café Hôtel Restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Chaudière gaz;Gaz;10.1471411;20;98.15093355;0.664516373;0.352563145;0.0513
+Sport Loisir Culture;Grande salle de spectacle;PAC performant;Electricité;32.38404524;20;45.24078443;3.361855814;9.99101E-05;0.0774
+Sport Loisir Culture;Grand bar café tabac;Chaudière gaz;Gaz;10.64585202;20;104.7006386;0.61240282;0.353604753;0.0513
+Sport Loisir Culture;Grande salle de spectacle;Rooftop performant;Electricité;4.458695125;17;40.72984762;3.293246512;9.99101E-05;0.0774
+Enseignement Recherche;Préélémentaire;Chaudière fioul;Fioul;12.19769541;20;89.1716455;0.557425846;0.075484913;0.074414716
+Sport Loisir Culture;Grande salle de spectacle;Tube radiant performant;Gaz;12;25;66.84453797;1;9.99101E-05;0.0513
+Bureaux Administration;immeuble résidentiel;Electrique direct;Electricité;10;13;159.7971816;0.9;0.336839132;0.0774
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Haut de gamme;Chaudière gaz;Gaz;10.02437255;20;97.76653936;0.664330809;0.343364476;0.0513
+Sport Loisir Culture;Grande salle multisport;Autre système centralisé performant;Autres;24.67701271;25;32.136535;2.129516008;9.99101E-05;0.015468227
+Sport Loisir Culture;Grande salle multisport;Autre système centralisé performant;Urbain;22.8526093;25;21.98064594;2.974461225;9.99101E-05;0.0616
+Sport Loisir Culture;Grande salle de spectacle;Chaudière fioul;Fioul;4.862304114;20;36.06145348;0.679115021;0.043605484;0.074414716
+Sport Loisir Culture;Grande salle multisport;Cassette rayonnante performant;Electricité;12;10;23.15996621;1;9.99101E-05;0.0774
+Sport Loisir Culture;Grande salle multisport;Chaudière condensation fioul;Fioul;11.13852548;20;38.9264275;0.755633719;9.99101E-05;0.074414716
+Sport Loisir Culture;Grande salle multisport;Chaudière condensation gaz;Gaz;6.628935871;20;38.95466126;0.975085112;9.99101E-05;0.0513
+Commerce;Grand process;Chaudière gaz;Gaz;11.19716382;20;100.8616688;0.727660561;0.382140273;0.0513
+Enseignement Recherche;Cantine élémentaire;Chaudière gaz;Gaz;21.2484596;20;230.1993086;0.875429888;0.392459638;0.0513
+Sport Loisir Culture;Grande salle de spectacle;Chaudière gaz;Gaz;3.667053216;20;48.34529728;0.649353504;0.357636174;0.0513
+Sport Loisir Culture;Grande salle multisport;Electrique direct performant;Electricité;12;13;23.84503771;1;9.99101E-05;0.0774
+Habitat Communautaire;Maison retraite médicalisée;Chaudière fioul;Fioul;6.658097157;20;88.14047505;0.589331152;0.078812103;0.074414716
+Sport Loisir Culture;Grande salle multisport;PAC performant;Electricité;15.67830213;20;22.6233581;3.406336744;9.99101E-05;0.0774
+Café Hôtel Restaurant;Grand Hotel avec restaurant Luxe;Chaudière gaz;Gaz;7.827614578;20;100.7375776;0.615548801;0.360549698;0.0513
+Sport Loisir Culture;Grande salle multisport;Rooftop performant;Electricité;3.274381986;17;21.64719816;3.336819668;9.99101E-05;0.0774
+Commerce;Petit brico;Chaudière gaz;Gaz;24.71089231;20;91.73773485;0.708986199;0.393040239;0.0513
+Sport Loisir Culture;Grande salle multisport;Tube radiant performant;Gaz;12;25;35.10035502;1;9.99101E-05;0.0513
+Commerce;Petit process;Chaudière gaz;Gaz;24.71089231;20;120.2457653;0.709482738;0.389780456;0.0513
+Café Hôtel Restaurant;Petit Hotel sans restaurant Haut de gamme;Chaudière gaz;Gaz;20.14702145;20;180.7251656;0.604630993;0.35249903;0.0513
+Sport Loisir Culture;Immeuble péri urbain;Autre système centralisé performant;Autres;20.98632818;25;113.5445298;0.955568222;9.994E-05;0.015468227
+Sport Loisir Culture;Immeuble péri urbain;Autre système centralisé performant;Urbain;18.53338381;25;117.2347395;0.971485262;9.994E-05;0.0616
+Sport Loisir Culture;Immeuble péri urbain;Chaudière condensation fioul;Fioul;12.03795006;20;135.6153913;0.720355495;9.994E-05;0.074414716
+Sport Loisir Culture;Immeuble péri urbain;Chaudière condensation gaz;Gaz;8.466691089;20;117.1284735;0.951135783;9.994E-05;0.0513
+Commerce;Grand librairie;Chaudière gaz;Gaz;10.66569409;20;75.718178;0.727228812;0.399486101;0.0513
+Café Hôtel Restaurant;Hotel d'affaire avec restaurant Luxe;Chaudière gaz;Gaz;7.442217233;20;63.83263295;0.627699346;0.369821101;0.0513
+Commerce;Petit librairie;Chaudière gaz;Gaz;24.71089231;20;93.30224842;0.723341004;0.390978347;0.0513
+Sport Loisir Culture;Immeuble péri urbain;DRV performant;Electricité;15.84162753;17;127.7357053;3.177309767;9.994E-05;0.0774
+Enseignement Recherche;Cantine LEGT;Autre système centralisé;Urbain;43.72181512;25;326.4995468;0.84168716;0.331399241;0.0616
+Sport Loisir Culture;Immeuble péri urbain;Electrique direct performant;Electricité;12;13;120.1538957;1;9.994E-05;0.0774
+Enseignement Recherche;Cantine élémentaire;Chaudière fioul;Fioul;29.10904681;20;259.5511816;0.559307348;0.083027466;0.074414716
+Habitat Communautaire;Foyers;Chaudière fioul;Fioul;9.490464251;20;100.7114091;0.591581335;0.083442926;0.074414716
+Sport Loisir Culture;Musée;Autre système centralisé performant;Autres;32.66628167;25;91.30996185;2.811703399;9.993E-05;0.015468227
+Sport Loisir Culture;Musée;Autre système centralisé performant;Urbain;39.67776382;25;91.97528283;3.063612393;9.993E-05;0.0616
+Enseignement Recherche;Internat LEGT;Autre système centralisé;Urbain;17.09535519;25;132.5168167;0.894260828;0.336230769;0.0616
+Sport Loisir Culture;Musée;Cassette rayonnante performant;Electricité;12;10;110.7316843;1;9.993E-05;0.0774
+Sport Loisir Culture;Musée;Chaudière condensation fioul;Fioul;16.64965099;20;118.9533447;0.751336894;9.993E-05;0.074414716
+Sport Loisir Culture;Musée;Chaudière condensation gaz;Gaz;9.772422442;20;110.2128278;0.975772506;9.993E-05;0.0513
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Haut de gamme;Chaudière gaz;Gaz;13.11806138;20;130.0436769;0.610823001;0.387620946;0.0513
+Café Hôtel Restaurant;Grand Hotel sans restaurant Luxe;Chaudière gaz;Gaz;7.921568511;20;83.95202788;0.606819682;0.365390285;0.0513
+Café Hôtel Restaurant;Grand Hotel avec restaurant Haut de gamme;Chaudière gaz;Gaz;7.801300404;20;70.86595833;0.607565553;0.390820693;0.0513
+Sport Loisir Culture;Musée;Electrique direct performant;Electricité;12;13;111.4630206;1;9.993E-05;0.0774
+Commerce;Grand brico;Chaudière gaz;Gaz;14.96086246;20;114.4173888;0.728585644;0.424930428;0.0513
+Sport Loisir Culture;Musée;PAC performant;Electricité;67.75837837;20;90.18916944;3.411493953;9.993E-05;0.0774
+Commerce;Grand Mode;Chaudière gaz;Gaz;10.64991112;20;77.09330194;0.72720947;0.421788096;0.0513
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Haut de gamme;Chaudière gaz;Gaz;13.16918875;20;130.0551851;0.611174024;0.379624643;0.0513
+Sport Loisir Culture;Patinoire;Autre système centralisé performant;Autres;42.12661913;25;46.45119536;2.149775138;9.99101E-05;0.015468227
+Sport Loisir Culture;Patinoire;Autre système centralisé performant;Urbain;57.73246157;25;141.8889308;2.559698836;9.99101E-05;0.0616
+Café Hôtel Restaurant;Grand Hotel sans restaurant Bas de gamme;Chaudière gaz;Gaz;8.74991546;20;78.68620791;0.60640304;0.390893925;0.0513
+Sport Loisir Culture;Patinoire;Cassette rayonnante performant;Electricité;12;10;20.04192312;1;9.99101E-05;0.0774
+Sport Loisir Culture;Patinoire;Chaudière condensation fioul;Fioul;15.49104505;20;56.20226841;0.755852758;9.99101E-05;0.074414716
+Sport Loisir Culture;Patinoire;Chaudière condensation gaz;Gaz;10.6644885;20;46.55850563;0.974680009;9.99101E-05;0.0513
+Enseignement Recherche;Elémentaire;Chaudière fioul;Fioul;12.23526744;20;87.88804812;0.557435454;0.090365724;0.074414716
+Enseignement Recherche;Cantine LP;Chaudière gaz;Gaz;20.04501069;20;264.5290114;0.848050405;0.394626879;0.0513
+Enseignement Recherche;Internat LEGT;Chaudière gaz;Gaz;5.067876831;20;110.7697032;0.84927826;0.390770837;0.0513
+Sport Loisir Culture;Patinoire;Electrique direct performant;Electricité;12;13;23.59391195;1;9.99101E-05;0.0774
+Commerce;Complexe brico;Chaudière gaz;Gaz;7.039504737;20;57.31892665;0.728585644;0.436264127;0.0513
+Sport Loisir Culture;Patinoire;PAC performant;Electricité;28.87449997;20;43.14784271;3.406336744;9.99101E-05;0.0774
+Commerce;Petit commerce de gros;Chaudière gaz;Gaz;8.754216285;20;83.04869933;0.728585644;0.426628386;0.0513
+Sport Loisir Culture;Patinoire;Rooftop performant;Electricité;8.468907498;17;33.29167139;3.336819668;9.99101E-05;0.0774
+Commerce;ZAC Mode;Chaudière gaz;Gaz;12.41072262;20;107.5577995;0.728585644;0.445759701;0.0513
+Sport Loisir Culture;Patinoire;Tube radiant performant;Gaz;12;25;58.54157361;1;9.99101E-05;0.0513
+Enseignement Recherche;Cantine préélémentaire;Chaudière gaz;Gaz;21.07118073;20;233.6090795;0.875407257;0.44599286;0.0513
+Café Hôtel Restaurant;Petit Hotel avec restaurant Haut de gamme;Chaudière gaz;Gaz;19.97013667;20;192.9143238;0.604187856;0.427558618;0.0513
+Sport Loisir Culture;Petit cinéma;Autre système centralisé performant;Autres;60.09560092;25;132.3110899;2.507240739;9.99201E-05;0.015468227
+Sport Loisir Culture;Petit cinéma;Autre système centralisé performant;Urbain;62.72197436;25;173.5210618;2.573486556;9.99201E-05;0.0616
+Sport Loisir Culture;Petite salle multisport;Chaudière gaz;Gaz;18.02659282;20;215.3958132;0.641502112;0.399649684;0.0513
+Sport Loisir Culture;Petit cinéma;Cassette rayonnante performant;Electricité;12;10;126.3745098;1;9.99201E-05;0.0774
+Sport Loisir Culture;Petit cinéma;Chaudière condensation fioul;Fioul;30.58225144;20;133.090995;0.750812574;9.99201E-05;0.074414716
+Sport Loisir Culture;Petit cinéma;Chaudière condensation gaz;Gaz;20.73864648;20;219.6782114;0.971104955;9.99201E-05;0.0513
+Café Hôtel Restaurant;Grand restaurant traditionnel;Chaudière gaz;Gaz;16.63730903;20;109.9002417;0.612868158;0.425535076;0.0513
+Café Hôtel Restaurant;Grand restaurant rapide;Chaudière gaz;Gaz;22.47989336;20;178.8784076;0.613422239;0.427556754;0.0513
+Commerce;Entrepôt;Chaudière fioul;Fioul;6.832327918;20;61.88186616;0.6713266;0.09778541;0.074414716
+Sport Loisir Culture;Petit cinéma;Electrique direct performant;Electricité;12;13;129.4706259;1;9.99201E-05;0.0774
+Enseignement Recherche;R&D sciences physiques et naturelles;Chaudière gaz;Gaz;8.262419893;20;80.90857722;0.72676684;0.408467958;0.0513
+Sport Loisir Culture;Petit cinéma;PAC performant;Electricité;41.53603389;20;149.6509616;3.411493953;9.99201E-05;0.0774
+Bureaux Administration;immeuble peri urbain;Chaudière gaz;Gaz;8.39304822;20;151.47616;0.671181773;0.442893313;0.0513
+Sport Loisir Culture;Petit cinéma;Rooftop performant;Electricité;11.43042499;17;172.3195585;3.235780465;9.99201E-05;0.0774
+Commerce;Entrepôt;Chaudière gaz;Gaz;5.141419991;20;61.48221662;0.728585644;0.508919857;0.0513
+Enseignement Recherche;Internat LP;Chaudière gaz;Gaz;4.774144133;20;103.3946297;0.84927826;0.443703372;0.0513
+Sport Loisir Culture;Petite salle de spectacle;Autre système centralisé performant;Autres;63.68986856;25;135.6110873;2.521671098;9.99101E-05;0.015468227
+Sport Loisir Culture;Petite salle de spectacle;Autre système centralisé performant;Urbain;71.55643224;25;154.7319371;2.559329236;9.99101E-05;0.0616
+Habitat Communautaire;Foyers;Chaudière gaz;Gaz;7.09131804;20;104.8689121;0.800823741;0.498838442;0.0513
+Sport Loisir Culture;Petite salle de spectacle;Cassette rayonnante performant;Electricité;12;10;125.6384299;1;9.99101E-05;0.0774
+Sport Loisir Culture;Petite salle de spectacle;Chaudière condensation fioul;Fioul;30.73761092;20;130.932736;0.752453017;9.99101E-05;0.074414716
+Sport Loisir Culture;Petite salle de spectacle;Chaudière condensation gaz;Gaz;20.35119365;20;233.3796442;0.972516551;9.99101E-05;0.0513
+Café Hôtel Restaurant;Moyen Hotel sans restaurant Bas de gamme;Chaudière gaz;Gaz;14.61994963;20;139.7839739;0.609696501;0.422146805;0.0513
+Café Hôtel Restaurant;Petit bar café tabac;Chaudière gaz;Gaz;40.1552;20;133.8838834;0.597523753;0.450876765;0.0513
+Bureaux Administration;immeuble rénové;Chaudière gaz;Gaz;6.116024383;20;114.8398547;0.675773917;0.456391456;0.0513
+Sport Loisir Culture;Petite salle de spectacle;Electrique direct performant;Electricité;12;13;126.0826083;1;9.99101E-05;0.0774
+Commerce;Grand commerce de gros;Chaudière gaz;Gaz;6.044716532;20;83.86674549;0.728585644;0.480135091;0.0513
+Sport Loisir Culture;Petite salle de spectacle;PAC performant;Electricité;81.69428227;20;139.5483581;3.411493953;9.99101E-05;0.0774
+Bureaux Administration;plateau large bureau paysagés;Chaudière gaz;Gaz;3.117991113;20;71.78206613;0.675908648;0.462749289;0.0513
+Sport Loisir Culture;Petite salle de spectacle;Rooftop performant;Electricité;12.38184604;17;181.9742662;3.235780465;9.99101E-05;0.0774
+Bureaux Administration;plateau large bureaux cloisonnés;Chaudière gaz;Gaz;3.293934796;20;94.10594977;0.675908648;0.465833946;0.0513
+Sport Loisir Culture;Petite salle de spectacle;Tube radiant performant;Gaz;12;25;235.5109321;1;9.99101E-05;0.0513
+Café Hôtel Restaurant;Grande cantine;Chaudière gaz;Gaz;16.20910503;20;88.40320651;0.61197476;0.488010645;0.0513
+Bureaux Administration;plateau mince;Chaudière gaz;Gaz;3.659061061;20;105.5361057;0.675908648;0.465014295;0.0513
+Sport Loisir Culture;Petite salle multisport;Autre système centralisé performant;Autres;74.11601779;25;106.0527558;2.114306362;9.99101E-05;0.015468227
+Sport Loisir Culture;Petite salle multisport;Autre système centralisé performant;Urbain;76.51416041;25;118.9556333;2.522356491;9.99101E-05;0.0616
+Habitat Communautaire;Maison retraite médicalisée;Chaudière gaz;Gaz;4.80193899;20;86.54493563;0.792536302;0.524963936;0.0513
+Sport Loisir Culture;Petite salle multisport;Cassette rayonnante performant;Electricité;12;10;77.84701727;1;9.99101E-05;0.0774
+Sport Loisir Culture;Petite salle multisport;Chaudière condensation fioul;Fioul;36.86088288;20;112.2691385;0.752372057;9.99101E-05;0.074414716
+Sport Loisir Culture;Petite salle multisport;Chaudière condensation gaz;Gaz;22.53324102;20;215.3958132;0.972147214;9.99101E-05;0.0513
+Commerce;Hypermarché;Chaudière gaz;Gaz;6.513694863;20;111.5550674;0.728585644;0.505111584;0.0513
+Café Hôtel Restaurant;Petite cantine;Chaudière gaz;Gaz;80.3104;20;126.7921685;0.593241289;0.511116832;0.0513
+Enseignement Recherche;Cantine LEGT;Chaudière gaz;Gaz;20.40606595;20;277.8443156;0.848095912;0.482111314;0.0513
+Sport Loisir Culture;Petite salle multisport;Electrique direct performant;Electricité;12;13;76.46640802;1;9.99101E-05;0.0774
+Sport Loisir Culture;Patinoire;Chaudière gaz;Gaz;8.531590797;20;46.55850563;0.644266761;0.489683573;0.0513
+Sport Loisir Culture;Petite salle multisport;PAC performant;Electricité;53.61070308;20;78.65023543;3.406336744;9.99101E-05;0.0774
+Café Hôtel Restaurant;Grand bar café tabac;Chaudière gaz;Gaz;11.99982075;20;91.63378722;0.612227734;0.525865935;0.0513
+Sport Loisir Culture;Petite salle multisport;Rooftop performant;Electricité;10.94842335;17;99.83514431;3.235780465;9.99101E-05;0.0774
+Bureaux Administration;immeuble résidentiel;Chaudière gaz;Gaz;26.491595;20;169.5993244;0.660039463;0.506798995;0.0513
+Sport Loisir Culture;Petite salle multisport;Tube radiant performant;Gaz;12;25;227.0185547;1;9.99101E-05;0.0513
+Café Hôtel Restaurant;Petit Hotel avec restaurant Luxe;Chaudière gaz;Gaz;17.87543184;20;165.7015263;0.613999361;0.516207499;0.0513
+Café Hôtel Restaurant;Moyen Hotel avec restaurant Bas de gamme;Chaudière gaz;Gaz;14.45400884;20;142.7607012;0.609370656;0.518888771;0.0513
+Sport Loisir Culture;Piscine;Autre système centralisé performant;Autres;44.919224;25;48.6014636;2.146694033;9.99101E-05;0.015468227
+Sport Loisir Culture;Piscine;Autre système centralisé performant;Urbain;52.09350511;25;60.5724684;2.526791791;9.99101E-05;0.0616
+Commerce;Grand alimentaire;Chaudière gaz;Gaz;10.8854029;20;86.47517264;0.727447311;0.541782098;0.0513
+Sport Loisir Culture;Piscine;Cassette rayonnante performant;Electricité;12;10;41.41431687;1;9.99101E-05;0.0774
+Sport Loisir Culture;Piscine;Chaudière condensation fioul;Fioul;16.7492806;20;52.28431622;0.755216072;9.99101E-05;0.074414716
+Sport Loisir Culture;Piscine;Chaudière condensation gaz;Gaz;11.73346889;20;60.46053215;0.975044638;9.99101E-05;0.0513
+Santé Action Sociale;Cabinet médical;Chaudière gaz;Gaz;4.77976227;20;70.71834492;0.924122833;0.543378159;0.0513
+Commerce;Superette;Chaudière gaz;Gaz;16.11895483;20;107.3890518;0.715122252;0.530429411;0.0513
+Habitat Communautaire;Résidentiel;Chaudière gaz;Gaz;26.77013333;20;88.81891495;0.790546322;0.576151882;0.0513
+Sport Loisir Culture;Piscine;Electrique direct performant;Electricité;12;13;43.57329245;1;9.99101E-05;0.0774
+Commerce;Supermarché;Chaudière gaz;Gaz;9.226359683;20;102.5241681;0.728585644;0.571635824;0.0513
+Sport Loisir Culture;Piscine;PAC performant;Electricité;31.77409486;20;51.36624388;3.406336744;9.99101E-05;0.0774
+Sport Loisir Culture;Grande salle multisport;Chaudière gaz;Gaz;5.303148697;20;38.95466126;0.644864431;0.538338;0.0513
+Sport Loisir Culture;Piscine;Rooftop performant;Electricité;7.57369017;17;45.03726873;3.425860465;9.99101E-05;0.0774
+Enseignement Recherche;Elémentaire;Chaudière gaz;Gaz;9.007326316;20;87.05905501;0.873413768;0.616739906;0.0513
+Sport Loisir Culture;Piscine;Tube radiant performant;Gaz;12;25;86.79300588;1;9.99101E-05;0.0513
+Santé Action Sociale;Hopital bloc;Chaudière gaz;Gaz;1.644025078;20;121.3969198;0.919215454;0.589355009;0.0513
+Santé Action Sociale;Hopital maison;Chaudière gaz;Gaz;2.186340381;20;117.7484371;0.918977646;0.588660251;0.0513
+Sport Loisir Culture;Salle non spécialisée;Autre système centralisé performant;Autres;67.63571534;25;92.07316825;2.076834268;9.99201E-05;0.015468227
+Sport Loisir Culture;Salle non spécialisée;Autre système centralisé performant;Urbain;64.47113783;25;86.42467098;2.55098942;9.99201E-05;0.0616
+Santé Action Sociale;Hopital pavillonnaire;Chaudière gaz;Gaz;2.814802046;20;174.5063771;0.920892899;0.586627548;0.0513
+Sport Loisir Culture;Salle non spécialisée;Cassette rayonnante performant;Electricité;12;10;65.59763578;1;9.99201E-05;0.0774
+Sport Loisir Culture;Salle non spécialisée;Chaudière condensation fioul;Fioul;44.69129308;20;91.48158355;0.749026059;9.99201E-05;0.074414716
+Sport Loisir Culture;Salle non spécialisée;Chaudière condensation gaz;Gaz;29.81672039;20;97.79201288;0.967670956;9.99201E-05;0.0513
+Habitat Communautaire;Résidence universitaire;Chaudière gaz;Gaz;4.421281662;20;79.85987813;0.804151492;0.594914598;0.0513
+Santé Action Sociale;Garderie;Chaudière gaz;Gaz;5.739448843;20;88.13130976;0.91968534;0.593135351;0.0513
+Habitat Communautaire;Maison de pré-retraite;Chaudière gaz;Gaz;7.236947188;20;97.60492409;0.79007051;0.6086654;0.0513
+Sport Loisir Culture;Salle non spécialisée;Electrique direct performant;Electricité;12;13;64.9883637;1;9.99201E-05;0.0774
+Enseignement Recherche;R&D en sciences humaines et sociales;Chaudière gaz;Gaz;7.890164984;20;81.71631417;0.725797805;0.559172223;0.0513
+Sport Loisir Culture;Salle non spécialisée;PAC performant;Electricité;74.23521467;20;72.18363613;3.406336744;9.99201E-05;0.0774
+Santé Action Sociale;Centre accueil;Chaudière gaz;Gaz;6.779674424;20;92.56418933;0.92003453;0.618136588;0.0513
+Sport Loisir Culture;Salle non spécialisée;Tube radiant performant;Gaz;12;25;118.0017109;1;9.99201E-05;0.0513
+Enseignement Recherche;Collège;Chaudière gaz;Gaz;5.607818309;20;67.53412145;0.84927826;0.627613935;0.0513
+Enseignement Recherche;Préélémentaire;Chaudière gaz;Gaz;9.071924748;20;87.76110641;0.873436477;0.663682343;0.0513
+Sport Loisir Culture;Vestiaire et rangement;Autre système centralisé performant;Autres;101.0930614;25;100.3547873;2.294742558;9.99201E-05;0.015468227
+Sport Loisir Culture;Vestiaire et rangement;Autre système centralisé performant;Urbain;106.5123799;25;117.6022319;2.488822656;9.99201E-05;0.0616
+Enseignement Recherche;université;Chaudière gaz;Gaz;4.301576234;20;72.85965007;0.73162203;0.631435877;0.0513
+Sport Loisir Culture;Vestiaire et rangement;Cassette rayonnante performant;Electricité;12;10;88.84502938;1;9.99201E-05;0.0774
+Sport Loisir Culture;Vestiaire et rangement;Chaudière condensation fioul;Fioul;80.32068532;20;96.33367936;0.742139648;9.99201E-05;0.074414716
+Sport Loisir Culture;Vestiaire et rangement;Chaudière condensation gaz;Gaz;62.19528393;20;172.4665198;0.960914373;9.99201E-05;0.0513
+Enseignement Recherche;Lycée professionnel (LP);Chaudière gaz;Gaz;5.619082816;20;75.32045729;0.84927826;0.651123215;0.0513
+Enseignement Recherche;Lycée d’enseignement général et technologique (LEGT);Chaudière gaz;Gaz;5.678662868;20;76.15208037;0.84927826;0.660392063;0.0513
+Sport Loisir Culture;Piscine;Chaudière gaz;Gaz;9.386775113;20;60.46053215;0.644446421;0.652104316;0.0513
+Sport Loisir Culture;Vestiaire et rangement;Electrique direct performant;Electricité;12;13;94.63015122;1;9.99201E-05;0.0774
+Enseignement Recherche;école;Chaudière gaz;Gaz;8.194366847;20;74.3233328;0.73162203;0.694879544;0.0513
+Sport Loisir Culture;Vestiaire et rangement;PAC performant;Electricité;64.16180935;20;105.7692782;3.411493953;9.99201E-05;0.0774
+Café Hôtel Restaurant;Hotel d'affaire sans restaurant Luxe;Chaudière gaz;Gaz;7.434212321;20;73.14162264;0.663571928;0.99990001;0.0513
+Sport Loisir Culture;Vestiaire et rangement;Tube radiant performant;Gaz;12;25;203.3495793;1;9.99201E-05;0.0513
+Transport;nr;nr;Autres;30.6911474;20;173.6662095;1;0.041032253;0.015468227
+Transport;nr;nr;Electricité;30.6911474;20;54.98507097;1;0.328488407;0.0774
+Transport;nr;nr;Fioul;30.6911474;20;209.8621634;1;0.083967269;0.074414716
+Transport;nr;nr;Gaz;30.6911474;20;167.3457822;1;0.502523005;0.0513
+Transport;nr;nr;Urbain;30.6911474;20;172.041105;1;0.043989066;0.0616

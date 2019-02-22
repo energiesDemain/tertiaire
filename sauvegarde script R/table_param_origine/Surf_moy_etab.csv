@@ -1,0 +1,116 @@
+BRANCHE;SS_BRANCHE;BAT_TYPE;ID;SURFACE
+Bureaux Administration;Administration;immeuble peri urbain;010142;238
+Bureaux Administration;Administration;immeuble rénové;010144;352
+Bureaux Administration;Administration;plateau large bureaux cloisonnés;010184;7386
+Bureaux Administration;Bureaux;immeuble peri urbain;010242;78
+Bureaux Administration;Bureaux;immeuble rénové;010244;104
+Bureaux Administration;Bureaux;immeuble résidentiel;010245;40
+Bureaux Administration;Bureaux;plateau large bureau paysagés;010283;5598
+Bureaux Administration;Bureaux;plateau large bureaux cloisonnés;010284;6048
+Bureaux Administration;Bureaux;plateau mince;010285;5627
+Café Hôtel Restaurant;Café, cantine, traiteur;Grand bar café tabac;020416;490
+Café Hôtel Restaurant;Café, cantine, traiteur;Grande cantine;020431;499
+Café Hôtel Restaurant;Café, cantine, traiteur;Petit bar café tabac;020462;79
+Café Hôtel Restaurant;Café, cantine, traiteur;Petite cantine;020479;398
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Bas de gamme;021820;1398
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Haut de gamme;021821;2084
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Luxe;021822;3045
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Haut de gamme;021837;4853
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Luxe;021838;6594
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Bas de gamme;021853;416
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Haut de gamme;021854;956
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Luxe;021855;1463
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Bas de gamme;021867;144
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Haut de gamme;021868;367
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Luxe;021869;536
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Bas de gamme;021923;995
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Haut de gamme;021924;1544
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Luxe;021925;2400
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Haut de Gamme;021939;4038
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Luxe;021940;4368
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Bas de gamme;021956;420
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Haut de gamme;021957;775
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Luxe;021958;1236
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Bas de gamme;021970;139
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Haut de gamme;021971;284
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Luxe;021972;394
+Café Hôtel Restaurant;Restaurant;Grand restaurant rapide;022629;390
+Café Hôtel Restaurant;Restaurant;Grand restaurant traditionnel;022630;393
+Café Hôtel Restaurant;Restaurant;Petit restaurant rapide;022677;40
+Café Hôtel Restaurant;Restaurant;Petit restaurant traditionnel;022678;40
+Commerce;Commerce de détail non alimentaire;Complexe brico;030609;2676
+Commerce;Commerce de détail non alimentaire;Grand brico;030617;1062
+Commerce;Commerce de détail non alimentaire;Grand librairie;030626;860
+Commerce;Commerce de détail non alimentaire;Grand Mode;030627;621
+Commerce;Commerce de détail non alimentaire;Petit brico;030664;131
+Commerce;Commerce de détail non alimentaire;Petit librairie;030673;101
+Commerce;Commerce de détail non alimentaire;Petit mode;030674;69
+Commerce;Commerce de détail non alimentaire;ZAC Mode;030696;204
+Commerce;Commerce de gros;Grand commerce de gros;030719;6511
+Commerce;Commerce de gros;Petit commerce de gros;030766;236
+Commerce;Entrepôt;Entrepôt;031212;1488
+Commerce;Grand commerce alimentaire;Grand alimentaire;031615;1779
+Commerce;Grand commerce alimentaire;Hypermarché;031641;6373
+Commerce;Grand commerce alimentaire;Superette;031692;118
+Commerce;Grand commerce alimentaire;Supermarché;031693;1406
+Commerce;Petit commerce alimentaire;Petit boulangerie;032363;63
+Commerce;Petit commerce alimentaire;Petit librairie;032373;62
+Commerce;Petit commerce alimentaire;Petit poissonnerie;032375;63
+Commerce;Process;Grand librairie;032426;184
+Commerce;Process;Grand process;032428;1294
+Commerce;Process;Petit process;032476;83
+Enseignement Recherche;Enseignement primaire;Cantine élémentaire;040903;75
+Enseignement Recherche;Enseignement primaire;Cantine préélémentaire;040906;97
+Enseignement Recherche;Enseignement primaire;Elémentaire;040911;897
+Enseignement Recherche;Enseignement primaire;Préélémentaire;040986;1190
+Enseignement Recherche;Enseignement secondaire;Cantine collége;041002;261
+Enseignement Recherche;Enseignement secondaire;Cantine LEGT;041004;385
+Enseignement Recherche;Enseignement secondaire;Cantine LP;041005;124
+Enseignement Recherche;Enseignement secondaire;Collège;041008;6222
+Enseignement Recherche;Enseignement secondaire;Internat college;041046;129
+Enseignement Recherche;Enseignement secondaire;Internat LEGT;041047;299
+Enseignement Recherche;Enseignement secondaire;Internat LP;041048;259
+Enseignement Recherche;Enseignement secondaire;Lycée d’enseignement général et technologique (LEGT);041049;10257
+Enseignement Recherche;Enseignement secondaire;Lycée professionnel (LP);041050;6850
+Enseignement Recherche;Enseignement supérieur et recherche;école;041110;2927
+Enseignement Recherche;Enseignement supérieur et recherche;R&D en sciences humaines et sociales;041187;785
+Enseignement Recherche;Enseignement supérieur et recherche;R&D sciences physiques et naturelles;041188;717
+Enseignement Recherche;Enseignement supérieur et recherche;université;041194;14727
+Habitat Communautaire;Foyer;Foyers;051413;774
+Habitat Communautaire;Maison de pré-retraite;Maison de pré-retraite;052151;836
+Habitat Communautaire;Maison retraite médicalisée;Maison retraite médicalisée;052252;1119
+Habitat Communautaire;Résidence universitaire;Résidence universitaire;052589;1098
+Habitat Communautaire;Service à la personne;Résidentiel;052890;483
+Santé Action Sociale;Cabinet médical;Cabinet médical;060301;136
+Santé Action Sociale;Centre accueil;Centre accueil;060507;932
+Santé Action Sociale;Garderie;Garderie;061514;890
+Santé Action Sociale;Hôpital;Hopital bloc;061734;9143
+Santé Action Sociale;Hôpital;Hopital maison;061735;5138
+Santé Action Sociale;Hôpital;Hopital pavillonnaire;061736;7949
+Sport Loisir Culture;Culture;Grand cinéma;070818;5198
+Sport Loisir Culture;Culture;Grande salle de spectacle;070832;18189
+Sport Loisir Culture;Culture;Immeuble péri urbain;070843;142
+Sport Loisir Culture;Culture;Musée;070859;3249
+Sport Loisir Culture;Culture;nr;070860;0
+Sport Loisir Culture;Culture;Petit cinéma;070865;560
+Sport Loisir Culture;Culture;Petite salle de spectacle;070880;749
+Sport Loisir Culture;Equipement collectif;Immeuble péri urbain;071343;326
+Sport Loisir Culture;Loisir;Grand bar café tabac;072016;370
+Sport Loisir Culture;Loisir;nr;072060;0
+Sport Loisir Culture;Loisir;Salle non spécialisée;072091;343
+Sport Loisir Culture;Loisir;Vestiaire et rangement;072095;140
+Sport Loisir Culture;Sport;Grand bar café tabac;072916;176
+Sport Loisir Culture;Sport;Grande salle multisport;072933;1840
+Sport Loisir Culture;Sport;nr;072960;0
+Sport Loisir Culture;Sport;Patinoire;072961;1869
+Sport Loisir Culture;Sport;Petite salle multisport;072981;430
+Sport Loisir Culture;Sport;Piscine;072982;476
+Sport Loisir Culture;Sport;Salle non spécialisée;072991;324
+Sport Loisir Culture;Sport;Vestiaire et rangement;072995;126
+Transport;Service;nr;082760;364
+Transport;Transport aérien;nr;083060;2096
+Transport;Transport autre;nr;083160;432
+Transport;Transport ferroviaire;nr;083260;1698
+Transport;Transport maritime et fluvial;nr;083360;250
+Transport;Transport routier;nr;083460;172
+Transport;Transport urbain;nr;083560;2400

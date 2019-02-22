@@ -1,0 +1,1345 @@
+BRANCHE;SS_BRANCHE;BAT_TYPE;EQ_CLIM;ID_AGREG;PERIODE;RDT;COUT
+Bureaux Administration;Administration;immeuble peri urbain;Climatisé;01014201;0;3.084192272;80.80050725
+Bureaux Administration;Administration;immeuble rénové;Climatisé;01014401;0;3.028754929;81.37823454
+Bureaux Administration;Administration;plateau large bureaux cloisonnés;Climatisé;01018401;0;3.030641724;110.3744244
+Bureaux Administration;Bureaux;immeuble peri urbain;Climatisé;01024201;0;3.068619155;104.1732425
+Bureaux Administration;Bureaux;immeuble rénové;Climatisé;01024401;0;3.028059226;104.7547493
+Bureaux Administration;Bureaux;immeuble résidentiel;Climatisé;01024501;0;3.050643345;102.2144947
+Bureaux Administration;Bureaux;plateau large bureau paysagés;Climatisé;01028301;0;3.056671793;113.3285618
+Bureaux Administration;Bureaux;plateau large bureaux cloisonnés;Climatisé;01028401;0;3.049597797;110.8506257
+Bureaux Administration;Bureaux;plateau mince;Climatisé;01028501;0;3.058609866;112.0556117
+Café Hôtel Restaurant;Café, cantine, traiteur;Grand bar café tabac;Climatisé;02041601;0;3.253807622;143.3496283
+Café Hôtel Restaurant;Café, cantine, traiteur;Grande cantine;Climatisé;02043101;0;3.269758119;142.5058594
+Café Hôtel Restaurant;Café, cantine, traiteur;Petit bar café tabac;Climatisé;02046201;0;3.270011079;135.9285275
+Café Hôtel Restaurant;Café, cantine, traiteur;Petite cantine;Climatisé;02047901;0;3.264691397;141.2747469
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Bas de gamme;Climatisé;02182001;0;3.279258693;132.0062908
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Haut de gamme;Climatisé;02182101;0;3.297934658;133.2744289
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Luxe;Climatisé;02182201;0;3.264310907;132.2263216
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Haut de gamme;Climatisé;02183701;0;3.321291002;131.9431818
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Luxe;Climatisé;02183801;0;3.28934291;133.2588692
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Bas de gamme;Climatisé;02185301;0;3.26048166;135.5062013
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Haut de gamme;Climatisé;02185401;0;3.252812359;133.055159
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Luxe;Climatisé;02185501;0;3.24970632;131.0756243
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Bas de gamme;Climatisé;02186701;0;3.264358093;128.9338969
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Haut de gamme;Climatisé;02186801;0;3.248261403;133.0690476
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Luxe;Climatisé;02186901;0;3.242976545;135.8290258
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Bas de gamme;Climatisé;02192301;0;3.292305108;132.7723384
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Haut de gamme;Climatisé;02192401;0;3.319647183;130.4803922
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Luxe;Climatisé;02192501;0;3.275763903;130.4423077
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Climatisé;02193901;0;3.260598671;132.1071429
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Luxe;Climatisé;02194001;0;3.326398435;153.75
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Bas de gamme;Climatisé;02195601;0;3.278962335;129.8553678
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Haut de gamme;Climatisé;02195701;0;3.269751995;130.8619154
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Luxe;Climatisé;02195801;0;3.326371476;132.3113208
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Bas de gamme;Climatisé;02197001;0;3.25993949;127.7249445
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Haut de gamme;Climatisé;02197101;0;3.235745258;128.1994048
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Luxe;Climatisé;02197201;0;3.255193382;128.5
+Café Hôtel Restaurant;Restaurant;Grand restaurant rapide;Climatisé;02262901;0;3.285073208;133.9828767
+Café Hôtel Restaurant;Restaurant;Grand restaurant traditionnel;Climatisé;02263001;0;3.275878378;133.0457089
+Café Hôtel Restaurant;Restaurant;Petit restaurant rapide;Climatisé;02267701;0;3.262281103;129.9832523
+Café Hôtel Restaurant;Restaurant;Petit restaurant traditionnel;Climatisé;02267801;0;3.265343681;128.9233412
+Commerce;Commerce de détail non alimentaire;Complexe brico;Climatisé;03060901;0;3.975560356;115.7171429
+Commerce;Commerce de détail non alimentaire;Grand brico;Climatisé;03061701;0;3.9638718;112.9250307
+Commerce;Commerce de détail non alimentaire;Grand librairie;Climatisé;03062601;0;3.672756848;156
+Commerce;Commerce de détail non alimentaire;Grand Mode;Climatisé;03062701;0;3.683689249;156
+Commerce;Commerce de détail non alimentaire;Petit brico;Climatisé;03066401;0;2.745640713;156
+Commerce;Commerce de détail non alimentaire;Petit librairie;Climatisé;03067301;0;2.745656699;156
+Commerce;Commerce de détail non alimentaire;Petit mode;Climatisé;03067401;0;2.742597112;156
+Commerce;Commerce de détail non alimentaire;ZAC Mode;Climatisé;03069601;0;3.967451911;116.4253241
+Commerce;Commerce de gros;Grand commerce de gros;Climatisé;03071901;0;3.987114689;114.1803519
+Commerce;Commerce de gros;Petit commerce de gros;Climatisé;03076601;0;3.963832158;109.4392225
+Commerce;Entrepôt;Entrepôt;Climatisé;03121201;0;3.405529268;142.0528249
+Commerce;Grand commerce alimentaire;Grand alimentaire;Climatisé;03161501;0;3.69495336;156
+Commerce;Grand commerce alimentaire;Hypermarché;Climatisé;03164101;0;3.966347306;118.2348624
+Commerce;Grand commerce alimentaire;Superette;Climatisé;03169201;0;2.736712713;156
+Commerce;Grand commerce alimentaire;Supermarché;Climatisé;03169301;0;3.970288577;126.134564
+Commerce;Petit commerce alimentaire;Petit boulangerie;Climatisé;03236301;0;2.743349787;156
+Commerce;Petit commerce alimentaire;Petit librairie;Climatisé;03237301;0;2.732230687;156
+Commerce;Petit commerce alimentaire;Petit poissonnerie;Climatisé;03237501;0;2.743157522;156
+Commerce;Process;Grand librairie;Climatisé;03242601;0;3.663290615;156
+Commerce;Process;Grand process;Climatisé;03242801;0;3.668796934;156
+Commerce;Process;Petit process;Climatisé;03247601;0;2.743286317;156
+Enseignement Recherche;Enseignement primaire;Cantine élémentaire;Climatisé;04090301;0;3.063854429;173.25
+Enseignement Recherche;Enseignement primaire;Cantine préélémentaire;Climatisé;04090601;0;3.063854429;173.25
+Enseignement Recherche;Enseignement primaire;Elémentaire;Climatisé;04091101;0;3.063854429;173.25
+Enseignement Recherche;Enseignement primaire;Préélémentaire;Climatisé;04098601;0;3.063854429;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine collége;Climatisé;04100201;0;3.063854429;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine LEGT;Climatisé;04100401;0;3.063854429;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine LP;Climatisé;04100501;0;3.063854429;173.25
+Enseignement Recherche;Enseignement secondaire;Collège;Climatisé;04100801;0;3.063854429;173.25
+Enseignement Recherche;Enseignement secondaire;Internat college;Climatisé;04104601;0;3.063854429;173.25
+Enseignement Recherche;Enseignement secondaire;Internat LEGT;Climatisé;04104701;0;3.063854429;173.25
+Enseignement Recherche;Enseignement secondaire;Internat LP;Climatisé;04104801;0;3.063854429;173.25
+Enseignement Recherche;Enseignement secondaire;Lycée d’enseignement général et technologique (LEGT);Climatisé;04104901;0;3.063854429;173.25
+Enseignement Recherche;Enseignement secondaire;Lycée professionnel (LP);Climatisé;04105001;0;3.063854429;173.25
+Enseignement Recherche;Enseignement supérieur et recherche;école;Climatisé;04111001;0;3.102211038;190.5
+Enseignement Recherche;Enseignement supérieur et recherche;R&D en sciences humaines et sociales;Climatisé;04118701;0;3.040262367;156
+Enseignement Recherche;Enseignement supérieur et recherche;R&D sciences physiques et naturelles;Climatisé;04118801;0;3.022608714;156
+Enseignement Recherche;Enseignement supérieur et recherche;université;Climatisé;04119401;0;3.090335595;190.5
+Habitat Communautaire;Foyer;Foyers;Climatisé;05141301;0;2.800595126;156
+Habitat Communautaire;Maison de pré-retraite;Maison de pré-retraite;Climatisé;05215101;0;2.810062684;156
+Habitat Communautaire;Maison retraite médicalisée;Maison retraite médicalisée;Climatisé;05225201;0;2.791127569;156
+Habitat Communautaire;Résidence universitaire;Résidence universitaire;Climatisé;05258901;0;2.800595126;156
+Habitat Communautaire;Service à la personne;Résidentiel;Climatisé;05289001;0;2.800595126;156
+Santé Action Sociale;Cabinet médical;Cabinet médical;Climatisé;06030101;0;3.028516032;156
+Santé Action Sociale;Centre accueil;Centre accueil;Climatisé;06050701;0;3.028516032;156
+Santé Action Sociale;Garderie;Garderie;Climatisé;06151401;0;3.028516032;156
+Santé Action Sociale;Hôpital;Hopital bloc;Climatisé;06173401;0;3.025179136;156
+Santé Action Sociale;Hôpital;Hopital maison;Climatisé;06173501;0;3.028621214;156
+Santé Action Sociale;Hôpital;Hopital pavillonnaire;Climatisé;06173601;0;3.031747747;156
+Sport Loisir Culture;Culture;Grand cinéma;Climatisé;07081801;0;3.050469172;155.4496855
+Sport Loisir Culture;Culture;Grande salle de spectacle;Climatisé;07083201;0;3.061495969;155.4176471
+Sport Loisir Culture;Culture;Immeuble péri urbain;Climatisé;07084301;0;3.011204559;156
+Sport Loisir Culture;Culture;Musée;Climatisé;07085901;0;3.070625673;155.2065293
+Sport Loisir Culture;Culture;Petit cinéma;Climatisé;07086501;0;3.0412532;155.4533333
+Sport Loisir Culture;Culture;Petite salle de spectacle;Climatisé;07088001;0;3.050966103;155.398906
+Sport Loisir Culture;Equipement collectif;Immeuble péri urbain;Climatisé;07134301;0;2.984924053;156
+Sport Loisir Culture;Loisir;Grand bar café tabac;Climatisé;07201601;0;2.97640665;156
+Sport Loisir Culture;Loisir;Salle non spécialisée;Climatisé;07209101;0;3.043807668;155.2963286
+Sport Loisir Culture;Loisir;Vestiaire et rangement;Climatisé;07209501;0;3.028923775;155.5943541
+Sport Loisir Culture;Sport;Grand bar café tabac;Climatisé;07291601;0;2.986962004;156
+Sport Loisir Culture;Sport;Grande salle multisport;Climatisé;07293301;0;3.021668691;155.7717662
+Sport Loisir Culture;Sport;Patinoire;Climatisé;07296101;0;3.035323426;155.4352941
+Sport Loisir Culture;Sport;Petite salle multisport;Climatisé;07298101;0;3.033442252;155.5159127
+Sport Loisir Culture;Sport;Piscine;Climatisé;07298201;0;3.030786233;155.5452358
+Sport Loisir Culture;Sport;Salle non spécialisée;Climatisé;07299101;0;3.03452097;155.4246734
+Sport Loisir Culture;Sport;Vestiaire et rangement;Climatisé;07299501;0;3.028923775;155.5943541
+Transport;Service;nr;Climatisé;08276001;0;1;128.8973583
+Transport;Transport aérien;nr;Climatisé;08306001;0;1;128.8973583
+Transport;Transport autre;nr;Climatisé;08316001;0;1;128.8973583
+Transport;Transport ferroviaire;nr;Climatisé;08326001;0;1;128.8973583
+Transport;Transport maritime et fluvial;nr;Climatisé;08336001;0;1;128.8973583
+Transport;Transport routier;nr;Climatisé;08346001;0;1;128.8973583
+Transport;Transport urbain;nr;Climatisé;08356001;0;1;128.8973583
+Bureaux Administration;Administration;immeuble peri urbain;Non climatisé;01014202;0;0;0
+Bureaux Administration;Administration;immeuble rénové;Non climatisé;01014402;0;0;0
+Bureaux Administration;Administration;plateau large bureaux cloisonnés;Non climatisé;01018402;0;0;0
+Bureaux Administration;Bureaux;immeuble peri urbain;Non climatisé;01024202;0;0;0
+Bureaux Administration;Bureaux;immeuble rénové;Non climatisé;01024402;0;0;0
+Bureaux Administration;Bureaux;immeuble résidentiel;Non climatisé;01024502;0;0;0
+Bureaux Administration;Bureaux;plateau large bureau paysagés;Non climatisé;01028302;0;0;0
+Bureaux Administration;Bureaux;plateau large bureaux cloisonnés;Non climatisé;01028402;0;0;0
+Bureaux Administration;Bureaux;plateau mince;Non climatisé;01028502;0;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Grand bar café tabac;Non climatisé;02041602;0;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Grande cantine;Non climatisé;02043102;0;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Petit bar café tabac;Non climatisé;02046202;0;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Petite cantine;Non climatisé;02047902;0;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Bas de gamme;Non climatisé;02182002;0;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Haut de gamme;Non climatisé;02182102;0;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Luxe;Non climatisé;02182202;0;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Haut de gamme;Non climatisé;02183702;0;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Luxe;Non climatisé;02183802;0;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Bas de gamme;Non climatisé;02185302;0;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Haut de gamme;Non climatisé;02185402;0;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Luxe;Non climatisé;02185502;0;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Bas de gamme;Non climatisé;02186702;0;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Haut de gamme;Non climatisé;02186802;0;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Luxe;Non climatisé;02186902;0;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Bas de gamme;Non climatisé;02192302;0;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Haut de gamme;Non climatisé;02192402;0;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Luxe;Non climatisé;02192502;0;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Non climatisé;02193902;0;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Luxe;Non climatisé;02194002;0;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Bas de gamme;Non climatisé;02195602;0;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Haut de gamme;Non climatisé;02195702;0;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Luxe;Non climatisé;02195802;0;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Bas de gamme;Non climatisé;02197002;0;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Haut de gamme;Non climatisé;02197102;0;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Luxe;Non climatisé;02197202;0;0;0
+Café Hôtel Restaurant;Restaurant;Grand restaurant rapide;Non climatisé;02262902;0;0;0
+Café Hôtel Restaurant;Restaurant;Grand restaurant traditionnel;Non climatisé;02263002;0;0;0
+Café Hôtel Restaurant;Restaurant;Petit restaurant rapide;Non climatisé;02267702;0;0;0
+Café Hôtel Restaurant;Restaurant;Petit restaurant traditionnel;Non climatisé;02267802;0;0;0
+Commerce;Commerce de détail non alimentaire;Complexe brico;Non climatisé;03060902;0;0;0
+Commerce;Commerce de détail non alimentaire;Grand brico;Non climatisé;03061702;0;0;0
+Commerce;Commerce de détail non alimentaire;Grand librairie;Non climatisé;03062602;0;0;0
+Commerce;Commerce de détail non alimentaire;Grand Mode;Non climatisé;03062702;0;0;0
+Commerce;Commerce de détail non alimentaire;Petit brico;Non climatisé;03066402;0;0;0
+Commerce;Commerce de détail non alimentaire;Petit librairie;Non climatisé;03067302;0;0;0
+Commerce;Commerce de détail non alimentaire;Petit mode;Non climatisé;03067402;0;0;0
+Commerce;Commerce de détail non alimentaire;ZAC Mode;Non climatisé;03069602;0;0;0
+Commerce;Commerce de gros;Grand commerce de gros;Non climatisé;03071902;0;0;0
+Commerce;Commerce de gros;Petit commerce de gros;Non climatisé;03076602;0;0;0
+Commerce;Entrepôt;Entrepôt;Non climatisé;03121202;0;0;0
+Commerce;Grand commerce alimentaire;Grand alimentaire;Non climatisé;03161502;0;0;0
+Commerce;Grand commerce alimentaire;Hypermarché;Non climatisé;03164102;0;0;0
+Commerce;Grand commerce alimentaire;Superette;Non climatisé;03169202;0;0;0
+Commerce;Grand commerce alimentaire;Supermarché;Non climatisé;03169302;0;0;0
+Commerce;Petit commerce alimentaire;Petit boulangerie;Non climatisé;03236302;0;0;0
+Commerce;Petit commerce alimentaire;Petit librairie;Non climatisé;03237302;0;0;0
+Commerce;Petit commerce alimentaire;Petit poissonnerie;Non climatisé;03237502;0;0;0
+Commerce;Process;Grand librairie;Non climatisé;03242602;0;0;0
+Commerce;Process;Grand process;Non climatisé;03242802;0;0;0
+Commerce;Process;Petit process;Non climatisé;03247602;0;0;0
+Enseignement Recherche;Enseignement primaire;Cantine élémentaire;Non climatisé;04090302;0;0;0
+Enseignement Recherche;Enseignement primaire;Cantine préélémentaire;Non climatisé;04090602;0;0;0
+Enseignement Recherche;Enseignement primaire;Elémentaire;Non climatisé;04091102;0;0;0
+Enseignement Recherche;Enseignement primaire;Préélémentaire;Non climatisé;04098602;0;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine collége;Non climatisé;04100202;0;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine LEGT;Non climatisé;04100402;0;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine LP;Non climatisé;04100502;0;0;0
+Enseignement Recherche;Enseignement secondaire;Collège;Non climatisé;04100802;0;0;0
+Enseignement Recherche;Enseignement secondaire;Internat college;Non climatisé;04104602;0;0;0
+Enseignement Recherche;Enseignement secondaire;Internat LEGT;Non climatisé;04104702;0;0;0
+Enseignement Recherche;Enseignement secondaire;Internat LP;Non climatisé;04104802;0;0;0
+Enseignement Recherche;Enseignement secondaire;Lycée d’enseignement général et technologique (LEGT);Non climatisé;04104902;0;0;0
+Enseignement Recherche;Enseignement secondaire;Lycée professionnel (LP);Non climatisé;04105002;0;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;école;Non climatisé;04111002;0;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;R&D en sciences humaines et sociales;Non climatisé;04118702;0;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;R&D sciences physiques et naturelles;Non climatisé;04118802;0;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;université;Non climatisé;04119402;0;0;0
+Habitat Communautaire;Foyer;Foyers;Non climatisé;05141302;0;0;0
+Habitat Communautaire;Maison de pré-retraite;Maison de pré-retraite;Non climatisé;05215102;0;0;0
+Habitat Communautaire;Maison retraite médicalisée;Maison retraite médicalisée;Non climatisé;05225202;0;0;0
+Habitat Communautaire;Résidence universitaire;Résidence universitaire;Non climatisé;05258902;0;0;0
+Habitat Communautaire;Service à la personne;Résidentiel;Non climatisé;05289002;0;0;0
+Santé Action Sociale;Cabinet médical;Cabinet médical;Non climatisé;06030102;0;0;0
+Santé Action Sociale;Centre accueil;Centre accueil;Non climatisé;06050702;0;0;0
+Santé Action Sociale;Garderie;Garderie;Non climatisé;06151402;0;0;0
+Santé Action Sociale;Hôpital;Hopital bloc;Non climatisé;06173402;0;0;0
+Santé Action Sociale;Hôpital;Hopital maison;Non climatisé;06173502;0;0;0
+Santé Action Sociale;Hôpital;Hopital pavillonnaire;Non climatisé;06173602;0;0;0
+Sport Loisir Culture;Culture;Grand cinéma;Non climatisé;07081802;0;0;0
+Sport Loisir Culture;Culture;Grande salle de spectacle;Non climatisé;07083202;0;0;0
+Sport Loisir Culture;Culture;Immeuble péri urbain;Non climatisé;07084302;0;0;0
+Sport Loisir Culture;Culture;Musée;Non climatisé;07085902;0;0;0
+Sport Loisir Culture;Culture;Petit cinéma;Non climatisé;07086502;0;0;0
+Sport Loisir Culture;Culture;Petite salle de spectacle;Non climatisé;07088002;0;0;0
+Sport Loisir Culture;Equipement collectif;Immeuble péri urbain;Non climatisé;07134302;0;0;0
+Sport Loisir Culture;Loisir;Grand bar café tabac;Non climatisé;07201602;0;0;0
+Sport Loisir Culture;Loisir;Salle non spécialisée;Non climatisé;07209102;0;0;0
+Sport Loisir Culture;Loisir;Vestiaire et rangement;Non climatisé;07209502;0;0;0
+Sport Loisir Culture;Sport;Grand bar café tabac;Non climatisé;07291602;0;0;0
+Sport Loisir Culture;Sport;Grande salle multisport;Non climatisé;07293302;0;0;0
+Sport Loisir Culture;Sport;Patinoire;Non climatisé;07296102;0;0;0
+Sport Loisir Culture;Sport;Petite salle multisport;Non climatisé;07298102;0;0;0
+Sport Loisir Culture;Sport;Piscine;Non climatisé;07298202;0;0;0
+Sport Loisir Culture;Sport;Salle non spécialisée;Non climatisé;07299102;0;0;0
+Sport Loisir Culture;Sport;Vestiaire et rangement;Non climatisé;07299502;0;0;0
+Transport;Service;nr;Non climatisé;08276002;0;0;0
+Transport;Transport aérien;nr;Non climatisé;08306002;0;0;0
+Transport;Transport autre;nr;Non climatisé;08316002;0;0;0
+Transport;Transport ferroviaire;nr;Non climatisé;08326002;0;0;0
+Transport;Transport maritime et fluvial;nr;Non climatisé;08336002;0;0;0
+Transport;Transport routier;nr;Non climatisé;08346002;0;0;0
+Transport;Transport urbain;nr;Non climatisé;08356002;0;0;0
+Bureaux Administration;Administration;immeuble peri urbain;Climatisé;01014201;1;3.392611499;80.80050725
+Bureaux Administration;Administration;immeuble rénové;Climatisé;01014401;1;3.331630421;81.37823454
+Bureaux Administration;Administration;plateau large bureaux cloisonnés;Climatisé;01018401;1;3.333705897;110.3744244
+Bureaux Administration;Bureaux;immeuble peri urbain;Climatisé;01024201;1;3.375481071;104.1732425
+Bureaux Administration;Bureaux;immeuble rénové;Climatisé;01024401;1;3.330865148;104.7547493
+Bureaux Administration;Bureaux;immeuble résidentiel;Climatisé;01024501;1;3.35570768;102.2144947
+Bureaux Administration;Bureaux;plateau large bureau paysagés;Climatisé;01028301;1;3.362338973;113.3285618
+Bureaux Administration;Bureaux;plateau large bureaux cloisonnés;Climatisé;01028401;1;3.354557577;110.8506257
+Bureaux Administration;Bureaux;plateau mince;Climatisé;01028501;1;3.364470853;112.0556117
+Café Hôtel Restaurant;Café, cantine, traiteur;Grand bar café tabac;Climatisé;02041601;1;3.579188384;143.3496283
+Café Hôtel Restaurant;Café, cantine, traiteur;Grande cantine;Climatisé;02043101;1;3.596733931;142.5058594
+Café Hôtel Restaurant;Café, cantine, traiteur;Petit bar café tabac;Climatisé;02046201;1;3.597012187;135.9285275
+Café Hôtel Restaurant;Café, cantine, traiteur;Petite cantine;Climatisé;02047901;1;3.591160537;141.2747469
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Bas de gamme;Climatisé;02182001;1;3.607184562;132.0062908
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Haut de gamme;Climatisé;02182101;1;3.627728123;133.2744289
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Luxe;Climatisé;02182201;1;3.590741997;132.2263216
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Haut de gamme;Climatisé;02183701;1;3.653420102;131.9431818
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Luxe;Climatisé;02183801;1;3.618277201;133.2588692
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Bas de gamme;Climatisé;02185301;1;3.586529827;135.5062013
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Haut de gamme;Climatisé;02185401;1;3.578093595;133.055159
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Luxe;Climatisé;02185501;1;3.574676952;131.0756243
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Bas de gamme;Climatisé;02186701;1;3.590793902;128.9338969
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Haut de gamme;Climatisé;02186801;1;3.573087543;133.0690476
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Luxe;Climatisé;02186901;1;3.5672742;135.8290258
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Bas de gamme;Climatisé;02192301;1;3.621535619;132.7723384
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Haut de gamme;Climatisé;02192401;1;3.651611902;130.4803922
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Luxe;Climatisé;02192501;1;3.603340293;130.4423077
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Climatisé;02193901;1;3.586658538;132.1071429
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Luxe;Climatisé;02194001;1;3.659038278;153.75
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Bas de gamme;Climatisé;02195601;1;3.606858569;129.8553678
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Haut de gamme;Climatisé;02195701;1;3.596727194;130.8619154
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Luxe;Climatisé;02195801;1;3.659008623;132.3113208
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Bas de gamme;Climatisé;02197001;1;3.585933439;127.7249445
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Haut de gamme;Climatisé;02197101;1;3.559319784;128.1994048
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Luxe;Climatisé;02197201;1;3.580712721;128.5
+Café Hôtel Restaurant;Restaurant;Grand restaurant rapide;Climatisé;02262901;1;3.613580529;133.9828767
+Café Hôtel Restaurant;Restaurant;Grand restaurant traditionnel;Climatisé;02263001;1;3.603466216;133.0457089
+Café Hôtel Restaurant;Restaurant;Petit restaurant rapide;Climatisé;02267701;1;3.588509214;129.9832523
+Café Hôtel Restaurant;Restaurant;Petit restaurant traditionnel;Climatisé;02267801;1;3.59187805;128.9233412
+Commerce;Commerce de détail non alimentaire;Complexe brico;Climatisé;03060901;1;4.373116392;115.7171429
+Commerce;Commerce de détail non alimentaire;Grand brico;Climatisé;03061701;1;4.36025898;112.9250307
+Commerce;Commerce de détail non alimentaire;Grand librairie;Climatisé;03062601;1;4.040032533;156
+Commerce;Commerce de détail non alimentaire;Grand Mode;Climatisé;03062701;1;4.052058174;156
+Commerce;Commerce de détail non alimentaire;Petit brico;Climatisé;03066401;1;3.020204785;156
+Commerce;Commerce de détail non alimentaire;Petit librairie;Climatisé;03067301;1;3.020222369;156
+Commerce;Commerce de détail non alimentaire;Petit mode;Climatisé;03067401;1;3.016856823;156
+Commerce;Commerce de détail non alimentaire;ZAC Mode;Climatisé;03069601;1;4.364197102;116.4253241
+Commerce;Commerce de gros;Grand commerce de gros;Climatisé;03071901;1;4.385826158;114.1803519
+Commerce;Commerce de gros;Petit commerce de gros;Climatisé;03076601;1;4.360215374;109.4392225
+Commerce;Entrepôt;Entrepôt;Climatisé;03121201;1;3.746082194;142.0528249
+Commerce;Grand commerce alimentaire;Grand alimentaire;Climatisé;03161501;1;4.064448696;156
+Commerce;Grand commerce alimentaire;Hypermarché;Climatisé;03164101;1;4.362982037;118.2348624
+Commerce;Grand commerce alimentaire;Superette;Climatisé;03169201;1;3.010383984;156
+Commerce;Grand commerce alimentaire;Supermarché;Climatisé;03169301;1;4.367317434;126.134564
+Commerce;Petit commerce alimentaire;Petit boulangerie;Climatisé;03236301;1;3.017684765;156
+Commerce;Petit commerce alimentaire;Petit librairie;Climatisé;03237301;1;3.005453756;156
+Commerce;Petit commerce alimentaire;Petit poissonnerie;Climatisé;03237501;1;3.017473274;156
+Commerce;Process;Grand librairie;Climatisé;03242601;1;4.029619677;156
+Commerce;Process;Grand process;Climatisé;03242801;1;4.035676627;156
+Commerce;Process;Petit process;Climatisé;03247601;1;3.017614949;156
+Enseignement Recherche;Enseignement primaire;Cantine élémentaire;Climatisé;04090301;1;3.370239871;173.25
+Enseignement Recherche;Enseignement primaire;Cantine préélémentaire;Climatisé;04090601;1;3.370239871;173.25
+Enseignement Recherche;Enseignement primaire;Elémentaire;Climatisé;04091101;1;3.370239871;173.25
+Enseignement Recherche;Enseignement primaire;Préélémentaire;Climatisé;04098601;1;3.370239871;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine collége;Climatisé;04100201;1;3.370239871;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine LEGT;Climatisé;04100401;1;3.370239871;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine LP;Climatisé;04100501;1;3.370239871;173.25
+Enseignement Recherche;Enseignement secondaire;Collège;Climatisé;04100801;1;3.370239871;173.25
+Enseignement Recherche;Enseignement secondaire;Internat college;Climatisé;04104601;1;3.370239871;173.25
+Enseignement Recherche;Enseignement secondaire;Internat LEGT;Climatisé;04104701;1;3.370239871;173.25
+Enseignement Recherche;Enseignement secondaire;Internat LP;Climatisé;04104801;1;3.370239871;173.25
+Enseignement Recherche;Enseignement secondaire;Lycée d’enseignement général et technologique (LEGT);Climatisé;04104901;1;3.370239871;173.25
+Enseignement Recherche;Enseignement secondaire;Lycée professionnel (LP);Climatisé;04105001;1;3.370239871;173.25
+Enseignement Recherche;Enseignement supérieur et recherche;école;Climatisé;04111001;1;3.412432142;190.5
+Enseignement Recherche;Enseignement supérieur et recherche;R&D en sciences humaines et sociales;Climatisé;04118701;1;3.344288604;156
+Enseignement Recherche;Enseignement supérieur et recherche;R&D sciences physiques et naturelles;Climatisé;04118801;1;3.324869586;156
+Enseignement Recherche;Enseignement supérieur et recherche;université;Climatisé;04119401;1;3.399369155;190.5
+Habitat Communautaire;Foyer;Foyers;Climatisé;05141301;1;3.080654639;156
+Habitat Communautaire;Maison de pré-retraite;Maison de pré-retraite;Climatisé;05215101;1;3.091068952;156
+Habitat Communautaire;Maison retraite médicalisée;Maison retraite médicalisée;Climatisé;05225201;1;3.070240326;156
+Habitat Communautaire;Résidence universitaire;Résidence universitaire;Climatisé;05258901;1;3.080654639;156
+Habitat Communautaire;Service à la personne;Résidentiel;Climatisé;05289001;1;3.080654639;156
+Santé Action Sociale;Cabinet médical;Cabinet médical;Climatisé;06030101;1;3.331367635;156
+Santé Action Sociale;Centre accueil;Centre accueil;Climatisé;06050701;1;3.331367635;156
+Santé Action Sociale;Garderie;Garderie;Climatisé;06151401;1;3.331367635;156
+Santé Action Sociale;Hôpital;Hopital bloc;Climatisé;06173401;1;3.32769705;156
+Santé Action Sociale;Hôpital;Hopital maison;Climatisé;06173501;1;3.331483335;156
+Santé Action Sociale;Hôpital;Hopital pavillonnaire;Climatisé;06173601;1;3.334922522;156
+Sport Loisir Culture;Culture;Grand cinéma;Climatisé;07081801;1;3.355516089;155.4496855
+Sport Loisir Culture;Culture;Grande salle de spectacle;Climatisé;07083201;1;3.367645566;155.4176471
+Sport Loisir Culture;Culture;Immeuble péri urbain;Climatisé;07084301;1;3.312325015;156
+Sport Loisir Culture;Culture;Musée;Climatisé;07085901;1;3.37768824;155.2065293
+Sport Loisir Culture;Culture;Petit cinéma;Climatisé;07086501;1;3.34537852;155.4533333
+Sport Loisir Culture;Culture;Petite salle de spectacle;Climatisé;07088001;1;3.356062713;155.398906
+Sport Loisir Culture;Equipement collectif;Immeuble péri urbain;Climatisé;07134301;1;3.283416459;156
+Sport Loisir Culture;Loisir;Grand bar café tabac;Climatisé;07201601;1;3.274047315;156
+Sport Loisir Culture;Loisir;Salle non spécialisée;Climatisé;07209101;1;3.348188435;155.2963286
+Sport Loisir Culture;Loisir;Vestiaire et rangement;Climatisé;07209501;1;3.331816152;155.5943541
+Sport Loisir Culture;Sport;Grand bar café tabac;Climatisé;07291601;1;3.285658204;156
+Sport Loisir Culture;Sport;Grande salle multisport;Climatisé;07293301;1;3.32383556;155.7717662
+Sport Loisir Culture;Sport;Patinoire;Climatisé;07296101;1;3.338855769;155.4352941
+Sport Loisir Culture;Sport;Petite salle multisport;Climatisé;07298101;1;3.336786477;155.5159127
+Sport Loisir Culture;Sport;Piscine;Climatisé;07298201;1;3.333864857;155.5452358
+Sport Loisir Culture;Sport;Salle non spécialisée;Climatisé;07299101;1;3.337973067;155.4246734
+Sport Loisir Culture;Sport;Vestiaire et rangement;Climatisé;07299501;1;3.331816152;155.5943541
+Transport;Service;nr;Climatisé;08276001;1;1.1;128.8973583
+Transport;Transport aérien;nr;Climatisé;08306001;1;1.1;128.8973583
+Transport;Transport autre;nr;Climatisé;08316001;1;1.1;128.8973583
+Transport;Transport ferroviaire;nr;Climatisé;08326001;1;1.1;128.8973583
+Transport;Transport maritime et fluvial;nr;Climatisé;08336001;1;1.1;128.8973583
+Transport;Transport routier;nr;Climatisé;08346001;1;1.1;128.8973583
+Transport;Transport urbain;nr;Climatisé;08356001;1;1.1;128.8973583
+Bureaux Administration;Administration;immeuble peri urbain;Non climatisé;01014202;1;0;0
+Bureaux Administration;Administration;immeuble rénové;Non climatisé;01014402;1;0;0
+Bureaux Administration;Administration;plateau large bureaux cloisonnés;Non climatisé;01018402;1;0;0
+Bureaux Administration;Bureaux;immeuble peri urbain;Non climatisé;01024202;1;0;0
+Bureaux Administration;Bureaux;immeuble rénové;Non climatisé;01024402;1;0;0
+Bureaux Administration;Bureaux;immeuble résidentiel;Non climatisé;01024502;1;0;0
+Bureaux Administration;Bureaux;plateau large bureau paysagés;Non climatisé;01028302;1;0;0
+Bureaux Administration;Bureaux;plateau large bureaux cloisonnés;Non climatisé;01028402;1;0;0
+Bureaux Administration;Bureaux;plateau mince;Non climatisé;01028502;1;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Grand bar café tabac;Non climatisé;02041602;1;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Grande cantine;Non climatisé;02043102;1;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Petit bar café tabac;Non climatisé;02046202;1;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Petite cantine;Non climatisé;02047902;1;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Bas de gamme;Non climatisé;02182002;1;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Haut de gamme;Non climatisé;02182102;1;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Luxe;Non climatisé;02182202;1;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Haut de gamme;Non climatisé;02183702;1;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Luxe;Non climatisé;02183802;1;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Bas de gamme;Non climatisé;02185302;1;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Haut de gamme;Non climatisé;02185402;1;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Luxe;Non climatisé;02185502;1;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Bas de gamme;Non climatisé;02186702;1;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Haut de gamme;Non climatisé;02186802;1;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Luxe;Non climatisé;02186902;1;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Bas de gamme;Non climatisé;02192302;1;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Haut de gamme;Non climatisé;02192402;1;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Luxe;Non climatisé;02192502;1;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Non climatisé;02193902;1;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Luxe;Non climatisé;02194002;1;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Bas de gamme;Non climatisé;02195602;1;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Haut de gamme;Non climatisé;02195702;1;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Luxe;Non climatisé;02195802;1;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Bas de gamme;Non climatisé;02197002;1;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Haut de gamme;Non climatisé;02197102;1;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Luxe;Non climatisé;02197202;1;0;0
+Café Hôtel Restaurant;Restaurant;Grand restaurant rapide;Non climatisé;02262902;1;0;0
+Café Hôtel Restaurant;Restaurant;Grand restaurant traditionnel;Non climatisé;02263002;1;0;0
+Café Hôtel Restaurant;Restaurant;Petit restaurant rapide;Non climatisé;02267702;1;0;0
+Café Hôtel Restaurant;Restaurant;Petit restaurant traditionnel;Non climatisé;02267802;1;0;0
+Commerce;Commerce de détail non alimentaire;Complexe brico;Non climatisé;03060902;1;0;0
+Commerce;Commerce de détail non alimentaire;Grand brico;Non climatisé;03061702;1;0;0
+Commerce;Commerce de détail non alimentaire;Grand librairie;Non climatisé;03062602;1;0;0
+Commerce;Commerce de détail non alimentaire;Grand Mode;Non climatisé;03062702;1;0;0
+Commerce;Commerce de détail non alimentaire;Petit brico;Non climatisé;03066402;1;0;0
+Commerce;Commerce de détail non alimentaire;Petit librairie;Non climatisé;03067302;1;0;0
+Commerce;Commerce de détail non alimentaire;Petit mode;Non climatisé;03067402;1;0;0
+Commerce;Commerce de détail non alimentaire;ZAC Mode;Non climatisé;03069602;1;0;0
+Commerce;Commerce de gros;Grand commerce de gros;Non climatisé;03071902;1;0;0
+Commerce;Commerce de gros;Petit commerce de gros;Non climatisé;03076602;1;0;0
+Commerce;Entrepôt;Entrepôt;Non climatisé;03121202;1;0;0
+Commerce;Grand commerce alimentaire;Grand alimentaire;Non climatisé;03161502;1;0;0
+Commerce;Grand commerce alimentaire;Hypermarché;Non climatisé;03164102;1;0;0
+Commerce;Grand commerce alimentaire;Superette;Non climatisé;03169202;1;0;0
+Commerce;Grand commerce alimentaire;Supermarché;Non climatisé;03169302;1;0;0
+Commerce;Petit commerce alimentaire;Petit boulangerie;Non climatisé;03236302;1;0;0
+Commerce;Petit commerce alimentaire;Petit librairie;Non climatisé;03237302;1;0;0
+Commerce;Petit commerce alimentaire;Petit poissonnerie;Non climatisé;03237502;1;0;0
+Commerce;Process;Grand librairie;Non climatisé;03242602;1;0;0
+Commerce;Process;Grand process;Non climatisé;03242802;1;0;0
+Commerce;Process;Petit process;Non climatisé;03247602;1;0;0
+Enseignement Recherche;Enseignement primaire;Cantine élémentaire;Non climatisé;04090302;1;0;0
+Enseignement Recherche;Enseignement primaire;Cantine préélémentaire;Non climatisé;04090602;1;0;0
+Enseignement Recherche;Enseignement primaire;Elémentaire;Non climatisé;04091102;1;0;0
+Enseignement Recherche;Enseignement primaire;Préélémentaire;Non climatisé;04098602;1;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine collége;Non climatisé;04100202;1;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine LEGT;Non climatisé;04100402;1;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine LP;Non climatisé;04100502;1;0;0
+Enseignement Recherche;Enseignement secondaire;Collège;Non climatisé;04100802;1;0;0
+Enseignement Recherche;Enseignement secondaire;Internat college;Non climatisé;04104602;1;0;0
+Enseignement Recherche;Enseignement secondaire;Internat LEGT;Non climatisé;04104702;1;0;0
+Enseignement Recherche;Enseignement secondaire;Internat LP;Non climatisé;04104802;1;0;0
+Enseignement Recherche;Enseignement secondaire;Lycée d’enseignement général et technologique (LEGT);Non climatisé;04104902;1;0;0
+Enseignement Recherche;Enseignement secondaire;Lycée professionnel (LP);Non climatisé;04105002;1;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;école;Non climatisé;04111002;1;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;R&D en sciences humaines et sociales;Non climatisé;04118702;1;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;R&D sciences physiques et naturelles;Non climatisé;04118802;1;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;université;Non climatisé;04119402;1;0;0
+Habitat Communautaire;Foyer;Foyers;Non climatisé;05141302;1;0;0
+Habitat Communautaire;Maison de pré-retraite;Maison de pré-retraite;Non climatisé;05215102;1;0;0
+Habitat Communautaire;Maison retraite médicalisée;Maison retraite médicalisée;Non climatisé;05225202;1;0;0
+Habitat Communautaire;Résidence universitaire;Résidence universitaire;Non climatisé;05258902;1;0;0
+Habitat Communautaire;Service à la personne;Résidentiel;Non climatisé;05289002;1;0;0
+Santé Action Sociale;Cabinet médical;Cabinet médical;Non climatisé;06030102;1;0;0
+Santé Action Sociale;Centre accueil;Centre accueil;Non climatisé;06050702;1;0;0
+Santé Action Sociale;Garderie;Garderie;Non climatisé;06151402;1;0;0
+Santé Action Sociale;Hôpital;Hopital bloc;Non climatisé;06173402;1;0;0
+Santé Action Sociale;Hôpital;Hopital maison;Non climatisé;06173502;1;0;0
+Santé Action Sociale;Hôpital;Hopital pavillonnaire;Non climatisé;06173602;1;0;0
+Sport Loisir Culture;Culture;Grand cinéma;Non climatisé;07081802;1;0;0
+Sport Loisir Culture;Culture;Grande salle de spectacle;Non climatisé;07083202;1;0;0
+Sport Loisir Culture;Culture;Immeuble péri urbain;Non climatisé;07084302;1;0;0
+Sport Loisir Culture;Culture;Musée;Non climatisé;07085902;1;0;0
+Sport Loisir Culture;Culture;Petit cinéma;Non climatisé;07086502;1;0;0
+Sport Loisir Culture;Culture;Petite salle de spectacle;Non climatisé;07088002;1;0;0
+Sport Loisir Culture;Equipement collectif;Immeuble péri urbain;Non climatisé;07134302;1;0;0
+Sport Loisir Culture;Loisir;Grand bar café tabac;Non climatisé;07201602;1;0;0
+Sport Loisir Culture;Loisir;Salle non spécialisée;Non climatisé;07209102;1;0;0
+Sport Loisir Culture;Loisir;Vestiaire et rangement;Non climatisé;07209502;1;0;0
+Sport Loisir Culture;Sport;Grand bar café tabac;Non climatisé;07291602;1;0;0
+Sport Loisir Culture;Sport;Grande salle multisport;Non climatisé;07293302;1;0;0
+Sport Loisir Culture;Sport;Patinoire;Non climatisé;07296102;1;0;0
+Sport Loisir Culture;Sport;Petite salle multisport;Non climatisé;07298102;1;0;0
+Sport Loisir Culture;Sport;Piscine;Non climatisé;07298202;1;0;0
+Sport Loisir Culture;Sport;Salle non spécialisée;Non climatisé;07299102;1;0;0
+Sport Loisir Culture;Sport;Vestiaire et rangement;Non climatisé;07299502;1;0;0
+Transport;Service;nr;Non climatisé;08276002;1;0;0
+Transport;Transport aérien;nr;Non climatisé;08306002;1;0;0
+Transport;Transport autre;nr;Non climatisé;08316002;1;0;0
+Transport;Transport ferroviaire;nr;Non climatisé;08326002;1;0;0
+Transport;Transport maritime et fluvial;nr;Non climatisé;08336002;1;0;0
+Transport;Transport routier;nr;Non climatisé;08346002;1;0;0
+Transport;Transport urbain;nr;Non climatisé;08356002;1;0;0
+Bureaux Administration;Administration;immeuble peri urbain;Climatisé;01014201;2;3.701030726;80.80050725
+Bureaux Administration;Administration;immeuble rénové;Climatisé;01014401;2;3.634505914;81.37823454
+Bureaux Administration;Administration;plateau large bureaux cloisonnés;Climatisé;01018401;2;3.636770069;110.3744244
+Bureaux Administration;Bureaux;immeuble peri urbain;Climatisé;01024201;2;3.682342987;104.1732425
+Bureaux Administration;Bureaux;immeuble rénové;Climatisé;01024401;2;3.633671071;104.7547493
+Bureaux Administration;Bureaux;immeuble résidentiel;Climatisé;01024501;2;3.660772014;102.2144947
+Bureaux Administration;Bureaux;plateau large bureau paysagés;Climatisé;01028301;2;3.668006152;113.3285618
+Bureaux Administration;Bureaux;plateau large bureaux cloisonnés;Climatisé;01028401;2;3.659517357;110.8506257
+Bureaux Administration;Bureaux;plateau mince;Climatisé;01028501;2;3.67033184;112.0556117
+Café Hôtel Restaurant;Café, cantine, traiteur;Grand bar café tabac;Climatisé;02041601;2;3.904569146;143.3496283
+Café Hôtel Restaurant;Café, cantine, traiteur;Grande cantine;Climatisé;02043101;2;3.923709743;142.5058594
+Café Hôtel Restaurant;Café, cantine, traiteur;Petit bar café tabac;Climatisé;02046201;2;3.924013295;135.9285275
+Café Hôtel Restaurant;Café, cantine, traiteur;Petite cantine;Climatisé;02047901;2;3.917629677;141.2747469
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Bas de gamme;Climatisé;02182001;2;3.935110431;132.0062908
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Haut de gamme;Climatisé;02182101;2;3.957521589;133.2744289
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Luxe;Climatisé;02182201;2;3.917173088;132.2263216
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Haut de gamme;Climatisé;02183701;2;3.985549203;131.9431818
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Luxe;Climatisé;02183801;2;3.947211492;133.2588692
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Bas de gamme;Climatisé;02185301;2;3.912577993;135.5062013
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Haut de gamme;Climatisé;02185401;2;3.90337483;133.055159
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Luxe;Climatisé;02185501;2;3.899647584;131.0756243
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Bas de gamme;Climatisé;02186701;2;3.917229712;128.9338969
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Haut de gamme;Climatisé;02186801;2;3.897913684;133.0690476
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Luxe;Climatisé;02186901;2;3.891571854;135.8290258
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Bas de gamme;Climatisé;02192301;2;3.95076613;132.7723384
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Haut de gamme;Climatisé;02192401;2;3.98357662;130.4803922
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Luxe;Climatisé;02192501;2;3.930916683;130.4423077
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Climatisé;02193901;2;3.912718405;132.1071429
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Luxe;Climatisé;02194001;2;3.991678122;153.75
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Bas de gamme;Climatisé;02195601;2;3.934754802;129.8553678
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Haut de gamme;Climatisé;02195701;2;3.923702394;130.8619154
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Luxe;Climatisé;02195801;2;3.991645771;132.3113208
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Bas de gamme;Climatisé;02197001;2;3.911927388;127.7249445
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Haut de gamme;Climatisé;02197101;2;3.882894309;128.1994048
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Luxe;Climatisé;02197201;2;3.906232059;128.5
+Café Hôtel Restaurant;Restaurant;Grand restaurant rapide;Climatisé;02262901;2;3.942087849;133.9828767
+Café Hôtel Restaurant;Restaurant;Grand restaurant traditionnel;Climatisé;02263001;2;3.931054054;133.0457089
+Café Hôtel Restaurant;Restaurant;Petit restaurant rapide;Climatisé;02267701;2;3.914737324;129.9832523
+Café Hôtel Restaurant;Restaurant;Petit restaurant traditionnel;Climatisé;02267801;2;3.918412418;128.9233412
+Commerce;Commerce de détail non alimentaire;Complexe brico;Climatisé;03060901;2;4.770672427;115.7171429
+Commerce;Commerce de détail non alimentaire;Grand brico;Climatisé;03061701;2;4.75664616;112.9250307
+Commerce;Commerce de détail non alimentaire;Grand librairie;Climatisé;03062601;2;4.407308217;156
+Commerce;Commerce de détail non alimentaire;Grand Mode;Climatisé;03062701;2;4.420427099;156
+Commerce;Commerce de détail non alimentaire;Petit brico;Climatisé;03066401;2;3.294768856;156
+Commerce;Commerce de détail non alimentaire;Petit librairie;Climatisé;03067301;2;3.294788039;156
+Commerce;Commerce de détail non alimentaire;Petit mode;Climatisé;03067401;2;3.291116534;156
+Commerce;Commerce de détail non alimentaire;ZAC Mode;Climatisé;03069601;2;4.760942293;116.4253241
+Commerce;Commerce de gros;Grand commerce de gros;Climatisé;03071901;2;4.784537627;114.1803519
+Commerce;Commerce de gros;Petit commerce de gros;Climatisé;03076601;2;4.75659859;109.4392225
+Commerce;Entrepôt;Entrepôt;Climatisé;03121201;2;4.086635121;142.0528249
+Commerce;Grand commerce alimentaire;Grand alimentaire;Climatisé;03161501;2;4.433944032;156
+Commerce;Grand commerce alimentaire;Hypermarché;Climatisé;03164101;2;4.759616767;118.2348624
+Commerce;Grand commerce alimentaire;Superette;Climatisé;03169201;2;3.284055255;156
+Commerce;Grand commerce alimentaire;Supermarché;Climatisé;03169301;2;4.764346292;126.134564
+Commerce;Petit commerce alimentaire;Petit boulangerie;Climatisé;03236301;2;3.292019744;156
+Commerce;Petit commerce alimentaire;Petit librairie;Climatisé;03237301;2;3.278676824;156
+Commerce;Petit commerce alimentaire;Petit poissonnerie;Climatisé;03237501;2;3.291789026;156
+Commerce;Process;Grand librairie;Climatisé;03242601;2;4.395948738;156
+Commerce;Process;Grand process;Climatisé;03242801;2;4.402556321;156
+Commerce;Process;Petit process;Climatisé;03247601;2;3.291943581;156
+Enseignement Recherche;Enseignement primaire;Cantine élémentaire;Climatisé;04090301;2;3.676625314;173.25
+Enseignement Recherche;Enseignement primaire;Cantine préélémentaire;Climatisé;04090601;2;3.676625314;173.25
+Enseignement Recherche;Enseignement primaire;Elémentaire;Climatisé;04091101;2;3.676625314;173.25
+Enseignement Recherche;Enseignement primaire;Préélémentaire;Climatisé;04098601;2;3.676625314;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine collége;Climatisé;04100201;2;3.676625314;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine LEGT;Climatisé;04100401;2;3.676625314;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine LP;Climatisé;04100501;2;3.676625314;173.25
+Enseignement Recherche;Enseignement secondaire;Collège;Climatisé;04100801;2;3.676625314;173.25
+Enseignement Recherche;Enseignement secondaire;Internat college;Climatisé;04104601;2;3.676625314;173.25
+Enseignement Recherche;Enseignement secondaire;Internat LEGT;Climatisé;04104701;2;3.676625314;173.25
+Enseignement Recherche;Enseignement secondaire;Internat LP;Climatisé;04104801;2;3.676625314;173.25
+Enseignement Recherche;Enseignement secondaire;Lycée d’enseignement général et technologique (LEGT);Climatisé;04104901;2;3.676625314;173.25
+Enseignement Recherche;Enseignement secondaire;Lycée professionnel (LP);Climatisé;04105001;2;3.676625314;173.25
+Enseignement Recherche;Enseignement supérieur et recherche;école;Climatisé;04111001;2;3.722653246;190.5
+Enseignement Recherche;Enseignement supérieur et recherche;R&D en sciences humaines et sociales;Climatisé;04118701;2;3.64831484;156
+Enseignement Recherche;Enseignement supérieur et recherche;R&D sciences physiques et naturelles;Climatisé;04118801;2;3.627130457;156
+Enseignement Recherche;Enseignement supérieur et recherche;université;Climatisé;04119401;2;3.708402715;190.5
+Habitat Communautaire;Foyer;Foyers;Climatisé;05141301;2;3.360714152;156
+Habitat Communautaire;Maison de pré-retraite;Maison de pré-retraite;Climatisé;05215101;2;3.37207522;156
+Habitat Communautaire;Maison retraite médicalisée;Maison retraite médicalisée;Climatisé;05225201;2;3.349353083;156
+Habitat Communautaire;Résidence universitaire;Résidence universitaire;Climatisé;05258901;2;3.360714152;156
+Habitat Communautaire;Service à la personne;Résidentiel;Climatisé;05289001;2;3.360714152;156
+Santé Action Sociale;Cabinet médical;Cabinet médical;Climatisé;06030101;2;3.634219239;156
+Santé Action Sociale;Centre accueil;Centre accueil;Climatisé;06050701;2;3.634219239;156
+Santé Action Sociale;Garderie;Garderie;Climatisé;06151401;2;3.634219239;156
+Santé Action Sociale;Hôpital;Hopital bloc;Climatisé;06173401;2;3.630214963;156
+Santé Action Sociale;Hôpital;Hopital maison;Climatisé;06173501;2;3.634345456;156
+Santé Action Sociale;Hôpital;Hopital pavillonnaire;Climatisé;06173601;2;3.638097296;156
+Sport Loisir Culture;Culture;Grand cinéma;Climatisé;07081801;2;3.660563006;155.4496855
+Sport Loisir Culture;Culture;Grande salle de spectacle;Climatisé;07083201;2;3.673795163;155.4176471
+Sport Loisir Culture;Culture;Immeuble péri urbain;Climatisé;07084301;2;3.613445471;156
+Sport Loisir Culture;Culture;Musée;Climatisé;07085901;2;3.684750807;155.2065293
+Sport Loisir Culture;Culture;Petit cinéma;Climatisé;07086501;2;3.64950384;155.4533333
+Sport Loisir Culture;Culture;Petite salle de spectacle;Climatisé;07088001;2;3.661159323;155.398906
+Sport Loisir Culture;Equipement collectif;Immeuble péri urbain;Climatisé;07134301;2;3.581908864;156
+Sport Loisir Culture;Loisir;Grand bar café tabac;Climatisé;07201601;2;3.57168798;156
+Sport Loisir Culture;Loisir;Salle non spécialisée;Climatisé;07209101;2;3.652569202;155.2963286
+Sport Loisir Culture;Loisir;Vestiaire et rangement;Climatisé;07209501;2;3.63470853;155.5943541
+Sport Loisir Culture;Sport;Grand bar café tabac;Climatisé;07291601;2;3.584354404;156
+Sport Loisir Culture;Sport;Grande salle multisport;Climatisé;07293301;2;3.626002429;155.7717662
+Sport Loisir Culture;Sport;Patinoire;Climatisé;07296101;2;3.642388112;155.4352941
+Sport Loisir Culture;Sport;Petite salle multisport;Climatisé;07298101;2;3.640130702;155.5159127
+Sport Loisir Culture;Sport;Piscine;Climatisé;07298201;2;3.63694348;155.5452358
+Sport Loisir Culture;Sport;Salle non spécialisée;Climatisé;07299101;2;3.641425164;155.4246734
+Sport Loisir Culture;Sport;Vestiaire et rangement;Climatisé;07299501;2;3.63470853;155.5943541
+Transport;Service;nr;Climatisé;08276001;2;1.2;128.8973583
+Transport;Transport aérien;nr;Climatisé;08306001;2;1.2;128.8973583
+Transport;Transport autre;nr;Climatisé;08316001;2;1.2;128.8973583
+Transport;Transport ferroviaire;nr;Climatisé;08326001;2;1.2;128.8973583
+Transport;Transport maritime et fluvial;nr;Climatisé;08336001;2;1.2;128.8973583
+Transport;Transport routier;nr;Climatisé;08346001;2;1.2;128.8973583
+Transport;Transport urbain;nr;Climatisé;08356001;2;1.2;128.8973583
+Bureaux Administration;Administration;immeuble peri urbain;Non climatisé;01014202;2;0;0
+Bureaux Administration;Administration;immeuble rénové;Non climatisé;01014402;2;0;0
+Bureaux Administration;Administration;plateau large bureaux cloisonnés;Non climatisé;01018402;2;0;0
+Bureaux Administration;Bureaux;immeuble peri urbain;Non climatisé;01024202;2;0;0
+Bureaux Administration;Bureaux;immeuble rénové;Non climatisé;01024402;2;0;0
+Bureaux Administration;Bureaux;immeuble résidentiel;Non climatisé;01024502;2;0;0
+Bureaux Administration;Bureaux;plateau large bureau paysagés;Non climatisé;01028302;2;0;0
+Bureaux Administration;Bureaux;plateau large bureaux cloisonnés;Non climatisé;01028402;2;0;0
+Bureaux Administration;Bureaux;plateau mince;Non climatisé;01028502;2;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Grand bar café tabac;Non climatisé;02041602;2;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Grande cantine;Non climatisé;02043102;2;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Petit bar café tabac;Non climatisé;02046202;2;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Petite cantine;Non climatisé;02047902;2;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Bas de gamme;Non climatisé;02182002;2;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Haut de gamme;Non climatisé;02182102;2;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Luxe;Non climatisé;02182202;2;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Haut de gamme;Non climatisé;02183702;2;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Luxe;Non climatisé;02183802;2;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Bas de gamme;Non climatisé;02185302;2;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Haut de gamme;Non climatisé;02185402;2;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Luxe;Non climatisé;02185502;2;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Bas de gamme;Non climatisé;02186702;2;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Haut de gamme;Non climatisé;02186802;2;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Luxe;Non climatisé;02186902;2;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Bas de gamme;Non climatisé;02192302;2;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Haut de gamme;Non climatisé;02192402;2;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Luxe;Non climatisé;02192502;2;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Non climatisé;02193902;2;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Luxe;Non climatisé;02194002;2;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Bas de gamme;Non climatisé;02195602;2;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Haut de gamme;Non climatisé;02195702;2;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Luxe;Non climatisé;02195802;2;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Bas de gamme;Non climatisé;02197002;2;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Haut de gamme;Non climatisé;02197102;2;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Luxe;Non climatisé;02197202;2;0;0
+Café Hôtel Restaurant;Restaurant;Grand restaurant rapide;Non climatisé;02262902;2;0;0
+Café Hôtel Restaurant;Restaurant;Grand restaurant traditionnel;Non climatisé;02263002;2;0;0
+Café Hôtel Restaurant;Restaurant;Petit restaurant rapide;Non climatisé;02267702;2;0;0
+Café Hôtel Restaurant;Restaurant;Petit restaurant traditionnel;Non climatisé;02267802;2;0;0
+Commerce;Commerce de détail non alimentaire;Complexe brico;Non climatisé;03060902;2;0;0
+Commerce;Commerce de détail non alimentaire;Grand brico;Non climatisé;03061702;2;0;0
+Commerce;Commerce de détail non alimentaire;Grand librairie;Non climatisé;03062602;2;0;0
+Commerce;Commerce de détail non alimentaire;Grand Mode;Non climatisé;03062702;2;0;0
+Commerce;Commerce de détail non alimentaire;Petit brico;Non climatisé;03066402;2;0;0
+Commerce;Commerce de détail non alimentaire;Petit librairie;Non climatisé;03067302;2;0;0
+Commerce;Commerce de détail non alimentaire;Petit mode;Non climatisé;03067402;2;0;0
+Commerce;Commerce de détail non alimentaire;ZAC Mode;Non climatisé;03069602;2;0;0
+Commerce;Commerce de gros;Grand commerce de gros;Non climatisé;03071902;2;0;0
+Commerce;Commerce de gros;Petit commerce de gros;Non climatisé;03076602;2;0;0
+Commerce;Entrepôt;Entrepôt;Non climatisé;03121202;2;0;0
+Commerce;Grand commerce alimentaire;Grand alimentaire;Non climatisé;03161502;2;0;0
+Commerce;Grand commerce alimentaire;Hypermarché;Non climatisé;03164102;2;0;0
+Commerce;Grand commerce alimentaire;Superette;Non climatisé;03169202;2;0;0
+Commerce;Grand commerce alimentaire;Supermarché;Non climatisé;03169302;2;0;0
+Commerce;Petit commerce alimentaire;Petit boulangerie;Non climatisé;03236302;2;0;0
+Commerce;Petit commerce alimentaire;Petit librairie;Non climatisé;03237302;2;0;0
+Commerce;Petit commerce alimentaire;Petit poissonnerie;Non climatisé;03237502;2;0;0
+Commerce;Process;Grand librairie;Non climatisé;03242602;2;0;0
+Commerce;Process;Grand process;Non climatisé;03242802;2;0;0
+Commerce;Process;Petit process;Non climatisé;03247602;2;0;0
+Enseignement Recherche;Enseignement primaire;Cantine élémentaire;Non climatisé;04090302;2;0;0
+Enseignement Recherche;Enseignement primaire;Cantine préélémentaire;Non climatisé;04090602;2;0;0
+Enseignement Recherche;Enseignement primaire;Elémentaire;Non climatisé;04091102;2;0;0
+Enseignement Recherche;Enseignement primaire;Préélémentaire;Non climatisé;04098602;2;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine collége;Non climatisé;04100202;2;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine LEGT;Non climatisé;04100402;2;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine LP;Non climatisé;04100502;2;0;0
+Enseignement Recherche;Enseignement secondaire;Collège;Non climatisé;04100802;2;0;0
+Enseignement Recherche;Enseignement secondaire;Internat college;Non climatisé;04104602;2;0;0
+Enseignement Recherche;Enseignement secondaire;Internat LEGT;Non climatisé;04104702;2;0;0
+Enseignement Recherche;Enseignement secondaire;Internat LP;Non climatisé;04104802;2;0;0
+Enseignement Recherche;Enseignement secondaire;Lycée d’enseignement général et technologique (LEGT);Non climatisé;04104902;2;0;0
+Enseignement Recherche;Enseignement secondaire;Lycée professionnel (LP);Non climatisé;04105002;2;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;école;Non climatisé;04111002;2;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;R&D en sciences humaines et sociales;Non climatisé;04118702;2;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;R&D sciences physiques et naturelles;Non climatisé;04118802;2;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;université;Non climatisé;04119402;2;0;0
+Habitat Communautaire;Foyer;Foyers;Non climatisé;05141302;2;0;0
+Habitat Communautaire;Maison de pré-retraite;Maison de pré-retraite;Non climatisé;05215102;2;0;0
+Habitat Communautaire;Maison retraite médicalisée;Maison retraite médicalisée;Non climatisé;05225202;2;0;0
+Habitat Communautaire;Résidence universitaire;Résidence universitaire;Non climatisé;05258902;2;0;0
+Habitat Communautaire;Service à la personne;Résidentiel;Non climatisé;05289002;2;0;0
+Santé Action Sociale;Cabinet médical;Cabinet médical;Non climatisé;06030102;2;0;0
+Santé Action Sociale;Centre accueil;Centre accueil;Non climatisé;06050702;2;0;0
+Santé Action Sociale;Garderie;Garderie;Non climatisé;06151402;2;0;0
+Santé Action Sociale;Hôpital;Hopital bloc;Non climatisé;06173402;2;0;0
+Santé Action Sociale;Hôpital;Hopital maison;Non climatisé;06173502;2;0;0
+Santé Action Sociale;Hôpital;Hopital pavillonnaire;Non climatisé;06173602;2;0;0
+Sport Loisir Culture;Culture;Grand cinéma;Non climatisé;07081802;2;0;0
+Sport Loisir Culture;Culture;Grande salle de spectacle;Non climatisé;07083202;2;0;0
+Sport Loisir Culture;Culture;Immeuble péri urbain;Non climatisé;07084302;2;0;0
+Sport Loisir Culture;Culture;Musée;Non climatisé;07085902;2;0;0
+Sport Loisir Culture;Culture;Petit cinéma;Non climatisé;07086502;2;0;0
+Sport Loisir Culture;Culture;Petite salle de spectacle;Non climatisé;07088002;2;0;0
+Sport Loisir Culture;Equipement collectif;Immeuble péri urbain;Non climatisé;07134302;2;0;0
+Sport Loisir Culture;Loisir;Grand bar café tabac;Non climatisé;07201602;2;0;0
+Sport Loisir Culture;Loisir;Salle non spécialisée;Non climatisé;07209102;2;0;0
+Sport Loisir Culture;Loisir;Vestiaire et rangement;Non climatisé;07209502;2;0;0
+Sport Loisir Culture;Sport;Grand bar café tabac;Non climatisé;07291602;2;0;0
+Sport Loisir Culture;Sport;Grande salle multisport;Non climatisé;07293302;2;0;0
+Sport Loisir Culture;Sport;Patinoire;Non climatisé;07296102;2;0;0
+Sport Loisir Culture;Sport;Petite salle multisport;Non climatisé;07298102;2;0;0
+Sport Loisir Culture;Sport;Piscine;Non climatisé;07298202;2;0;0
+Sport Loisir Culture;Sport;Salle non spécialisée;Non climatisé;07299102;2;0;0
+Sport Loisir Culture;Sport;Vestiaire et rangement;Non climatisé;07299502;2;0;0
+Transport;Service;nr;Non climatisé;08276002;2;0;0
+Transport;Transport aérien;nr;Non climatisé;08306002;2;0;0
+Transport;Transport autre;nr;Non climatisé;08316002;2;0;0
+Transport;Transport ferroviaire;nr;Non climatisé;08326002;2;0;0
+Transport;Transport maritime et fluvial;nr;Non climatisé;08336002;2;0;0
+Transport;Transport routier;nr;Non climatisé;08346002;2;0;0
+Transport;Transport urbain;nr;Non climatisé;08356002;2;0;0
+Bureaux Administration;Administration;immeuble peri urbain;Climatisé;01014201;3;4.009449953;80.80050725
+Bureaux Administration;Administration;immeuble rénové;Climatisé;01014401;3;3.937381407;81.37823454
+Bureaux Administration;Administration;plateau large bureaux cloisonnés;Climatisé;01018401;3;3.939834241;110.3744244
+Bureaux Administration;Bureaux;immeuble peri urbain;Climatisé;01024201;3;3.989204902;104.1732425
+Bureaux Administration;Bureaux;immeuble rénové;Climatisé;01024401;3;3.936476993;104.7547493
+Bureaux Administration;Bureaux;immeuble résidentiel;Climatisé;01024501;3;3.965836349;102.2144947
+Bureaux Administration;Bureaux;plateau large bureau paysagés;Climatisé;01028301;3;3.973673331;113.3285618
+Bureaux Administration;Bureaux;plateau large bureaux cloisonnés;Climatisé;01028401;3;3.964477136;110.8506257
+Bureaux Administration;Bureaux;plateau mince;Climatisé;01028501;3;3.976192826;112.0556117
+Café Hôtel Restaurant;Café, cantine, traiteur;Grand bar café tabac;Climatisé;02041601;3;4.229949908;143.3496283
+Café Hôtel Restaurant;Café, cantine, traiteur;Grande cantine;Climatisé;02043101;3;4.250685555;142.5058594
+Café Hôtel Restaurant;Café, cantine, traiteur;Petit bar café tabac;Climatisé;02046201;3;4.251014403;135.9285275
+Café Hôtel Restaurant;Café, cantine, traiteur;Petite cantine;Climatisé;02047901;3;4.244098816;141.2747469
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Bas de gamme;Climatisé;02182001;3;4.2630363;132.0062908
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Haut de gamme;Climatisé;02182101;3;4.287315055;133.2744289
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Luxe;Climatisé;02182201;3;4.243604179;132.2263216
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Haut de gamme;Climatisé;02183701;3;4.317678303;131.9431818
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Luxe;Climatisé;02183801;3;4.276145783;133.2588692
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Bas de gamme;Climatisé;02185301;3;4.238626159;135.5062013
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Haut de gamme;Climatisé;02185401;3;4.228656066;133.055159
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Luxe;Climatisé;02185501;3;4.224618216;131.0756243
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Bas de gamme;Climatisé;02186701;3;4.243665521;128.9338969
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Haut de gamme;Climatisé;02186801;3;4.222739824;133.0690476
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Luxe;Climatisé;02186901;3;4.215869509;135.8290258
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Bas de gamme;Climatisé;02192301;3;4.279996641;132.7723384
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Haut de gamme;Climatisé;02192401;3;4.315541339;130.4803922
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Luxe;Climatisé;02192501;3;4.258493073;130.4423077
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Climatisé;02193901;3;4.238778272;132.1071429
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Luxe;Climatisé;02194001;3;4.324317965;153.75
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Bas de gamme;Climatisé;02195601;3;4.262651036;129.8553678
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Haut de gamme;Climatisé;02195701;3;4.250677593;130.8619154
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Luxe;Climatisé;02195801;3;4.324282918;132.3113208
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Bas de gamme;Climatisé;02197001;3;4.237921337;127.7249445
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Haut de gamme;Climatisé;02197101;3;4.206468835;128.1994048
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Luxe;Climatisé;02197201;3;4.231751397;128.5
+Café Hôtel Restaurant;Restaurant;Grand restaurant rapide;Climatisé;02262901;3;4.27059517;133.9828767
+Café Hôtel Restaurant;Restaurant;Grand restaurant traditionnel;Climatisé;02263001;3;4.258641892;133.0457089
+Café Hôtel Restaurant;Restaurant;Petit restaurant rapide;Climatisé;02267701;3;4.240965434;129.9832523
+Café Hôtel Restaurant;Restaurant;Petit restaurant traditionnel;Climatisé;02267801;3;4.244946786;128.9233412
+Commerce;Commerce de détail non alimentaire;Complexe brico;Climatisé;03060901;3;5.168228463;115.7171429
+Commerce;Commerce de détail non alimentaire;Grand brico;Climatisé;03061701;3;5.15303334;112.9250307
+Commerce;Commerce de détail non alimentaire;Grand librairie;Climatisé;03062601;3;4.774583902;156
+Commerce;Commerce de détail non alimentaire;Grand Mode;Climatisé;03062701;3;4.788796024;156
+Commerce;Commerce de détail non alimentaire;Petit brico;Climatisé;03066401;3;3.569332927;156
+Commerce;Commerce de détail non alimentaire;Petit librairie;Climatisé;03067301;3;3.569353709;156
+Commerce;Commerce de détail non alimentaire;Petit mode;Climatisé;03067401;3;3.565376245;156
+Commerce;Commerce de détail non alimentaire;ZAC Mode;Climatisé;03069601;3;5.157687484;116.4253241
+Commerce;Commerce de gros;Grand commerce de gros;Climatisé;03071901;3;5.183249096;114.1803519
+Commerce;Commerce de gros;Petit commerce de gros;Climatisé;03076601;3;5.152981806;109.4392225
+Commerce;Entrepôt;Entrepôt;Climatisé;03121201;3;4.427188048;142.0528249
+Commerce;Grand commerce alimentaire;Grand alimentaire;Climatisé;03161501;3;4.803439368;156
+Commerce;Grand commerce alimentaire;Hypermarché;Climatisé;03164101;3;5.156251498;118.2348624
+Commerce;Grand commerce alimentaire;Superette;Climatisé;03169201;3;3.557726526;156
+Commerce;Grand commerce alimentaire;Supermarché;Climatisé;03169301;3;5.16137515;126.134564
+Commerce;Petit commerce alimentaire;Petit boulangerie;Climatisé;03236301;3;3.566354723;156
+Commerce;Petit commerce alimentaire;Petit librairie;Climatisé;03237301;3;3.551899893;156
+Commerce;Petit commerce alimentaire;Petit poissonnerie;Climatisé;03237501;3;3.566104778;156
+Commerce;Process;Grand librairie;Climatisé;03242601;3;4.7622778;156
+Commerce;Process;Grand process;Climatisé;03242801;3;4.769436014;156
+Commerce;Process;Petit process;Climatisé;03247601;3;3.566272212;156
+Enseignement Recherche;Enseignement primaire;Cantine élémentaire;Climatisé;04090301;3;3.983010757;173.25
+Enseignement Recherche;Enseignement primaire;Cantine préélémentaire;Climatisé;04090601;3;3.983010757;173.25
+Enseignement Recherche;Enseignement primaire;Elémentaire;Climatisé;04091101;3;3.983010757;173.25
+Enseignement Recherche;Enseignement primaire;Préélémentaire;Climatisé;04098601;3;3.983010757;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine collége;Climatisé;04100201;3;3.983010757;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine LEGT;Climatisé;04100401;3;3.983010757;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine LP;Climatisé;04100501;3;3.983010757;173.25
+Enseignement Recherche;Enseignement secondaire;Collège;Climatisé;04100801;3;3.983010757;173.25
+Enseignement Recherche;Enseignement secondaire;Internat college;Climatisé;04104601;3;3.983010757;173.25
+Enseignement Recherche;Enseignement secondaire;Internat LEGT;Climatisé;04104701;3;3.983010757;173.25
+Enseignement Recherche;Enseignement secondaire;Internat LP;Climatisé;04104801;3;3.983010757;173.25
+Enseignement Recherche;Enseignement secondaire;Lycée d’enseignement général et technologique (LEGT);Climatisé;04104901;3;3.983010757;173.25
+Enseignement Recherche;Enseignement secondaire;Lycée professionnel (LP);Climatisé;04105001;3;3.983010757;173.25
+Enseignement Recherche;Enseignement supérieur et recherche;école;Climatisé;04111001;3;4.032874349;190.5
+Enseignement Recherche;Enseignement supérieur et recherche;R&D en sciences humaines et sociales;Climatisé;04118701;3;3.952341077;156
+Enseignement Recherche;Enseignement supérieur et recherche;R&D sciences physiques et naturelles;Climatisé;04118801;3;3.929391328;156
+Enseignement Recherche;Enseignement supérieur et recherche;université;Climatisé;04119401;3;4.017436274;190.5
+Habitat Communautaire;Foyer;Foyers;Climatisé;05141301;3;3.640773664;156
+Habitat Communautaire;Maison de pré-retraite;Maison de pré-retraite;Climatisé;05215101;3;3.653081489;156
+Habitat Communautaire;Maison retraite médicalisée;Maison retraite médicalisée;Climatisé;05225201;3;3.62846584;156
+Habitat Communautaire;Résidence universitaire;Résidence universitaire;Climatisé;05258901;3;3.640773664;156
+Habitat Communautaire;Service à la personne;Résidentiel;Climatisé;05289001;3;3.640773664;156
+Santé Action Sociale;Cabinet médical;Cabinet médical;Climatisé;06030101;3;3.937070842;156
+Santé Action Sociale;Centre accueil;Centre accueil;Climatisé;06050701;3;3.937070842;156
+Santé Action Sociale;Garderie;Garderie;Climatisé;06151401;3;3.937070842;156
+Santé Action Sociale;Hôpital;Hopital bloc;Climatisé;06173401;3;3.932732877;156
+Santé Action Sociale;Hôpital;Hopital maison;Climatisé;06173501;3;3.937207578;156
+Santé Action Sociale;Hôpital;Hopital pavillonnaire;Climatisé;06173601;3;3.941272071;156
+Sport Loisir Culture;Culture;Grand cinéma;Climatisé;07081801;3;3.965609923;155.4496855
+Sport Loisir Culture;Culture;Grande salle de spectacle;Climatisé;07083201;3;3.97994476;155.4176471
+Sport Loisir Culture;Culture;Immeuble péri urbain;Climatisé;07084301;3;3.914565927;156
+Sport Loisir Culture;Culture;Musée;Climatisé;07085901;3;3.991813374;155.2065293
+Sport Loisir Culture;Culture;Petit cinéma;Climatisé;07086501;3;3.95362916;155.4533333
+Sport Loisir Culture;Culture;Petite salle de spectacle;Climatisé;07088001;3;3.966255934;155.398906
+Sport Loisir Culture;Equipement collectif;Immeuble péri urbain;Climatisé;07134301;3;3.880401269;156
+Sport Loisir Culture;Loisir;Grand bar café tabac;Climatisé;07201601;3;3.869328645;156
+Sport Loisir Culture;Loisir;Salle non spécialisée;Climatisé;07209101;3;3.956949969;155.2963286
+Sport Loisir Culture;Loisir;Vestiaire et rangement;Climatisé;07209501;3;3.937600907;155.5943541
+Sport Loisir Culture;Sport;Grand bar café tabac;Climatisé;07291601;3;3.883050605;156
+Sport Loisir Culture;Sport;Grande salle multisport;Climatisé;07293301;3;3.928169298;155.7717662
+Sport Loisir Culture;Sport;Patinoire;Climatisé;07296101;3;3.945920454;155.4352941
+Sport Loisir Culture;Sport;Petite salle multisport;Climatisé;07298101;3;3.943474927;155.5159127
+Sport Loisir Culture;Sport;Piscine;Climatisé;07298201;3;3.940022103;155.5452358
+Sport Loisir Culture;Sport;Salle non spécialisée;Climatisé;07299101;3;3.944877261;155.4246734
+Sport Loisir Culture;Sport;Vestiaire et rangement;Climatisé;07299501;3;3.937600907;155.5943541
+Transport;Service;nr;Climatisé;08276001;3;1.3;128.8973583
+Transport;Transport aérien;nr;Climatisé;08306001;3;1.3;128.8973583
+Transport;Transport autre;nr;Climatisé;08316001;3;1.3;128.8973583
+Transport;Transport ferroviaire;nr;Climatisé;08326001;3;1.3;128.8973583
+Transport;Transport maritime et fluvial;nr;Climatisé;08336001;3;1.3;128.8973583
+Transport;Transport routier;nr;Climatisé;08346001;3;1.3;128.8973583
+Transport;Transport urbain;nr;Climatisé;08356001;3;1.3;128.8973583
+Bureaux Administration;Administration;immeuble peri urbain;Non climatisé;01014202;3;0;0
+Bureaux Administration;Administration;immeuble rénové;Non climatisé;01014402;3;0;0
+Bureaux Administration;Administration;plateau large bureaux cloisonnés;Non climatisé;01018402;3;0;0
+Bureaux Administration;Bureaux;immeuble peri urbain;Non climatisé;01024202;3;0;0
+Bureaux Administration;Bureaux;immeuble rénové;Non climatisé;01024402;3;0;0
+Bureaux Administration;Bureaux;immeuble résidentiel;Non climatisé;01024502;3;0;0
+Bureaux Administration;Bureaux;plateau large bureau paysagés;Non climatisé;01028302;3;0;0
+Bureaux Administration;Bureaux;plateau large bureaux cloisonnés;Non climatisé;01028402;3;0;0
+Bureaux Administration;Bureaux;plateau mince;Non climatisé;01028502;3;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Grand bar café tabac;Non climatisé;02041602;3;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Grande cantine;Non climatisé;02043102;3;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Petit bar café tabac;Non climatisé;02046202;3;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Petite cantine;Non climatisé;02047902;3;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Bas de gamme;Non climatisé;02182002;3;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Haut de gamme;Non climatisé;02182102;3;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Luxe;Non climatisé;02182202;3;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Haut de gamme;Non climatisé;02183702;3;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Luxe;Non climatisé;02183802;3;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Bas de gamme;Non climatisé;02185302;3;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Haut de gamme;Non climatisé;02185402;3;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Luxe;Non climatisé;02185502;3;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Bas de gamme;Non climatisé;02186702;3;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Haut de gamme;Non climatisé;02186802;3;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Luxe;Non climatisé;02186902;3;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Bas de gamme;Non climatisé;02192302;3;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Haut de gamme;Non climatisé;02192402;3;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Luxe;Non climatisé;02192502;3;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Non climatisé;02193902;3;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Luxe;Non climatisé;02194002;3;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Bas de gamme;Non climatisé;02195602;3;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Haut de gamme;Non climatisé;02195702;3;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Luxe;Non climatisé;02195802;3;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Bas de gamme;Non climatisé;02197002;3;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Haut de gamme;Non climatisé;02197102;3;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Luxe;Non climatisé;02197202;3;0;0
+Café Hôtel Restaurant;Restaurant;Grand restaurant rapide;Non climatisé;02262902;3;0;0
+Café Hôtel Restaurant;Restaurant;Grand restaurant traditionnel;Non climatisé;02263002;3;0;0
+Café Hôtel Restaurant;Restaurant;Petit restaurant rapide;Non climatisé;02267702;3;0;0
+Café Hôtel Restaurant;Restaurant;Petit restaurant traditionnel;Non climatisé;02267802;3;0;0
+Commerce;Commerce de détail non alimentaire;Complexe brico;Non climatisé;03060902;3;0;0
+Commerce;Commerce de détail non alimentaire;Grand brico;Non climatisé;03061702;3;0;0
+Commerce;Commerce de détail non alimentaire;Grand librairie;Non climatisé;03062602;3;0;0
+Commerce;Commerce de détail non alimentaire;Grand Mode;Non climatisé;03062702;3;0;0
+Commerce;Commerce de détail non alimentaire;Petit brico;Non climatisé;03066402;3;0;0
+Commerce;Commerce de détail non alimentaire;Petit librairie;Non climatisé;03067302;3;0;0
+Commerce;Commerce de détail non alimentaire;Petit mode;Non climatisé;03067402;3;0;0
+Commerce;Commerce de détail non alimentaire;ZAC Mode;Non climatisé;03069602;3;0;0
+Commerce;Commerce de gros;Grand commerce de gros;Non climatisé;03071902;3;0;0
+Commerce;Commerce de gros;Petit commerce de gros;Non climatisé;03076602;3;0;0
+Commerce;Entrepôt;Entrepôt;Non climatisé;03121202;3;0;0
+Commerce;Grand commerce alimentaire;Grand alimentaire;Non climatisé;03161502;3;0;0
+Commerce;Grand commerce alimentaire;Hypermarché;Non climatisé;03164102;3;0;0
+Commerce;Grand commerce alimentaire;Superette;Non climatisé;03169202;3;0;0
+Commerce;Grand commerce alimentaire;Supermarché;Non climatisé;03169302;3;0;0
+Commerce;Petit commerce alimentaire;Petit boulangerie;Non climatisé;03236302;3;0;0
+Commerce;Petit commerce alimentaire;Petit librairie;Non climatisé;03237302;3;0;0
+Commerce;Petit commerce alimentaire;Petit poissonnerie;Non climatisé;03237502;3;0;0
+Commerce;Process;Grand librairie;Non climatisé;03242602;3;0;0
+Commerce;Process;Grand process;Non climatisé;03242802;3;0;0
+Commerce;Process;Petit process;Non climatisé;03247602;3;0;0
+Enseignement Recherche;Enseignement primaire;Cantine élémentaire;Non climatisé;04090302;3;0;0
+Enseignement Recherche;Enseignement primaire;Cantine préélémentaire;Non climatisé;04090602;3;0;0
+Enseignement Recherche;Enseignement primaire;Elémentaire;Non climatisé;04091102;3;0;0
+Enseignement Recherche;Enseignement primaire;Préélémentaire;Non climatisé;04098602;3;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine collége;Non climatisé;04100202;3;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine LEGT;Non climatisé;04100402;3;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine LP;Non climatisé;04100502;3;0;0
+Enseignement Recherche;Enseignement secondaire;Collège;Non climatisé;04100802;3;0;0
+Enseignement Recherche;Enseignement secondaire;Internat college;Non climatisé;04104602;3;0;0
+Enseignement Recherche;Enseignement secondaire;Internat LEGT;Non climatisé;04104702;3;0;0
+Enseignement Recherche;Enseignement secondaire;Internat LP;Non climatisé;04104802;3;0;0
+Enseignement Recherche;Enseignement secondaire;Lycée d’enseignement général et technologique (LEGT);Non climatisé;04104902;3;0;0
+Enseignement Recherche;Enseignement secondaire;Lycée professionnel (LP);Non climatisé;04105002;3;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;école;Non climatisé;04111002;3;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;R&D en sciences humaines et sociales;Non climatisé;04118702;3;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;R&D sciences physiques et naturelles;Non climatisé;04118802;3;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;université;Non climatisé;04119402;3;0;0
+Habitat Communautaire;Foyer;Foyers;Non climatisé;05141302;3;0;0
+Habitat Communautaire;Maison de pré-retraite;Maison de pré-retraite;Non climatisé;05215102;3;0;0
+Habitat Communautaire;Maison retraite médicalisée;Maison retraite médicalisée;Non climatisé;05225202;3;0;0
+Habitat Communautaire;Résidence universitaire;Résidence universitaire;Non climatisé;05258902;3;0;0
+Habitat Communautaire;Service à la personne;Résidentiel;Non climatisé;05289002;3;0;0
+Santé Action Sociale;Cabinet médical;Cabinet médical;Non climatisé;06030102;3;0;0
+Santé Action Sociale;Centre accueil;Centre accueil;Non climatisé;06050702;3;0;0
+Santé Action Sociale;Garderie;Garderie;Non climatisé;06151402;3;0;0
+Santé Action Sociale;Hôpital;Hopital bloc;Non climatisé;06173402;3;0;0
+Santé Action Sociale;Hôpital;Hopital maison;Non climatisé;06173502;3;0;0
+Santé Action Sociale;Hôpital;Hopital pavillonnaire;Non climatisé;06173602;3;0;0
+Sport Loisir Culture;Culture;Grand cinéma;Non climatisé;07081802;3;0;0
+Sport Loisir Culture;Culture;Grande salle de spectacle;Non climatisé;07083202;3;0;0
+Sport Loisir Culture;Culture;Immeuble péri urbain;Non climatisé;07084302;3;0;0
+Sport Loisir Culture;Culture;Musée;Non climatisé;07085902;3;0;0
+Sport Loisir Culture;Culture;Petit cinéma;Non climatisé;07086502;3;0;0
+Sport Loisir Culture;Culture;Petite salle de spectacle;Non climatisé;07088002;3;0;0
+Sport Loisir Culture;Equipement collectif;Immeuble péri urbain;Non climatisé;07134302;3;0;0
+Sport Loisir Culture;Loisir;Grand bar café tabac;Non climatisé;07201602;3;0;0
+Sport Loisir Culture;Loisir;Salle non spécialisée;Non climatisé;07209102;3;0;0
+Sport Loisir Culture;Loisir;Vestiaire et rangement;Non climatisé;07209502;3;0;0
+Sport Loisir Culture;Sport;Grand bar café tabac;Non climatisé;07291602;3;0;0
+Sport Loisir Culture;Sport;Grande salle multisport;Non climatisé;07293302;3;0;0
+Sport Loisir Culture;Sport;Patinoire;Non climatisé;07296102;3;0;0
+Sport Loisir Culture;Sport;Petite salle multisport;Non climatisé;07298102;3;0;0
+Sport Loisir Culture;Sport;Piscine;Non climatisé;07298202;3;0;0
+Sport Loisir Culture;Sport;Salle non spécialisée;Non climatisé;07299102;3;0;0
+Sport Loisir Culture;Sport;Vestiaire et rangement;Non climatisé;07299502;3;0;0
+Transport;Service;nr;Non climatisé;08276002;3;0;0
+Transport;Transport aérien;nr;Non climatisé;08306002;3;0;0
+Transport;Transport autre;nr;Non climatisé;08316002;3;0;0
+Transport;Transport ferroviaire;nr;Non climatisé;08326002;3;0;0
+Transport;Transport maritime et fluvial;nr;Non climatisé;08336002;3;0;0
+Transport;Transport routier;nr;Non climatisé;08346002;3;0;0
+Transport;Transport urbain;nr;Non climatisé;08356002;3;0;0
+Bureaux Administration;Administration;immeuble peri urbain;Climatisé;01014201;4;4.317869181;80.80050725
+Bureaux Administration;Administration;immeuble rénové;Climatisé;01014401;4;4.2402569;81.37823454
+Bureaux Administration;Administration;plateau large bureaux cloisonnés;Climatisé;01018401;4;4.242898414;110.3744244
+Bureaux Administration;Bureaux;immeuble peri urbain;Climatisé;01024201;4;4.296066818;104.1732425
+Bureaux Administration;Bureaux;immeuble rénové;Climatisé;01024401;4;4.239282916;104.7547493
+Bureaux Administration;Bureaux;immeuble résidentiel;Climatisé;01024501;4;4.270900683;102.2144947
+Bureaux Administration;Bureaux;plateau large bureau paysagés;Climatisé;01028301;4;4.279340511;113.3285618
+Bureaux Administration;Bureaux;plateau large bureaux cloisonnés;Climatisé;01028401;4;4.269436916;110.8506257
+Bureaux Administration;Bureaux;plateau mince;Climatisé;01028501;4;4.282053813;112.0556117
+Café Hôtel Restaurant;Café, cantine, traiteur;Grand bar café tabac;Climatisé;02041601;4;4.555330671;143.3496283
+Café Hôtel Restaurant;Café, cantine, traiteur;Grande cantine;Climatisé;02043101;4;4.577661367;142.5058594
+Café Hôtel Restaurant;Café, cantine, traiteur;Petit bar café tabac;Climatisé;02046201;4;4.578015511;135.9285275
+Café Hôtel Restaurant;Café, cantine, traiteur;Petite cantine;Climatisé;02047901;4;4.570567956;141.2747469
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Bas de gamme;Climatisé;02182001;4;4.59096217;132.0062908
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Haut de gamme;Climatisé;02182101;4;4.617108521;133.2744289
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Luxe;Climatisé;02182201;4;4.570035269;132.2263216
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Haut de gamme;Climatisé;02183701;4;4.649807403;131.9431818
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Luxe;Climatisé;02183801;4;4.605080074;133.2588692
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Bas de gamme;Climatisé;02185301;4;4.564674325;135.5062013
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Haut de gamme;Climatisé;02185401;4;4.553937302;133.055159
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Luxe;Climatisé;02185501;4;4.549588848;131.0756243
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Bas de gamme;Climatisé;02186701;4;4.57010133;128.9338969
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Haut de gamme;Climatisé;02186801;4;4.547565964;133.0690476
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Luxe;Climatisé;02186901;4;4.540167163;135.8290258
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Bas de gamme;Climatisé;02192301;4;4.609227151;132.7723384
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Haut de gamme;Climatisé;02192401;4;4.647506057;130.4803922
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Luxe;Climatisé;02192501;4;4.586069464;130.4423077
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Climatisé;02193901;4;4.564838139;132.1071429
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Luxe;Climatisé;02194001;4;4.656957809;153.75
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Bas de gamme;Climatisé;02195601;4;4.590547269;129.8553678
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Haut de gamme;Climatisé;02195701;4;4.577652793;130.8619154
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Luxe;Climatisé;02195801;4;4.656920066;132.3113208
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Bas de gamme;Climatisé;02197001;4;4.563915286;127.7249445
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Haut de gamme;Climatisé;02197101;4;4.530043361;128.1994048
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Luxe;Climatisé;02197201;4;4.557270735;128.5
+Café Hôtel Restaurant;Restaurant;Grand restaurant rapide;Climatisé;02262901;4;4.599102491;133.9828767
+Café Hôtel Restaurant;Restaurant;Grand restaurant traditionnel;Climatisé;02263001;4;4.586229729;133.0457089
+Café Hôtel Restaurant;Restaurant;Petit restaurant rapide;Climatisé;02267701;4;4.567193545;129.9832523
+Café Hôtel Restaurant;Restaurant;Petit restaurant traditionnel;Climatisé;02267801;4;4.571481154;128.9233412
+Commerce;Commerce de détail non alimentaire;Complexe brico;Climatisé;03060901;4;5.565784499;115.7171429
+Commerce;Commerce de détail non alimentaire;Grand brico;Climatisé;03061701;4;5.54942052;112.9250307
+Commerce;Commerce de détail non alimentaire;Grand librairie;Climatisé;03062601;4;5.141859587;156
+Commerce;Commerce de détail non alimentaire;Grand Mode;Climatisé;03062701;4;5.157164949;156
+Commerce;Commerce de détail non alimentaire;Petit brico;Climatisé;03066401;4;3.843896999;156
+Commerce;Commerce de détail non alimentaire;Petit librairie;Climatisé;03067301;4;3.843919379;156
+Commerce;Commerce de détail non alimentaire;Petit mode;Climatisé;03067401;4;3.839635956;156
+Commerce;Commerce de détail non alimentaire;ZAC Mode;Climatisé;03069601;4;5.554432676;116.4253241
+Commerce;Commerce de gros;Grand commerce de gros;Climatisé;03071901;4;5.581960565;114.1803519
+Commerce;Commerce de gros;Petit commerce de gros;Climatisé;03076601;4;5.549365021;109.4392225
+Commerce;Entrepôt;Entrepôt;Climatisé;03121201;4;4.767740975;142.0528249
+Commerce;Grand commerce alimentaire;Grand alimentaire;Climatisé;03161501;4;5.172934705;156
+Commerce;Grand commerce alimentaire;Hypermarché;Climatisé;03164101;4;5.552886229;118.2348624
+Commerce;Grand commerce alimentaire;Superette;Climatisé;03169201;4;3.831397798;156
+Commerce;Grand commerce alimentaire;Supermarché;Climatisé;03169301;4;5.558404007;126.134564
+Commerce;Petit commerce alimentaire;Petit boulangerie;Climatisé;03236301;4;3.840689701;156
+Commerce;Petit commerce alimentaire;Petit librairie;Climatisé;03237301;4;3.825122962;156
+Commerce;Petit commerce alimentaire;Petit poissonnerie;Climatisé;03237501;4;3.84042053;156
+Commerce;Process;Grand librairie;Climatisé;03242601;4;5.128606861;156
+Commerce;Process;Grand process;Climatisé;03242801;4;5.136315707;156
+Commerce;Process;Petit process;Climatisé;03247601;4;3.840600844;156
+Enseignement Recherche;Enseignement primaire;Cantine élémentaire;Climatisé;04090301;4;4.2893962;173.25
+Enseignement Recherche;Enseignement primaire;Cantine préélémentaire;Climatisé;04090601;4;4.2893962;173.25
+Enseignement Recherche;Enseignement primaire;Elémentaire;Climatisé;04091101;4;4.2893962;173.25
+Enseignement Recherche;Enseignement primaire;Préélémentaire;Climatisé;04098601;4;4.2893962;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine collége;Climatisé;04100201;4;4.2893962;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine LEGT;Climatisé;04100401;4;4.2893962;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine LP;Climatisé;04100501;4;4.2893962;173.25
+Enseignement Recherche;Enseignement secondaire;Collège;Climatisé;04100801;4;4.2893962;173.25
+Enseignement Recherche;Enseignement secondaire;Internat college;Climatisé;04104601;4;4.2893962;173.25
+Enseignement Recherche;Enseignement secondaire;Internat LEGT;Climatisé;04104701;4;4.2893962;173.25
+Enseignement Recherche;Enseignement secondaire;Internat LP;Climatisé;04104801;4;4.2893962;173.25
+Enseignement Recherche;Enseignement secondaire;Lycée d’enseignement général et technologique (LEGT);Climatisé;04104901;4;4.2893962;173.25
+Enseignement Recherche;Enseignement secondaire;Lycée professionnel (LP);Climatisé;04105001;4;4.2893962;173.25
+Enseignement Recherche;Enseignement supérieur et recherche;école;Climatisé;04111001;4;4.343095453;190.5
+Enseignement Recherche;Enseignement supérieur et recherche;R&D en sciences humaines et sociales;Climatisé;04118701;4;4.256367314;156
+Enseignement Recherche;Enseignement supérieur et recherche;R&D sciences physiques et naturelles;Climatisé;04118801;4;4.2316522;156
+Enseignement Recherche;Enseignement supérieur et recherche;université;Climatisé;04119401;4;4.326469834;190.5
+Habitat Communautaire;Foyer;Foyers;Climatisé;05141301;4;3.920833177;156
+Habitat Communautaire;Maison de pré-retraite;Maison de pré-retraite;Climatisé;05215101;4;3.934087757;156
+Habitat Communautaire;Maison retraite médicalisée;Maison retraite médicalisée;Climatisé;05225201;4;3.907578597;156
+Habitat Communautaire;Résidence universitaire;Résidence universitaire;Climatisé;05258901;4;3.920833177;156
+Habitat Communautaire;Service à la personne;Résidentiel;Climatisé;05289001;4;3.920833177;156
+Santé Action Sociale;Cabinet médical;Cabinet médical;Climatisé;06030101;4;4.239922445;156
+Santé Action Sociale;Centre accueil;Centre accueil;Climatisé;06050701;4;4.239922445;156
+Santé Action Sociale;Garderie;Garderie;Climatisé;06151401;4;4.239922445;156
+Santé Action Sociale;Hôpital;Hopital bloc;Climatisé;06173401;4;4.235250791;156
+Santé Action Sociale;Hôpital;Hopital maison;Climatisé;06173501;4;4.240069699;156
+Santé Action Sociale;Hôpital;Hopital pavillonnaire;Climatisé;06173601;4;4.244446846;156
+Sport Loisir Culture;Culture;Grand cinéma;Climatisé;07081801;4;4.270656841;155.4496855
+Sport Loisir Culture;Culture;Grande salle de spectacle;Climatisé;07083201;4;4.286094357;155.4176471
+Sport Loisir Culture;Culture;Immeuble péri urbain;Climatisé;07084301;4;4.215686382;156
+Sport Loisir Culture;Culture;Musée;Climatisé;07085901;4;4.298875942;155.2065293
+Sport Loisir Culture;Culture;Petit cinéma;Climatisé;07086501;4;4.25775448;155.4533333
+Sport Loisir Culture;Culture;Petite salle de spectacle;Climatisé;07088001;4;4.271352544;155.398906
+Sport Loisir Culture;Equipement collectif;Immeuble péri urbain;Climatisé;07134301;4;4.178893675;156
+Sport Loisir Culture;Loisir;Grand bar café tabac;Climatisé;07201601;4;4.16696931;156
+Sport Loisir Culture;Loisir;Salle non spécialisée;Climatisé;07209101;4;4.261330736;155.2963286
+Sport Loisir Culture;Loisir;Vestiaire et rangement;Climatisé;07209501;4;4.240493285;155.5943541
+Sport Loisir Culture;Sport;Grand bar café tabac;Climatisé;07291601;4;4.181746805;156
+Sport Loisir Culture;Sport;Grande salle multisport;Climatisé;07293301;4;4.230336167;155.7717662
+Sport Loisir Culture;Sport;Patinoire;Climatisé;07296101;4;4.249452797;155.4352941
+Sport Loisir Culture;Sport;Petite salle multisport;Climatisé;07298101;4;4.246819152;155.5159127
+Sport Loisir Culture;Sport;Piscine;Climatisé;07298201;4;4.243100727;155.5452358
+Sport Loisir Culture;Sport;Salle non spécialisée;Climatisé;07299101;4;4.248329358;155.4246734
+Sport Loisir Culture;Sport;Vestiaire et rangement;Climatisé;07299501;4;4.240493285;155.5943541
+Transport;Service;nr;Climatisé;08276001;4;1.4;128.8973583
+Transport;Transport aérien;nr;Climatisé;08306001;4;1.4;128.8973583
+Transport;Transport autre;nr;Climatisé;08316001;4;1.4;128.8973583
+Transport;Transport ferroviaire;nr;Climatisé;08326001;4;1.4;128.8973583
+Transport;Transport maritime et fluvial;nr;Climatisé;08336001;4;1.4;128.8973583
+Transport;Transport routier;nr;Climatisé;08346001;4;1.4;128.8973583
+Transport;Transport urbain;nr;Climatisé;08356001;4;1.4;128.8973583
+Bureaux Administration;Administration;immeuble peri urbain;Non climatisé;01014202;4;0;0
+Bureaux Administration;Administration;immeuble rénové;Non climatisé;01014402;4;0;0
+Bureaux Administration;Administration;plateau large bureaux cloisonnés;Non climatisé;01018402;4;0;0
+Bureaux Administration;Bureaux;immeuble peri urbain;Non climatisé;01024202;4;0;0
+Bureaux Administration;Bureaux;immeuble rénové;Non climatisé;01024402;4;0;0
+Bureaux Administration;Bureaux;immeuble résidentiel;Non climatisé;01024502;4;0;0
+Bureaux Administration;Bureaux;plateau large bureau paysagés;Non climatisé;01028302;4;0;0
+Bureaux Administration;Bureaux;plateau large bureaux cloisonnés;Non climatisé;01028402;4;0;0
+Bureaux Administration;Bureaux;plateau mince;Non climatisé;01028502;4;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Grand bar café tabac;Non climatisé;02041602;4;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Grande cantine;Non climatisé;02043102;4;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Petit bar café tabac;Non climatisé;02046202;4;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Petite cantine;Non climatisé;02047902;4;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Bas de gamme;Non climatisé;02182002;4;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Haut de gamme;Non climatisé;02182102;4;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Luxe;Non climatisé;02182202;4;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Haut de gamme;Non climatisé;02183702;4;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Luxe;Non climatisé;02183802;4;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Bas de gamme;Non climatisé;02185302;4;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Haut de gamme;Non climatisé;02185402;4;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Luxe;Non climatisé;02185502;4;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Bas de gamme;Non climatisé;02186702;4;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Haut de gamme;Non climatisé;02186802;4;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Luxe;Non climatisé;02186902;4;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Bas de gamme;Non climatisé;02192302;4;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Haut de gamme;Non climatisé;02192402;4;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Luxe;Non climatisé;02192502;4;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Non climatisé;02193902;4;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Luxe;Non climatisé;02194002;4;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Bas de gamme;Non climatisé;02195602;4;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Haut de gamme;Non climatisé;02195702;4;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Luxe;Non climatisé;02195802;4;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Bas de gamme;Non climatisé;02197002;4;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Haut de gamme;Non climatisé;02197102;4;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Luxe;Non climatisé;02197202;4;0;0
+Café Hôtel Restaurant;Restaurant;Grand restaurant rapide;Non climatisé;02262902;4;0;0
+Café Hôtel Restaurant;Restaurant;Grand restaurant traditionnel;Non climatisé;02263002;4;0;0
+Café Hôtel Restaurant;Restaurant;Petit restaurant rapide;Non climatisé;02267702;4;0;0
+Café Hôtel Restaurant;Restaurant;Petit restaurant traditionnel;Non climatisé;02267802;4;0;0
+Commerce;Commerce de détail non alimentaire;Complexe brico;Non climatisé;03060902;4;0;0
+Commerce;Commerce de détail non alimentaire;Grand brico;Non climatisé;03061702;4;0;0
+Commerce;Commerce de détail non alimentaire;Grand librairie;Non climatisé;03062602;4;0;0
+Commerce;Commerce de détail non alimentaire;Grand Mode;Non climatisé;03062702;4;0;0
+Commerce;Commerce de détail non alimentaire;Petit brico;Non climatisé;03066402;4;0;0
+Commerce;Commerce de détail non alimentaire;Petit librairie;Non climatisé;03067302;4;0;0
+Commerce;Commerce de détail non alimentaire;Petit mode;Non climatisé;03067402;4;0;0
+Commerce;Commerce de détail non alimentaire;ZAC Mode;Non climatisé;03069602;4;0;0
+Commerce;Commerce de gros;Grand commerce de gros;Non climatisé;03071902;4;0;0
+Commerce;Commerce de gros;Petit commerce de gros;Non climatisé;03076602;4;0;0
+Commerce;Entrepôt;Entrepôt;Non climatisé;03121202;4;0;0
+Commerce;Grand commerce alimentaire;Grand alimentaire;Non climatisé;03161502;4;0;0
+Commerce;Grand commerce alimentaire;Hypermarché;Non climatisé;03164102;4;0;0
+Commerce;Grand commerce alimentaire;Superette;Non climatisé;03169202;4;0;0
+Commerce;Grand commerce alimentaire;Supermarché;Non climatisé;03169302;4;0;0
+Commerce;Petit commerce alimentaire;Petit boulangerie;Non climatisé;03236302;4;0;0
+Commerce;Petit commerce alimentaire;Petit librairie;Non climatisé;03237302;4;0;0
+Commerce;Petit commerce alimentaire;Petit poissonnerie;Non climatisé;03237502;4;0;0
+Commerce;Process;Grand librairie;Non climatisé;03242602;4;0;0
+Commerce;Process;Grand process;Non climatisé;03242802;4;0;0
+Commerce;Process;Petit process;Non climatisé;03247602;4;0;0
+Enseignement Recherche;Enseignement primaire;Cantine élémentaire;Non climatisé;04090302;4;0;0
+Enseignement Recherche;Enseignement primaire;Cantine préélémentaire;Non climatisé;04090602;4;0;0
+Enseignement Recherche;Enseignement primaire;Elémentaire;Non climatisé;04091102;4;0;0
+Enseignement Recherche;Enseignement primaire;Préélémentaire;Non climatisé;04098602;4;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine collége;Non climatisé;04100202;4;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine LEGT;Non climatisé;04100402;4;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine LP;Non climatisé;04100502;4;0;0
+Enseignement Recherche;Enseignement secondaire;Collège;Non climatisé;04100802;4;0;0
+Enseignement Recherche;Enseignement secondaire;Internat college;Non climatisé;04104602;4;0;0
+Enseignement Recherche;Enseignement secondaire;Internat LEGT;Non climatisé;04104702;4;0;0
+Enseignement Recherche;Enseignement secondaire;Internat LP;Non climatisé;04104802;4;0;0
+Enseignement Recherche;Enseignement secondaire;Lycée d’enseignement général et technologique (LEGT);Non climatisé;04104902;4;0;0
+Enseignement Recherche;Enseignement secondaire;Lycée professionnel (LP);Non climatisé;04105002;4;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;école;Non climatisé;04111002;4;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;R&D en sciences humaines et sociales;Non climatisé;04118702;4;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;R&D sciences physiques et naturelles;Non climatisé;04118802;4;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;université;Non climatisé;04119402;4;0;0
+Habitat Communautaire;Foyer;Foyers;Non climatisé;05141302;4;0;0
+Habitat Communautaire;Maison de pré-retraite;Maison de pré-retraite;Non climatisé;05215102;4;0;0
+Habitat Communautaire;Maison retraite médicalisée;Maison retraite médicalisée;Non climatisé;05225202;4;0;0
+Habitat Communautaire;Résidence universitaire;Résidence universitaire;Non climatisé;05258902;4;0;0
+Habitat Communautaire;Service à la personne;Résidentiel;Non climatisé;05289002;4;0;0
+Santé Action Sociale;Cabinet médical;Cabinet médical;Non climatisé;06030102;4;0;0
+Santé Action Sociale;Centre accueil;Centre accueil;Non climatisé;06050702;4;0;0
+Santé Action Sociale;Garderie;Garderie;Non climatisé;06151402;4;0;0
+Santé Action Sociale;Hôpital;Hopital bloc;Non climatisé;06173402;4;0;0
+Santé Action Sociale;Hôpital;Hopital maison;Non climatisé;06173502;4;0;0
+Santé Action Sociale;Hôpital;Hopital pavillonnaire;Non climatisé;06173602;4;0;0
+Sport Loisir Culture;Culture;Grand cinéma;Non climatisé;07081802;4;0;0
+Sport Loisir Culture;Culture;Grande salle de spectacle;Non climatisé;07083202;4;0;0
+Sport Loisir Culture;Culture;Immeuble péri urbain;Non climatisé;07084302;4;0;0
+Sport Loisir Culture;Culture;Musée;Non climatisé;07085902;4;0;0
+Sport Loisir Culture;Culture;Petit cinéma;Non climatisé;07086502;4;0;0
+Sport Loisir Culture;Culture;Petite salle de spectacle;Non climatisé;07088002;4;0;0
+Sport Loisir Culture;Equipement collectif;Immeuble péri urbain;Non climatisé;07134302;4;0;0
+Sport Loisir Culture;Loisir;Grand bar café tabac;Non climatisé;07201602;4;0;0
+Sport Loisir Culture;Loisir;Salle non spécialisée;Non climatisé;07209102;4;0;0
+Sport Loisir Culture;Loisir;Vestiaire et rangement;Non climatisé;07209502;4;0;0
+Sport Loisir Culture;Sport;Grand bar café tabac;Non climatisé;07291602;4;0;0
+Sport Loisir Culture;Sport;Grande salle multisport;Non climatisé;07293302;4;0;0
+Sport Loisir Culture;Sport;Patinoire;Non climatisé;07296102;4;0;0
+Sport Loisir Culture;Sport;Petite salle multisport;Non climatisé;07298102;4;0;0
+Sport Loisir Culture;Sport;Piscine;Non climatisé;07298202;4;0;0
+Sport Loisir Culture;Sport;Salle non spécialisée;Non climatisé;07299102;4;0;0
+Sport Loisir Culture;Sport;Vestiaire et rangement;Non climatisé;07299502;4;0;0
+Transport;Service;nr;Non climatisé;08276002;4;0;0
+Transport;Transport aérien;nr;Non climatisé;08306002;4;0;0
+Transport;Transport autre;nr;Non climatisé;08316002;4;0;0
+Transport;Transport ferroviaire;nr;Non climatisé;08326002;4;0;0
+Transport;Transport maritime et fluvial;nr;Non climatisé;08336002;4;0;0
+Transport;Transport routier;nr;Non climatisé;08346002;4;0;0
+Transport;Transport urbain;nr;Non climatisé;08356002;4;0;0
+Bureaux Administration;Administration;immeuble peri urbain;Climatisé;01014201;5;4.626288408;80.80050725
+Bureaux Administration;Administration;immeuble rénové;Climatisé;01014401;5;4.543132393;81.37823454
+Bureaux Administration;Administration;plateau large bureaux cloisonnés;Climatisé;01018401;5;4.545962586;110.3744244
+Bureaux Administration;Bureaux;immeuble peri urbain;Climatisé;01024201;5;4.602928733;104.1732425
+Bureaux Administration;Bureaux;immeuble rénové;Climatisé;01024401;5;4.542088838;104.7547493
+Bureaux Administration;Bureaux;immeuble résidentiel;Climatisé;01024501;5;4.575965018;102.2144947
+Bureaux Administration;Bureaux;plateau large bureau paysagés;Climatisé;01028301;5;4.58500769;113.3285618
+Bureaux Administration;Bureaux;plateau large bureaux cloisonnés;Climatisé;01028401;5;4.574396696;110.8506257
+Bureaux Administration;Bureaux;plateau mince;Climatisé;01028501;5;4.5879148;112.0556117
+Café Hôtel Restaurant;Café, cantine, traiteur;Grand bar café tabac;Climatisé;02041601;5;4.880711433;143.3496283
+Café Hôtel Restaurant;Café, cantine, traiteur;Grande cantine;Climatisé;02043101;5;4.904637179;142.5058594
+Café Hôtel Restaurant;Café, cantine, traiteur;Petit bar café tabac;Climatisé;02046201;5;4.905016619;135.9285275
+Café Hôtel Restaurant;Café, cantine, traiteur;Petite cantine;Climatisé;02047901;5;4.897037096;141.2747469
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Bas de gamme;Climatisé;02182001;5;4.918888039;132.0062908
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Haut de gamme;Climatisé;02182101;5;4.946901987;133.2744289
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Luxe;Climatisé;02182201;5;4.89646636;132.2263216
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Haut de gamme;Climatisé;02183701;5;4.981936503;131.9431818
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Luxe;Climatisé;02183801;5;4.934014364;133.2588692
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Bas de gamme;Climatisé;02185301;5;4.890722491;135.5062013
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Haut de gamme;Climatisé;02185401;5;4.879218538;133.055159
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Luxe;Climatisé;02185501;5;4.87455948;131.0756243
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Bas de gamme;Climatisé;02186701;5;4.896537139;128.9338969
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Haut de gamme;Climatisé;02186801;5;4.872392105;133.0690476
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Luxe;Climatisé;02186901;5;4.864464818;135.8290258
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Bas de gamme;Climatisé;02192301;5;4.938457662;132.7723384
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Haut de gamme;Climatisé;02192401;5;4.979470775;130.4803922
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Luxe;Climatisé;02192501;5;4.913645854;130.4423077
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Climatisé;02193901;5;4.890898006;132.1071429
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Luxe;Climatisé;02194001;5;4.989597652;153.75
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Bas de gamme;Climatisé;02195601;5;4.918443503;129.8553678
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Haut de gamme;Climatisé;02195701;5;4.904627992;130.8619154
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Luxe;Climatisé;02195801;5;4.989557213;132.3113208
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Bas de gamme;Climatisé;02197001;5;4.889909235;127.7249445
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Haut de gamme;Climatisé;02197101;5;4.853617887;128.1994048
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Luxe;Climatisé;02197201;5;4.882790074;128.5
+Café Hôtel Restaurant;Restaurant;Grand restaurant rapide;Climatisé;02262901;5;4.927609812;133.9828767
+Café Hôtel Restaurant;Restaurant;Grand restaurant traditionnel;Climatisé;02263001;5;4.913817567;133.0457089
+Café Hôtel Restaurant;Restaurant;Petit restaurant rapide;Climatisé;02267701;5;4.893421655;129.9832523
+Café Hôtel Restaurant;Restaurant;Petit restaurant traditionnel;Climatisé;02267801;5;4.898015522;128.9233412
+Commerce;Commerce de détail non alimentaire;Complexe brico;Climatisé;03060901;5;5.963340534;115.7171429
+Commerce;Commerce de détail non alimentaire;Grand brico;Climatisé;03061701;5;5.9458077;112.9250307
+Commerce;Commerce de détail non alimentaire;Grand librairie;Climatisé;03062601;5;5.509135272;156
+Commerce;Commerce de détail non alimentaire;Grand Mode;Climatisé;03062701;5;5.525533874;156
+Commerce;Commerce de détail non alimentaire;Petit brico;Climatisé;03066401;5;4.11846107;156
+Commerce;Commerce de détail non alimentaire;Petit librairie;Climatisé;03067301;5;4.118485049;156
+Commerce;Commerce de détail non alimentaire;Petit mode;Climatisé;03067401;5;4.113895668;156
+Commerce;Commerce de détail non alimentaire;ZAC Mode;Climatisé;03069601;5;5.951177867;116.4253241
+Commerce;Commerce de gros;Grand commerce de gros;Climatisé;03071901;5;5.980672034;114.1803519
+Commerce;Commerce de gros;Petit commerce de gros;Climatisé;03076601;5;5.945748237;109.4392225
+Commerce;Entrepôt;Entrepôt;Climatisé;03121201;5;5.108293901;142.0528249
+Commerce;Grand commerce alimentaire;Grand alimentaire;Climatisé;03161501;5;5.542430041;156
+Commerce;Grand commerce alimentaire;Hypermarché;Climatisé;03164101;5;5.949520959;118.2348624
+Commerce;Grand commerce alimentaire;Superette;Climatisé;03169201;5;4.105069069;156
+Commerce;Grand commerce alimentaire;Supermarché;Climatisé;03169301;5;5.955432865;126.134564
+Commerce;Petit commerce alimentaire;Petit boulangerie;Climatisé;03236301;5;4.11502468;156
+Commerce;Petit commerce alimentaire;Petit librairie;Climatisé;03237301;5;4.098346031;156
+Commerce;Petit commerce alimentaire;Petit poissonnerie;Climatisé;03237501;5;4.114736282;156
+Commerce;Process;Grand librairie;Climatisé;03242601;5;5.494935923;156
+Commerce;Process;Grand process;Climatisé;03242801;5;5.503195401;156
+Commerce;Process;Petit process;Climatisé;03247601;5;4.114929476;156
+Enseignement Recherche;Enseignement primaire;Cantine élémentaire;Climatisé;04090301;5;4.595781643;173.25
+Enseignement Recherche;Enseignement primaire;Cantine préélémentaire;Climatisé;04090601;5;4.595781643;173.25
+Enseignement Recherche;Enseignement primaire;Elémentaire;Climatisé;04091101;5;4.595781643;173.25
+Enseignement Recherche;Enseignement primaire;Préélémentaire;Climatisé;04098601;5;4.595781643;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine collége;Climatisé;04100201;5;4.595781643;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine LEGT;Climatisé;04100401;5;4.595781643;173.25
+Enseignement Recherche;Enseignement secondaire;Cantine LP;Climatisé;04100501;5;4.595781643;173.25
+Enseignement Recherche;Enseignement secondaire;Collège;Climatisé;04100801;5;4.595781643;173.25
+Enseignement Recherche;Enseignement secondaire;Internat college;Climatisé;04104601;5;4.595781643;173.25
+Enseignement Recherche;Enseignement secondaire;Internat LEGT;Climatisé;04104701;5;4.595781643;173.25
+Enseignement Recherche;Enseignement secondaire;Internat LP;Climatisé;04104801;5;4.595781643;173.25
+Enseignement Recherche;Enseignement secondaire;Lycée d’enseignement général et technologique (LEGT);Climatisé;04104901;5;4.595781643;173.25
+Enseignement Recherche;Enseignement secondaire;Lycée professionnel (LP);Climatisé;04105001;5;4.595781643;173.25
+Enseignement Recherche;Enseignement supérieur et recherche;école;Climatisé;04111001;5;4.653316557;190.5
+Enseignement Recherche;Enseignement supérieur et recherche;R&D en sciences humaines et sociales;Climatisé;04118701;5;4.56039355;156
+Enseignement Recherche;Enseignement supérieur et recherche;R&D sciences physiques et naturelles;Climatisé;04118801;5;4.533913071;156
+Enseignement Recherche;Enseignement supérieur et recherche;université;Climatisé;04119401;5;4.635503393;190.5
+Habitat Communautaire;Foyer;Foyers;Climatisé;05141301;5;4.20089269;156
+Habitat Communautaire;Maison de pré-retraite;Maison de pré-retraite;Climatisé;05215101;5;4.215094026;156
+Habitat Communautaire;Maison retraite médicalisée;Maison retraite médicalisée;Climatisé;05225201;5;4.186691354;156
+Habitat Communautaire;Résidence universitaire;Résidence universitaire;Climatisé;05258901;5;4.20089269;156
+Habitat Communautaire;Service à la personne;Résidentiel;Climatisé;05289001;5;4.20089269;156
+Santé Action Sociale;Cabinet médical;Cabinet médical;Climatisé;06030101;5;4.542774048;156
+Santé Action Sociale;Centre accueil;Centre accueil;Climatisé;06050701;5;4.542774048;156
+Santé Action Sociale;Garderie;Garderie;Climatisé;06151401;5;4.542774048;156
+Santé Action Sociale;Hôpital;Hopital bloc;Climatisé;06173401;5;4.537768704;156
+Santé Action Sociale;Hôpital;Hopital maison;Climatisé;06173501;5;4.54293182;156
+Santé Action Sociale;Hôpital;Hopital pavillonnaire;Climatisé;06173601;5;4.54762162;156
+Sport Loisir Culture;Culture;Grand cinéma;Climatisé;07081801;5;4.575703758;155.4496855
+Sport Loisir Culture;Culture;Grande salle de spectacle;Climatisé;07083201;5;4.592243954;155.4176471
+Sport Loisir Culture;Culture;Immeuble péri urbain;Climatisé;07084301;5;4.516806838;156
+Sport Loisir Culture;Culture;Musée;Climatisé;07085901;5;4.605938509;155.2065293
+Sport Loisir Culture;Culture;Petit cinéma;Climatisé;07086501;5;4.5618798;155.4533333
+Sport Loisir Culture;Culture;Petite salle de spectacle;Climatisé;07088001;5;4.576449154;155.398906
+Sport Loisir Culture;Equipement collectif;Immeuble péri urbain;Climatisé;07134301;5;4.47738608;156
+Sport Loisir Culture;Loisir;Grand bar café tabac;Climatisé;07201601;5;4.464609975;156
+Sport Loisir Culture;Loisir;Salle non spécialisée;Climatisé;07209101;5;4.565711503;155.2963286
+Sport Loisir Culture;Loisir;Vestiaire et rangement;Climatisé;07209501;5;4.543385662;155.5943541
+Sport Loisir Culture;Sport;Grand bar café tabac;Climatisé;07291601;5;4.480443005;156
+Sport Loisir Culture;Sport;Grande salle multisport;Climatisé;07293301;5;4.532503036;155.7717662
+Sport Loisir Culture;Sport;Patinoire;Climatisé;07296101;5;4.55298514;155.4352941
+Sport Loisir Culture;Sport;Petite salle multisport;Climatisé;07298101;5;4.550163377;155.5159127
+Sport Loisir Culture;Sport;Piscine;Climatisé;07298201;5;4.54617935;155.5452358
+Sport Loisir Culture;Sport;Salle non spécialisée;Climatisé;07299101;5;4.551781455;155.4246734
+Sport Loisir Culture;Sport;Vestiaire et rangement;Climatisé;07299501;5;4.543385662;155.5943541
+Transport;Service;nr;Climatisé;08276001;5;1.5;128.8973583
+Transport;Transport aérien;nr;Climatisé;08306001;5;1.5;128.8973583
+Transport;Transport autre;nr;Climatisé;08316001;5;1.5;128.8973583
+Transport;Transport ferroviaire;nr;Climatisé;08326001;5;1.5;128.8973583
+Transport;Transport maritime et fluvial;nr;Climatisé;08336001;5;1.5;128.8973583
+Transport;Transport routier;nr;Climatisé;08346001;5;1.5;128.8973583
+Transport;Transport urbain;nr;Climatisé;08356001;5;1.5;128.8973583
+Bureaux Administration;Administration;immeuble peri urbain;Non climatisé;01014202;5;0;0
+Bureaux Administration;Administration;immeuble rénové;Non climatisé;01014402;5;0;0
+Bureaux Administration;Administration;plateau large bureaux cloisonnés;Non climatisé;01018402;5;0;0
+Bureaux Administration;Bureaux;immeuble peri urbain;Non climatisé;01024202;5;0;0
+Bureaux Administration;Bureaux;immeuble rénové;Non climatisé;01024402;5;0;0
+Bureaux Administration;Bureaux;immeuble résidentiel;Non climatisé;01024502;5;0;0
+Bureaux Administration;Bureaux;plateau large bureau paysagés;Non climatisé;01028302;5;0;0
+Bureaux Administration;Bureaux;plateau large bureaux cloisonnés;Non climatisé;01028402;5;0;0
+Bureaux Administration;Bureaux;plateau mince;Non climatisé;01028502;5;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Grand bar café tabac;Non climatisé;02041602;5;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Grande cantine;Non climatisé;02043102;5;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Petit bar café tabac;Non climatisé;02046202;5;0;0
+Café Hôtel Restaurant;Café, cantine, traiteur;Petite cantine;Non climatisé;02047902;5;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Bas de gamme;Non climatisé;02182002;5;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Haut de gamme;Non climatisé;02182102;5;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Grand Hotel avec restaurant Luxe;Non climatisé;02182202;5;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Haut de gamme;Non climatisé;02183702;5;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Hotel d'affaire avec restaurant Luxe;Non climatisé;02183802;5;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Bas de gamme;Non climatisé;02185302;5;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Haut de gamme;Non climatisé;02185402;5;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Moyen Hotel avec restaurant Luxe;Non climatisé;02185502;5;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Bas de gamme;Non climatisé;02186702;5;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Haut de gamme;Non climatisé;02186802;5;0;0
+Café Hôtel Restaurant;Hôtel avec restaurant;Petit Hotel avec restaurant Luxe;Non climatisé;02186902;5;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Bas de gamme;Non climatisé;02192302;5;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Haut de gamme;Non climatisé;02192402;5;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Grand Hotel sans restaurant Luxe;Non climatisé;02192502;5;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Haut de Gamme;Non climatisé;02193902;5;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Hotel d'affaire sans restaurant Luxe;Non climatisé;02194002;5;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Bas de gamme;Non climatisé;02195602;5;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Haut de gamme;Non climatisé;02195702;5;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Moyen Hotel sans restaurant Luxe;Non climatisé;02195802;5;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Bas de gamme;Non climatisé;02197002;5;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Haut de gamme;Non climatisé;02197102;5;0;0
+Café Hôtel Restaurant;Hôtel sans restaurant;Petit Hotel sans restaurant Luxe;Non climatisé;02197202;5;0;0
+Café Hôtel Restaurant;Restaurant;Grand restaurant rapide;Non climatisé;02262902;5;0;0
+Café Hôtel Restaurant;Restaurant;Grand restaurant traditionnel;Non climatisé;02263002;5;0;0
+Café Hôtel Restaurant;Restaurant;Petit restaurant rapide;Non climatisé;02267702;5;0;0
+Café Hôtel Restaurant;Restaurant;Petit restaurant traditionnel;Non climatisé;02267802;5;0;0
+Commerce;Commerce de détail non alimentaire;Complexe brico;Non climatisé;03060902;5;0;0
+Commerce;Commerce de détail non alimentaire;Grand brico;Non climatisé;03061702;5;0;0
+Commerce;Commerce de détail non alimentaire;Grand librairie;Non climatisé;03062602;5;0;0
+Commerce;Commerce de détail non alimentaire;Grand Mode;Non climatisé;03062702;5;0;0
+Commerce;Commerce de détail non alimentaire;Petit brico;Non climatisé;03066402;5;0;0
+Commerce;Commerce de détail non alimentaire;Petit librairie;Non climatisé;03067302;5;0;0
+Commerce;Commerce de détail non alimentaire;Petit mode;Non climatisé;03067402;5;0;0
+Commerce;Commerce de détail non alimentaire;ZAC Mode;Non climatisé;03069602;5;0;0
+Commerce;Commerce de gros;Grand commerce de gros;Non climatisé;03071902;5;0;0
+Commerce;Commerce de gros;Petit commerce de gros;Non climatisé;03076602;5;0;0
+Commerce;Entrepôt;Entrepôt;Non climatisé;03121202;5;0;0
+Commerce;Grand commerce alimentaire;Grand alimentaire;Non climatisé;03161502;5;0;0
+Commerce;Grand commerce alimentaire;Hypermarché;Non climatisé;03164102;5;0;0
+Commerce;Grand commerce alimentaire;Superette;Non climatisé;03169202;5;0;0
+Commerce;Grand commerce alimentaire;Supermarché;Non climatisé;03169302;5;0;0
+Commerce;Petit commerce alimentaire;Petit boulangerie;Non climatisé;03236302;5;0;0
+Commerce;Petit commerce alimentaire;Petit librairie;Non climatisé;03237302;5;0;0
+Commerce;Petit commerce alimentaire;Petit poissonnerie;Non climatisé;03237502;5;0;0
+Commerce;Process;Grand librairie;Non climatisé;03242602;5;0;0
+Commerce;Process;Grand process;Non climatisé;03242802;5;0;0
+Commerce;Process;Petit process;Non climatisé;03247602;5;0;0
+Enseignement Recherche;Enseignement primaire;Cantine élémentaire;Non climatisé;04090302;5;0;0
+Enseignement Recherche;Enseignement primaire;Cantine préélémentaire;Non climatisé;04090602;5;0;0
+Enseignement Recherche;Enseignement primaire;Elémentaire;Non climatisé;04091102;5;0;0
+Enseignement Recherche;Enseignement primaire;Préélémentaire;Non climatisé;04098602;5;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine collége;Non climatisé;04100202;5;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine LEGT;Non climatisé;04100402;5;0;0
+Enseignement Recherche;Enseignement secondaire;Cantine LP;Non climatisé;04100502;5;0;0
+Enseignement Recherche;Enseignement secondaire;Collège;Non climatisé;04100802;5;0;0
+Enseignement Recherche;Enseignement secondaire;Internat college;Non climatisé;04104602;5;0;0
+Enseignement Recherche;Enseignement secondaire;Internat LEGT;Non climatisé;04104702;5;0;0
+Enseignement Recherche;Enseignement secondaire;Internat LP;Non climatisé;04104802;5;0;0
+Enseignement Recherche;Enseignement secondaire;Lycée d’enseignement général et technologique (LEGT);Non climatisé;04104902;5;0;0
+Enseignement Recherche;Enseignement secondaire;Lycée professionnel (LP);Non climatisé;04105002;5;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;école;Non climatisé;04111002;5;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;R&D en sciences humaines et sociales;Non climatisé;04118702;5;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;R&D sciences physiques et naturelles;Non climatisé;04118802;5;0;0
+Enseignement Recherche;Enseignement supérieur et recherche;université;Non climatisé;04119402;5;0;0
+Habitat Communautaire;Foyer;Foyers;Non climatisé;05141302;5;0;0
+Habitat Communautaire;Maison de pré-retraite;Maison de pré-retraite;Non climatisé;05215102;5;0;0
+Habitat Communautaire;Maison retraite médicalisée;Maison retraite médicalisée;Non climatisé;05225202;5;0;0
+Habitat Communautaire;Résidence universitaire;Résidence universitaire;Non climatisé;05258902;5;0;0
+Habitat Communautaire;Service à la personne;Résidentiel;Non climatisé;05289002;5;0;0
+Santé Action Sociale;Cabinet médical;Cabinet médical;Non climatisé;06030102;5;0;0
+Santé Action Sociale;Centre accueil;Centre accueil;Non climatisé;06050702;5;0;0
+Santé Action Sociale;Garderie;Garderie;Non climatisé;06151402;5;0;0
+Santé Action Sociale;Hôpital;Hopital bloc;Non climatisé;06173402;5;0;0
+Santé Action Sociale;Hôpital;Hopital maison;Non climatisé;06173502;5;0;0
+Santé Action Sociale;Hôpital;Hopital pavillonnaire;Non climatisé;06173602;5;0;0
+Sport Loisir Culture;Culture;Grand cinéma;Non climatisé;07081802;5;0;0
+Sport Loisir Culture;Culture;Grande salle de spectacle;Non climatisé;07083202;5;0;0
+Sport Loisir Culture;Culture;Immeuble péri urbain;Non climatisé;07084302;5;0;0
+Sport Loisir Culture;Culture;Musée;Non climatisé;07085902;5;0;0
+Sport Loisir Culture;Culture;Petit cinéma;Non climatisé;07086502;5;0;0
+Sport Loisir Culture;Culture;Petite salle de spectacle;Non climatisé;07088002;5;0;0
+Sport Loisir Culture;Equipement collectif;Immeuble péri urbain;Non climatisé;07134302;5;0;0
+Sport Loisir Culture;Loisir;Grand bar café tabac;Non climatisé;07201602;5;0;0
+Sport Loisir Culture;Loisir;Salle non spécialisée;Non climatisé;07209102;5;0;0
+Sport Loisir Culture;Loisir;Vestiaire et rangement;Non climatisé;07209502;5;0;0
+Sport Loisir Culture;Sport;Grand bar café tabac;Non climatisé;07291602;5;0;0
+Sport Loisir Culture;Sport;Grande salle multisport;Non climatisé;07293302;5;0;0
+Sport Loisir Culture;Sport;Patinoire;Non climatisé;07296102;5;0;0
+Sport Loisir Culture;Sport;Petite salle multisport;Non climatisé;07298102;5;0;0
+Sport Loisir Culture;Sport;Piscine;Non climatisé;07298202;5;0;0
+Sport Loisir Culture;Sport;Salle non spécialisée;Non climatisé;07299102;5;0;0
+Sport Loisir Culture;Sport;Vestiaire et rangement;Non climatisé;07299502;5;0;0
+Transport;Service;nr;Non climatisé;08276002;5;0;0
+Transport;Transport aérien;nr;Non climatisé;08306002;5;0;0
+Transport;Transport autre;nr;Non climatisé;08316002;5;0;0
+Transport;Transport ferroviaire;nr;Non climatisé;08326002;5;0;0
+Transport;Transport maritime et fluvial;nr;Non climatisé;08336002;5;0;0
+Transport;Transport routier;nr;Non climatisé;08346002;5;0;0
+Transport;Transport urbain;nr;Non climatisé;08356002;5;0;0
