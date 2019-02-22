@@ -79,14 +79,14 @@ color_energie = data.table(ENERGIE = factor(c("Gaz", "Fioul","Electricité","Urb
 
 #### liste des fichiers à lire
    
-wbfiles  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_nopol_prixconstant"
+wbfiles  = "../Sauvegardes_resultats_thema/avec_calib_CODAH/2050_nopol_prixconstant"
 #wbfiles  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_nopol_prixcroissants_noRT2012"
-wbfiles[2]  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_nopol_prixcroissants"
-wbfiles[3]  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_AME_nouveauxprix"
-wbfiles[4]  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_AMS2_sansdecarb"
+wbfiles[2]  = "../Sauvegardes_resultats_thema/avec_calib_CODAH/2050_nopol_prixcroissants"
+wbfiles[3]  = "../Sauvegardes_resultats_thema/avec_calib_CODAH/2050_AME_nouveauxprix"
+wbfiles[4]  = "../Sauvegardes_resultats_thema/avec_calib_CODAH/2050_AMS2_sansdecarb"
 #wbfiles[3]  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_AMS_nosubENR"
-wbfiles[5]  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_AMS1_biog150"
-wbfiles[6]  = "../tertiaire/model/Result_csv/publi_thema/avec_calib_CODAH/2050_AMS2"
+wbfiles[5]  = "../Sauvegardes_resultats_thema/avec_calib_CODAH/2050_AMS1_biog150"
+wbfiles[6]  = "../Sauvegardes_resultats_thema/avec_calib_CODAH/2050_AMS2"
 
 
 
@@ -219,7 +219,7 @@ tax_to_use = data.table(scenario=wbname,taxe=c(
 
 #### facteurs d'émissions constants par énergie et usage pour le scénrio de référence et l'AME
 
-FE_AME = data.table(read_excel("../tertiaire/parametrage modèle/Facteuremissions_thema.xls", sheet = "FEexportAME"))
+FE_AME = data.table(read_excel("../parametrage modèle/Facteuremissions_thema.xls", sheet = "FEexportAME"))
 
 FE_AME = melt(FE_AME, id.vars = c("energie","usage"),variable.name = "annee",value.name = "FE_AME")
 FE_AME[,annee:=as.character(annee)]
